@@ -1,0 +1,184 @@
+<resources>
+    <string name="app_name">Bird</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="none" />
+
+    <!-- 相对于整个手机屏幕的大小-->
+    <string name="title_size_1">1.5%</string>
+    <string name="title_size_2">2%</string>
+    <string name="title_size_3">2.5%</string>
+    <string name="context_size_1">2.5%</string>
+    <string name="context_size_2">2.5%</string>
+    <string name="context_size_3">2.5%</string>
+
+    <!-- 相对于父类的大小-->
+    <string name="item_context_size_1">30%</string>
+    <string name="item_context_size_2">20%</string>
+    <string name="item_context_size_3">40%</string>
+    <string name="del_size">20%w</string>
+
+    <string name="common_padding_left">6%w</string>
+    <string name="common_padding_right">3%w</string>
+    <string name="common_padding_top">3%h</string>
+    <string name="common_padding_bottom">3%h</string>
+
+    <string name="half">50%</string>
+    <string name="all">100%</string>
+    <string name="title_activity_pay_balance_list">PayBalanceListActivity</string>
+
+    <string name="listmanager">80%h</string>
+
+    <!--欢迎页面-->
+    <string name="welcom_go_now">点击跳过>></string>
+    <!--首页-->
+    <string name="index">首页</string>
+    <string name="custom_service">客服</string>
+    <string name="mine">我的</string>
+    <string name="help">帮助</string>
+    <string name="allofthem">全部</string>
+    <string name="tool1">订单管理</string>
+    <string name="tool2">预报管理</string>
+    <string name="tool3">库存动态</string>
+    <string name="tool4">进销存管理</string>
+    <string name="tool5">我的支出</string>
+    <string name="tool6">账户充值</string>
+    <string name="edit">编辑</string>
+    <string name="tools">管理工具</string>
+    <string name="data">数据看板</string>
+    <!-- 按照页面命名 index,detail等等-->
+    <!--我的账号-->
+    <string name="myaccount_recharge">充值</string>
+    <string name="myaccount_details">收支明细</string>
+    <string name="myaccount_manage">账户管理</string>
+    <string name="myaccount_title_1">充值</string>
+    <string name="myaccount_title_2">收支明细</string>
+    <string name="myaccount_title_3">账户管理</string>
+    <!--费用类型-->
+    <string name="cost_type_1">所有</string>
+    <string name="cost_type_2">运费支出</string>
+    <string name="cost_type_3">仓租</string>
+    <string name="cost_type_4">关税</string>
+    <string name="cost_type_5">充值记录</string>
+    <string name="cost_type_6">其他</string>
+    <string name="cost_miss_code">缺失订单号</string>
+    <string name="cost_order_code">订单号</string>
+    <string name="cost_order_count">支出金额</string>
+    <!---->
+    <string name="myaccount_select_all">所有</string>
+    <string name="myaccount_select_settingdate">设置时间段</string>
+    <string name="select_start_end_date">交易时间</string>
+    <string name="start_date">开始日期:</string>
+    <string name="end_date">结束日期:</string>
+    <string name="pick_date_cancel">取消</string>
+    <string name="pick_date_clear">清空</string>
+    <string name="pick_date_sure">确定</string>
+    <string name="tip_pick_date1">开始时间必须在结束时间之前!</string>
+    <string name="tip_pick_date2">开始时间必须在今天之前!</string>
+    <string name="tip_pick_date3">结束时间必须在今天之前!</string>
+    <string name="tip_myaccount_needlogin">需要登录获取数据!</string>
+    <string name="tip_myaccount_getdatawrong">获取数据失败!</string>
+    <string name="tip_myaccount_prasedatawrong">解析数据失败!</string>
+    <string name="tip_myaccount_nodata">没有数据可以加载!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="listview_header_hint_normal">下拉刷新</string>
+    <string name="listview_header_hint_release">放送开始刷新</string>
+    <string name="listview_loading">加载中...</string>
+    <!--<string name="nomore_loading">加载完毕</string>-->
+    <string name="nomore_loading"></string>
+    <string name="refreshing">刷新中...</string>
+    <string name="refresh_done">刷新完毕</string>
+    <string name="listview_header_last_time"></string>
+    <!--日历-->
+    <string name="monday">周日</string>
+    <string name="tuesday">周一</string>
+    <string name="wednesday">周二</string>
+    <string name="thursday">周三</string>
+    <string name="friday">周四</string>
+    <string name="saturday">周五</string>
+    <string name="sunday">周六</string>
+
+    <!-- 登录页面 -->
+    <string name="username_hint">输入帐号</string>
+    <string name="password_hint">输入密码</string>
+    <string name="login">登  录</string>
+    <string name="register">用户注册</string>
+    <string name="forgetpassword">忘记密码</string>
+    <string name="notempty">用户名或密码不能为空</string>
+    <string name="loginsu">登录成功</string>
+    <string name="loginfa">用户名或密码错误</string>
+
+    <!-- 我的账户 -->
+    <string name="welcome">亲，欢迎您！</string>
+    <string name="iconchange_title">修改头像</string>
+    <string name="iconchange_save">保存</string>
+
+    <!-- 修改头像 -->
+    <string name="photo">拍照</string>
+    <string name="from_loacl">从手机相册获取</string>
+
+    <!-- 我的账号：充值 -->
+    <string name="recharge_title">充值</string>
+    <string name="recharge_translute_account">运输账号</string>
+    <string name="recharge_tax_account">关税账号</string>
+    <string name="recharge_pay_now">立即支付</string>
+    <string name="recharge_pay_count">充值金额:</string>
+    <string name="recharge_moneyinput">输入金额</string>
+    <string name="recharge_type_zhifubao">支付宝充值</string>
+    <!-- 账户管理 -->
+    <string name="base_message">企业基本信息</string>
+
+    <!--维度-->
+    <string name="state_time">时间</string>
+    <string name="state_Warehouse">全部仓库</string>
+    <string name="state_all">全部状态</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="main_message">企业主营信息</string>
+    <string name="contacts_message">联系人信息</string>
+    <string name="business_message">业务模式及要求</string>
+    
+    <string name="sign_company_name">签约公司名称：</string>
+    <string name="company_short_name">公司简称：</string>
+    <string name="headquarters_address">总部所在地：</string>
+    <string name="detail_address">详细地址：</string>
+
+    <string name="main_market">主营市场：</string>
+    <string name="order_pri">订单平均客单价：</string>
+
+    <string name="principal">商务总负责人：</string>
+    <string name="finance">财务对接人：</string>
+    <string name="outin">出入库负责人：</string>
+    <string name="it">IT对接人：</string>
+    <string name="exception">异常件通知</string>
+    <string name="phone_no">手机号：</string>
+    <string name="email">邮箱：</string>
+
+    <string name="patter_text">业务模式</string>
+    <string name="pattern">业务模式：</string>
+    <string name="clear_server">清关服务：</string>
+
+    <string name="outaccount">退出账户</string>
+
+    <string name="title_activity_about">AboutActivity</string>
+    <!--关于-->
+    <string name="about_us_title">关于我们</string>
+    <string name="about_us_content">\t\t\t\t笨鸟海淘成立于2014年1月，由海淘城前CEO带领原班人马倾力打造，笨鸟海淘致力于用电商的用户体验，基于互联网快速专注的思维打造全新的转运公司。在美国免税州设立数万尺仓库（4000个库位，30000个包裹容量，10000个包裹处理能力／每天），配备专业设备，IT团队量身打造转运系统，多口岸就近清关，7*10小时客服在线服务。</string>
+    <string name="about_us_www">手机访问：www.birdex.cn</string>
+    <string name="about_us_version">当前版本：B1.0.1 for Android</string>
+    
+    <!--我的主页-->
+    <string name="mine_index_title">我的</string>
+    <string-array name="mine_item_title">
+        <item name="mine_item_myaccount">我的账号</item>
+        <item name="mine_item_mymessage">我的订阅消息</item>
+        <item name="mine_item_mysetting">我的设置</item>
+        <item name="mine_item_manage">账户管理</item>
+        <item name="mine_item_mydata">我的数据</item>
+        <item name="mine_item_mycustomer">我的客户经理</item>
+        <item name="mine_item_about">关于</item>
+    </string-array>
+</resources>

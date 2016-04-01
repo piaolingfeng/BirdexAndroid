@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
+    android:gravity="center_horizontal">
+
+    <RelativeLayout
+        android:id="@+id/rl_about_us_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:background="@color/blue_head_1"
+        android:gravity="center_vertical"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp">
+
+        <ImageView
+            android:id="@+id/iv_about_us_back"
+            android:layout_width="15dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/back_chevron" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/about_us_title"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_about_us_icon"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/rl_about_us_head"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/company_img" />
+
+    <TextView
+        android:id="@+id/tv_about_us_context"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_about_us_icon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:lineSpacingMultiplier="1.5"
+        android:text="@string/about_us_content"
+        android:textColor="@color/context_1"
+        android:textSize="12sp"
+        app:layout_widthPercent="85%" />
+
+    <LinearLayout
+        android:id="@+id/ll_about_us_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/tv_about_us_context"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        app:layout_marginBottomPercent="20%">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_us_www"
+            android:textColor="@color/context_3"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_us_version"
+            android:textColor="@color/context_3"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+</com.zhy.android.percent.support.PercentRelativeLayout>

@@ -242,16 +242,16 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="14dp"
+                        android:layout_marginLeft="24dp"
                         android:layout_marginTop="15dp"
                         android:gravity="right"
                         android:text="@string/main_market"
                         android:textColor="#747474"
                         android:textSize="@dimen/context_2"
-                        app:layout_widthPercent="30%" />
+                         />
 
                     <TextView
                         android:id="@+id/main_market"
@@ -279,16 +279,16 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="14dp"
+                        android:layout_marginLeft="24dp"
                         android:layout_marginTop="15dp"
                         android:gravity="right"
                         android:textColor="#747474"
                         android:text="@string/order_pri"
                         android:textSize="@dimen/context_2"
-                        app:layout_widthPercent="30%" />
+                         />
 
                     <TextView
                         android:id="@+id/order_pri"

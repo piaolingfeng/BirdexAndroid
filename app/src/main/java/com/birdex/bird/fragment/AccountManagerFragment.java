@@ -298,6 +298,21 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     // 获取的公司信息
     private CompanyInformation companyInf;
 
+    // 数据就绪标记
+    private boolean dataReady = false;
+
+    // 数据类型就绪标记
+    private boolean typeReady = false;
+
+    // 获取的城市信息
+    private City myCities;
+
+    private List<Market> myMarkest;
+
+    private List<BusinessModel> businessModels;
+
+    private  List<QgModel> qgModels;
+
     // 初始化数据
     private void initData(){
         showLoading();
@@ -314,81 +329,13 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                         companyInf = JsonHelper.parseObject((JSONObject) response.get("data"), CompanyInformation.class);
 
                         if (companyInf != null) {
-                            // 请求获取相关的 type 数据，成功获取后再展现数据
-                            RequestParams requestParams = new RequestParams();
-                            requestParams.put("city", "北京");
-                            requestParams.put("markets", "all");
-                            requestParams.put("business_models", "all");
-                            requestParams.put("qg_models", "all");
-                            BirdApi.getConfig(MyApplication.getInstans(), requestParams, new JsonHttpResponseHandler() {
-                                @Override
-                                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                    super.onSuccess(statusCode, headers, response);
 
-                                    JSONObject all = null;
-                                    try {
-                                        all = (JSONObject) response.get("data");
-                                        JSONObject city = (JSONObject) all.get("city");
-                                        City myCities = JsonHelper.parseObject(city, City.class);
-                                        JSONObject markets = (JSONObject) all.get("markets");
+                            dataReady = true;
 
-                                        List<Market> myMarkest = new ArrayList<Market>();
+                            if(typeReady){
+                                setDetailData(companyInf, myCities, myMarkest, businessModels, qgModels);
+                            }
 
-                                        Iterator<String> marketIter = markets.keys();
-                                        while(marketIter.hasNext()){
-                                            String ma = marketIter.next();
-                                            JSONObject mm = (JSONObject) markets.get(ma);
-                                            Market market1 = JsonHelper.parseObject(mm,Market.class);
-                                            myMarkest.add(market1);
-                                        }
-
-                                        JSONObject business = (JSONObject) all.get("business_models");
-                                        List<BusinessModel> businessModels = new ArrayList<BusinessModel>();
-                                        Iterator<String> businessIt = business.keys();
-                                        while(businessIt.hasNext()){
-                                            String bb = businessIt.next();
-                                            JSONObject bm = (JSONObject) business.get(bb);
-                                            businessModels.add(JsonHelper.parseObject(bm,BusinessModel.class));
-                                        }
-
-                                        JSONObject qgModel = (JSONObject) all.get("qg_models");
-                                        List<QgModel> qgModels = new ArrayList<QgModel>();
-                                        Iterator<String> models = qgModel.keys();
-                                        while(models.hasNext()){
-                                            String mo = models.next();
-                                            JSONObject moo = (JSONObject) qgModel.get(mo);
-                                            qgModels.add(JsonHelper.parseObject(moo,QgModel.class));
-                                        }
-
-                                        setDetailData(companyInf,myCities,myMarkest,businessModels,qgModels);
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                    super.onFailure(statusCode, headers, responseString, throwable);
-                                    hideLoading();
-                                    T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                                    hideLoading();
-                                    T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                                    hideLoading();
-                                    T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
-                                }
-                            });
                         }
 
 
@@ -402,7 +349,89 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
                 hideLoading();
-                T.showShort(getActivity(),getString(R.string.tip_myaccount_getdatawrong));
+                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
+            }
+        });
+
+
+        // 请求获取相关的 type 数据，成功获取后再展现数据
+        RequestParams requestParams = new RequestParams();
+        requestParams.put("city", "北京");
+        requestParams.put("markets", "all");
+        requestParams.put("business_models", "all");
+        requestParams.put("qg_models", "all");
+        BirdApi.getConfig(MyApplication.getInstans(), requestParams, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+
+                JSONObject all = null;
+                try {
+
+                    all = (JSONObject) response.get("data");
+                    JSONObject city = (JSONObject) all.get("city");
+                    myCities = JsonHelper.parseObject(city, City.class);
+                    JSONObject markets = (JSONObject) all.get("markets");
+
+                    myMarkest = new ArrayList<Market>();
+
+                    Iterator<String> marketIter = markets.keys();
+                    while (marketIter.hasNext()) {
+                        String ma = marketIter.next();
+                        JSONObject mm = (JSONObject) markets.get(ma);
+                        Market market1 = JsonHelper.parseObject(mm, Market.class);
+                        myMarkest.add(market1);
+                    }
+
+                    JSONObject business = (JSONObject) all.get("business_models");
+                    businessModels = new ArrayList<BusinessModel>();
+                    Iterator<String> businessIt = business.keys();
+                    while (businessIt.hasNext()) {
+                        String bb = businessIt.next();
+                        JSONObject bm = (JSONObject) business.get(bb);
+                        businessModels.add(JsonHelper.parseObject(bm, BusinessModel.class));
+                    }
+
+                    JSONObject qgModel = (JSONObject) all.get("qg_models");
+                    qgModels = new ArrayList<QgModel>();
+                    Iterator<String> models = qgModel.keys();
+                    while (models.hasNext()) {
+                        String mo = models.next();
+                        JSONObject moo = (JSONObject) qgModel.get(mo);
+                        qgModels.add(JsonHelper.parseObject(moo, QgModel.class));
+                    }
+
+                    typeReady = true;
+
+                    if(dataReady) {
+                        setDetailData(companyInf, myCities, myMarkest, businessModels, qgModels);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                hideLoading();
+                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
             }
 
             @Override

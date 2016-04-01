@@ -50,8 +50,12 @@ public class MyAccountInfoActivity extends BaseActivity implements BaseFragment.
         return R.layout.myaccount_info_layout;
     }
     private BaseFragment baseFragment;//加入栈顶的fragment
+    //获取进入显示的第几页
+    private int enterIndex=0;
     @Override
     public void initializeContentViews() {
+        //获取列表
+        enterIndex=getIntent().getIntExtra("enterindex",0);
         initSystemBar(R.color.blue_head_1);
         manager=getSupportFragmentManager();
         transaction=manager.beginTransaction();
@@ -62,7 +66,21 @@ public class MyAccountInfoActivity extends BaseActivity implements BaseFragment.
         fragments.add(billfragment);
         managefragment=new AccountManagerFragment();
         fragments.add(managefragment);
-        clickChangeFragment(R.id.rb_myaccount_recharge);
+        //判断索引显示不同的页面
+        switch (enterIndex){
+            case 0:
+                clickChangeFragment(R.id.rb_myaccount_recharge);
+                break;
+            case 1:
+                clickChangeFragment(R.id.rb_myaccount_bill);
+                break;
+            case 2:
+                clickChangeFragment(R.id.rb_myaccount_manage);
+                break;
+            default:
+                clickChangeFragment(R.id.rb_myaccount_recharge);
+                break;
+        }
         //设置点击事件
         tv_recharge.setOnClickListener(this);
         tv_bill.setOnClickListener(this);

@@ -1,8 +1,10 @@
 package com.birdex.bird.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -13,7 +15,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import com.birdex.bird.R;
 import com.birdex.bird.interfaces.BackHandledInterface;
+import com.birdex.bird.util.SafeProgressDialog;
+import com.birdex.bird.widget.RotateLoading;
 
 import org.simple.eventbus.EventBus;
 
@@ -38,6 +43,7 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
 //    private String mParam2;
     private int mContentLayoutResId;
     ProgressDialog bar;
+    Dialog loadingDialog;
     /**
      * 缓存content布局
      */
@@ -65,6 +71,29 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
 //        fragment.setArguments(args);
 //        return fragment;
 //    }
+
+
+    public void showLoading() {
+        loadingDialog = new SafeProgressDialog(getActivity(), R.style.semester_dialog);// 创建自定义样式dialog
+//        loadingDialog.setCancelable(false);// 不可以用“返回键”取消
+//        loadingDialog.setCanceledOnTouchOutside(false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_loading, null);
+        loadingDialog.setContentView(view);// 设置布局
+        final RotateLoading loading = (RotateLoading) view.findViewById(R.id.rotateloading);
+        loading.start();
+        loadingDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                loading.stop();
+            }
+        });
+        loadingDialog.show();
+    }
+
+    public void hideLoading() {
+        loadingDialog.dismiss();
+    }
+
 
     public BaseFragment() {
         // Required empty public constructor

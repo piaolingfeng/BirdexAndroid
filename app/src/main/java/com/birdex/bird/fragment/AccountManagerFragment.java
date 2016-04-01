@@ -22,6 +22,7 @@ import com.birdex.bird.entity.Markets;
 import com.birdex.bird.entity.QgModel;
 import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.StringUtils;
+import com.birdex.bird.util.T;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -212,6 +213,8 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
         // 清关服务  -- 未知
         List<String> qgs = StringUtils.spiltStringArray(information.getQg_models());
         clear_server.setText(getQgStr(qgModels,qgs));
+
+        hideLoading();
     }
 
     // 获取 主营市场 字符串
@@ -297,6 +300,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
 
     // 初始化数据
     private void initData(){
+        showLoading();
         RequestParams params = new RequestParams();
         params.add("app_debug", 1 + "");
         params.add("user_code", MyApplication.user.getUser_code());
@@ -363,6 +367,27 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                                     }
 
                                 }
+
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                    super.onFailure(statusCode, headers, responseString, throwable);
+                                    hideLoading();
+                                    T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
+                                }
+
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                                    hideLoading();
+                                    T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
+                                }
+
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                                    hideLoading();
+                                    T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
+                                }
                             });
                         }
 
@@ -376,16 +401,22 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
+                hideLoading();
+                T.showShort(getActivity(),getString(R.string.tip_myaccount_getdatawrong));
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
             }
         });
     }

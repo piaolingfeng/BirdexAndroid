@@ -20,9 +20,18 @@ import android.widget.TextView;
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.adapter.CommonSimpleAdapter;
+import com.birdex.bird.api.BirdApi;
+import com.birdex.bird.entity.OrderManagerEntity;
+import com.birdex.bird.fragment.IndexFragment;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +62,7 @@ public class MyOrderListActivity extends AppCompatActivity implements View.OnCli
     TextView state_time;
     @Bind(R.id.state_Warehouse)
     TextView state_Warehouse;
-    public static final int[] name = {R.string.tool1, R.string.tool2, R.string.tool3, R.string.tool4, R.string.tool5};
+    public static final int[] name = {R.string.tool1, R.string.tool2, R.string.tool3, R.string.tool5, R.string.tool6};
     public static List<String> menuList = new ArrayList<>();
     public String currentName;
     public int position = 0;
@@ -128,14 +137,24 @@ public class MyOrderListActivity extends AppCompatActivity implements View.OnCli
         mPopupWindow.showAsDropDown(viewID, width / 4, 0);
     }
 
-    @OnClick({R.id.img_menu,R.id.state_time,R.id.state_Warehouse,R.id.state_all})
+    @OnClick({R.id.img_menu, R.id.state_time, R.id.state_Warehouse, R.id.state_all})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_menu:
                 showPopupWindow((View) img_menu.getParent(), menuList);
                 break;
-
+            case R.id.state_all:
+                showPopupWindow((View) state_all.getParent(), menuList);
+                break;
+            case R.id.state_Warehouse:
+                showPopupWindow((View) state_Warehouse.getParent(), menuList);
+                break;
+            case R.id.state_time:
+                showPopupWindow((View) state_time.getParent(), menuList);
+                break;
         }
     }
+
+
 }

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.activity.InventoryActivity;
 import com.birdex.bird.activity.MyAccountActivity;
 import com.birdex.bird.activity.MyAccountInfoActivity;
 import com.birdex.bird.activity.MyOrderListActivity;
@@ -270,6 +271,11 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                     //显示第二个页面
                     intent.putExtra("enterindex",1);
                     getActivity().startActivity(intent);
+                    return;
+                }else if(list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool3))){
+                    //我的库存
+                    intent=new Intent(getActivity(), InventoryActivity.class);
+                    startActivity(intent);
                     return;
                 }
                 intent = new Intent(getActivity(), MyOrderListActivity.class);

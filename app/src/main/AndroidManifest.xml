@@ -49,6 +49,8 @@
         <activity android:name=".activity.MyOrderListActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
+        <activity android:name=".activity.InventoryActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <service android:name=".update.UpdateService" />
 
         <activity

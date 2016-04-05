@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/inventory_item_margin_top"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/inventory_item_paddinglr">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/inventory_item_row1_padding"
+        android:paddingTop="@dimen/inventory_item_row1_padding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/inventory_item_code"
+            android:textColor="@color/context_1"
+            android:textSize="@dimen/inventory_item_code" />
+
+        <TextView
+            android:id="@+id/tv_inventory_item_upc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="@string/inventory_item_code"
+            android:textColor="@color/context_1"
+            android:textSize="@dimen/inventory_item_code" />
+
+        <TextView
+            android:id="@+id/tv_inventory_item_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/inventory_item_time" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/inventory_item_row2_padding"
+        android:paddingTop="@dimen/inventory_item_row2_padding">
+
+        <ImageView
+            android:layout_width="@dimen/inventory_item_pic_width"
+            android:layout_height="@dimen/inventory_item_pic_height"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0">
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

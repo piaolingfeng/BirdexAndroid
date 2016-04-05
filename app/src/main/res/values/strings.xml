@@ -181,4 +181,10 @@
         <item name="mine_item_mycustomer">我的客户经理</item>
         <item name="mine_item_about">关于</item>
     </string-array>
+    <!--我的库存-->
+    <string name="inventory_tip_1">获取库存数据失败!</string>
+    <string name="inventory_tip_2">库存数据解析失败!</string>
+    <string name="inventory_item_code">商品编码:</string>
+    <string name="inventory_item_available">可用</string>
+    <string name="inventory_item_occupancy">占用</string>
 </resources>

@@ -120,7 +120,6 @@ public class InventoryActivity extends AppCompatActivity implements XRecyclerVie
                             jobj = response.getJSONObject("data");
                             countNum=jobj.getInt("count");
                             countPage=jobj.getInt("page_num");
-                            Log.e("android","1------"+countPage+"-------"+currentPage);
                             JSONObject jroot=jobj.getJSONObject("products");
                             list=biz.parseJson2List(jroot);
                             if(currentPage==1){

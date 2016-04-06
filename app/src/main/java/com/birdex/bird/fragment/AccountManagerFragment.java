@@ -180,40 +180,49 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
 
     // 将接口获取到的值 set 进去
     private void setDetailData(CompanyInformation information, City cities,List<Market> markets, List<BusinessModel> businessModels,List<QgModel> qgModels){
-        sign_company_name.setText(information.getCompany_name());
-        company_short_name.setText(information.getCompany_short_name());
+        if(information != null) {
+            sign_company_name.setText(information.getCompany_name());
+            company_short_name.setText(information.getCompany_short_name());
 
-        // 总部所在地   -- 缺少
-        // 所在省份 id
-        String provinceId = information.getProvince_id();
-        // 所在地城市
-        String cityId = information.getCity_id();
-        // 所在地区县
-        String areaId = information.getArea_id();
-        headquarters_address.setText(getAddressDetail(cities,provinceId,cityId,areaId));
+            // 总部所在地   -- 缺少
+            // 所在省份 id
+            String provinceId = information.getProvince_id();
+            // 所在地城市
+            String cityId = information.getCity_id();
+            // 所在地区县
+            String areaId = information.getArea_id();
+            if(cities != null) {
+                headquarters_address.setText(getAddressDetail(cities, provinceId, cityId, areaId));
+            }
+            detail_address.setText(information.getAddress());
 
-        detail_address.setText(information.getAddress());
+            // 主营市场   -- 缺少
+            // 返回主营市场 list
+            List<String> marTypes = StringUtils.spiltStringArray(information.getMarkets());
+            if(markets != null) {
+                main_market.setText(getMarketStr(markets, marTypes));
+            }
 
-        // 主营市场   -- 缺少
-        // 返回主营市场 list
-        List<String> marTypes = StringUtils.spiltStringArray(information.getMarkets());
-        main_market.setText(getMarketStr(markets,marTypes));
+            order_pri.setText(information.getOrder_avg_price());
 
-        order_pri.setText(information.getOrder_avg_price());
+            // 设置联系人信息相关
+            setContactInf(information.getContacts());
 
-        // 设置联系人信息相关
-        setContactInf(information.getContacts());
+            exception_email.setText(information.getNotice_email());
 
-        exception_email.setText(information.getNotice_email());
+            // 业务模式 list
+            List<String> businessType = StringUtils.spiltStringArray(information.getBusiness_models());
+            if(businessModels != null) {
+                pattern.setText(getBusinessStr(businessModels, businessType));
+            }
 
-        // 业务模式 list
-        List<String> businessType = StringUtils.spiltStringArray(information.getBusiness_models());
-        pattern.setText(getBusinessStr(businessModels,businessType));
+            // 清关服务  -- 未知
+            List<String> qgs = StringUtils.spiltStringArray(information.getQg_models());
+            if(qgModels != null) {
+                clear_server.setText(getQgStr(qgModels, qgs));
+            }
 
-        // 清关服务  -- 未知
-        List<String> qgs = StringUtils.spiltStringArray(information.getQg_models());
-        clear_server.setText(getQgStr(qgModels,qgs));
-
+        }
         hideLoading();
     }
 

@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -46,8 +47,12 @@
         <activity android:name=".activity.MyAccountActivity" />
         <activity android:name=".activity.IconChangeActivity" />
         <activity android:name=".activity.TodayDataActivity" />
-        <activity android:name=".activity.MyOrderListActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity
+            android:name=".activity.MyOrderListActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activity.ChangeAdressActivity"
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.InventoryActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 

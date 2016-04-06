@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <include layout="@layout/title"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/consignee"
+                            android:textColor="@color/context_1"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/consignee"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:textColor="@color/context_4"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="#E4E4E4" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/phone"
+                            android:textColor="@color/context_1"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/phone"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:inputType="phone"
+                            android:background="@null"
+                            android:textColor="@color/context_4"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#E4E4E4" />
+
+                <ImageView
+                    android:id="@+id/contacts"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/changeadresshead" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#E4E4E4" />
+
+            <LinearLayout
+                android:id="@+id/region_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="@string/region"
+                    android:textColor="@color/context_1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/region"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/context_4"
+                    android:textSize="18sp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/arrow_up_select" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#E4E4E4" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="@string/detail_adress"
+                    android:textColor="@color/context_1"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/detail_adress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:textColor="@color/context_4"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#E4E4E4" />
+
+            <LinearLayout
+                android:id="@+id/wheelview_ll"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                >
+
+                <com.birdex.bird.widget.WheelView
+                    android:id="@+id/select_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     />
+                <com.birdex.bird.widget.WheelView
+                    android:id="@+id/select_view2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     />
+                <com.birdex.bird.widget.WheelView
+                    android:id="@+id/select_view3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/confirm_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="70dp">
+
+        <Button
+            android:id="@+id/confirm"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            app:layout_widthPercent="40%"
+            android:gravity="center"
+            android:text="@string/confirm"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/out_selector"
+            android:textSize="20sp" />
+
+
+    </com.zhy.android.percent.support.PercentLinearLayout>
+
+</LinearLayout>

@@ -2,35 +2,45 @@
 <com.zhy.android.percent.support.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:background="@color/background"
+    android:layout_height="70dp"
+    android:background="@color/blue_head_1"
     android:orientation="vertical">
 
-    <TextView
+    <ImageView
         android:id="@+id/back"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="30%"
         android:layout_centerVertical="true"
-        android:drawableLeft="@drawable/navigation_previous_item"
-        app:layout_marginLeftPercent="2%"
-        app:layout_paddingRightPercent="2%" />
+        android:src="@drawable/back_chevron"
+        app:layout_marginPercent="4%" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textColor="@color/context_2"
         android:layout_centerVertical="true"
-        app:layout_textSizePercent="30%" />
+        android:textAppearance="@style/title_while"
+        app:layout_textSizePercent="35%" />
 
     <TextView
         android:id="@+id/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/title_while"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         app:layout_marginRightPercent="4%"
-        app:layout_textSizePercent="30%" />
+        app:layout_textSizePercent="25%" />
 
+    <ImageView
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/menu"
+        android:visibility="gone"
+        app:layout_paddingPercent="4%" />
 </com.zhy.android.percent.support.PercentRelativeLayout>

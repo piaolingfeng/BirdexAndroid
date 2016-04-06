@@ -76,7 +76,7 @@ public abstract class BaseActivity extends FragmentActivity {
     public void showLoading() {
         loadingDialog = new SafeProgressDialog(this, R.style.semester_dialog);// 创建自定义样式dialog
 //        loadingDialog.setCancelable(false);// 不可以用“返回键”取消
-//        loadingDialog.setCanceledOnTouchOutside(false);
+        loadingDialog.setCanceledOnTouchOutside(false);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_loading, null);
         loadingDialog.setContentView(view);// 设置布局
         final RotateLoading loading = (RotateLoading) view.findViewById(R.id.rotateloading);

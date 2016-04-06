@@ -82,51 +82,42 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
     //当前页面 从1开始
     private int currentPage=1;
 
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        View view=inflater.inflate(R.layout.fragment_personal_details_list,null,false);
-//        recyclerView = (XRecyclerView)view.findViewById(R.id.xrv_personal_detail_list);
-//        tabLayout = (TabLayout)view.findViewById(R.id.tl_personal_details_type);
-//        btn_datepick=(Button)view.findViewById(R.id.btn_details_pick_date);
-//        tv_timeshow=(TextView)view.findViewById(R.id.tv_person_timeshow);
-//        init();
-//        return view;
+//    private void init(){
+//        //初始化解析的类
+//        maBiz = new MyAccountBiz();
+//        //初始化请求参数
+//        params = new RequestParams();
+//        //初始化日期条件
+//        // 一个自定义的布局，作为显示的内容
+//        View contentView = LayoutInflater.from(getActivity()).inflate(
+//                R.layout.get_date_layout, null);
+//        initPopWin(contentView);
+//        popWindow = new PopupWindow(contentView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+//        popWindow.setOutsideTouchable(false);
+//        popWindow.setTouchable(true);
+//        //设置选择日期事件
+//        btn_datepick.setOnClickListener(this);
+//        tv_timeshow.setOnClickListener(this);
+//        adapter = new TransactionAdapter(getActivity());
+//        recyclerView.setLoadingMoreEnabled(true);
+//        recyclerView.setPullRefreshEnabled(true);
+//        recyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        recyclerView.setLoadingListener(this);
+//        recyclerView.setAdapter(adapter);
+//        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_1));
+//        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_2));
+//        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_3));
+//        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_4));
+//        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_5));
+//        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_6));
+//        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+//        tabLayout.setOnTabSelectedListener(this);
+//        //请求动画
+//        showBar();
+//        //开始数据请求
+//        startHttpRequest(http_Request_Refresh);
 //    }
-    private void init(){
-        //初始化解析的类
-        maBiz = new MyAccountBiz();
-        //初始化请求参数
-        params = new RequestParams();
-        //初始化日期条件
-        // 一个自定义的布局，作为显示的内容
-        View contentView = LayoutInflater.from(getActivity()).inflate(
-                R.layout.get_date_layout, null);
-        initPopWin(contentView);
-        popWindow = new PopupWindow(contentView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        popWindow.setOutsideTouchable(false);
-        popWindow.setTouchable(true);
-        //设置选择日期事件
-        btn_datepick.setOnClickListener(this);
-        tv_timeshow.setOnClickListener(this);
-        adapter = new TransactionAdapter(getActivity());
-        recyclerView.setLoadingMoreEnabled(true);
-        recyclerView.setPullRefreshEnabled(true);
-        recyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setLoadingListener(this);
-        recyclerView.setAdapter(adapter);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_1));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_2));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_3));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_4));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_5));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_6));
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.setOnTabSelectedListener(this);
-        //开始数据请求
-        startHttpRequest(http_Request_Refresh);
-    }
         @Override
     public int getContentLayoutResId() {
         return R.layout.fragment_personal_details_list;
@@ -164,6 +155,8 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
         tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_6));
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setOnTabSelectedListener(this);
+        //请求动画
+        showBar();
         //开始数据请求
         startHttpRequest(http_Request_Refresh);
     }
@@ -348,6 +341,8 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
 
     //停止请求的动画
     private void stopHttpAnim() {
+        //停止加载动画
+        hideBar();
         recyclerView.refreshComplete();
         recyclerView.loadMoreComplete();
     }
@@ -422,6 +417,8 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
         params.put("page_no",currentPage);
         //全部-0，运费支出-1，仓租-2，关税-3，在线充值-4，其它-5
         params.put("transaction_type", tab.getPosition());
+        //显示加载动画
+        showBar();
         startHttpRequest(http_Request_Refresh);
     }
 

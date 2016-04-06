@@ -50,10 +50,18 @@ public class TodayDataAdapter extends RecyclerView.Adapter<TodayDataAdapter.Toda
     }
 
     @Override
-    public void onBindViewHolder(TodayDataHolder holder, int position) {
+    public void onBindViewHolder(TodayDataHolder holder,final  int position) {
         holder.position = position;//check的时候会用到holder的position，所以需要
         holder.tv_name.setText(list.get(position).getName());
         holder.com_switch.setChecked(list.get(position).isChoose_state());
+        holder.com_switch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(Switch view, boolean checked) {
+                list.get(position).setChoose_state(checked);
+//                    notifyDataSetChanged();
+                EventBus.getDefault().post(list.get(position), "entity");
+            }
+        });
     }
 
     @Override
@@ -73,19 +81,12 @@ public class TodayDataAdapter extends RecyclerView.Adapter<TodayDataAdapter.Toda
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
-            com_switch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(Switch view, boolean checked) {
-                    list.get(position).setChoose_state(checked);
-//                    notifyDataSetChanged();
-                    EventBus.getDefault().post(list.get(position), "entity");
-                }
-            });
+
         }
 
         @Override
         public void onClick(View v) {
-                com_switch.setChecked(!com_switch.isChecked());
+            com_switch.setChecked(!com_switch.isChecked());
 //            list.get(position).setChoose_state(!com_switch.isChecked());
 //                    notifyDataSetChanged();
 //            EventBus.getDefault().post(list.get(position), "entity");

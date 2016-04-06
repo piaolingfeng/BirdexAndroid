@@ -127,17 +127,17 @@ public class OrderManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 //                orderManagerHolder.tv_bottom_line.setVisibility(View.VISIBLE);
 //            }
             orderManagerHolder.position = position;
-//            holder.itemView.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-////                    if (longClickState) {
-//                        if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-//                            mDragStartListener.onStartDrag(holder);
-//                        }
-////                    }
-//                    return false;
-//                }
-//            });
+            holder.itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (longClickState) {
+                        if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                            mDragStartListener.onStartDrag(holder);
+                        }
+                    }
+                    return false;
+                }
+            });
         } else {
             AddHolder addHolder = (AddHolder) holder;
             addHolder.position = position;
@@ -156,6 +156,7 @@ public class OrderManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         OrderManagerEntity entityFrom = orderList.get(fromPosition);
         orderList.remove(fromPosition);
         orderList.add(toPosition, entityFrom);
+//        EventBus.getDefault().post("", "save");//保存移动状态
 //        JSONObject object = new JSONObject();
 //        try {
 //            for (int i=0;i<orderList.size()-1;i++){

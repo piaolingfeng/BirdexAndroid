@@ -1,16 +1,11 @@
 package com.birdex.bird.fragment;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.birdex.bird.MyApplication;
@@ -38,6 +33,7 @@ import com.loopj.android.http.RequestParams;
 import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
 import java.io.Serializable;
@@ -73,8 +69,8 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
             firstCome = true;
             PreferenceUtils.setPrefBoolean(getActivity(), "firstCome", false);
         }
-        indexOrderList = new ArrayList<>();//初始化
-        indexOrderAmountList = new ArrayList<>();
+        indexOrderLocalDataList = new ArrayList<>();//初始化
+        indexOrderNetDatatList = new ArrayList<>();
         bus.register(this);
         cycleViewPager = (CycleViewPager) getFragmentManager().findFragmentById(R.id.cycle_viewpage);
         if (cycleViewPager == null) {
@@ -83,17 +79,19 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         cycleViewPager.setCycle(true);
         cycleViewPager.setWheel(true);
         cycleViewPager.setTime(3 * 1000);
-        cycleViewPager.setData(initData());
+        cycleViewPager.setData(initCarouselData());
         cycleViewPager.getViewPager()
                 .setPageTransformer(true,
                         new DepthPageTransformer());
         initToolManager();
+        initOrderManager();
         getTodayData();
     }
 
-    OrderManagerAdapter orderManagerAdapter;
-    List<OrderManagerEntity> indexOrderList;//首页订单状态数据数据
-    List<OrderManagerEntity> indexOrderAmountList;//首页订单状态总数据
+    public static OrderManagerAdapter orderManagerAdapter;
+    public static List<OrderManagerEntity> indexOrderLocalDataList;//首页订单状态首页显示数据
+    public static List<OrderManagerEntity> indexOrderNetDatatList;//首页订单状态网络数据
+    public static String localArrayString;
 
     /**
      * 数据看板初始化
@@ -101,9 +99,9 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     private void initOrderManager() {
 
         rcv_order_manager.setLayoutManager(new FullyGridLayoutManager(getContext(), 3));
-
-        indexOrderList.add(null);//首页最后一个为进入数据更多
-        orderManagerAdapter = new OrderManagerAdapter(getContext(), indexOrderList, this);
+        if (indexOrderLocalDataList != null)
+            indexOrderLocalDataList.add(null);//首页最后一个为进入数据更多
+        orderManagerAdapter = new OrderManagerAdapter(getContext(), indexOrderLocalDataList, this);
         orderManagerAdapter.setOnRecyclerViewItemLongClickListener(new OnRecyclerViewItemLongClickListener() {
             @Override
             public boolean onItemLongClick(int position) {
@@ -115,7 +113,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent(getActivity(), TodayDataActivity.class);
-                intent.putExtra("TodayData", (Serializable) indexOrderAmountList);
+                intent.putExtra("TodayData", (Serializable) indexOrderNetDatatList);
                 startActivity(intent);
             }
         });
@@ -134,7 +132,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     }
 
 
-    private void getTodayData() {
+    public static void getTodayData() {
         RequestParams params = new RequestParams();
         params.add("app_debug", 1 + "");
         params.add("user_code", MyApplication.user.getUser_code());
@@ -144,8 +142,9 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 //                super.onSuccess(statusCode, headers, response);
                 try {
-                    parseData(response);
-                    initOrderManager();
+                    parseNetData(response);
+                    EventBus.getDefault().post("", "getLocalData");
+//                    initOrderManager();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -157,83 +156,163 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                 T.showShort(MyApplication.getInstans(), errorResponse.toString());
             }
         };
-        BirdApi.getTodayData(getActivity(), params, httpResponseHandler);
+        BirdApi.getTodayData(MyApplication.getInstans(), params, httpResponseHandler);
     }
 
     /**
      * 解析网络请求返回的今日数据
      */
-    private void parseData(JSONObject response) throws JSONException {
+    public static void parseNetData(final JSONObject response) throws JSONException {
         JSONObject object = response.getJSONObject("data");
         OrderManagerEntity entity;
-        boolean state = false;
+        boolean state;
 
-        String[] name = {"today_confirm_storage_count", "today_checkout_order_count", "today_wait_checkout_order_count",
-                "exception_order_count", "transport_order_count", "no_pass_order_count"
-                , "today_sign_order_count", "no_pass_storage_count", "warning_stock_count", "wait_confirm_storage_count"};
-        String[] nameText = {"今日已入库预报单", "今日已出库", "今日待出库",
-                "异常订单", "今日运输中", "审核不通过的订单",
-                "今日已签收", "审核不通过预报单", "库存紧张", "待确认预报单"};
         for (int i = 0; i < name.length; i++) {
             entity = new OrderManagerEntity();
             entity.setCount((Integer) object.get(name[i]));
-            state = PreferenceUtils.getPrefBoolean(getActivity(), nameText[i], false);
+            state = PreferenceUtils.getPrefBoolean(MyApplication.getInstans(), nameText[i], false);
             entity.setChoose_state(state);
             entity.setName(nameText[i]);
             if (firstCome && i < name.length / 2) {
                 entity.setChoose_state(firstCome);//第一次进入默认获取前5个显示在首页
-                PreferenceUtils.setPrefBoolean(getActivity(), nameText[i], true);
-                indexOrderList.add(entity);
+                PreferenceUtils.setPrefBoolean(MyApplication.getInstans(), nameText[i], true);
+//                indexOrderLocalDataList.add(indexOrderLocalDataList.size() - 1, entity);
             }
-            if (state && !firstCome) {
-                indexOrderList.add(entity);
-            }
-            indexOrderAmountList.add(entity);
+//            if (state && !firstCome) {
+//                indexOrderLocalDataList.add(indexOrderLocalDataList.size() - 1, entity);
+//            }
+            indexOrderNetDatatList.add(entity);
         }
     }
 
+
+    public static String[] name = {"today_confirm_storage_count", "today_checkout_order_count", "today_wait_checkout_order_count",
+            "exception_order_count", "transport_order_count", "no_pass_order_count"
+            , "today_sign_order_count", "no_pass_storage_count", "warning_stock_count", "wait_confirm_storage_count"};
+    public static String[] nameText = {"今日已入库预报单", "今日已出库", "今日待出库",
+            "异常订单", "今日运输中", "审核不通过的订单",
+            "今日已签收", "审核不通过预报单", "库存紧张", "待确认预报单"};
+
+
     /**
-     * 保存状态
+     * 获取保存在数据库中的list顺序
+     */
+    @Subscriber(tag = "getLocalData")
+    public void getDatabaseData(String string) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (firstCome) {
+                    for (int i = 0; i < name.length / 2; i++) {
+                        indexOrderLocalDataList.add(indexOrderLocalDataList.size() - 1, indexOrderNetDatatList.get(i));
+                        bus.post("", "save");
+                    }
+                } else {
+                    localArrayString = PreferenceUtils.getPrefString(MyApplication.getInstans(), "getSortData", "");
+                    List<String> parseList = parseString(localArrayString);
+                    for (String p : parseList) {
+                        for (OrderManagerEntity entity : indexOrderNetDatatList) {
+                            if (entity.getName().contains(p)) {
+                                indexOrderLocalDataList.add(indexOrderLocalDataList.size() - 1, entity);//放在null之前
+                                break;
+                            }
+                        }
+                    }
+                    bus.post("", "adapterReflash");
+                }
+            }
+        }).start();
+    }
+
+    @Subscriber(tag = "adapterReflash")
+    public void adapterReflash(String string) {
+        orderManagerAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 保存今日数据的顺序
+     */
+    @Subscriber(tag = "save")
+    public synchronized void saveDatabaseData(String string) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                localArrayString = "";
+                List<String> arrayList = new ArrayList<String>();
+                for (OrderManagerEntity entity : indexOrderLocalDataList) {
+                    if (entity != null)
+                        arrayList.add(entity.getName());
+                }
+                localArrayString = arrayList.toString();
+                localArrayString = localArrayString.substring(1, localArrayString.length() - 1);
+                PreferenceUtils.setPrefString(MyApplication.getInstans(), "getSortData", localArrayString);
+                bus.post("", "adapterReflash");
+            }
+        }).start();
+    }
+
+    /**
+     * 解析首页订单列表的字符串
+     */
+    public List<String> parseString(String sortString) {
+        List<String> parseString = new ArrayList<>();
+        if (sortString.contains(",") || sortString.contains(";")) {
+            String sort[] = sortString.split(";");
+            if (sortString.contains(",")) {
+                sort = sortString.split(",");
+            }
+            for (String s : sort) {
+                parseString.add(s.trim());
+            }
+        }
+        return parseString;
+    }
+
+
+    /**
+     * 网络数据状态
      */
     @Subscriber(tag = "entity")
     public void indexAmountListChange(OrderManagerEntity entity) {
         //遍历
-        for (int i = 0; i < indexOrderAmountList.size(); i++) {
-            if (indexOrderAmountList.get(i).getName().equals(entity.getName())) {
-                indexOrderAmountList.get(i).setChoose_state(entity.isChoose_state());
+        for (int i = 0; i < indexOrderNetDatatList.size(); i++) {
+            if (indexOrderNetDatatList.get(i).getName().equals(entity.getName())) {
+                indexOrderNetDatatList.get(i).setChoose_state(entity.isChoose_state());
                 return;
             }
         }
     }
 
+    /**
+     * 首页显示状态
+     */
     @Subscriber(tag = "entity")
-    public void indexListChange(OrderManagerEntity entity) {
+    public synchronized void indexListChange(OrderManagerEntity entity) {
         //遍历
-        for (int i = 0; i < indexOrderList.size() - 1; i++) {//最后一个null为添加
-            if (indexOrderList.get(i).getName().equals(entity.getName())) {
-                PreferenceUtils.setPrefBoolean(getContext(), indexOrderList.get(i).getName(), entity.isChoose_state());
-                if (!entity.isChoose_state()) {
-                    indexOrderList.remove(i);
-                    orderManagerAdapter.setOrderList(indexOrderList);
-                    orderManagerAdapter.notifyDataSetChanged();
-                }
+        for (int i = 0; i < indexOrderLocalDataList.size() - 1; i++) {//最后一个null为添加
+            if (indexOrderLocalDataList.get(i).getName().equals(entity.getName())) {
+                PreferenceUtils.setPrefBoolean(getContext(), indexOrderLocalDataList.get(i).getName(), entity.isChoose_state());
+//                if (!entity.isChoose_state()) {
+                indexOrderLocalDataList.remove(i);
+//                }
+                bus.post("", "save");
                 return;
             }
-            if (i == indexOrderList.size() - 2) {
+            if (i == indexOrderLocalDataList.size() - 2) {
                 PreferenceUtils.setPrefBoolean(getContext(), entity.getName(), entity.isChoose_state());
-                indexOrderList.add(indexOrderList.size() - 1, entity);//在null之前添加
-                orderManagerAdapter.setOrderList(indexOrderList);
-                orderManagerAdapter.notifyDataSetChanged();
+                indexOrderLocalDataList.add(indexOrderLocalDataList.size() - 1, entity);//在null之前添加
+                bus.post("", "save");
                 return;
             }
         }
-        if (indexOrderList.size() - 1 == 0) {
+        if (indexOrderLocalDataList.size() - 1 == 0) {
             PreferenceUtils.setPrefBoolean(getContext(), entity.getName(), entity.isChoose_state());
-            indexOrderList.add(indexOrderList.size() - 1, entity);//在null之前添加
-            orderManagerAdapter.setOrderList(indexOrderList);
-            orderManagerAdapter.notifyDataSetChanged();
+            indexOrderLocalDataList.add(indexOrderLocalDataList.size() - 1, entity);//在null之前添加
+            bus.post("", "save");
         }
     }
+
 
     /**
      * 管理工具初始化
@@ -241,8 +320,8 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     private void initToolManager() {
         rcv_tool_manager.setLayoutManager(new FullyGridLayoutManager(getContext(), 3));
         final List<OrderManagerEntity> list = new ArrayList<OrderManagerEntity>();
-        int[] data = {R.drawable.tool1, R.drawable.tool2, R.drawable.tool3, R.drawable.tool4, R.drawable.tool5, R.drawable.tool6};
-        final int[] name = {R.string.tool1, R.string.tool2, R.string.tool3, R.string.tool4, R.string.tool5, R.string.tool6};
+        int[] data = {R.drawable.tool1, R.drawable.tool2, R.drawable.tool3, R.drawable.tool5, R.drawable.tool6};
+        final int[] name = {R.string.tool1, R.string.tool2, R.string.tool3, R.string.tool5, R.string.tool6};
         for (int i = 0; i < data.length; i++) {
             OrderManagerEntity entity = new OrderManagerEntity();
             entity.setCount(data[i]);
@@ -286,8 +365,8 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                 orderManagerAdapter.getOrderList().get(i).setDel_state(state);
             }
         }
-//        orderManagerAdapter.setOrderList(indexOrderList);
         orderManagerAdapter.notifyDataSetChanged();
+        bus.post("", "save");
     }
 
 
@@ -296,7 +375,10 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 
     }
 
-    private List<View> initData() {
+    /**
+     * 初始化轮播数据
+     */
+    private List<View> initCarouselData() {
 
         String url[] = {"file:///android_asset/lunbo1.png"
                 , "file:///android_asset/lunbo2.png"

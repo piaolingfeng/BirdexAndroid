@@ -29,4 +29,15 @@
     <dimen name="todaydata_item_height">60dp</dimen>
     <dimen name="item_height">75dp</dimen>
     <dimen name="orderlist_item_height">80dp</dimen>
+
+    <!--headview上的字体 高度-->
+    <dimen name="headview_title_size">18sp</dimen>
+    <dimen name="headview_padding_top">18dp</dimen>
+    <dimen name="headview_padding_bottom">6dp</dimen>
+    <!--我的首页-->
+    <dimen name="mine_item_size">16sp</dimen>
+    <!--收支明细-->
+    <dimen name="personal_details_item_orderid_size">16sp</dimen>
+    <dimen name="personal_details_item_ordernum_size">16sp</dimen>
+    <dimen name="personal_details_item_ordercontent_size">14sp</dimen>
 </resources>

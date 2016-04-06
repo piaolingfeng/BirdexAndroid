@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.birdex.bird.R;
 import com.birdex.bird.activity.AboutActivity;
+import com.birdex.bird.activity.MyAccountActivity;
 import com.birdex.bird.activity.MyAccountInfoActivity;
 import com.birdex.bird.entity.MineEntity;
 
@@ -122,8 +123,8 @@ public class MineIndexAdapter extends RecyclerView.Adapter<MineIndexAdapter.Mine
             Intent intent=null;
             switch (position){
                 case 0:
-                    //我的账号
-                    intent=new Intent(MineIndexAdapter.this.activity, MyAccountInfoActivity.class);
+                    // 点击了 我的账户
+                    intent = new Intent(MineIndexAdapter.this.activity, MyAccountActivity.class);
                     MineIndexAdapter.this.activity.startActivity(intent);
                     break;
                 case 1:

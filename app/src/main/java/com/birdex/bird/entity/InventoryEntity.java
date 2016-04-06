@@ -115,11 +115,11 @@ public class InventoryEntity implements Serializable {
         this.price_unit = price_unit;
     }
 
-    public ArrayList<Warehouse> getStock() {
+    public ArrayList<InventoryStockEntity> getStock() {
         return stock;
     }
 
-    public void setStock(ArrayList<Warehouse> stock) {
+    public void setStock(ArrayList<InventoryStockEntity> stock) {
         this.stock = stock;
     }
 
@@ -148,10 +148,7 @@ public class InventoryEntity implements Serializable {
     //价值单位
     private String price_unit;
     //
-    private ArrayList<Warehouse> stock;
+    private ArrayList<InventoryStockEntity> stock;
 
-    //仓库对象
-    public class Warehouse implements Serializable {
 
-    }
 }

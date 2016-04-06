@@ -13,12 +13,13 @@
     <!--库存-->
     <dimen name="inventory_item_margin_top">10dp</dimen>
     <dimen name="inventory_item_paddinglr">12dp</dimen>
-    <dimen name="inventory_item_code">18sp</dimen>
-    <dimen name="inventory_item_time">16sp</dimen>
-    <dimen name="inventory_item_name">18sp</dimen>
-    <dimen name="inventory_item_number">18sp</dimen>
+    <dimen name="inventory_item_code">16sp</dimen>
+    <dimen name="inventory_item_time">14sp</dimen>
+    <dimen name="inventory_item_text">14sp</dimen>
+    <dimen name="inventory_item_number">16sp</dimen>
     <dimen name="inventory_item_pic_width">60dp</dimen>
     <dimen name="inventory_item_pic_height">60dp</dimen>
     <dimen name="inventory_item_row1_padding">10dp</dimen>
     <dimen name="inventory_item_row2_padding">10dp</dimen>
+    <dimen name="inventory_item_row2_marginlr">10dp</dimen>
 </resources>

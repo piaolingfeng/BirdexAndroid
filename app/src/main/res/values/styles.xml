@@ -3,6 +3,10 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
+
+    <style name="AppCompat.style" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:listDivider">@drawable/divider_bg</item>
+    </style>
     -->
     <!-- Mydialog-->
     <style name="semester_dialog" parent="@android:style/Theme.Dialog">
@@ -64,10 +68,6 @@
         <item name="android:textColor">@color/selected</item>
     </style>
 
-    <style name="text_blue" parent="android:TextAppearance.Widget.TextView">
-        <item name="android:textColor">@color/blue</item>
-        <item name="android:textSize">18dp</item>
-    </style>
     <!--库存页面的字体样式-->
     <style name="inventory_item_text">
         <item name="android:textColorPrimary">@color/inventory_item_black</item>
@@ -91,8 +91,5 @@
     <style name="inventory_item_gray1" parent="android:TextAppearance.Widget.TextView">
         <item name="android:textColor">@color/inventory_item_gray</item>
         <item name="android:textSize">@dimen/inventory_item_text</item>
-    </style>
-    <style name="title_while" parent="android:TextAppearance.Widget.TextView">
-        <item name="android:textColor">@color/white</item>
     </style>
 </resources>

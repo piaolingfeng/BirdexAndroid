@@ -1,9 +1,6 @@
 package com.birdex.bird.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.support.percent.PercentRelativeLayout;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,22 +10,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.entity.OrderManagerEntity;
-import com.birdex.bird.fragment.IndexFragment;
 import com.birdex.bird.helper.ItemTouchHelperAdapter;
 import com.birdex.bird.helper.ItemTouchHelperViewHolder;
 import com.birdex.bird.helper.OnStartDragListener;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.interfaces.OnRecyclerViewItemLongClickListener;
-import com.birdex.bird.util.T;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
 
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;

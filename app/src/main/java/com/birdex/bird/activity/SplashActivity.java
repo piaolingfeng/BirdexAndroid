@@ -116,7 +116,7 @@ public class SplashActivity extends BaseActivity implements BaseFragment.OnFragm
                 imgThread.notify();
             }
         }
-        startActivity(new Intent("com.google.app.splashy.CLEARSPLASH"));
+        startActivity(new Intent("com.bird.app.splashy.CLEARSPLASH"));
         finish();
     }
 

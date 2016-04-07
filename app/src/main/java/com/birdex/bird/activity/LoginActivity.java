@@ -160,7 +160,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //                        contactDetail.setReceiver_area_id("4700");
 //                        contactDetail.setReceiver_area("临城县");
 //                        contactDetail.setReceiver_address("什么三峡搬迁罗里吧嗦一大堆");
-
+//
 //                        Bundle b = new Bundle();
 //                        b.putSerializable("ContactDetail",contactDetail);
 //                        intent.putExtras(b);

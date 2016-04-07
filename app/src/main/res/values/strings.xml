@@ -220,6 +220,9 @@
     <string name="track">当前轨迹</string>
     <string name="transport">已运送：</string>
     <string name="out_storage">出库时间：</string>
+    <string name="copy_logistics">复制物流信息</string>
+    <string name="copy_tip">内容已经复制到剪切板</string>
+    <string name="track_after">物流跟踪</string>
 
     <string name="please_wail">敬请期待</string>
 </resources>

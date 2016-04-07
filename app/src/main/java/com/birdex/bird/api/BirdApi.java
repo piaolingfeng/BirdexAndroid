@@ -138,6 +138,14 @@ public class BirdApi {
 
     // 获取物流轨迹
     public static void getTracking(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        params.add("app_debug", 1 + "");
+        params.add("user_code", MyApplication.user.getUser_code());
+        params.add("company_code", MyApplication.user.getCompany_code());
         get(context, "Order/getTracking", params, jsonHttpResponseHandler);
+    }
+
+    // 获取预报列表
+    public static void getForecast(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        post(context, "Storage/all", params, jsonHttpResponseHandler);
     }
 }

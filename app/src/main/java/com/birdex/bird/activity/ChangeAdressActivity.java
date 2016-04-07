@@ -235,6 +235,9 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     // 一开始传递过来的
     private ContactDetail contactDetail;
 
+    // 传递过来的 订单号
+    private String orderNo;
+
     private void setOriginalData(){
         Intent intent = getIntent();
         contactDetail = (ContactDetail) intent.getExtras().get("ContactDetail");
@@ -245,6 +248,22 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
             detail_adress.setText(contactDetail.getReceiver_address());
 
         }
+
+        orderNo = intent.getExtras().getString("order_oms_no");
+        // 通过订单号，拿到订单信息
+        getOrderDetail();
+    }
+
+    private void getOrderDetail(){
+        RequestParams params = new RequestParams();
+//        params.put("order_code",orderNo);
+        params.add("order_code","BH160322676334");
+        BirdApi.getOrderDetail(MyApplication.getInstans(),params,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+            }
+        });
     }
 
     // 将传过来的 省市区 设置上 选择器上

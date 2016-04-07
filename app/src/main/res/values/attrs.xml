@@ -55,5 +55,12 @@
     <declare-styleable name="HeaderView">
         <attr name="headtitle" format="reference|string"/>
         <attr name="bgcolor" format="color|reference" />
+        <attr name="leftstyle" format="reference"/>
+        <attr name="rightstyle" format="reference"/>
+        <attr name="middlestyle" format="reference"/>
+        <attr name="leftimg" format="reference"/>
+        <attr name="rightimg" format="reference"/>
+        <attr name="lefttxt" format="reference|string"/>
+        <attr name="righttxt" format="reference|string"/>
     </declare-styleable>
 </resources>

@@ -25,7 +25,7 @@ import com.birdex.bird.widget.SystemBarTintManager;
 
 import butterknife.ButterKnife;
 
-public abstract class BaseActivity extends FragmentActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     private int mContentLayoutResId;
     ProgressDialog bar;
     Dialog loadingDialog;

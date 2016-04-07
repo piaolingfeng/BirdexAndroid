@@ -1,13 +1,8 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar" />
-
-    <style name="AppCompat.style" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:listDivider">@drawable/divider_bg</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
-
-    <style name="ThemeOverlay.AppCompat.Dark" parent="Base.ThemeOverlay.AppCompat.Dark" />
     -->
     <!-- Mydialog-->
     <style name="semester_dialog" parent="@android:style/Theme.Dialog">
@@ -61,12 +56,10 @@
         <item name="android:textSize">18sp</item>
         <item name="android:gravity">center</item>
     </style>
-
     <style name="myaccount_style_unselect" parent="myaccount_style">
         <item name="android:textColor">#8e949a</item>
         <item name="android:textStyle">normal</item>
     </style>
-
     <style name="myaccount_style_select" parent="myaccount_style">
         <item name="android:textColor">@color/selected</item>
     </style>

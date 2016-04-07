@@ -31,13 +31,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+
 /**
  * Created by huwei on 16/4/5.
  */
-public class InventoryActivity extends AppCompatActivity implements XRecyclerView.LoadingListener{
+public class InventoryActivity extends BaseActivity implements XRecyclerView.LoadingListener{
     private RequestParams params=null;
     //当前页数，首页为1
     private int currentPage=1;
+    @Bind(R.id.rv_inventory)
     public XRecyclerView rv_inventory=null;
     //适配器
     private InventoryAdapter adapter=null;
@@ -51,12 +54,36 @@ public class InventoryActivity extends AppCompatActivity implements XRecyclerVie
     private ArrayList<InventoryEntity> list=null;
     //默认为在库库存
     private InventoryAdapter.Type type= InventoryAdapter.Type.Inner;
-    ProgressDialog bar;
-    Dialog loadingDialog;
+//    ProgressDialog bar;
+//    Dialog loadingDialog;
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.inventory_layout);
+//
+//        //初始化解析业务
+//        biz=new InventoryBiz();
+//        //网络请求参数
+//        params=new RequestParams();
+//        //商品类型，20表示物料，默认10表示商品
+//        params.put("product_type",10);
+//        //40表示发往仓库，1表示在库，10表示正常，20表示库存紧张，30表示断货
+//        //默认进入为“待入库”
+//        params.put("stock_status", 1);
+////        params.put("page_num",2);
+//        initView();
+//        //
+//        showBar();
+//        startRequest();
+//    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.inventory_layout);
+    public int getContentLayoutResId() {
+        return R.layout.inventory_layout;
+    }
+
+    @Override
+    public void initializeContentViews() {
         //初始化解析业务
         biz=new InventoryBiz();
         //网络请求参数
@@ -66,14 +93,6 @@ public class InventoryActivity extends AppCompatActivity implements XRecyclerVie
         //40表示发往仓库，1表示在库，10表示正常，20表示库存紧张，30表示断货
         //默认进入为“待入库”
         params.put("stock_status", 1);
-//        params.put("page_num",2);
-        initView();
-        //
-        showBar();
-        startRequest();
-    }
-    //初始化view
-    private void initView(){
         rv_inventory=(XRecyclerView)findViewById(R.id.rv_inventory);
         rv_inventory.setLoadingMoreEnabled(true);
         rv_inventory.setPullRefreshEnabled(true);
@@ -83,10 +102,23 @@ public class InventoryActivity extends AppCompatActivity implements XRecyclerVie
         //初始化适配器
         adapter=new InventoryAdapter(this,this.list,type);
         rv_inventory.setAdapter(adapter);
-        //
-        bar = new ProgressDialog(this);
-        bar.setCanceledOnTouchOutside(false);
     }
+
+//    //初始化view
+//    private void initView(){
+//        rv_inventory=(XRecyclerView)findViewById(R.id.rv_inventory);
+//        rv_inventory.setLoadingMoreEnabled(true);
+//        rv_inventory.setPullRefreshEnabled(true);
+//        rv_inventory.setLoadingListener(this);
+//        rv_inventory.setLayoutManager(new LinearLayoutManager(this));
+//        this.list=new ArrayList<>();
+//        //初始化适配器
+//        adapter=new InventoryAdapter(this,this.list,type);
+//        rv_inventory.setAdapter(adapter);
+//        //
+//        bar = new ProgressDialog(this);
+//        bar.setCanceledOnTouchOutside(false);
+//    }
     private void startRequest(){
         params.put("page_no",currentPage);
         BirdApi.getInventory(this,params,new JsonHttpResponseHandler(){
@@ -172,34 +204,34 @@ public class InventoryActivity extends AppCompatActivity implements XRecyclerVie
             stopHttpAnim();
         }
     }
-    public void showBar() {
-        bar.setMessage("加载中...");
-        bar.show();
-    }
-
-    public void hideBar() {
-        bar.dismiss();
-    }
-
-    public void showBarCommit() {
-        bar.setMessage("正在提交...");
-        bar.show();
-    }
-
-    public void showLoading() {
-        loadingDialog = new SafeProgressDialog(this, R.style.semester_dialog);// 创建自定义样式dialog
-//        loadingDialog.setCancelable(false);// 不可以用“返回键”取消
-//        loadingDialog.setCanceledOnTouchOutside(false);
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_loading, null);
-        loadingDialog.setContentView(view);// 设置布局
-        final RotateLoading loading = (RotateLoading) view.findViewById(R.id.rotateloading);
-        loading.start();
-        loadingDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                loading.stop();
-            }
-        });
-        loadingDialog.show();
-    }
+//    public void showBar() {
+//        bar.setMessage("加载中...");
+//        bar.show();
+//    }
+//
+//    public void hideBar() {
+//        bar.dismiss();
+//    }
+//
+//    public void showBarCommit() {
+//        bar.setMessage("正在提交...");
+//        bar.show();
+//    }
+//
+//    public void showLoading() {
+//        loadingDialog = new SafeProgressDialog(this, R.style.semester_dialog);// 创建自定义样式dialog
+////        loadingDialog.setCancelable(false);// 不可以用“返回键”取消
+////        loadingDialog.setCanceledOnTouchOutside(false);
+//        View view = LayoutInflater.from(this).inflate(R.layout.dialog_loading, null);
+//        loadingDialog.setContentView(view);// 设置布局
+//        final RotateLoading loading = (RotateLoading) view.findViewById(R.id.rotateloading);
+//        loading.start();
+//        loadingDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//                loading.stop();
+//            }
+//        });
+//        loadingDialog.show();
+//    }
 }

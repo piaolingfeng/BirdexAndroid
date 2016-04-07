@@ -30,6 +30,7 @@
 
     <string name="listmanager">80%h</string>
 
+    <string name="sixtyPercentHeight">70%h</string>
     <!--欢迎页面-->
     <string name="welcom_go_now">点击跳过>></string>
     <!--首页-->
@@ -181,4 +182,9 @@
         <item name="mine_item_mycustomer">我的客户经理</item>
         <item name="mine_item_about">关于</item>
     </string-array>
+
+    <string name="logistics_tracking">物流跟踪</string>
+    <string name="service_type">联系客服</string>
+    <string name="change_address">改派</string>
+    <string name="commodity_code">商品编码:</string>
 </resources>

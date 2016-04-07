@@ -47,7 +47,7 @@
         <activity android:name=".activity.IconChangeActivity" />
         <activity android:name=".activity.TodayDataActivity" />
         <activity android:name=".activity.MyOrderListActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/AppCompat.style"/>
 
         <service android:name=".update.UpdateService" />
 

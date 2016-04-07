@@ -93,4 +93,37 @@ public class BirdApi {
     public static void getConfig(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
         get(context, "Public/getConfig", params, jsonHttpResponseHandler);
     }
+
+    // 获取订单所有状态
+    public static void getOrderListState(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        params.add("app_debug", 1 + "");
+        params.add("user_code", MyApplication.user.getUser_code());
+        params.add("company_code", MyApplication.user.getCompany_code());
+        get(context, "order/getOrderStatusList", params, jsonHttpResponseHandler);
+    }
+
+    // 获取订单列表
+    public static void getOrderList(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        params.add("app_debug", 1 + "");
+        params.add("user_code", MyApplication.user.getUser_code());
+        params.add("company_code", MyApplication.user.getCompany_code());
+        get(context, "order/all", params, jsonHttpResponseHandler);
+    }
+
+    // 获取单个订单
+    public static void getOrderDetail(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        params.add("app_debug", 1 + "");
+        params.add("user_code", MyApplication.user.getUser_code());
+        params.add("company_code", MyApplication.user.getCompany_code());
+        get(context, "Order/get", params, jsonHttpResponseHandler);
+    }
+
+    // 获取所有仓库
+    public static void getAllWarehouse(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        params.add("app_debug", 1 + "");
+        params.add("user_code", MyApplication.user.getUser_code());
+        params.add("company_code", MyApplication.user.getCompany_code());
+        get(context, "Warehouse/companyAll", params, jsonHttpResponseHandler);
+    }
+
 }

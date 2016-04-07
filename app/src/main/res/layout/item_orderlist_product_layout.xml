@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+
+        <ImageView
+            android:id="@+id/img_pic"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/chrome"
+            app:layout_heightPercent="70%"
+            app:layout_marginPercent="3%"
+            app:layout_widthPercent="@string/sixtyPercentHeight" />
+
+        <com.zhy.android.percent.support.PercentRelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/img_pic"
+            app:layout_marginLeftPercent="3%">
+
+            <com.zhy.android.percent.support.PercentLinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/tv_nums"
+                android:orientation="vertical">
+
+                <com.zhy.android.percent.support.PercentRelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_heightPercent="40%">
+
+                    <TextView
+                        android:id="@+id/tv_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center"
+                        android:text="@string/commodity_code"
+                        android:textColor="@color/context_1"
+                        app:layout_textSizePercent="40%" />
+
+                    <TextView
+                        android:id="@+id/tv_external_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@id/tv_code"
+                        android:gravity="left|center"
+                        android:singleLine="true"
+                        android:text="42334124343"
+                        android:textColor="@color/context_1"
+                        app:layout_marginLeftPercent="3%"
+                        app:layout_textSizePercent="40%" />
+
+
+                </com.zhy.android.percent.support.PercentRelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:maxLines="2"
+                    android:text="234234"
+                    android:textColor="@color/context_1"
+                    app:layout_textSizePercent="17%" />
+            </com.zhy.android.percent.support.PercentLinearLayout>
+
+
+            <TextView
+                android:id="@+id/tv_nums"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="x1"
+                android:textColor="@color/context_2"
+                app:layout_paddingLeftPercent="3%"
+                app:layout_paddingRightPercent="6%"
+                app:layout_textSizePercent="20%" />
+
+        </com.zhy.android.percent.support.PercentRelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:background="@color/touch_color" />
+
+
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+</LinearLayout>

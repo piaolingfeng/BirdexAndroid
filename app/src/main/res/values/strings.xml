@@ -207,5 +207,19 @@
     <string name="phone_empty">联系电话不能为空</string>
     <string name="adress_empty">详细地址不能为空</string>
 
+    <!-- 物流跟踪 -->
+    <string name="order_number">订单号：</string>
+    <string name="client_number">客户单号：</string>
+    <string name="receiver">收件人：</string>
+    <string name="getorder">仓库接单</string>
+    <string name="orderout">订单出库</string>
+    <string name="fly">航空运输</string>
+    <string name="clear">清关</string>
+    <string name="transportation">国内运输</string>
+    <string name="sign">签收</string>
+    <string name="track">当前轨迹</string>
+    <string name="transport">已运送：</string>
+    <string name="out_storage">出库时间：</string>
+
     <string name="please_wail">敬请期待</string>
 </resources>

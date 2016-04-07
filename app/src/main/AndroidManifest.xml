@@ -50,6 +50,9 @@
         <activity
             android:name=".activity.ChangeAdressActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LogisticsActivity"
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.InventoryActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".activity.MyOrderListActivity"

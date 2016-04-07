@@ -117,12 +117,14 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.tv_logistics_tracking:
+
                     break;
                 case R.id.tv_service_type:
+                    T.showLong(MyApplication.getInstans(),mContext.getString(R.string.please_wail));
                     break;
                 case R.id.tv_change_address:
                     break;
-                case R.id.tv_order_oms_no:
+                case R.id.tv_order_oms_no://复制订单号
                     ClipboardManagerUtil.copy(tv_order_oms_no.getText().toString(), mContext);
                     T.showShort(MyApplication.getInstans(), "已复制");
                     break;
@@ -135,6 +137,15 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
             }
         }
 
+        public void startTrackingActivity(String order_oms_no){
+            Intent intent = new Intent();
+            intent.putExtra("order_oms_no",order_oms_no);
+            mContext.startActivity(intent);
+        }
+
+        /**
+         * 拨打电话
+         * */
         public void dialPhoneNumber(String phoneNumber) {
             Intent intent = new Intent(Intent.ACTION_DIAL);
             intent.setData(Uri.parse("tel:" + phoneNumber));

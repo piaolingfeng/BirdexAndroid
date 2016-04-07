@@ -206,4 +206,6 @@
     <string name="consignee_empty">收货人不能为空</string>
     <string name="phone_empty">联系电话不能为空</string>
     <string name="adress_empty">详细地址不能为空</string>
+
+    <string name="please_wail">敬请期待</string>
 </resources>

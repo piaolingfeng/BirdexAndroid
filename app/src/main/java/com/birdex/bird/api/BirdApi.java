@@ -93,4 +93,9 @@ public class BirdApi {
     public static void getConfig(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
         get(context, "Public/getConfig", params, jsonHttpResponseHandler);
     }
+
+    // 获取物流轨迹
+    public static void getTracking(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        get(context, "Order/getTracking", params, jsonHttpResponseHandler);
+    }
 }

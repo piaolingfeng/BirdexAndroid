@@ -47,13 +47,12 @@
         <activity android:name=".activity.IconChangeActivity" />
         <activity android:name=".activity.TodayDataActivity" />
         <activity
-            android:name=".activity.MyOrderListActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
             android:name=".activity.ChangeAdressActivity"
             android:screenOrientation="portrait" />
 
         <activity android:name=".activity.InventoryActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".activity.MyOrderListActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
 
         <service android:name=".update.UpdateService" />
 

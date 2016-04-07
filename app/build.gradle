@@ -35,4 +35,5 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.github.rey5137:material:1.2.2'
     compile files('libs/alipaySdk-20160223.jar')
+    compile 'com.google.code.gson:gson:2.6.2'
 }

@@ -1,43 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
 
     <com.zhy.android.percent.support.PercentRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        app:layout_heightPercent="8%">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/tool1"
-            android:textColor="@color/title_2"
-            app:layout_textSizePercent="30%" />
-
-        <ImageView
-            android:id="@+id/img_menu"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/tv_title"
-            android:src="@drawable/tool1" />
+        <include
+            layout="@layout/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
 
     </com.zhy.android.percent.support.PercentRelativeLayout>
 
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.CoordinatorLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -49,7 +33,7 @@
             android:layout_height="wrap_content"
             android:background="@color/background"
             android:orientation="vertical"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
 
             <LinearLayout
@@ -58,118 +42,117 @@
                 android:orientation="vertical"
                 app:layout_scrollFlags="scroll|enterAlways">
 
-                <EditText
-                    android:id="@+id/et_search"
-                    android:layout_width="fill_parent"
+                <com.zhy.android.percent.support.PercentRelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/aboutus_search"
-                    android:drawableLeft="@drawable/ic_search"
-                    android:hint="请输入文字..."
-                    android:imeOptions="actionSearch"
-                    android:singleLine="true"
-                    android:textSize="12sp" />
+                    android:layout_marginRight="10dp">
 
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tablayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp" />
+                    <com.birdex.bird.widget.ClearEditText
+                        android:id="@+id/et_search"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:layout_toLeftOf="@+id/img_scan_code"
+                        android:background="@drawable/aboutus_search"
+                        android:drawableLeft="@drawable/ic_search"
+                        android:hint="请输入文字..."
+                        android:imeOptions="actionSearch"
+                        android:singleLine="true"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:id="@+id/img_scan_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/scan_code" />
+                </com.zhy.android.percent.support.PercentRelativeLayout>
 
                 <com.zhy.android.percent.support.PercentLinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:background="@color/white">
+                    android:background="@color/white"
+                    android:orientation="horizontal">
 
                     <com.zhy.android.percent.support.PercentRelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:background="@drawable/list_item_selector"
                         android:layout_weight="1"
-                        android:gravity="center">
-
-                        <TextView
-                            android:id="@+id/state_time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="@string/state_time"
-                            android:textColor="@color/menu_item_color_selector" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_centerVertical="true"
-                            android:layout_toRightOf="@+id/state_time"
-                            android:src="@drawable/tool1"
-                            app:layout_marginLeftPercent="10%" />
-
-                    </com.zhy.android.percent.support.PercentRelativeLayout>
-
-                    <TextView
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:background="@color/touch_color"
-                        android:visibility="visible"
-                        app:layout_heightPercent="60%" />
-
-                    <com.zhy.android.percent.support.PercentRelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
                         android:background="@drawable/list_item_selector"
-                        android:layout_weight="1"
                         android:gravity="center">
 
                         <TextView
                             android:id="@+id/state_Warehouse"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:drawableRight="@drawable/laydown"
                             android:gravity="center"
                             android:text="@string/state_Warehouse"
-                            android:textColor="@color/menu_item_color_selector" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_centerVertical="true"
-                            android:layout_toRightOf="@+id/state_Warehouse"
-                            android:src="@drawable/tool1"
-                            app:layout_marginLeftPercent="10%" />
+                            android:textColor="@color/menu_item_color_selector"
+                            app:layout_paddingLeftPercent="5%"
+                            app:layout_paddingRightPercent="5%" />
 
                     </com.zhy.android.percent.support.PercentRelativeLayout>
 
                     <TextView
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:gravity="center"
                         android:background="@color/touch_color"
+                        android:gravity="center"
                         android:visibility="visible"
                         app:layout_heightPercent="60%" />
 
                     <com.zhy.android.percent.support.PercentRelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:background="@drawable/list_item_selector"
                         android:layout_weight="1"
+                        android:background="@drawable/list_item_selector"
                         android:gravity="center">
 
                         <TextView
                             android:id="@+id/state_all"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:drawablePadding="10dp"
+                            android:drawableRight="@drawable/laydown"
                             android:gravity="center"
                             android:text="@string/state_all"
-                            android:textColor="@color/menu_item_color_selector"/>
+                            android:textColor="@color/menu_item_color_selector"
+                            app:layout_paddingLeftPercent="5%"
+                            app:layout_paddingRightPercent="5%" />
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_centerVertical="true"
-                            android:layout_toRightOf="@+id/state_all"
-                            android:src="@drawable/tool1"
-                            app:layout_marginLeftPercent="10%" />
+
+                    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/touch_color"
+                        android:gravity="center"
+                        android:visibility="visible"
+                        app:layout_heightPercent="60%" />
+
+                    <com.zhy.android.percent.support.PercentRelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/list_item_selector"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/state_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:drawablePadding="10dp"
+                            android:drawableRight="@drawable/laydown"
+                            android:gravity="center"
+                            android:text="@string/state_time"
+                            android:textColor="@color/menu_item_color_selector"
+                            app:layout_paddingLeftPercent="5%"
+                            app:layout_paddingRightPercent="5%" />
+
                     </com.zhy.android.percent.support.PercentRelativeLayout>
 
                 </com.zhy.android.percent.support.PercentLinearLayout>
@@ -177,20 +160,15 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.widget.NestedScrollView
+
+        <com.birdex.bird.xrecyclerview.XRecyclerView
+            android:id="@+id/rcy_orderlist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        </com.birdex.bird.xrecyclerview.XRecyclerView>
 
-            </android.support.v4.view.ViewPager>
-
-
-        </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
 </com.zhy.android.percent.support.PercentLinearLayout>

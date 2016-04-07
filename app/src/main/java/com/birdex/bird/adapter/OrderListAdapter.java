@@ -1,6 +1,8 @@
 package com.birdex.bird.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,11 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
+import com.birdex.bird.util.ClipboardManagerUtil;
+import com.birdex.bird.util.T;
 
 import java.util.List;
 
@@ -102,6 +108,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+            tv_order_oms_no.setOnClickListener(this);
+            tv_receiver_mobile.setOnClickListener(this);
         }
 
         @OnClick({R.id.tv_logistics_tracking, R.id.tv_service_type, R.id.tv_change_address})
@@ -114,9 +122,24 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
                     break;
                 case R.id.tv_change_address:
                     break;
+                case R.id.tv_order_oms_no:
+                    ClipboardManagerUtil.copy(tv_order_oms_no.getText().toString(), mContext);
+                    T.showShort(MyApplication.getInstans(), "已复制");
+                    break;
+                case R.id.tv_receiver_mobile:
+                    dialPhoneNumber(tv_receiver_mobile.getText().toString());
+                    break;
                 default:
                     if (onRecyclerViewItemClickListener != null)
                         onRecyclerViewItemClickListener.onItemClick(position);
+            }
+        }
+
+        public void dialPhoneNumber(String phoneNumber) {
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse("tel:" + phoneNumber));
+            if (intent.resolveActivity(mContext.getPackageManager()) != null) {
+                mContext.startActivity(intent);
             }
         }
     }

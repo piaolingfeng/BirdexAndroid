@@ -60,8 +60,8 @@ public class MyOrderListActivity extends AppCompatActivity implements View.OnCli
 //    ViewPager viewpager;
     @Bind(R.id.et_search)
     ClearEditText et_search;
-    @Bind(R.id.tablayout)
-    TabLayout tabLayout;
+//    @Bind(R.id.tablayout)
+//    TabLayout tabLayout;
 
     @Bind(R.id.title)
     TextView title;
@@ -143,7 +143,7 @@ public class MyOrderListActivity extends AppCompatActivity implements View.OnCli
 
 
     private void initTab() {
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+//        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 //        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_1));
 //        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_2));
 //        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_3));

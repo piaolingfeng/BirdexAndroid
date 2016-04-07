@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.api.BirdApi;
+import com.birdex.bird.entity.ContactDetail;
 import com.birdex.bird.entity.User;
 import com.birdex.bird.update.UpdateManager;
 import com.birdex.bird.util.JsonHelper;
@@ -147,6 +149,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         MyApplication.user = JsonHelper.parseObject((JSONObject) response.get("data"), User.class);
                         T.showShort(MyApplication.getInstans(), getString(R.string.loginsu));
                         Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
+
+//                        ContactDetail contactDetail = new ContactDetail();
+//                        contactDetail.setReceiver_name("胡芦娃");
+//                        contactDetail.setReceiver_mobile("1383838388");
+//                        contactDetail.setReceiver_province_id("4628");
+//                        contactDetail.setReceiver_province("河北省");
+//                        contactDetail.setReceiver_city_id("4696");
+//                        contactDetail.setReceiver_city("邢台市");
+//                        contactDetail.setReceiver_area_id("4700");
+//                        contactDetail.setReceiver_area("临城县");
+//                        contactDetail.setReceiver_address("什么三峡搬迁罗里吧嗦一大堆");
+//
+//                        Bundle b = new Bundle();
+//                        b.putSerializable("ContactDetail",contactDetail);
+//                        intent.putExtras(b);
+
                         startActivity(intent);
                         finish();
                     } else {

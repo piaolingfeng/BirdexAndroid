@@ -2,15 +2,23 @@ package com.birdex.bird.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.activity.InventoryActivity;
 import com.birdex.bird.activity.MyAccountActivity;
+import com.birdex.bird.activity.MyAccountInfoActivity;
 import com.birdex.bird.activity.MyOrderListActivity;
 import com.birdex.bird.activity.TodayDataActivity;
 import com.birdex.bird.adapter.OrderManagerAdapter;
@@ -339,15 +347,29 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         toolManagerAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                T.showShort(MyApplication.getInstans(), list.get(position).getName());
-                // 点击了 我的账户
+//                T.showShort(MyApplication.getInstans(), list.get(position).getName());
+                Intent intent=null;
                 if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool6))) {
-                    // 跳转到我的账户
-                    Intent intent = new Intent(getActivity(), MyAccountActivity.class);
+                    //我的充值
+                    intent=new Intent(getActivity(), MyAccountInfoActivity.class);
+                    //显示第一个页面
+                    intent.putExtra("enterindex",0);
+                    getActivity().startActivity(intent);
+                    return;
+                }else if(list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool5))){
+                    //我的支出记录
+                    intent=new Intent(getActivity(), MyAccountInfoActivity.class);
+                    //显示第二个页面
+                    intent.putExtra("enterindex",1);
+                    getActivity().startActivity(intent);
+                    return;
+                }else if(list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool3))){
+                    //我的库存
+                    intent=new Intent(getActivity(), InventoryActivity.class);
                     startActivity(intent);
                     return;
                 }
-                Intent intent = new Intent(getActivity(), MyOrderListActivity.class);
+                intent = new Intent(getActivity(), MyOrderListActivity.class);
                 intent.putExtra("name", getString(name[position]));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

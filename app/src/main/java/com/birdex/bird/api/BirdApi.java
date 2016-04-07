@@ -60,8 +60,7 @@ public class BirdApi {
         post(context, "UpdateCenter/CheckVersion", params, jsonHttpResponseHandler);
     }
 
-
-
+    //消费记录
     public static void getWalletRecord(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
         StringBuilder url=new StringBuilder("Wallet/getRecord");
         if(MyApplication.user!=null){
@@ -92,6 +91,16 @@ public class BirdApi {
     // 获取配置信息
     public static void getConfig(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
         get(context, "Public/getConfig", params, jsonHttpResponseHandler);
+    }
+    //获取仓库，库存
+    public static void getInventory(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
+        StringBuilder url=new StringBuilder("stock/all");
+        if(MyApplication.user!=null){
+            url.append("?app_debug=1");
+            url.append("&user_code=").append(MyApplication.user.getUser_code());
+            url.append("&company_code=").append(MyApplication.user.getCompany_code());
+        }
+        post(context, url.toString(), params, jsonHttpResponseHandler);
     }
 
     // 获取订单所有状态

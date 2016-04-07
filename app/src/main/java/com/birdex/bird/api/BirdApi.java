@@ -102,16 +102,6 @@ public class BirdApi {
         }
         post(context, url.toString(), params, jsonHttpResponseHandler);
     }
-    //获取仓库，库存
-    public static void getInventory(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
-        StringBuilder url=new StringBuilder("stock/all");
-        if(MyApplication.user!=null){
-            url.append("?app_debug=1");
-            url.append("&user_code=").append(MyApplication.user.getUser_code());
-            url.append("&company_code=").append(MyApplication.user.getCompany_code());
-        }
-        post(context, url.toString(), params, jsonHttpResponseHandler);
-    }
 
     // 获取订单所有状态
     public static void getOrderListState(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {

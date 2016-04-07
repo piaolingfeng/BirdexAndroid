@@ -102,4 +102,31 @@
     <style name="title_while" parent="android:TextAppearance.Widget.TextView">
         <item name="android:textColor">@color/white</item>
     </style>
+    <!--库存页面的字体样式-->
+    <style name="inventory_item_text">
+        <item name="android:textColorPrimary">@color/inventory_item_black</item>
+    </style>
+    <style name="inventory_item_info">
+        <item name="android:textColorPrimary">@color/inventory_item_gray</item>
+    </style>
+    <style name="inventory_item_num">
+        <item name="android:textColorPrimary">@color/inventory_item_blue</item>
+        <item name="android:textColorSecondary">@color/inventory_item_blue</item>
+    </style>
+    <!--我的库存item中的蓝色字体-->
+    <style name="inventory_item_blue1" parent="android:TextAppearance.Widget.TextView">
+        <item name="android:textColor">@color/inventory_item_blue</item>
+        <item name="android:textSize">@dimen/inventory_item_number</item>
+    </style>
+    <style name="inventory_item_black1" parent="android:TextAppearance.Widget.TextView">
+        <item name="android:textColor">@color/inventory_item_black</item>
+        <item name="android:textSize">@dimen/inventory_item_number</item>
+    </style>
+    <style name="inventory_item_gray1" parent="android:TextAppearance.Widget.TextView">
+        <item name="android:textColor">@color/inventory_item_gray</item>
+        <item name="android:textSize">@dimen/inventory_item_text</item>
+    </style>
+    <style name="title_while" parent="android:TextAppearance.Widget.TextView">
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>

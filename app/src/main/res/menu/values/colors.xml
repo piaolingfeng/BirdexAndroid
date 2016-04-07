@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="main_menu">#2e333a</color>
+    <color name="main_mene_sel">#2d87e1</color>
+
+
+    <!-- 123,表示栏目层级关系 -->
+    <color name="title_1">#000000</color>
+    <color name="title_2">#666666</color>
+    <color name="title_3">#222222</color>
+    <color name="context_1">#9b9b9b</color>
+    <color name="context_2">#666666</color>
+    <color name="context_3">#999999</color>
+    <color name="context_4">#808080</color>
+
+    <color name="background">#f5f4f4</color>
+    <color name="white">#ffffff</color>
+    <color name="gray">#a6a6a6</color>
+    <color name="red">#ff4444</color>
+    <color name="black">#000000</color>
+    <color name="blue">#039FFF</color>
+    <color name="light_blue_1">#75e8be</color>
+    <color name="light_blue_2">#3F51B5</color>
+    <color name="light_blue_3">#03A9F4</color>
+    <color name="blue_1">#00ACFF</color>
+    <color name="blue_2">#5392EF</color>
+    <color name="blue_3">#00A5E0</color>
+    <color name="blue_head_1">#13A7DF</color>
+    <color name="selected">#039FFF</color>
+
+    <color name="touch_color">#f3F3F3</color>
+
+    <color name="transparent">#00000000</color>
+
+    <color name="title">#E2E2E2</color>
+    <!--fragment_recharge-->
+    <color name="fragment_recharge_account">#666666</color>
+    <color name="fragment_recharge_font">#666666</color>
+    <color name="input_money_line">#e4e4e4</color>
+    <!--我的-->
+    <color name="mine_item_font">#666666</color>
+    <color name="mine_item_nor">#ffffff</color>
+    <color name="mine_item_press">#e4e4e4</color>
+    <!--时间段按钮-->
+    <color name="time_item_nor">#ffffff</color>
+    <color name="time_item_press">#e4e4e4</color>
+    <color name="time_pick_nor">#2196F3</color>
+    <color name="time_pick_press">#03A9F4</color>
+    <!--库存-->
+    <color name="inventory_item_black">#ff4A4A4A</color>
+    <color name="inventory_item_gray">#ff979797</color>
+    <color name="inventory_item_blue">#ff039FFF</color>
+    <color name="inventory_item_line">#ffE4E4E4</color>
+</resources>

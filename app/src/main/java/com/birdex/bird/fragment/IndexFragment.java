@@ -174,7 +174,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         JSONObject object = response.getJSONObject("data");
         OrderManagerEntity entity;
         boolean state;
-
+        indexOrderNetDatatList = new ArrayList<>();
         for (int i = 0; i < name.length; i++) {
             entity = new OrderManagerEntity();
             entity.setCount((Integer) object.get(name[i]));
@@ -216,6 +216,11 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                         bus.post("", "save");
                     }
                 } else {
+//                    while (indexOrderLocalDataList.get(0) != null) {
+//                        indexOrderLocalDataList.remove(0);
+//                    }
+                    indexOrderLocalDataList = new ArrayList<OrderManagerEntity>();
+                    indexOrderLocalDataList.add(null);
                     localArrayString = PreferenceUtils.getPrefString(MyApplication.getInstans(), "getSortData", "");
                     List<String> parseList = parseString(localArrayString);
                     for (String p : parseList) {
@@ -234,6 +239,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 
     @Subscriber(tag = "adapterReflash")
     public void adapterReflash(String string) {
+        orderManagerAdapter.setOrderList(indexOrderLocalDataList);
         orderManagerAdapter.notifyDataSetChanged();
     }
 

@@ -364,7 +364,18 @@ public class StringUtils {
 	public static String getString(String s) {
 		return s == null ? "" : s;
 	}
-
+	public static String getNumString(String s) {
+		if(s==null){
+			return "0";
+		}else{
+			if("".equals(s.trim())){
+				return "0";
+			}else if("null".equals(s.trim())){
+				return "0";
+			}
+		}
+		return s;
+	}
 	/**
 	 * 将一个InputStream流转换成字符串
 	 * 

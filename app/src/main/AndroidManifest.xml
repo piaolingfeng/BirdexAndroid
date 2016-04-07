@@ -17,20 +17,19 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Light.NoTitleBar">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".activity.MyAccountInfoActivity"
             android:configChanges="orientation|keyboardHidden"
             android:noHistory="true"
             android:screenOrientation="locked"
-            android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="adjustPan|stateHidden"></activity>
         <activity android:name=".activity.MainActivity"></activity>
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="locked">
             <intent-filter>
-                <action android:name="com.google.app.splashy.CLEARSPLASH" />
+                <action android:name="com.bird.app.splashy.CLEARSPLASH" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -49,14 +48,16 @@
         <activity android:name=".activity.IconChangeActivity" />
         <activity android:name=".activity.TodayDataActivity" />
         <activity
-            android:name=".activity.MyOrderListActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
             android:name=".activity.ChangeAdressActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LogisticsActivity"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".activity.InventoryActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".activity.MyOrderListActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:theme="@style/AppCompat.style"/>
 
         <service android:name=".update.UpdateService" />
 

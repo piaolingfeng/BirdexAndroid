@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/list_item_selector"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+
+        <TextView
+            android:id="@+id/tv_order_oms_no"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_o"
+            android:drawablePadding="10dp"
+            android:drawableRight="@drawable/copy"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="232:"
+            android:textColor="@color/context_2"
+            app:layout_paddingLeftPercent="1%"
+            app:layout_textSizePercent="30%" />
+
+        <TextView
+            android:id="@+id/tv_status_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="待出库"
+            android:textColor="@color/blue"
+            app:layout_paddingLeftPercent="3%"
+            app:layout_paddingRightPercent="6%"
+            app:layout_textSizePercent="33%" />
+
+        <TextView
+            android:id="@+id/tv_created_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="2132136"
+            android:textColor="@color/context_2"
+            app:layout_paddingRightPercent="2%"
+            app:layout_textSizePercent="30%" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:background="@color/touch_color" />
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_paddingLeftPercent="1%">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcy_productlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:background="@color/touch_color" />
+
+        <TextView
+            android:id="@+id/tv_receiver_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="zhuangng"
+            android:textColor="@color/blue"
+            app:layout_paddingLeftPercent="1%"
+            app:layout_textSizePercent="35%" />
+
+        <TextView
+            android:id="@+id/tv_receiver_mobile"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_receiver_name"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="12255655"
+            android:textColor="@color/blue"
+            app:layout_marginLeftPercent="3%"
+            app:layout_textSizePercent="35%" />
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tv_weight"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="yang:0.00"
+            android:textColor="@color/context_2"
+            app:layout_textSizePercent="35%" />
+
+        <TextView
+            android:id="@+id/tv_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="1kg"
+            android:textColor="@color/context_2"
+            app:layout_marginLeftPercent="3%"
+            app:layout_paddingRightPercent="2%"
+            app:layout_textSizePercent="35%" />
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp">
+
+        <TextView
+            android:id="@+id/tv_logistics_tracking"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="@string/logistics_tracking"
+            android:textColor="@color/context_1"
+            app:layout_paddingLeftPercent="1%"
+            app:layout_paddingRightPercent="3%"
+            app:layout_textSizePercent="40%" />
+
+        <TextView
+            android:id="@+id/tv_service_type"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/service_type"
+            android:textColor="@color/context_1"
+            app:layout_paddingLeftPercent="3%"
+            app:layout_paddingRightPercent="3%"
+            app:layout_textSizePercent="40%" />
+
+        <TextView
+            android:id="@+id/tv_change_address"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="@string/change_address"
+            android:textColor="@color/context_1"
+            app:layout_paddingLeftPercent="3%"
+            app:layout_paddingRightPercent="2%"
+            app:layout_textSizePercent="40%" />
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+</com.zhy.android.percent.support.PercentLinearLayout>

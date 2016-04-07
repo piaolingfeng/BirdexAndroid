@@ -24,7 +24,7 @@ public class GlideUtils {
                         // .centerCrop()
                         // 设置占位图或者加载错误图：
 //				.placeholder(R.drawable.head)
-//				.error(R.drawable.head)
+				.error(R.drawable.chrome)
                         // 交叉淡入淡出
                 .crossFade(100)
                         // 初始化
@@ -64,7 +64,6 @@ public class GlideUtils {
                         // 裁剪中心
 //						 .centerCrop()
                         // 设置占位图或者加载错误图：
-//				.placeholder(R.drawable.chrome)chrome.png
                 .fitCenter()
                 .error(R.drawable.chrome)
                         // 交叉淡入淡出

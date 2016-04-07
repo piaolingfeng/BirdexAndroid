@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_centerVertical="true"
-        android:textAppearance="@style/title_while"
+        android:textColor="@color/white"
         app:layout_textSizePercent="35%" />
 
     <TextView
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:textAppearance="@style/title_while"
+        android:textColor="@color/blue"
         app:layout_marginRightPercent="4%"
         app:layout_textSizePercent="30%" />
 

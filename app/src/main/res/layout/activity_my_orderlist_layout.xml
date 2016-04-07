@@ -10,7 +10,8 @@
 
     <com.zhy.android.percent.support.PercentRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        app:layout_heightPercent="9%">
 
         <include
             layout="@layout/title"
@@ -21,8 +22,7 @@
     </com.zhy.android.percent.support.PercentRelativeLayout>
 
 
-    <android.support.design.widget.CoordinatorLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
@@ -32,8 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background"
-            android:orientation="vertical"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark">
+            android:orientation="vertical">
 
 
             <LinearLayout
@@ -57,6 +56,7 @@
                         android:background="@drawable/aboutus_search"
                         android:drawableLeft="@drawable/ic_search"
                         android:hint="请输入文字..."
+                        android:textColor="@color/context_2"
                         android:imeOptions="actionSearch"
                         android:singleLine="true"
                         android:textSize="12sp" />
@@ -87,6 +87,7 @@
                             android:id="@+id/state_Warehouse"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:drawablePadding="10dp"
                             android:drawableRight="@drawable/laydown"
                             android:gravity="center"
                             android:text="@string/state_Warehouse"
@@ -160,11 +161,10 @@
 
         </android.support.design.widget.AppBarLayout>
 
-
         <com.birdex.bird.xrecyclerview.XRecyclerView
             android:id="@+id/rcy_orderlist"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 

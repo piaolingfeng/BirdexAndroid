@@ -1,23 +1,15 @@
 package com.birdex.bird.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.activity.InventoryActivity;
-import com.birdex.bird.activity.MyAccountActivity;
 import com.birdex.bird.activity.MyAccountInfoActivity;
 import com.birdex.bird.activity.MyOrderListActivity;
 import com.birdex.bird.activity.TodayDataActivity;

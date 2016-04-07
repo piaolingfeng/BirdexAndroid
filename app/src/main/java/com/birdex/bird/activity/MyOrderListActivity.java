@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -54,7 +53,7 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/3/30.
  */
-public class MyOrderListActivity extends AppCompatActivity implements View.OnClickListener, XRecyclerView.LoadingListener {
+public class MyOrderListActivity extends BaseActivity implements View.OnClickListener, XRecyclerView.LoadingListener {
 
     //    @Bind(R.id.viewPager)
 //    ViewPager viewpager;
@@ -97,19 +96,11 @@ public class MyOrderListActivity extends AppCompatActivity implements View.OnCli
     EventBus bus;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-        setContentView(getContentLayoutResId());
-        EventBus.getDefault().register(this);
-        ButterKnife.bind(this);
-        initializeContentViews();
-    }
-
     public int getContentLayoutResId() {
         return R.layout.activity_my_orderlist_layout;
     }
 
+    @Override
     public void initializeContentViews() {
         bus = EventBus.getDefault();
         currentName = getIntent().getStringExtra("name");

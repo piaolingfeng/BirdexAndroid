@@ -18,15 +18,15 @@ public class OrderListEntity {
     }
 
     public class OrderListNum {
-        String count = "";//: "总页数";
+        int count = 0;//: "总页数";
         int page_num = 0;
         List<Orders> orders = new ArrayList<>();
 
-        public String getCount() {
+        public int getCount() {
             return count;
         }
 
-        public void setCount(String count) {
+        public void setCount(int count) {
             this.count = count;
         }
 

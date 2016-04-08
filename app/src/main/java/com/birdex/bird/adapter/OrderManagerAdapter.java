@@ -138,7 +138,10 @@ public class OrderManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        return orderList.size();
+        int size=0;
+        if (orderList!=null)
+            size = orderList.size();
+        return size;
     }
 
     @Override

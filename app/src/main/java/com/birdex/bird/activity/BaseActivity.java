@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -20,6 +21,7 @@ import android.widget.EditText;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.SafeProgressDialog;
 import com.birdex.bird.widget.RotateLoading;
 import com.birdex.bird.widget.SystemBarTintManager;
@@ -49,10 +51,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         setContentView(mContentLayoutResId);
         ButterKnife.bind(this);
+        HideSoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
         bar = new ProgressDialog(this);
         bar.setCanceledOnTouchOutside(false);
         initializeContentViews();
 
+    }
+
+    /**
+     * 获取根布局
+     * */
+    public static View getRootView(Activity context) {
+        return ((ViewGroup) context.findViewById(android.R.id.content)).getChildAt(0);
     }
 
     //设置布局

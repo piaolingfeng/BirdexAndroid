@@ -141,7 +141,7 @@
     <string name="main_message">企业主营信息</string>
     <string name="contacts_message">联系人信息</string>
     <string name="business_message">业务模式及要求</string>
-    
+
     <string name="sign_company_name">签约公司名称：</string>
     <string name="company_short_name">公司简称：</string>
     <string name="headquarters_address">总部所在地：</string>
@@ -170,7 +170,7 @@
     <string name="about_us_content">\t\t\t\t笨鸟海淘成立于2014年1月，由海淘城前CEO带领原班人马倾力打造，笨鸟海淘致力于用电商的用户体验，基于互联网快速专注的思维打造全新的转运公司。在美国免税州设立数万尺仓库（4000个库位，30000个包裹容量，10000个包裹处理能力／每天），配备专业设备，IT团队量身打造转运系统，多口岸就近清关，7*10小时客服在线服务。</string>
     <string name="about_us_www">手机访问：www.birdex.cn</string>
     <string name="about_us_version">当前版本：B1.0.1 for Android</string>
-    
+
     <!--我的主页-->
     <string name="mine_index_title">我的</string>
     <string-array name="mine_item_title">
@@ -222,4 +222,9 @@
     <string name="out_storage">出库时间：</string>
 
     <string name="please_wail">敬请期待</string>
+    <string name="time_all">不限时间</string>
+    <string name="time_today">今天</string>
+    <string name="time_week">近一周</string>
+    <string name="time_month">近一个月</string>
+    <string name="time_year">近一年</string>
 </resources>

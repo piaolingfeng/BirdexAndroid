@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.activity.LogisticsActivity;
 import com.birdex.bird.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
@@ -42,6 +43,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
 
     public void setList(List<OrderListEntity.OrderListNum.Orders> list) {
         this.list = list;
+    }
+
+    public List<OrderListEntity.OrderListNum.Orders> getList() {
+        return list;
     }
 
     public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
@@ -117,7 +122,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.tv_logistics_tracking:
-
+                    startTrackingActivity(list.get(position).getOrder_code(),list.get(position).getStatus_name(),list.get(position).getReceiver_mobile());
                     break;
                 case R.id.tv_service_type:
                     T.showLong(MyApplication.getInstans(),mContext.getString(R.string.please_wail));
@@ -137,9 +142,12 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
             }
         }
 
-        public void startTrackingActivity(String order_oms_no){
-            Intent intent = new Intent();
+        public void startTrackingActivity(String order_oms_no,String Status_name,String Receiver_mobile){
+            Intent intent = new Intent(mContext, LogisticsActivity.class);
             intent.putExtra("order_oms_no",order_oms_no);
+            intent.putExtra("Status_name",Status_name);
+            intent.putExtra("Receiver_mobile",Receiver_mobile);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(intent);
         }
 

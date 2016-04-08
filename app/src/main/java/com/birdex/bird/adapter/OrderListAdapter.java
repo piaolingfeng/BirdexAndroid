@@ -60,6 +60,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
 
     @Override
     public void onBindViewHolder(DetailHolder holder, int position) {
+        holder.position = position;
         holder.tv_created_time.setText(list.get(position).getCreated_time());
         holder.tv_order_oms_no.setText(list.get(position).getOrder_oms_no());
         holder.tv_status_name.setText(list.get(position).getStatus_name());
@@ -74,9 +75,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
 
     @Override
     public int getItemCount() {
+        int size = 0;
         if (list != null)
-            return list.size();
-        else return 0;
+            size = list.size();
+        return size;
     }
 
     public class DetailHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -122,12 +124,13 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.tv_logistics_tracking:
-                    startTrackingActivity(list.get(position).getOrder_code(),list.get(position).getStatus_name(),list.get(position).getReceiver_mobile());
+                    startTrackingActivity(list.get(position).getOrder_code(), list.get(position).getStatus_name(), list.get(position).getReceiver_mobile());
                     break;
                 case R.id.tv_service_type:
-                    T.showLong(MyApplication.getInstans(),mContext.getString(R.string.please_wail));
+                    T.showLong(MyApplication.getInstans(), mContext.getString(R.string.please_wail));
                     break;
                 case R.id.tv_change_address:
+//                    startChangeAddrActivity(list.get(position).getOrder_code());
                     break;
                 case R.id.tv_order_oms_no://复制订单号
                     ClipboardManagerUtil.copy(tv_order_oms_no.getText().toString(), mContext);
@@ -142,18 +145,31 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
             }
         }
 
-        public void startTrackingActivity(String order_oms_no,String Status_name,String Receiver_mobile){
+        /**
+         * 修改地址
+         * */
+        public void startChangeAddrActivity(String order_oms_no) {
             Intent intent = new Intent(mContext, LogisticsActivity.class);
-            intent.putExtra("order_oms_no",order_oms_no);
-            intent.putExtra("Status_name",Status_name);
-            intent.putExtra("Receiver_mobile",Receiver_mobile);
+            intent.putExtra("order_code", order_oms_no);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+        }
+
+        /**
+         * 物流跟踪
+         * */
+        public void startTrackingActivity(String order_code, String Status_name, String Receiver_mobile) {
+            Intent intent = new Intent(mContext, LogisticsActivity.class);
+            intent.putExtra("order_code", order_code);
+            intent.putExtra("Status_name", Status_name);
+            intent.putExtra("Receiver_mobile", Receiver_mobile);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(intent);
         }
 
         /**
          * 拨打电话
-         * */
+         */
         public void dialPhoneNumber(String phoneNumber) {
             Intent intent = new Intent(Intent.ACTION_DIAL);
             intent.setData(Uri.parse("tel:" + phoneNumber));

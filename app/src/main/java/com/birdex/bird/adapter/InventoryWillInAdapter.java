@@ -2,12 +2,11 @@ package com.birdex.bird.adapter;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ScrollView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.birdex.bird.R;
@@ -16,20 +15,23 @@ import com.birdex.bird.entity.InventoryDetailEntity;
 import com.birdex.bird.entity.InventoryEntity;
 import com.birdex.bird.entity.InventoryStockEntity;
 import com.birdex.bird.helper.OnShowGoTopListener;
+import com.birdex.bird.widget.AutoRowLayout;
+import com.birdex.bird.widget.LineBreakLayout;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
 /**
- * Created by huwei on 16/4/5.
+ * Created by huwei on 16/4/7.
  */
-public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.ViewHolder> {
+public class InventoryWillInAdapter extends RecyclerView.Adapter<InventoryWillInAdapter.ViewHolder> {
     private LayoutInflater inflater = null;
     private Activity activity = null;
     private ArrayList<InventoryEntity> list = null;
     private InventoryEntity entity = null;
     private OnShowGoTopListener listener=null;
-    public InventoryAdapter(Activity activity, ArrayList<InventoryEntity> list) {
+    private LinearLayout.LayoutParams params=null;
+    public InventoryWillInAdapter(Activity activity, ArrayList<InventoryEntity> list) {
         inflater = LayoutInflater.from(activity);
         this.activity = activity;
         if (list == null) {
@@ -40,12 +42,14 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         if(listener!=null){
             listener.onShowFloatAtionButton(false);
         }
+        params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(10,0,10,0);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
-        view = inflater.inflate(R.layout.inventory_inner_item_layout, parent, false);
+        view = inflater.inflate(R.layout.inventory_willin_item_layout, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -57,30 +61,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             holder.tv_upc.setText(entity.getUpc());
             holder.tv_time.setText("");
             holder.tv_name.setText(entity.getName());
-            int availableCount = 0;
-            int occupancyCount = 0;
-            for (InventoryStockEntity entity1 : entity.getStock()) {
-                for (InventoryDetailEntity entity2 : entity1.getDetail()) {
-                    //可用=总入库-总出库-损耗-盘亏-占用-丢失-过期-破损+盘盈+允许超收数量
-                    int in_stock = Integer.parseInt(entity2.getIn_stock());
-                    int out_stock = Integer.parseInt(entity2.getOut_stock());
-                    int spoilage_stock = Integer.parseInt(entity2.getSpoilage_stock());
-                    int shortage_stock = Integer.parseInt(entity2.getShortage_stock());
-                    int block_stock = Integer.parseInt(entity2.getBlock_stock());
-                    int lose_stock = Integer.parseInt(entity2.getLose_stock());
-                    int expire_stock = Integer.parseInt(entity2.getExpire_stock());
-                    int damage_stock = Integer.parseInt(entity2.getDamage_stock());
-                    int overage_stock = Integer.parseInt(entity2.getOverage_stock());
-                    int overdraft_stock = Integer.parseInt(entity2.getOverdraft_stock());
-                    availableCount += (in_stock - out_stock - spoilage_stock - shortage_stock - block_stock - lose_stock - expire_stock - damage_stock - overage_stock + overdraft_stock);
-                    //占用=
-                    occupancyCount += Integer.parseInt(entity2.getBlock_stock());
-                }
-                holder.tv_available.setText(String.valueOf(availableCount));
-                holder.tv_occupancy.setText(String.valueOf(occupancyCount));
-            }
             if (RecyclerView.SCROLL_STATE_SETTLING != ((InventoryActivity) activity).rv_inventory.getScrollState()) {
-//                Log.e("android", entity.getPic());
                 if (!"".equals(entity.getPic())) {
                     //非飞翔状态
                     Glide.with(activity).load(entity.getPic()).placeholder(R.drawable.goods_default).into(holder.iv_pic);
@@ -94,6 +75,20 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             }else if(position>8&&listener!=null){
                 listener.onShowFloatAtionButton(true);
             }
+            int count=0;
+            holder.arl_inventory.removeAllViews();
+            for (InventoryStockEntity entity1 : entity.getStock()) {
+                for (InventoryDetailEntity entity2 : entity1.getDetail()) {
+                    count+=Integer.parseInt(entity2.getStock());
+                    View view=inflater.inflate(R.layout.inventory_item_willinnum_layout,null,false);
+                    TextView tv_willin_name=(TextView)view.findViewById(R.id.tv_inventory_willin_name);
+                    TextView tv_willin_num=(TextView)view.findViewById(R.id.tv_inventory_willin_num);
+                    tv_willin_name.setText(entity1.getWarehouse_name()+":");
+                    tv_willin_num.setText(entity2.getStock());
+                    holder.arl_inventory.addView(view,params);
+                }
+            }
+            holder.tv_willin_count.setText(String.valueOf(count));
         }
     }
 
@@ -111,19 +106,18 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         ImageView iv_pic = null;
         //商品名称
         TextView tv_name = null;
-        //可用
-        TextView tv_available = null;
-        //占用
-        TextView tv_occupancy = null;
-
+        //待入库数
+        TextView tv_willin_count = null;
+        //
+        LinearLayout arl_inventory=null;
         public ViewHolder(View itemView) {
             super(itemView);
             tv_upc = (TextView) itemView.findViewById(R.id.tv_inventory_item_upc);
             tv_time = (TextView) itemView.findViewById(R.id.tv_inventory_item_time);
             iv_pic = (ImageView) itemView.findViewById(R.id.iv_inventory_item_pic);
             tv_name = (TextView) itemView.findViewById(R.id.tv_inventory_item_name);
-            tv_available = (TextView) itemView.findViewById(R.id.tv_inventory_item_available);
-            tv_occupancy = (TextView) itemView.findViewById(R.id.tv_inventory_item_occupancy);
+            tv_willin_count = (TextView) itemView.findViewById(R.id.tv_inventory_willin_count);
+            arl_inventory=(LinearLayout)itemView.findViewById(R.id.arl_inventory_number);
         }
     }
 

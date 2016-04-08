@@ -46,9 +46,13 @@
     <color name="time_item_press">#e4e4e4</color>
     <color name="time_pick_nor">#2196F3</color>
     <color name="time_pick_press">#03A9F4</color>
-    <!--库存-->
+    <!--库存item-->
     <color name="inventory_item_black">#ff4A4A4A</color>
     <color name="inventory_item_gray">#ff979797</color>
     <color name="inventory_item_blue">#ff039FFF</color>
     <color name="inventory_item_line">#ffE4E4E4</color>
+    <!--库存-->
+    <color name="inventory_count_data">#ff039FFF</color>
+    <color name="inventory_all_status">#8d8e8c</color>
+    <color name="inventory_status_num">#f5a623</color>
 </resources>

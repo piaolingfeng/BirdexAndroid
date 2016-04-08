@@ -62,5 +62,6 @@
         <attr name="rightimg" format="reference"/>
         <attr name="lefttxt" format="reference|string"/>
         <attr name="righttxt" format="reference|string"/>
+        <attr name="hasstatubar" format="boolean" />
     </declare-styleable>
 </resources>

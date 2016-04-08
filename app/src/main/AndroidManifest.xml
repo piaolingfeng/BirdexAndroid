@@ -50,7 +50,8 @@
             android:name=".activity.ChangeAdressActivity"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.InventoryActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".activity.InventoryActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity android:name=".activity.MyOrderListActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:theme="@style/AppCompat.style"/>

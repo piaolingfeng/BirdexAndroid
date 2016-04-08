@@ -3,6 +3,7 @@ package com.birdex.bird.widget;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.birdex.bird.R;
+
+import java.lang.reflect.Field;
 
 /**
  * Created by huwei on 16/3/31.
@@ -41,6 +44,8 @@ public class HeaderView extends LinearLayout implements View.OnClickListener{
     private int rightimg = 0;
     //右边文字
     private String righttxt = "";
+    //是否显示据状态条
+    private boolean showStatuBar=false;
     private OnHeadViewClickLister lister=null;
     public HeaderView(Context context) {
         super(context);
@@ -81,6 +86,7 @@ public class HeaderView extends LinearLayout implements View.OnClickListener{
             rightstyle = array.getResourceId(R.styleable.HeaderView_rightstyle, 0);
             rightimg = array.getResourceId(R.styleable.HeaderView_rightimg, 0);
             righttxt = array.getString(R.styleable.HeaderView_righttxt);
+            showStatuBar=array.getBoolean(R.styleable.HeaderView_hasstatubar, false);
         }
     }
     @TargetApi(23)
@@ -114,7 +120,13 @@ public class HeaderView extends LinearLayout implements View.OnClickListener{
         if(rightimg!=0){
             iv_right.setImageResource(rightimg);
         }
-        addView(view, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        if(showStatuBar){
+            int statusBarHeight = getStatuHei();
+//            view.setPadding(0,statusBarHeight,0,0);
+            params.setMargins(0,statusBarHeight,0,0);
+        }
+        addView(view, params);
     }
 
     @Override
@@ -141,5 +153,22 @@ public class HeaderView extends LinearLayout implements View.OnClickListener{
         if(lister!=null){
             this.lister=lister;
         }
+    }
+    private int getStatuHei(){
+
+        Class<?> c = null;
+        Object obj = null;
+        Field field = null;
+        int x = 0, sbar = 0;
+        try {
+            c = Class.forName("com.android.internal.R$dimen");
+            obj = c.newInstance();
+            field = c.getField("status_bar_height");
+            x = Integer.parseInt(field.get(obj).toString());
+            sbar = getResources().getDimensionPixelSize(x);
+        } catch(Exception e1) {
+            e1.printStackTrace();
+        }
+        return sbar;
     }
 }

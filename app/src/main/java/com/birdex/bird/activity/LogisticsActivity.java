@@ -1,13 +1,17 @@
 package com.birdex.bird.activity;
 
+import android.Manifest;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -144,7 +148,7 @@ public class LogisticsActivity extends BaseActivity implements View.OnClickListe
         save.setCompoundDrawables(null, null, refresh, null);
 
         // 传过来的 order_code
-        orderNo = getIntent().getExtras().getString("order_oms_no");
+        orderNo = getIntent().getExtras().getString("order_code");
         order_status.setText(getIntent().getExtras().getString("Status_name"));
         phone.setText(getIntent().getExtras().getString("Receiver_mobile"));
         getInterfaceData();
@@ -221,10 +225,10 @@ public class LogisticsActivity extends BaseActivity implements View.OnClickListe
         order_no.setText(track.getOrder_no());
         receiver_name.setText(track.getReceiver_name());
 
-//        transport.setText(track.getTracking_length());
-        transport.setText("15天22小时");
+        transport.setText(track.getTracking_length());
+//        transport.setText("15天22小时");
         out_storage.setText(track.getCheckout_time());
-        out_storage.setText("2015-09-09 10:32:13");
+//        out_storage.setText("2015-09-09 10:32:13");
 
         String status = track.getStatus();
         // 通过 status 绘制轨迹图片
@@ -295,17 +299,47 @@ public class LogisticsActivity extends BaseActivity implements View.OnClickListe
         pic_utv_5.setTextColor(Color.parseColor("#13A7DF"));
     }
 
+    public static final int CALL_PHONE_REQUEST_CODE = 1;
+
+    // 6.0 权限控制
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CALL_PHONE_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission Granted 用户允许
+                callPhone();
+            } else {
+                // Permission Denied
+            }
+        }
+    }
+
+    // 打电话
+    private void callPhone(){
+        String Telphone = phone.getText().toString();
+        Uri uri = Uri.parse("tel:" + Telphone);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_CALL);
+        intent.setData(uri);
+        startActivity(intent);
+    }
+
     @OnClick({R.id.phone, R.id.back, R.id.copy_logistics, R.id.save})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.phone:
-                String Telphone = phone.getText().toString();
-                Uri uri = Uri.parse("tel:" + Telphone);
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_CALL);
-                intent.setData(uri);
-                startActivity(intent);
+
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    //申请CALL_PHONE权限
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},
+                            CALL_PHONE_REQUEST_CODE);
+                } else {
+                    callPhone();
+                }
+
                 break;
             //左上角返回键
             case R.id.back:

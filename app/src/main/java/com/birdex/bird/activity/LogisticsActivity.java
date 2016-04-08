@@ -148,7 +148,7 @@ public class LogisticsActivity extends BaseActivity implements View.OnClickListe
         save.setCompoundDrawables(null, null, refresh, null);
 
         // 传过来的 order_code
-        orderNo = getIntent().getExtras().getString("order_oms_no");
+        orderNo = getIntent().getExtras().getString("order_code");
         order_status.setText(getIntent().getExtras().getString("Status_name"));
         phone.setText(getIntent().getExtras().getString("Receiver_mobile"));
         getInterfaceData();

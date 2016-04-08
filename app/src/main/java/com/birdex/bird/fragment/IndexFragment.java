@@ -120,7 +120,19 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         orderManagerAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                T.showShort(MyApplication.getInstans(), position + "");
+//                T.showShort(MyApplication.getInstans(), position + "");
+                Intent intent = new Intent(getActivity(),MyOrderListActivity.class);
+                intent.putExtra("indexOrder",indexOrderLocalDataList.get(position).getName());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (indexOrderLocalDataList.get(position).getName().contains("预报")){
+                        startActivity(intent);
+                }else{
+                    if (indexOrderLocalDataList.get(position).getName().contains("库存")){
+
+                    }else{//订单
+                        startActivity(intent);
+                    }
+                }
             }
         });
         rcv_order_manager.setAdapter(orderManagerAdapter);
@@ -134,9 +146,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 
     public static void getTodayData() {
         RequestParams params = new RequestParams();
-        params.add("app_debug", 1 + "");
-        params.add("user_code", MyApplication.user.getUser_code());
-        params.add("company_code", MyApplication.user.getCompany_code());
+
         JsonHttpResponseHandler httpResponseHandler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

@@ -14,7 +14,7 @@
     <string name="context_size_3">2.5%</string>
 
     <!-- 相对于父类的大小-->
-    <string name="item_context_size_1">30%</string>
+    <string name="item_context_size_1">26%</string>
     <string name="item_context_size_2">20%</string>
     <string name="item_context_size_3">40%</string>
     <string name="del_size">20%w</string>
@@ -28,6 +28,8 @@
     <string name="all">100%</string>
     <string name="title_activity_pay_balance_list">PayBalanceListActivity</string>
 
+    <string name="title_filter_textsize">26%</string>
+    
     <string name="listmanager">80%h</string>
 
     <string name="sixtyPercentHeight">70%h</string>
@@ -132,7 +134,6 @@
     <string name="base_message">企业基本信息</string>
 
     <!--维度-->
-    <string name="state_time">时间</string>
     <string name="state_Warehouse">全部仓库</string>
     <string name="state_all">全部状态</string>
 
@@ -205,4 +206,30 @@
     <string name="consignee_empty">收货人不能为空</string>
     <string name="phone_empty">联系电话不能为空</string>
     <string name="adress_empty">详细地址不能为空</string>
+
+    <!-- 物流跟踪 -->
+    <string name="order_number">订单号：</string>
+    <string name="client_number">客户单号：</string>
+    <string name="receiver">收件人：</string>
+    <string name="getorder">仓库接单</string>
+    <string name="orderout">订单出库</string>
+    <string name="fly">航空运输</string>
+    <string name="clear">清关</string>
+    <string name="transportation">国内运输</string>
+    <string name="sign">签收</string>
+    <string name="track">当前轨迹</string>
+    <string name="transport">已运送：</string>
+    <string name="out_storage">出库时间：</string>
+    <string name="copy_logistics">复制物流信息</string>
+    <string name="copy_tip">内容已经复制到剪切板</string>
+    <string name="track_after">物流跟踪</string>
+
+    <string name="please_wail">敬请期待</string>
+    <string name="time_all">不限时间</string>
+    <string name="time_today">今天</string>
+    <string name="time_week">近一周</string>
+    <string name="time_month">近一个月</string>
+    <string name="time_three_month">近三个月</string>
+    <string name="time_year">近一年</string>
+    <string name="no_data">暂时没有数据哦！</string>
 </resources>

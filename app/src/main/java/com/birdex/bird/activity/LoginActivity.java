@@ -18,6 +18,7 @@ import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.ContactDetail;
 import com.birdex.bird.entity.User;
 import com.birdex.bird.update.UpdateManager;
+import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.T;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -66,6 +67,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void initializeContentViews() {
+        HideSoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
         initSystemBar(R.color.transparent);
         initData();
     }
@@ -160,9 +162,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //                        contactDetail.setReceiver_area_id("4700");
 //                        contactDetail.setReceiver_area("临城县");
 //                        contactDetail.setReceiver_address("什么三峡搬迁罗里吧嗦一大堆");
-//
+
 //                        Bundle b = new Bundle();
-//                        b.putSerializable("ContactDetail",contactDetail);
+////                        b.putSerializable("ContactDetail",contactDetail);
+//                        b.putString("order_code","c708fecf8f8e3b39622c35ece3371772");
 //                        intent.putExtras(b);
 
                         startActivity(intent);

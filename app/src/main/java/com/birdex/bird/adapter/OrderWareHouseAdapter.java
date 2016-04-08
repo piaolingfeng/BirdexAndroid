@@ -51,9 +51,11 @@ public class OrderWareHouseAdapter extends RecyclerView.Adapter<OrderWareHouseAd
 
     @Override
     public int getItemCount() {
-        if (warehouseList!=null)
-        return warehouseList.size();
-        else return 0;
+        int size = 0;
+        if (warehouseList!=null){
+            size = warehouseList.size();
+        }
+        return size;
     }
 
     public class WareHouseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

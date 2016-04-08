@@ -94,7 +94,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-
+                hideLoading();
                 try {
                     if ("0".equals(response.getString("error"))) {
                         // 正确获取到了地区数据
@@ -104,7 +104,6 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
                         setData(myCities);
                     }
 
-                    hideLoading();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     hideLoading();
@@ -235,16 +234,71 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     // 一开始传递过来的
     private ContactDetail contactDetail;
 
+    // 传递过来的 order_code
+    private String orderNo;
+
     private void setOriginalData(){
         Intent intent = getIntent();
-        contactDetail = (ContactDetail) intent.getExtras().get("ContactDetail");
-        if (contactDetail != null){
-            consignee.setText(contactDetail.getReceiver_name());
-            phone.setText(contactDetail.getReceiver_mobile());
-            region.setText(contactDetail.getReceiver_province()+contactDetail.getReceiver_city()+contactDetail.getReceiver_area());
-            detail_adress.setText(contactDetail.getReceiver_address());
+//        contactDetail = (ContactDetail) intent.getExtras().get("ContactDetail");
+//        if (contactDetail != null){
+//            consignee.setText(contactDetail.getReceiver_name());
+//            phone.setText(contactDetail.getReceiver_mobile());
+//            region.setText(contactDetail.getReceiver_province()+contactDetail.getReceiver_city()+contactDetail.getReceiver_area());
+//            detail_adress.setText(contactDetail.getReceiver_address());
+//
+//        }
 
-        }
+        orderNo = intent.getExtras().getString("order_code");
+        // 通过订单号，拿到订单信息
+        getOrderDetail();
+    }
+
+    private void getOrderDetail(){
+        showLoading();
+        RequestParams params = new RequestParams();
+//        params.put("order_code",orderNo);
+        params.add("order_code","c708fecf8f8e3b39622c35ece3371772");
+        BirdApi.getOrderDetail(MyApplication.getInstans(),params,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                hideLoading();
+                try {
+                    if("0".equals(response.getString("error"))){
+                        contactDetail = JsonHelper.parseObject((JSONObject) response.get("data"),ContactDetail.class);
+                        if (contactDetail != null){
+                            consignee.setText(contactDetail.getReceiver_name());
+                            phone.setText(contactDetail.getReceiver_mobile());
+                            region.setText(contactDetail.getReceiver_province() + contactDetail.getReceiver_city() + contactDetail.getReceiver_area());
+                            detail_adress.setText(contactDetail.getReceiver_address());
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
+                hideLoading();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
+                hideLoading();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
+                hideLoading();
+            }
+        });
     }
 
     // 将传过来的 省市区 设置上 选择器上

@@ -49,7 +49,10 @@ public class OrderProductAdapter extends RecyclerView.Adapter<OrderProductAdapte
 
     @Override
     public int getItemCount() {
-        return productList.size();
+        int size =0 ;
+        if (productList!=null)
+            size = productList.size();
+        return size;
     }
 
     public class ProductHold extends RecyclerView.ViewHolder implements View.OnClickListener {

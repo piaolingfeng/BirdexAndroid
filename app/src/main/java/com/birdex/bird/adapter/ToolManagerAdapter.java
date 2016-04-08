@@ -35,7 +35,10 @@ public class ToolManagerAdapter extends RecyclerView.Adapter<ToolManagerAdapter.
 
     @Override
     public int getItemCount() {
-        return toolList.size();
+        int size = 0;
+        if (toolList != null)
+            size = toolList.size();
+        return size;
     }
 
     public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {

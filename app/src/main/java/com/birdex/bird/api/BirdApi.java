@@ -50,6 +50,10 @@ public class BirdApi {
         MyApplication.ahc.get(context, BASE_URL + "/" + url, params, textHttpResponseHandler);
     }
 
+    public  static void cancelAllRequest(){
+        MyApplication.ahc.cancelAllRequests(false);
+    }
+
     /**
      * 请求接口方法
      * @param context
@@ -76,6 +80,10 @@ public class BirdApi {
     }
 
     public static void getTodayData(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        params.add("all",1+"");
+        params.add("app_debug", 1 + "");
+        params.add("user_code", MyApplication.user.getUser_code());
+        params.add("company_code", MyApplication.user.getCompany_code());
         get(context, "company/stat", params, jsonHttpResponseHandler);
     }
     // 获取更新信息
@@ -133,6 +141,31 @@ public class BirdApi {
         params.add("user_code", MyApplication.user.getUser_code());
         params.add("company_code", MyApplication.user.getCompany_code());
         get(context, "Warehouse/companyAll", params, jsonHttpResponseHandler);
+    }
+
+
+    // 获取物流轨迹
+    public static void getTracking(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        params.add("app_debug", 1 + "");
+        params.add("user_code", MyApplication.user.getUser_code());
+        params.add("company_code", MyApplication.user.getCompany_code());
+        get(context, "Order/getTracking", params, jsonHttpResponseHandler);
+    }
+
+    // 获取预报列表
+    public static void getPredicitionList(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        params.add("app_debug", 1 + "");
+        params.add("user_code", MyApplication.user.getUser_code());
+        params.add("company_code", MyApplication.user.getCompany_code());
+        post(context, "Storage/all", params, jsonHttpResponseHandler);
+    }
+
+    // 获取预报列表
+    public static void getPredicitionStatus(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        params.add("app_debug", 1 + "");
+        params.add("user_code", MyApplication.user.getUser_code());
+        params.add("company_code", MyApplication.user.getCompany_code());
+        post(context, "storage/getStorageStatusList", params, jsonHttpResponseHandler);
     }
 
 }

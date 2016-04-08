@@ -50,7 +50,7 @@ public class TodayDataAdapter extends RecyclerView.Adapter<TodayDataAdapter.Toda
     }
 
     @Override
-    public void onBindViewHolder(TodayDataHolder holder,final  int position) {
+    public void onBindViewHolder(TodayDataHolder holder, final int position) {
         holder.position = position;//check的时候会用到holder的position，所以需要
         holder.tv_name.setText(list.get(position).getName());
         holder.com_switch.setChecked(list.get(position).isChoose_state());
@@ -66,7 +66,10 @@ public class TodayDataAdapter extends RecyclerView.Adapter<TodayDataAdapter.Toda
 
     @Override
     public int getItemCount() {
-        return list.size();
+        int size = 0;
+        if (list != null)
+            size = list.size();
+        return size;
     }
 
     public class TodayDataHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -75,7 +78,7 @@ public class TodayDataAdapter extends RecyclerView.Adapter<TodayDataAdapter.Toda
         Switch com_switch;
         @Bind(R.id.tv_name)
         TextView tv_name;
-        int position = 0 ;
+        int position = 0;
 
         public TodayDataHolder(View itemView) {
             super(itemView);

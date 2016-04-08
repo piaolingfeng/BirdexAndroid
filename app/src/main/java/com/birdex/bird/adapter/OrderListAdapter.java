@@ -1,6 +1,8 @@
 package com.birdex.bird.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,11 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.activity.LogisticsActivity;
 import com.birdex.bird.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
+import com.birdex.bird.util.ClipboardManagerUtil;
+import com.birdex.bird.util.T;
 
 import java.util.List;
 
@@ -38,6 +45,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
         this.list = list;
     }
 
+    public List<OrderListEntity.OrderListNum.Orders> getList() {
+        return list;
+    }
+
     public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
         this.onRecyclerViewItemClickListener = onRecyclerViewItemClickListener;
     }
@@ -49,6 +60,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
 
     @Override
     public void onBindViewHolder(DetailHolder holder, int position) {
+        holder.position = position;
         holder.tv_created_time.setText(list.get(position).getCreated_time());
         holder.tv_order_oms_no.setText(list.get(position).getOrder_oms_no());
         holder.tv_status_name.setText(list.get(position).getStatus_name());
@@ -63,9 +75,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
 
     @Override
     public int getItemCount() {
+        int size = 0;
         if (list != null)
-            return list.size();
-        else return 0;
+            size = list.size();
+        return size;
     }
 
     public class DetailHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -102,6 +115,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+            tv_order_oms_no.setOnClickListener(this);
+            tv_receiver_mobile.setOnClickListener(this);
         }
 
         @OnClick({R.id.tv_logistics_tracking, R.id.tv_service_type, R.id.tv_change_address})
@@ -109,14 +124,57 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.tv_logistics_tracking:
+                    startTrackingActivity(list.get(position).getOrder_code(), list.get(position).getStatus_name(), list.get(position).getReceiver_mobile());
                     break;
                 case R.id.tv_service_type:
+                    T.showLong(MyApplication.getInstans(), mContext.getString(R.string.please_wail));
                     break;
                 case R.id.tv_change_address:
+//                    startChangeAddrActivity(list.get(position).getOrder_code());
+                    break;
+                case R.id.tv_order_oms_no://复制订单号
+                    ClipboardManagerUtil.copy(tv_order_oms_no.getText().toString(), mContext);
+                    T.showShort(MyApplication.getInstans(), "已复制");
+                    break;
+                case R.id.tv_receiver_mobile:
+                    dialPhoneNumber(tv_receiver_mobile.getText().toString());
                     break;
                 default:
                     if (onRecyclerViewItemClickListener != null)
                         onRecyclerViewItemClickListener.onItemClick(position);
+            }
+        }
+
+        /**
+         * 修改地址
+         * */
+        public void startChangeAddrActivity(String order_oms_no) {
+            Intent intent = new Intent(mContext, LogisticsActivity.class);
+            intent.putExtra("order_code", order_oms_no);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+        }
+
+        /**
+         * 物流跟踪
+         * */
+        public void startTrackingActivity(String order_code, String Status_name, String Receiver_mobile) {
+            Intent intent = new Intent(mContext, LogisticsActivity.class);
+            intent.putExtra("order_code", order_code);
+            intent.putExtra("Status_name", Status_name);
+            intent.putExtra("Receiver_mobile", Receiver_mobile);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+        }
+
+        /**
+         * 拨打电话
+         */
+        public void dialPhoneNumber(String phoneNumber) {
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse("tel:" + phoneNumber));
+            if (intent.resolveActivity(mContext.getPackageManager()) != null) {
+                mContext.startActivity(intent);
             }
         }
     }

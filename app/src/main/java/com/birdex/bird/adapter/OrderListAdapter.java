@@ -56,6 +56,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
 
     @Override
     public void onBindViewHolder(DetailHolder holder, int position) {
+        holder.position = position;
         holder.tv_created_time.setText(list.get(position).getCreated_time());
         holder.tv_order_oms_no.setText(list.get(position).getOrder_oms_no());
         holder.tv_status_name.setText(list.get(position).getStatus_name());

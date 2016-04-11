@@ -82,6 +82,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void initializeContentViews() {
         initData();
+        
     }
 
     // 初始化数据

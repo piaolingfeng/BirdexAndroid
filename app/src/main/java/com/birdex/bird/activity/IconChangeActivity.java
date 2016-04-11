@@ -21,16 +21,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.glide.GlideUtils;
 import com.birdex.bird.util.ImageUtils;
 import com.birdex.bird.util.T;
 import com.bumptech.glide.Glide;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -65,12 +79,18 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
     // 最终的 图片
     private Drawable resultDrawable;
 
-    // 传过来的 bitmap
-    private Bitmap bitmap;
+    // 传过来的 logo
+    private String logo;
+
     // 修改后的 bitmap
     private Bitmap resultBitmap;
 
-    /** 头像名称 */
+    // 上传图片后，服务器返回的 path
+    private String path;
+
+    /**
+     * 头像名称
+     */
     private static final String IMAGE_FILE_NAME = "image.jpg";
 
     @Override
@@ -89,21 +109,9 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
         title.setText(getString(R.string.iconchange_title));
         save.setText(getString(R.string.iconchange_save));
 
-        // 传过来的图片 path 或者 url
-//        String path = getIntent().getExtras().getString("path");
-//        String url = getIntent().getExtras().getString("url");
-        // 将 bitmap 设置进去 如果 path 为空 就设置 url ，如果都为空则用 default
-//        if (!TextUtils.isEmpty(path)) {
-//            GlideUtils.setImageToLocalPath(icon, path);
-//        } else if (!TextUtils.isEmpty(url)) {
-//            GlideUtils.setImageToUrl(icon, url);
-//        } else {
-//            icon.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.contacts));
-//        }
-
         // 传过来的 bitmap
-        bitmap = (Bitmap) getIntent().getExtras().get("bitmap");
-        icon.setImageBitmap(bitmap);
+        logo = (String) getIntent().getExtras().get("logo");
+        GlideUtils.setImageToLocalPathForMyaccount(icon, logo);
     }
 
     @OnClick({R.id.back, R.id.save, R.id.iconchange_icon})
@@ -115,23 +123,66 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.save:
-                //点击了 保存按钮
-//                if (!TextUtils.isEmpty(filePath)) {
-                    Intent resultIntent = new Intent();
-                    Bundle bundle = new Bundle();
-//                    bundle.putString("path", filePath);
-                if(resultBitmap != null) {
-//                    Bitmap rebitmap = ImageUtils.drawableToBitmap(resultDrawable);
-//                    bundle.putParcelable("bitmap", resultBitmap);
-                    bundle.putString("bitmap", uritempFile.toString());
-                } else {
-//                    bundle.putParcelable("bitmap", bitmap);
-                    bundle.putString("bitmap", null);
-                }
-                    resultIntent.putExtras(bundle);
-                    this.setResult(RESULT_OK, resultIntent);
+//                //点击了 保存按钮
+////                if (!TextUtils.isEmpty(filePath)) {
+//                Intent resultIntent = new Intent();
+//                Bundle bundle = new Bundle();
+////                    bundle.putString("path", filePath);
+//                if (resultBitmap != null) {
+////                    Bitmap rebitmap = ImageUtils.drawableToBitmap(resultDrawable);
+////                    bundle.putParcelable("bitmap", resultBitmap);
+//                    bundle.putString("bitmap", uritempFile.toString());
+//                } else {
+////                    bundle.putParcelable("bitmap", bitmap);
+//                    bundle.putString("bitmap", null);
 //                }
-                IconChangeActivity.this.finish();
+//                resultIntent.putExtras(bundle);
+//                this.setResult(RESULT_OK, resultIntent);
+////                }
+//                IconChangeActivity.this.finish();
+
+                showLoading();
+                // 点击保存按钮后，需要调用 修改公司信息
+                RequestParams params = new RequestParams();
+                params.put("company_code",MyApplication.user.getCompany_code());
+                params.put("logo",path);
+                BirdApi.companyEdit(MyApplication.getInstans(),params,new JsonHttpResponseHandler(){
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        hideLoading();
+                        try {
+                            if("0".equals(response.getString("error"))){
+                                IconChangeActivity.this.setResult(RESULT_OK);
+                                IconChangeActivity.this.finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        hideLoading();
+                        T.showShort(MyApplication.getInstans(),getString(R.string.save_fail));
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        hideLoading();
+                        T.showShort(MyApplication.getInstans(), getString(R.string.save_fail));
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        hideLoading();
+                        T.showShort(MyApplication.getInstans(), getString(R.string.save_fail));
+                    }
+                });
+
                 break;
             case R.id.iconchange_icon:
                 //点击了 图片， 进行选择 拍照或者从图库选择图片
@@ -272,26 +323,9 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
         startActivityForResult(intent, RESULT_REQUEST_CODE);
     }
 
-    // 图片压缩
-    private Bitmap compressImage(Bitmap image) {
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
-        int options = 100;
-        while (baos.toByteArray().length / 1024 > 100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
-            baos.reset();//重置baos即清空baos
-            image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
-            options -= 10;//每次都减少10
-        }
-        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
-        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
-        return bitmap;
-    }
-
 
     /**
      * 保存裁剪之后的图片数据
-     *
      */
     private void getImageToView(Intent data) {
         Bundle extras = data.getExtras();
@@ -367,20 +401,139 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
                 }
                 break;
 
-            case RESULT_REQUEST_CODE : // 图片缩放完成后
-//                if (data != null) {
+            case RESULT_REQUEST_CODE: // 图片缩放完成后
 
-                    //将Uri图片转换为Bitmap
+                try {
+                    // 将图片上传到服务器
                     try {
-                        resultBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uritempFile));
-                        icon.setImageBitmap(resultBitmap);
-                    } catch (FileNotFoundException e) {
+                        File file = new File(new URI(uritempFile.toString()));
+                        saveBitmapFile(comp(file.getAbsolutePath()),file.getAbsolutePath());
+                        RequestParams params = new RequestParams();
+                        params.put("logo", file);
+                        showLoading();
+                        BirdApi.upLoadLogo(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                super.onSuccess(statusCode, headers, response);
+                                hideLoading();
+                                T.showShort(MyApplication.getInstans(), "上传图片成功");
+                                try {
+                                    if("0".equals(response.getString("error"))) {
+                                        try {
+                                            String savepath = ((JSONObject)response.get("data")).getString("savepath");
+                                            String savename = ((JSONObject)response.get("data")).getString("savename");
+                                            path = savepath + savename;
+                                            resultBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uritempFile));
+                                            icon.setImageBitmap(resultBitmap);
+                                        } catch (FileNotFoundException e) {
+                                            e.printStackTrace();
+                                            hideLoading();
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                super.onFailure(statusCode, headers, responseString, throwable);
+                                hideLoading();
+                                T.showShort(MyApplication.getInstans(),getString(R.string.upload_fail));
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                hideLoading();
+                                T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                hideLoading();
+                                T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                            }
+                        });
+                    } catch (URISyntaxException e) {
                         e.printStackTrace();
                     }
+
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
 
 //                    getImageToView(data);
 //                }
                 break;
         }
+    }
+
+    // 图片压缩
+    private Bitmap compressImage(Bitmap image) {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        int options = 100;
+        while (baos.toByteArray().length / 1024 > 100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+            baos.reset();//重置baos即清空baos
+            image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
+            options -= 10;//每次都减少10
+        }
+        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
+        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
+        return bitmap;
+    }
+
+    // 将 bitmap 保存成图片
+    public void saveBitmapFile(Bitmap bitmap, String imgpath) {
+        File file = new File(imgpath);//将要保存图片的路径
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bos.flush();
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Bitmap comp(String path) {
+
+        Bitmap image = BitmapFactory.decodeFile(path);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        if (baos.toByteArray().length / 1024 > 1024) {//判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出
+            baos.reset();//重置baos即清空baos
+            image.compress(Bitmap.CompressFormat.JPEG, 50, baos);//这里压缩50%，把压缩后的数据存放到baos中
+        }
+        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());
+        BitmapFactory.Options newOpts = new BitmapFactory.Options();
+        //开始读入图片，此时把options.inJustDecodeBounds 设回true了
+        newOpts.inJustDecodeBounds = true;
+        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, newOpts);
+        newOpts.inJustDecodeBounds = false;
+        int w = newOpts.outWidth;
+        int h = newOpts.outHeight;
+        //现在主流手机比较多是800*480分辨率，所以高和宽我们设置为
+        float hh = 800f;//这里设置高度为800f
+        float ww = 480f;//这里设置宽度为480f
+        //缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
+        int be = 1;//be=1表示不缩放
+        if (w > h && w > ww) {//如果宽度大的话根据宽度固定大小缩放
+            be = (int) (newOpts.outWidth / ww);
+        } else if (w < h && h > hh) {//如果高度高的话根据宽度固定大小缩放
+            be = (int) (newOpts.outHeight / hh);
+        }
+        if (be <= 0)
+            be = 1;
+        newOpts.inSampleSize = be;//设置缩放比例
+        //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
+        isBm = new ByteArrayInputStream(baos.toByteArray());
+        bitmap = BitmapFactory.decodeStream(isBm, null, newOpts);
+        return compressImage(bitmap);//压缩好比例大小后再进行质量压缩
     }
 }

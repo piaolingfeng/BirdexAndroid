@@ -71,4 +71,24 @@ public class GlideUtils {
                         // 初始化
                 .into(aa);
     }
+
+    // 我的账户，加载头像
+    public static void setImageToLocalPathForMyaccount(ImageView aa, String url) {
+        // Glide的使用
+        Glide.with(MyApplication.getInstans())
+                // 设置加载路径
+                .load(url)
+//				.diskCacheStrategy(DiskCacheStrategy.ALL)
+                        // 图像大小调整
+                        // .override(600, 500)
+                        // 裁剪中心
+//						 .centerCrop()
+                        // 设置占位图或者加载错误图：
+                .fitCenter()
+                .error(R.drawable.contacts)
+                        // 交叉淡入淡出
+//				.crossFade(100)
+                        // 初始化
+                .into(aa);
+    }
 }

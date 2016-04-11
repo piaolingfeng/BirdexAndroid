@@ -119,6 +119,8 @@
     <!-- 修改头像 -->
     <string name="photo">拍照</string>
     <string name="from_loacl">从手机相册获取</string>
+    <string name="upload_fail">上传图片失败！</string>
+    <string name="save_fail">保存头像失败！</string>
 
     <!-- 我的账号：充值 -->
     <string name="recharge_title">充值</string>

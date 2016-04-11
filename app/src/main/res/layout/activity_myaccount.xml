@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:imagecontrol="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <com.zhy.android.percent.support.PercentRelativeLayout
@@ -56,10 +57,13 @@
         android:layout_below="@+id/title_1l"
         android:background="@drawable/myaccount_background">
 
-        <ImageView
+        <com.birdex.bird.widget.RoundImageView
             android:id="@+id/head_icon"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            imagecontrol:border_inside_color="#fff7f2e9"
+            imagecontrol:border_outside_color="#ffd5d1c8"
+            imagecontrol:border_thickness="2dp"
             android:layout_centerHorizontal="true"
             android:scaleType="centerInside"
             android:src="@drawable/contacts"
@@ -142,6 +146,7 @@
         android:id="@+id/yunfei_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:layout_below="@+id/division_01"
         android:orientation="horizontal"
         app:layout_marginTopPercent="2%">
@@ -157,11 +162,11 @@
 
 
         <TextView
+            android:id="@+id/freight_balance"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="￥646565"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -173,10 +178,11 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/credit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#13A7DF"
-                android:text="￥1600000"/>
+                />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -185,10 +191,11 @@
                 android:background="#C7C7C7"
                 />
             <TextView
+                android:id="@+id/left_credit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#F5A623"
-                android:text="￥4562"/>
+                />
 
         </LinearLayout>
 
@@ -203,7 +210,7 @@
         android:background="#C7C7C7"
         app:layout_marginLeftPercent="3%"
         app:layout_marginRightPercent="3%"
-        app:layout_marginTopPercent="3%" />
+        app:layout_marginTopPercent="2%" />
 
     <com.zhy.android.percent.support.PercentLinearLayout
         android:id="@+id/guanshui_ll"
@@ -224,11 +231,11 @@
 
 
         <TextView
+            android:id="@+id/tariff_balance"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="￥1000"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -242,8 +249,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:text=""
+                android:text="---"
                 android:textColor="#13A7DF"/>
 
 

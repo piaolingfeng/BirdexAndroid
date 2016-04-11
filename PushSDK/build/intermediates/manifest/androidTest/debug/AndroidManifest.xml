@@ -23,7 +23,8 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- 可选 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+ <!-- 可选 -->
     <uses-permission android:name="android.permission.BROADCAST_PACKAGE_ADDED" />
     <uses-permission android:name="android.permission.BROADCAST_PACKAGE_CHANGED" />
     <uses-permission android:name="android.permission.BROADCAST_PACKAGE_INSTALL" />
@@ -78,7 +79,7 @@
             android:name="com.umeng.message.RegistrationReceiver"
             android:exported="false" >
             <intent-filter>
-                <action android:name="com.umeng.message.lib.test.intent.action.COMMAND" />
+                <action android:name="com.birdex.bird.intent.action.COMMAND" />
             </intent-filter>
         </receiver>
         <receiver android:name="com.umeng.message.UmengMessageBootReceiver" >
@@ -93,10 +94,10 @@
             android:label="PushService"
             android:process=":push" >
             <intent-filter>
-                <action android:name="com.umeng.message.lib.test.intent.action.START" />
+                <action android:name="com.birdex.bird.intent.action.START" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.umeng.message.lib.test.intent.action.COCKROACH" />
+                <action android:name="com.birdex.bird.intent.action.COCKROACH" />
             </intent-filter>
             <intent-filter>
                 <action android:name="org.agoo.android.intent.action.PING_V4" />
@@ -133,7 +134,8 @@
             <intent-filter>
                 <action android:name="com.umeng.message.autoupdate.handler.action" />
             </intent-filter>
-        </service> <!-- If you donot want to use the standard notification bar in SDK, you can define IntentService instead to handle message. -->
+        </service>
+ <!-- If you donot want to use the standard notification bar in SDK, you can define IntentService instead to handle message. -->
         <service
             android:name="com.umeng.message.UmengDownloadResourceService"
             android:exported="false" />

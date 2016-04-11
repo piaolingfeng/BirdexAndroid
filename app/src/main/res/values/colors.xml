@@ -55,4 +55,6 @@
     <color name="inventory_count_data">#ff039FFF</color>
     <color name="inventory_all_status">#8d8e8c</color>
     <color name="inventory_status_num">#f5a623</color>
+
+    <color name="order_manager_list_item">#FAFAFA</color>
 </resources>

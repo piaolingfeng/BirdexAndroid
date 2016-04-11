@@ -3,8 +3,10 @@ package com.birdex.bird.activity;
 import android.app.Activity;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,11 +19,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.adapter.CommonSimpleAdapter;
+import com.birdex.bird.adapter.InventoryAdapter;
+import com.birdex.bird.adapter.InventoryWillInAdapter;
 import com.birdex.bird.adapter.OrderListAdapter;
 import com.birdex.bird.adapter.OrderStatusAdapter;
 import com.birdex.bird.adapter.OrderTimeAdapter;
@@ -61,7 +66,7 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/3/30.
  */
-public class MyOrderListActivity extends BaseActivity implements View.OnClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
+public class MyOrderListActivity extends BaseActivity implements View.OnClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface ,TabLayout.OnTabSelectedListener{
 
     //    @Bind(R.id.viewPager)
 //    ViewPager viewpager;
@@ -93,6 +98,18 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     TextView tv_no_text;
     @Bind(R.id.tv_list_count)
     TextView tv_list_count;
+    //库存布局
+//    @Bind(R.id.tv_inventory_all)
+//    public TextView tv_allInventory = null;
+//    @Bind(R.id.tv_inventory_sort_available)
+//    public TextView tv_sortavailable = null;
+//    @Bind(R.id.tv_inventory_sort_time)
+//    public TextView tv_sorttime;
+//    @Bind(R.id.rl_inventory)
+//    public RelativeLayout rl_inventory;
+//    @Bind(R.id.tl_inventory_change)
+//    public TabLayout tl_items;
+
     public static final int[] name = {R.string.tool1, R.string.tool2, R.string.tool3};
     public static final int[] time = {R.string.time_all, R.string.time_today, R.string.time_week, R.string.time_month, R.string.time_three_month, R.string.time_year};
     List<String> menuList;//menu菜单list
@@ -122,7 +139,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         if (orderListManagerFragment == null) {
             orderListManagerFragment = new OrderListManagerFragment();
         }
-
         bus = EventBus.getDefault();
         bus.register(this);
         menu.setVisibility(View.VISIBLE);
@@ -130,21 +146,23 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         for (int i = 0; i < name.length; i++) {//初始化lmenu list
             menuList.add(getString(name[i]));
         }
+        requestStateCount = 0;//
         initTimeStatus();
         initscan_code();
         initSearch();
+//        initTabStatus();
         getAllOrderStatus();//获取订单所有状态
         getAllPredicitionStatus();//获取预报所有状态
         getAllCompanyWarehouse();//获取所有仓库
         initFloatAction();
-        setData();//库存，订单管理
+//        setData();//库存，订单管理
 //        nowSelectedWarehouse = new WarehouseEntity().new WarehouseDetail();
 //        nowSelectedStatus = new OrderStatus().new Status();
     }
 
     /**
      * 滚动到顶部
-     * */
+     */
     public void initFloatAction() {
 
         fab_inventory_gotop.setOnClickListener(new View.OnClickListener() {
@@ -155,34 +173,83 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
+    /*
+    *初始化状态
+    */
+//    private void initTabStatus(){
+//        String [] status=getResources().getStringArray(R.array.inventory_all_status);
+//        LayoutInflater inflater=LayoutInflater.from(this);
+//        String str="";
+//        for(int i=0;i<status.length;i++){
+//            str=status[i];
+//            View view=inflater.inflate(R.layout.status_layout,null,false);
+//            tl_items.addTab(tl_items.newTab().setCustomView(view));
+//            TextView tv_name=(TextView)view.findViewById(R.id.tv_inventory_status_name);
+//            TextView tv_num=(TextView)view.findViewById(R.id.tv_inventory_status_num);
+//            tv_name.setText(str);
+//            if(i==0||i==1){
+//                tv_num.setVisibility(View.GONE);
+//            }else{
+//                tv_num.setText("0");
+//                tv_num.setVisibility(View.GONE);
+//            }
+//        }
+//        tl_items.setOnTabSelectedListener(this);
+//    }
+
     /**
      * 重新初始化fragment
      */
     public void setData() {
+//        rl_inventory.setVisibility(View.GONE);//非库存时，隐藏
+//        tl_items.setVisibility(View.GONE);
+        entity = new OrderRequestEntity();//请求实体初始化,切换时也要新建一个实体
         currentName = getIntent().getStringExtra("name");
         if (StringUtils.isEmpty(currentName)) {
-            currentName = getString(name[0]);
+            String indexOrder = getIntent().getStringExtra("indexOrder");
+            if (!StringUtils.isEmpty(indexOrder)) {
+                getIntent().removeExtra("indexOrder");
+            if (indexOrder.contains("今日")) {//初始化时间
+                entity.setStart_date(timeList.get(1).getStart_date());
+                entity.setEnd_date(timeList.get(1).getEnd_date());
+                bus.post(timeList.get(1).getName(), "changeTime");//改变显示的时间
+            } else {
+                entity.setStart_date(timeList.get(0).getStart_date());
+                entity.setEnd_date(timeList.get(0).getEnd_date());
+                bus.post(timeList.get(0).getName(), "changeTime");//改变显示的时间
+            }
+
+
+                if (indexOrder.contains("预报")) {
+                    currentName = getString(name[1]);
+                    for (int position = 0; position < predicitionStatus.getData().size(); position++) {
+                        if (indexOrder.contains(predicitionStatus.getData().get(position).getStatus_name().trim())) {//包含该模块的名字
+                            entity.setStatus(predicitionStatus.getData().get(position).getStatus() + "");
+                            bus.post(predicitionStatus.getData().get(position), "changeState");
+                            break;
+                        }
+                    }
+                } else {
+                    if (indexOrder.contains("库存")) {
+                        currentName = getString(name[2]);
+//                        rl_inventory.setVisibility(View.VISIBLE);
+//                        tl_items.setVisibility(View.VISIBLE);
+                    } else {//订单
+                        currentName = getString(name[0]);
+                        //初始化状态选择
+                        for (int position = 0; position < orderStatus.getData().size(); position++) {
+                            if (indexOrder.contains(orderStatus.getData().get(position).getStatus_name().trim())) {//包含该模块的名字
+                                entity.setStatus(orderStatus.getData().get(position).getStatus() + "");
+                                bus.post(orderStatus.getData().get(position), "changeState");
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
-//        String indexOrder = getIntent().getStringExtra("indexOrder");
-//        if (!StringUtils.isEmpty(indexOrder)){
-//            getIntent().removeExtra("indexOrder");
-//            if (indexOrder.contains("预报")){
-//                for (OrderStatus.Status s:predicitionStatus.getData()){
-//                    if (indexOrder.contains(s.getStatus_name()));
-//
-//                }
-//                predicitionStatus
-//            }else{
-//                if (indexOrder.contains("库存")){
-//
-//                }else{//订单
-//
-//                }
-//            }
-//        }
         addFragment(currentName);
         title.setText(currentName);
-        entity = new OrderRequestEntity();//请求实体初始化,切换时也要新建一个实体
         if (currentName.equals(getString(name[0]))) {
             bus.post(entity, "requestOrderList");
         } else {
@@ -192,43 +259,15 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void initscan_code(){
+    private void initscan_code() {
         img_scan_code.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                T.showShort(MyApplication.getInstans(),getString(R.string.please_wail));
+                T.showShort(MyApplication.getInstans(), getString(R.string.please_wail));
             }
         });
     }
 
-    private void initTab() {
-//        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-//        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_1));
-//        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_2));
-//        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_3));
-//        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_4));
-//        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_5));
-//        tabLayout.addTab(tabLayout.newTab().setText(R.string.cost_type_6));
-//        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-//        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
-//        IndexFragment.getTodayData();
-
-    }
 
     private void initTimeStatus() {
         timeList = new ArrayList<>();
@@ -274,18 +313,23 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                     if (currentName.equals(getString(name[0]))) {
                         bus.post(entity, "requestOrderList");
                     } else {
-                        if (currentName.equals(getString(name[1])))
+                        if (currentName.equals(getString(name[1]))) {
                             bus.post(entity, "requestPredictList");
+                        }else{
+                            bus.post(entity, "inventorytList");
+                        }
                     }
                 }
                 return false;
             }
         });
 
-        et_search.setOnClearETChangeListener(new ClearEditText.OnClearETChangeListener() {
+        et_search.setOnClearTextListener(new ClearEditText.OnClearTextListener() {
             @Override
-            public void textChange(CharSequence text) {
-
+            public void clearTextListenr() {
+                entity.setKeyword("");
+//                currentPage = 1;
+//                reStartHttp();
             }
         });
     }
@@ -295,6 +339,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
      * 获取订单所有状态
      */
     private void getAllOrderStatus() {
+        showBar();
         RequestParams stateParams = new RequestParams();
         stateParams.add("order_code", "");
         BirdApi.getOrderListState(MyApplication.getInstans(), stateParams, new JsonHttpResponseHandler() {
@@ -305,7 +350,9 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                 OrderStatus.Status status = new OrderStatus().new Status();
                 status.setStatus_name("全部状态");
                 orderStatus.getData().add(0, status);
-                bus.post(status, "changeState");
+                requestStateCount++;
+                getNetStatusCount();
+//                bus.post(status, "changeState");
             }
 
             @Override
@@ -313,13 +360,32 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                 T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
+
+            @Override
+            public void onFinish() {
+                hideBar();
+                super.onFinish();
+            }
         });
+    }
+
+    public int requestStateCount = 0;
+
+    /**
+     * 获取全部的网络状态后
+     */
+    public synchronized void getNetStatusCount() {
+        if (requestStateCount == 2) {
+            requestStateCount = 0;
+            setData();
+        }
     }
 
     /**
      * 获取预报所有状态
      */
     private void getAllPredicitionStatus() {
+        showBar();
         RequestParams stateParams = new RequestParams();
         BirdApi.getPredicitionStatus(MyApplication.getInstans(), stateParams, new JsonHttpResponseHandler() {
             @Override
@@ -329,13 +395,21 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                 OrderStatus.Status status = new OrderStatus().new Status();
                 status.setStatus_name("全部状态");
                 predicitionStatus.getData().add(0, status);
-                bus.post(status, "changeState");
+                requestStateCount++;
+                getNetStatusCount();
+//                bus.post(status, "changeState");
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
                 super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
+            public void onFinish() {
+                hideBar();
+                super.onFinish();
             }
         });
     }
@@ -344,6 +418,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
      * 获取所有的仓库
      */
     private void getAllCompanyWarehouse() {
+        showBar();
         RequestParams wareParams = new RequestParams();
         BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, new JsonHttpResponseHandler() {
             @Override
@@ -360,6 +435,12 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
                 super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
+            public void onFinish() {
+                hideBar();
+                super.onFinish();
             }
         });
     }
@@ -395,7 +476,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     }
 
 
-
     PopupWindow mPopupWindow;
 
     /**
@@ -405,7 +485,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
      * viewID 显示在其下方
      */
     public void showMenuWindow(View viewID, final List<String> list, final int w) {
-//
         CommonSimpleAdapter adapter = new CommonSimpleAdapter(this, list);
         adapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
@@ -427,9 +506,9 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
      * w,用来除以父控件的宽度
      * viewID 显示在其下方
      */
-    public void showTimeWindow(View viewID, final List<TimeSelectEntity> list, final int w) {
+    public void showTimeWindow(View viewID, final int w) {
 //
-        OrderTimeAdapter adapter = new OrderTimeAdapter(this, list);
+        OrderTimeAdapter adapter = new OrderTimeAdapter(this, timeList);
         adapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -438,14 +517,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                 }
 //                T.showShort(MyApplication.getInstans(), list.get(position));
 //                entity.setStatus(list.get(position) + "");
-                entity.setStart_date(list.get(position).getStart_date());
-                entity.setEnd_date(list.get(position).getEnd_date());
-                bus.post(list.get(position).getName(), "changeTime");//改变显示的时间
-                if (currentName.equals(getString(name[0])))
-                    bus.post(entity, "requestOrderList");
-                else if (currentName.equals(getString(name[1]))) {
-                    bus.post(entity, "requestPredictList");
-                }
+                setTime(position);
             }
         });
         showPopupWindow(viewID, w, adapter);
@@ -457,7 +529,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
      */
     public void showStateWindow(View viewID, final List<OrderStatus.Status> list, int w) {
         OrderStatusAdapter adapter = new OrderStatusAdapter(this, list);
-        ;
         adapter.setOnRecyclerViewItemClickListener(
                 new OnRecyclerViewItemClickListener() {
                     @Override
@@ -484,7 +555,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
      * 展示弹出框
      * Warehouse
      */
-    public void showWarehouseWindow(View viewID, final List<WarehouseEntity.WarehouseDetail> list, int w) {
+    public void showWarehouseWindow(View viewID, int w) {
         OrderWareHouseAdapter adapter = new OrderWareHouseAdapter(this, warehouseEntity.getData());
         adapter.setOnRecyclerViewItemClickListener(
                 new OnRecyclerViewItemClickListener() {
@@ -493,30 +564,12 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                         if (mPopupWindow.isShowing()) {
                             mPopupWindow.dismiss();
                         }
-                        entity.setWarehouse_cod(list.get(position).getWarehouse_code());
-                        bus.post(list.get(position), "changeWarehouse");
-                        if (currentName.equals(getString(name[0])))
-                            bus.post(entity, "requestOrderList");
-                        else if (currentName.equals(getString(name[1]))) {
-                            bus.post(entity, "requestPredictList");
-                        }
+                        setWarehouse(position);
                     }
                 }
         );
 
         showPopupWindow(viewID, w, adapter);
-//        CommonSimpleAdapter adapter = new CommonSimpleAdapter(this, list);
-//        adapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
-//            @Override
-//            public void onItemClick(int position) {
-//                if (mPopupWindow.isShowing()) {
-//                    mPopupWindow.dismiss();
-//                }
-//                T.showShort(MyApplication.getInstans(), list.get(position));
-//            }
-//        });
-//
-//        showPopupWindow(viewID, w, adapter);
     }
 
     /**
@@ -544,7 +597,35 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     }
 
 
-    @OnClick({R.id.back, R.id.menu, R.id.state_time, R.id.state_Warehouse, R.id.state_all})
+    /**
+     * 设置仓库条件
+     */
+    private void setWarehouse(int position) {
+        entity.setWarehouse_code(warehouseEntity.getData().get(position).getWarehouse_code());
+        bus.post(warehouseEntity.getData().get(position), "changeWarehouse");
+        if (currentName.equals(getString(name[0])))
+            bus.post(entity, "requestOrderList");
+        else if (currentName.equals(getString(name[1]))) {
+            bus.post(entity, "requestPredictList");
+        }
+    }
+
+    private void setState(int position) {
+
+    }
+
+    private void setTime(int position) {
+        entity.setStart_date(timeList.get(position).getStart_date());
+        entity.setEnd_date(timeList.get(position).getEnd_date());
+        bus.post(timeList.get(position).getName(), "changeTime");//改变显示的时间
+        if (currentName.equals(getString(name[0])))
+            bus.post(entity, "requestOrderList");
+        else if (currentName.equals(getString(name[1]))) {
+            bus.post(entity, "requestPredictList");
+        }
+    }
+
+    @OnClick({R.id.back, R.id.menu, R.id.state_time, R.id.state_Warehouse, R.id.state_all,R.id.tv_inventory_all,R.id.tv_inventory_sort_available,R.id.tv_inventory_sort_time})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -557,14 +638,40 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                 else
                     showStateWindow((View) state_all.getParent(), predicitionStatus.getData(), 1);
                 break;
+            case R.id.tv_inventory_all:
             case R.id.state_Warehouse://所有仓库
-                showWarehouseWindow((View) state_Warehouse.getParent(), warehouseEntity.getData(), 1);
+                showWarehouseWindow((View) state_Warehouse.getParent(), 1);
                 break;
             case R.id.state_time:
-                showTimeWindow((View) state_time.getParent(), timeList, 1);
+                showTimeWindow((View) state_time.getParent(), 1);
                 break;
             case R.id.back:
                 finish();
+                break;
+//            case R.id.tv_inventory_all:
+//                if (warehouseEntity != null) {
+//                    if (warehouseEntity.getData() != null) {
+//                        if (mPopupWindow != null) {
+//                            if (!mPopupWindow.isShowing()) {
+//                                //显示弹框
+//                                mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
+//                            }
+//                        } else {
+//                            initPopWindow();
+//                            //显示弹框
+//                            mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
+//                        }
+//                        return;
+//                    }
+//                }
+//                //请求所有仓库
+//                getAllCompanyWarehouse();
+//                break;
+            case R.id.tv_inventory_sort_available:
+
+                break;
+            case R.id.tv_inventory_sort_time:
+
                 break;
         }
     }
@@ -579,16 +686,19 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
      */
     private void addFragment(String string) {
         BaseFragment baseFragment;
+        transaction = getSupportFragmentManager().beginTransaction();
+        hideFragment();
         if (string.equals(getString(name[1]))) {
             baseFragment = predictionManagerFragment;
         } else {
             baseFragment = orderListManagerFragment;
         }
-        transaction = getSupportFragmentManager().beginTransaction();
-        hideFragment();
         if (!baseFragment.isAdded())
             transaction.add(R.id.frame_layout, baseFragment);
         transaction.show(baseFragment);
+        Bundle b = new Bundle();
+        b.putSerializable("entity", entity);
+        baseFragment.setUIArguments(b);
         transaction.commit();
     }
 
@@ -612,5 +722,69 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     protected void onDestroy() {
         BirdApi.cancelAllRequest();
         super.onDestroy();
+    }
+
+//    @Override
+//    public void onTabSelected(TabLayout.Tab tab) {
+//        //40表示发往仓库，1表示在库，10表示正常，20表示库存紧张，30表示断货
+//        switch (tab.getPosition()) {
+//            case 0:
+//                type = InventoryActivity.Type.Inner;
+//                tv_allInventory.setText(R.string.inventory_all);
+//                adapter = new InventoryAdapter(this, null);
+//                .setAdapter(adapter);
+//                entity.setTab_type(0);
+//                entity.setProduct_type(10);
+//                entity.setStock_status(1);
+//                bus.post(entity, "inventorytList");
+//                break;
+//            case 1:
+//                type = Type.Willin;
+//                tv_allInventory.setText(R.string.inventory_all);
+//                willInAdapter = new InventoryWillInAdapter(this, null);
+//                willInAdapter.setOnGoTopListener(this);
+////                willInAdapter.clearDataSource();
+//                rv_inventory.setAdapter(willInAdapter);
+//                clearParams();
+//                //商品类型，20表示物料，默认10表示商品
+//                params.put("product_type", 10);
+//                params.put("stock_status", 40);
+//                //显示加载动画
+//                reStartHttp();
+//                break;
+//            case 2:
+//                type = Type.OutofWarning;
+//                tv_allInventory.setText(R.string.inventory_all);
+//                adapter = new InventoryAdapter(this, null);
+//                adapter.setOnGoTopListener(this);
+////                adapter.clearDataSource();
+////                adapter.notifyDataSetChanged();
+//                rv_inventory.setAdapter(adapter);
+//                clearParams();
+//                //商品类型，20表示物料，默认10表示商品
+//                params.put("product_type", 10);
+//                params.put("stock_status", 20);
+//                //显示加载动画
+//                reStartHttp();
+//                break;
+//            default:
+//
+//                break;
+//        }
+//    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 }

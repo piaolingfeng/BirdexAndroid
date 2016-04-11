@@ -26,6 +26,7 @@ public class TodayDataActivity extends BaseActivity implements View.OnClickListe
     PercentRelativeLayout back;
     @Bind(R.id.title)
     TextView title;
+    
     private TodayDataAdapter adapter;
     private List<OrderManagerEntity> orderList;
 

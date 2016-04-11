@@ -23,7 +23,8 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
     private Drawable mClearDrawable;
     private boolean hasFoucs;
     private OnClearETChangeListener listener;
-
+    //设置清除文本时间
+    private OnClearTextListener clearTextListener;
     public ClearEditText(Context context) {
         this(context, null);
     }
@@ -82,6 +83,9 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
                 boolean isInnerHeight = y > distance && y < (distance + height);
                 if (isInnerWidth && isInnerHeight) {
                     this.setText("");
+                    if(clearTextListener!=null){
+                        clearTextListener.clearTextListenr();
+                    }
                 }
             }
         }
@@ -150,5 +154,12 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
     public void setOnClearETChangeListener(OnClearETChangeListener listener) {
         this.listener = listener;
     }
-
+    public interface OnClearTextListener{
+        void clearTextListenr();
+    }
+    public void setOnClearTextListener(OnClearTextListener listener){
+        if(listener!=null){
+            this.clearTextListener=listener;
+        }
+    }
 }

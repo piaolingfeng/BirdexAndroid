@@ -14,7 +14,7 @@
     <string name="context_size_3">2.5%</string>
 
     <!-- 相对于父类的大小-->
-    <string name="item_context_size_1">30%</string>
+    <string name="item_context_size_1">26%</string>
     <string name="item_context_size_2">20%</string>
     <string name="item_context_size_3">40%</string>
     <string name="del_size">20%w</string>
@@ -28,6 +28,8 @@
     <string name="all">100%</string>
     <string name="title_activity_pay_balance_list">PayBalanceListActivity</string>
 
+    <string name="title_filter_textsize">26%</string>
+    
     <string name="listmanager">80%h</string>
 
     <string name="sixtyPercentHeight">70%h</string>
@@ -134,7 +136,6 @@
     <string name="base_message">企业基本信息</string>
 
     <!--维度-->
-    <string name="state_time">时间</string>
     <string name="state_Warehouse">全部仓库</string>
     <string name="state_all">全部状态</string>
 
@@ -143,7 +144,7 @@
     <string name="main_message">企业主营信息</string>
     <string name="contacts_message">联系人信息</string>
     <string name="business_message">业务模式及要求</string>
-    
+
     <string name="sign_company_name">签约公司名称：</string>
     <string name="company_short_name">公司简称：</string>
     <string name="headquarters_address">总部所在地：</string>
@@ -172,18 +173,10 @@
     <string name="about_us_content">\t\t\t\t笨鸟海淘成立于2014年1月，由海淘城前CEO带领原班人马倾力打造，笨鸟海淘致力于用电商的用户体验，基于互联网快速专注的思维打造全新的转运公司。在美国免税州设立数万尺仓库（4000个库位，30000个包裹容量，10000个包裹处理能力／每天），配备专业设备，IT团队量身打造转运系统，多口岸就近清关，7*10小时客服在线服务。</string>
     <string name="about_us_www">手机访问：www.birdex.cn</string>
     <string name="about_us_version">当前版本：B1.0.1 for Android</string>
-    
+
     <!--我的主页-->
     <string name="mine_index_title">我的</string>
-    <string-array name="mine_item_title">
-        <item name="mine_item_myaccount">我的账户</item>
-        <item name="mine_item_mymessage">我的订阅消息</item>
-        <item name="mine_item_mysetting">我的设置</item>
-        <item name="mine_item_manage">账户管理</item>
-        <item name="mine_item_mydata">我的数据</item>
-        <item name="mine_item_mycustomer">我的客户经理</item>
-        <item name="mine_item_about">关于</item>
-    </string-array>
+
 
     <string name="logistics_tracking">物流跟踪</string>
     <string name="service_type">联系客服</string>
@@ -191,13 +184,20 @@
     <string name="commodity_code">商品编码:</string>
     <!--我的库存-->
     <string name="inventory_title">我的库存</string>
+    <string name="inventory_item_1">在库商品</string>
+    <string name="inventory_item_2">待入库商品</string>
+    <string name="inventory_search_hint">输入商品编码或UPC或商品编码</string>
+    <string name="inventory_all">所有仓库</string>
+    <string name="inventory_sort_time">时间排序</string>
+    <string name="inventory_sort_available">可用数量</string>
+    <string name="inventory_all_data">共@条数据</string>
     <string name="inventory_tip_1">获取库存数据失败!</string>
     <string name="inventory_tip_2">库存数据解析失败!</string>
-    <string name="inventory_tip_3">库存数据已经加载完!</string>
+    <string name="inventory_tip_3">数据已经加载完毕!</string>
     <string name="inventory_item_code">商品编码:</string>
     <string name="inventory_item_available">可用</string>
     <string name="inventory_item_occupancy">占用</string>
-
+    <string name="inventory_willin_item_num">待入库数</string>
     <!-- 修改地址 -->
     <string name="consignee">收货人：</string>
     <string name="phone">联系电话：</string>
@@ -237,4 +237,11 @@
     <string name="tariff">关税</string>
 
     <string name="please_wail">敬请期待</string>
+    <string name="time_all">不限时间</string>
+    <string name="time_today">今天</string>
+    <string name="time_week">近一周</string>
+    <string name="time_month">近一个月</string>
+    <string name="time_three_month">近三个月</string>
+    <string name="time_year">近一年</string>
+    <string name="no_data">暂时没有数据哦！</string>
 </resources>

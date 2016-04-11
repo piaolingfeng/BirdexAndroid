@@ -1,6 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/inventory_item_margin_top"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/inventory_item_paddinglr"
+    android:paddingRight="@dimen/inventory_item_paddinglr">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/inventory_item_row1_padding"
+        android:paddingTop="@dimen/inventory_item_row1_padding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/inventory_item_code"
+            android:textAppearance="@style/inventory_item_black1" />
+
+        <TextView
+            android:id="@+id/tv_inventory_item_upc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="@string/inventory_item_code"
+            android:textAppearance="@style/inventory_item_black1" />
+
+        <TextView
+            android:id="@+id/tv_inventory_item_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/inventory_item_gray1" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5px"
+        android:background="@drawable/inventory_item_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/inventory_item_row2_padding"
+        android:paddingTop="@dimen/inventory_item_row2_padding">
+
+        <ImageView
+            android:id="@+id/iv_inventory_item_pic"
+            android:layout_width="@dimen/inventory_item_pic_width"
+            android:layout_height="@dimen/inventory_item_pic_height"
+            android:layout_marginLeft="@dimen/inventory_item_row2_marginlr"
+            android:scaleType="fitXY" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_inventory_item_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/inventory_item_row2_marginlr"
+                    android:layout_marginRight="@dimen/inventory_item_row2_marginlr"
+                    android:layout_weight="1.0"
+                    android:textAppearance="@style/inventory_item_black1" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/inventory_willin_item_num"
+                        android:textColor="@color/inventory_item_gray"
+                        android:textSize="@dimen/inventory_item_text" />
+
+                    <TextView
+                        android:id="@+id/tv_inventory_willin_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/inventory_item_blue"
+                        android:textSize="@dimen/inventory_item_number" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1.5px"
+                android:layout_marginLeft="@dimen/inventory_item_row2_marginlr"
+                android:layout_marginRight="@dimen/inventory_item_row2_marginlr"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/inventory_item_line" />
+
+            <LinearLayout
+                android:id="@+id/arl_inventory_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

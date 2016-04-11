@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.birdex.bird.R;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -35,7 +36,11 @@ public class CommonSimpleAdapter extends RecyclerView.Adapter<CommonSimpleAdapte
 
     public CommonSimpleAdapter(Context mContext, List<String> list) {
         this.mContext = mContext;
-        this.list = list;
+        if(list!=null){
+            this.list = list;
+        }else{
+            this.list = new ArrayList<>();
+        }
     }
 
     @Override
@@ -71,6 +76,15 @@ public class CommonSimpleAdapter extends RecyclerView.Adapter<CommonSimpleAdapte
             if (onRecyclerViewItemClickListener != null) {
                 onRecyclerViewItemClickListener.onItemClick(position);
             }
+        }
+    }
+    /*
+    *修改数据源
+    */
+    public void setDataSource(List<String> list){
+        if(list!=null){
+            this.list=list;
+            notifyDataSetChanged();
         }
     }
 }

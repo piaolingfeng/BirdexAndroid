@@ -129,53 +129,61 @@ public class InventoryBiz {
                     entity=new InventoryDetailEntity();
                     try{
                         jobj=array.getJSONObject(i);
-                        //盘亏数量
-                        entity.setShortage_stock(StringUtils.getNumString(jobj.getString("shortage_stock")));
-                        //spoilage_stock: "损耗（品质问题）数量",
-                        entity.setSpoilage_stock(StringUtils.getNumString(jobj.getString("spoilage_stock")));
-                        //status: 状态。10表示正常,20表示库存紧张,30表示断货，40表示发往仓库
-                        entity.setStatus(jobj.getInt("status"));
-                        //overdraft_stock: "允许超售库存量",
-                        entity.setOverdraft_stock(StringUtils.getNumString(jobj.getString("overdraft_stock")));
-                        //out_stock: "出库总数",
-                        entity.setOut_stock(StringUtils.getNumString(jobj.getString("out_stock")));
-                        //lose_stock: "丢失数量",
-                        entity.setLose_stock(StringUtils.getNumString(jobj.getString("lose_stock")));
-                        //in_stock: "入库总数",
-                        entity.setIn_stock(StringUtils.getNumString(jobj.getString("in_stock")));
-                        //
-                        entity.setWms_stock(StringUtils.getNumString(jobj.getString("wms_stock")));
-                        //所有损坏库存
-                        entity.setAll_damage_stock(jobj.getInt("all_damage_stock"));
-                        //expire_stock: "过期数量",
-                        entity.setExpire_stock(StringUtils.getNumString(jobj.getString("expire_stock")));
+                        if(jobj.has("shortage_stock")){
+                            //盘亏数量
+                            entity.setShortage_stock(StringUtils.getNumString(jobj.getString("shortage_stock")));
+                            //spoilage_stock: "损耗（品质问题）数量",
+                            entity.setSpoilage_stock(StringUtils.getNumString(jobj.getString("spoilage_stock")));
+                            //status: 状态。10表示正常,20表示库存紧张,30表示断货，40表示发往仓库
+                            entity.setStatus(jobj.getInt("status"));
+                            //overdraft_stock: "允许超售库存量",
+                            entity.setOverdraft_stock(StringUtils.getNumString(jobj.getString("overdraft_stock")));
+                            //out_stock: "出库总数",
+                            entity.setOut_stock(StringUtils.getNumString(jobj.getString("out_stock")));
+                            //lose_stock: "丢失数量",
+                            entity.setLose_stock(StringUtils.getNumString(jobj.getString("lose_stock")));
+                            //in_stock: "入库总数",
+                            entity.setIn_stock(StringUtils.getNumString(jobj.getString("in_stock")));
+                            //
+                            entity.setWms_stock(StringUtils.getNumString(jobj.getString("wms_stock")));
+                            //所有损坏库存
+                            entity.setAll_damage_stock(jobj.getInt("all_damage_stock"));
+                            //expire_stock: "过期数量",
+                            entity.setExpire_stock(StringUtils.getNumString(jobj.getString("expire_stock")));
 
-                        //----------------将数组的json对象进行下一步解析---------------------
-                        ArrayList<InventoryOrderEntity> orderlist=new ArrayList<>();
-                        orderlist=parseJson2OrderList(jobj.getJSONArray("stock_detail"));
-                        entity.setStock_detail(orderlist);
-                        //damage_stock: "破损数量",
-                        entity.setDamage_stock(StringUtils.getNumString(jobj.getString("damage_stock")));
-                        //external_no: "商品外部编码"
-                        entity.setExternal_no(StringUtils.getString(jobj.getString("external_no")));
+                            //----------------将数组的json对象进行下一步解析---------------------
+                            ArrayList<InventoryOrderEntity> orderlist=new ArrayList<>();
+                            orderlist=parseJson2OrderList(jobj.getJSONArray("stock_detail"));
+                            entity.setStock_detail(orderlist);
+                            //damage_stock: "破损数量",
+                            entity.setDamage_stock(StringUtils.getNumString(jobj.getString("damage_stock")));
+                            //external_no: "商品外部编码"
+                            entity.setExternal_no(StringUtils.getString(jobj.getString("external_no")));
 
-                        entity.setOut_of_stock(StringUtils.getNumString(jobj.getString("out_of_stock")));
+                            entity.setOut_of_stock(StringUtils.getNumString(jobj.getString("out_of_stock")));
 
-                        entity.setIning_stock(StringUtils.getNumString(jobj.getString("ining_stock")));
-                        //stock 商品库存
-                        entity.setStock(StringUtils.getNumString(jobj.getString("stock")));
-                        //status_name: 状态名称
-                        entity.setStatus_name(StringUtils.getString(jobj.getString("status_name")));
-                        //warning_stock: 警界库存数量,
-                        entity.setWarning_stock(StringUtils.getNumString(jobj.getString("warning_stock")));
-                        //product_code: "商品唯一编码",
-                        entity.setProduct_code(StringUtils.getString(jobj.getString("product_code")));
-                        //block_stock: "订单占用库存量",
-                        entity.setBlock_stock(StringUtils.getNumString(jobj.getString("block_stock")));
+                            entity.setIning_stock(StringUtils.getNumString(jobj.getString("ining_stock")));
 
-                        entity.setWarehouse_code(StringUtils.getString(jobj.getString("warehouse_code")));
-                        //overage_stock: "盘盈数量"
-                        entity.setOverage_stock(StringUtils.getNumString(jobj.getString("overage_stock")));
+                            //warning_stock: 警界库存数量,
+                            entity.setWarning_stock(StringUtils.getNumString(jobj.getString("warning_stock")));
+                            //product_code: "商品唯一编码",
+                            entity.setProduct_code(StringUtils.getString(jobj.getString("product_code")));
+                            //block_stock: "订单占用库存量",
+                            entity.setBlock_stock(StringUtils.getNumString(jobj.getString("block_stock")));
+
+                            entity.setWarehouse_code(StringUtils.getString(jobj.getString("warehouse_code")));
+                            //overage_stock: "盘盈数量"
+                            entity.setOverage_stock(StringUtils.getNumString(jobj.getString("overage_stock")));
+                        }
+                        if(jobj.has("stock")){
+                            //stock 商品库存
+                            entity.setStock(StringUtils.getNumString(jobj.getString("stock")));
+                        }
+                        if(jobj.has("status_name")){
+                            //status_name: 状态名称
+                            entity.setStatus_name(StringUtils.getString(jobj.getString("status_name")));
+                        }
+
                         list.add(entity);
                     }catch (JSONException jex){
                         jex.printStackTrace();
@@ -200,7 +208,9 @@ public class InventoryBiz {
                     try {
                         jobj=array.getJSONObject(i);
                         //入库通知单唯一编码
-                        entity.setStorage_code(StringUtils.getString(jobj.getString("StoreCode")));
+                        if(jobj.has("StoreCode")){
+                            entity.setStorage_code(StringUtils.getString(jobj.getString("StoreCode")));
+                        }
                         //跟踪单号
                         entity.setTrackingNo(StringUtils.getString(jobj.getString("TrackingNo")));
                         //数量

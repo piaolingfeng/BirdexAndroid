@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="mine_item_title">
+        <item name="mine_item_myaccount">我的账户</item>
+        <item name="mine_item_mymessage">我的订阅消息</item>
+        <item name="mine_item_mysetting">我的设置</item>
+        <item name="mine_item_manage">账户管理</item>
+        <item name="mine_item_mydata">我的数据</item>
+        <item name="mine_item_mycustomer">我的客户经理</item>
+        <item name="mine_item_about">关于</item>
+    </string-array>
+    <string-array name="inventory_all_status">
+        <item>在库商品</item>
+        <item>待入库商品</item>
+        <item>超预警商品</item>
+    </string-array>
+    <string-array name="manage_mode_items">
+        <item name="tool1">订单管理</item>
+        <item name="tool2">预报管理</item>
+        <item name="tool3">库存动态</item>
+        <item name="tool4">进销存管理</item>
+        <item name="tool5">我的支出</item>
+        <item name="tool6">账户充值</item>
+    </string-array>
+</resources>

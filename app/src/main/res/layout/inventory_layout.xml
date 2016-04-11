@@ -1,38 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
 
-    <com.birdex.bird.widget.HeaderView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:headtitle="@string/inventory_title" />
-
-    <android.support.design.widget.CoordinatorLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background"
         android:orientation="vertical">
 
-        <android.support.design.widget.AppBarLayout
+        <com.birdex.bird.widget.HeaderView
+            android:id="@+id/hv_invenyory"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:bgcolor="@color/blue_head_1"
+            app:hasstatubar="false"
+            app:headtitle="@string/inventory_title"
+            app:leftimg="@drawable/back_chevron"
+            app:rightimg="@drawable/menu" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_scrollFlags="enterAlways">
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tl_inventory_change"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll"
+            app:tabIndicatorColor="@color/blue"
+            app:tabSelectedTextColor="@color/blue"
+            app:tabTextColor="@color/gray" />
 
-            </LinearLayout>
-        </android.support.design.widget.AppBarLayout>
-
-        <com.birdex.bird.xrecyclerview.XRecyclerView
-            android:id="@+id/rv_inventory"
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never" />
-    </android.support.design.widget.CoordinatorLayout>
-</LinearLayout>
+            android:background="@color/background"
+            android:orientation="vertical">
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    app:layout_scrollFlags="scroll|enterAlways">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.birdex.bird.widget.ClearEditText
+                            android:id="@+id/et_search"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="8dp"
+                            android:layout_toLeftOf="@+id/img_scan_code"
+                            android:layout_weight="1.0"
+                            android:background="@drawable/aboutus_search"
+                            android:drawableLeft="@drawable/ic_search"
+                            android:hint="@string/inventory_search_hint"
+                            android:imeOptions="actionSearch"
+                            android:singleLine="true"
+                            android:textColor="@color/context_2"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/img_scan_code"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/scan_code" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_inventory_all"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginLeft="@dimen/inventory_limit_marginlr"
+                            android:drawableRight="@drawable/laydown"
+                            android:text="@string/inventory_all"
+                            android:textSize="@dimen/inventory_limit_txt" />
+
+                        <TextView
+                            android:id="@+id/tv_inventory_sort_available"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/inventory_limit_marginlr"
+                            android:drawableRight="@drawable/triangle_down"
+                            android:text="@string/inventory_sort_available"
+                            android:textSize="@dimen/inventory_limit_txt" />
+
+                        <TextView
+                            android:id="@+id/tv_inventory_sort_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/inventory_limit_marginlr"
+                            android:layout_marginRight="@dimen/inventory_limit_marginlr"
+                            android:layout_toLeftOf="@id/tv_inventory_sort_available"
+                            android:drawableRight="@drawable/triangle_down"
+                            android:text="@string/inventory_sort_time"
+                            android:textSize="@dimen/inventory_limit_txt" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/tv_inventory_alltxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="@string/inventory_all_data"
+                        android:textColor="@color/inventory_count_data"
+                        android:textSize="@dimen/inventory_count_data" />
+                </LinearLayout>
+            </android.support.design.widget.AppBarLayout>
+
+            <com.birdex.bird.xrecyclerview.XRecyclerView
+                android:id="@+id/rv_inventory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                android:overScrollMode="never"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        </android.support.design.widget.CoordinatorLayout>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_inventory_gotop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp"
+        android:src="@drawable/gotop_img"
+        app:backgroundTint="#d1d3d4"
+        app:elevation="6dp"
+        android:visibility="gone"
+        app:pressedTranslationZ="12dp"
+        app:rippleColor="#33728dff" />
+</RelativeLayout>

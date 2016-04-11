@@ -30,17 +30,18 @@
     <dimen name="item_height">75dp</dimen>
     <dimen name="orderlist_item_height">80dp</dimen>
 
+    <dimen name="common_rcy_item_height">38dp</dimen>
     <!--headview上的字体 高度-->
     <dimen name="headview_title_size">18sp</dimen>
-    <dimen name="headview_padding_top">18dp</dimen>
-    <dimen name="headview_padding_bottom">6dp</dimen>
+    <dimen name="headview_padding_top">10dp</dimen>
+    <dimen name="headview_padding_bottom">10dp</dimen>
     <!--我的首页-->
     <dimen name="mine_item_size">16sp</dimen>
     <!--收支明细-->
     <dimen name="personal_details_item_orderid_size">16sp</dimen>
     <dimen name="personal_details_item_ordernum_size">16sp</dimen>
     <dimen name="personal_details_item_ordercontent_size">14sp</dimen>
-    <!--库存-->
+    <!--库存item-->
     <dimen name="inventory_item_margin_top">10dp</dimen>
     <dimen name="inventory_item_paddinglr">12dp</dimen>
     <dimen name="inventory_item_code">16sp</dimen>
@@ -52,4 +53,8 @@
     <dimen name="inventory_item_row1_padding">10dp</dimen>
     <dimen name="inventory_item_row2_padding">10dp</dimen>
     <dimen name="inventory_item_row2_marginlr">10dp</dimen>
+    <!--库存-->
+    <dimen name="inventory_limit_txt">16sp</dimen>
+    <dimen name="inventory_limit_marginlr">15dp</dimen>
+    <dimen name="inventory_count_data">16sp</dimen>
 </resources>

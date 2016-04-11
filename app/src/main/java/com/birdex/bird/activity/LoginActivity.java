@@ -18,6 +18,7 @@ import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.ContactDetail;
 import com.birdex.bird.entity.User;
 import com.birdex.bird.update.UpdateManager;
+import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.T;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -66,6 +67,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void initializeContentViews() {
+        HideSoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
         initSystemBar(R.color.transparent);
         initData();
     }

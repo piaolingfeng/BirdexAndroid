@@ -44,6 +44,7 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
     private int mContentLayoutResId;
     ProgressDialog bar;
     Dialog loadingDialog;
+    Bundle bundle;
     /**
      * 缓存content布局
      */
@@ -72,6 +73,14 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
 //        return fragment;
 //    }
 
+    public void setUIArguments(final Bundle args) {
+//        getActivity().runOnUiThread(new Runnable() {
+//            public void run() {
+            /* do your UI stuffs */
+                bundle = args;
+//            }
+//        });
+    }
 
     public void showLoading() {
         loadingDialog = new SafeProgressDialog(getActivity(), R.style.semester_dialog);// 创建自定义样式dialog

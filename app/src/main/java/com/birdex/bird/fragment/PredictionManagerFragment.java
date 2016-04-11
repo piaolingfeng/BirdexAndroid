@@ -1,5 +1,6 @@
 package com.birdex.bird.fragment;
 
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.KeyEvent;
 
@@ -39,6 +40,7 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
 
     }
 
+
     @Override
     public int getContentLayoutResId() {
         return R.layout.xrecycle_view_layout;
@@ -50,7 +52,12 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
         HideSoftKeyboardUtil.setupAppCompatUI(contentView, (BaseActivity) getActivity());
 //        orderListEntities = new OrderListEntity();
         predicitionEntity = new PredicitionEntity();
-        entity = new OrderRequestEntity();
+//        if (getArguments() != null) {
+        entity = (OrderRequestEntity) bundle.getSerializable("entity");
+        if (entity == null) {
+            entity = new OrderRequestEntity();
+        }
+//        }
         bus.register(this);
         rcy_orderlist.setLoadingListener(this);
         rcy_orderlist.setPullRefreshEnabled(false);
@@ -73,7 +80,7 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
         listParams.add("page_no", entity.getPage_no() + "");
         listParams.add("page_size", entity.getPage_size());
         listParams.add("keyword", entity.getKeyword());
-        listParams.add("warehouse_code", entity.getWarehouse_cod());
+        listParams.add("warehouse_code", entity.getWarehouse_code());
         listParams.add("start_date", entity.getStart_date());
         listParams.add("end_date", entity.getEnd_date());
         listParams.add("status", entity.getStatus());

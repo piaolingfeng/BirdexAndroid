@@ -22,4 +22,32 @@
         <item name="tool5">我的支出</item>
         <item name="tool6">账户充值</item>
     </string-array>
+
+    <string-array name="todaybash">
+        <item >today_checkout_order_count</item>
+        <item >today_wait_checkout_order_count</item>
+        <item >transport_order_count</item>
+        <item >today_sign_order_count</item>
+        <item >stock_exception_order_count</item>
+        <item >no_pass_order_count</item>
+        <item >today_confirm_storage_count</item>
+        <item >wait_confirm_storage_count</item>
+        <item >no_pass_storage_count</item>
+        <item >warning_stock_count</item>
+        <item >id_card_exception_order_count</item>
+    </string-array>
+
+    <string-array name="todaybash_name">
+        <item >今日已出库</item>
+        <item >今日待出库</item>
+        <item >运输中</item>
+        <item >今日已签收</item>
+        <item >库存异常订单</item>
+        <item >审核不通过的订单</item>
+        <item >今日已入库预报单</item>
+        <item >待确认预报单</item>
+        <item >审核不通过预报单</item>
+        <item >库存紧张</item>
+        <item >身份证异常订单</item>
+    </string-array>
 </resources>

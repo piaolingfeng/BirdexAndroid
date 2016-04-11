@@ -1,5 +1,6 @@
 package com.birdex.bird.fragment;
 
+import android.os.Bundle;
 import android.view.KeyEvent;
 
 import com.birdex.bird.MyApplication;
@@ -34,11 +35,11 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
     OrderRequestEntity entity;//请求数据保存的实体
     @Bind(R.id.rcy_orderlist)
     XRecyclerView rcy_orderlist;
-
     @Override
     protected void key(int keyCode, KeyEvent event) {
 
     }
+
 
     @Override
     public int getContentLayoutResId() {
@@ -49,7 +50,10 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
     public void initializeContentViews() {
         HideSoftKeyboardUtil.setupAppCompatUI(contentView, (BaseActivity) getActivity());
         orderListEntities = new OrderListEntity();
-        entity = new OrderRequestEntity();
+        entity = (OrderRequestEntity) bundle.getSerializable("entity");
+        if (entity == null) {
+            entity = new OrderRequestEntity();
+        }
         bus.register(this);
         rcy_orderlist.setLoadingListener(this);
 //        rcy_orderlist.setPullRefreshEnabled(false);
@@ -96,7 +100,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
         listParams.add("page_no", entity.getPage_no() + "");
         listParams.add("page_size", entity.getPage_size());
         listParams.add("keyword", entity.getKeyword());
-        listParams.add("warehouse_code", entity.getWarehouse_cod());
+        listParams.add("warehouse_code", entity.getWarehouse_code());
         listParams.add("start_date", entity.getStart_date());
         listParams.add("end_date", entity.getEnd_date());
         listParams.add("status", entity.getStatus());

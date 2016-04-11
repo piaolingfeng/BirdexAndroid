@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 import com.birdex.bird.R;
 import com.birdex.bird.glide.GlideUtils;
 import com.birdex.bird.util.Constant;
+
+import java.io.FileNotFoundException;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -29,9 +32,6 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
 
     @Bind(R.id.account_manager)
     TextView accountManager;
-
-    @Bind(R.id.account_framelayout)
-    FrameLayout frameLayout;
 
 //    private String path;
 
@@ -81,9 +81,15 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
 //                    path = data.getExtras().getString("path");
 //                    GlideUtils.setImageToLocalPath(head,path);
                     if(data.getExtras()!= null) {
-                        Bitmap resultBitmap = (Bitmap) data.getExtras().get("bitmap");
-                        if(resultBitmap!=null){
-                            head.setImageBitmap(resultBitmap);
+//                        Bitmap resultBitmap = (Bitmap) data.getExtras().get("bitmap");
+                        String uriStr = (String) data.getExtras().get("bitmap");
+                        if(uriStr!=null){
+                            Uri uri = Uri.parse(uriStr);
+                            try {
+                                head.setImageBitmap(BitmapFactory.decodeStream(getContentResolver().openInputStream(uri)));
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }

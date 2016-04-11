@@ -27,7 +27,10 @@ import com.birdex.bird.util.ImageUtils;
 import com.birdex.bird.util.T;
 import com.bumptech.glide.Glide;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -64,6 +67,8 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
 
     // 传过来的 bitmap
     private Bitmap bitmap;
+    // 修改后的 bitmap
+    private Bitmap resultBitmap;
 
     /** 头像名称 */
     private static final String IMAGE_FILE_NAME = "image.jpg";
@@ -115,11 +120,13 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
                     Intent resultIntent = new Intent();
                     Bundle bundle = new Bundle();
 //                    bundle.putString("path", filePath);
-                if(resultDrawable != null) {
-                    Bitmap rebitmap = ImageUtils.drawableToBitmap(resultDrawable);
-                    bundle.putParcelable("bitmap", rebitmap);
+                if(resultBitmap != null) {
+//                    Bitmap rebitmap = ImageUtils.drawableToBitmap(resultDrawable);
+//                    bundle.putParcelable("bitmap", resultBitmap);
+                    bundle.putString("bitmap", uritempFile.toString());
                 } else {
-                    bundle.putParcelable("bitmap", bitmap);
+//                    bundle.putParcelable("bitmap", bitmap);
+                    bundle.putString("bitmap", null);
                 }
                     resultIntent.putExtras(bundle);
                     this.setResult(RESULT_OK, resultIntent);
@@ -231,6 +238,7 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
         builder.create().show();
     }
 
+    Uri uritempFile;
 
     /**
      * 裁剪图片方法实现
@@ -248,8 +256,36 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
         // outputX outputY 是裁剪图片宽高
         intent.putExtra("outputX", 340);
         intent.putExtra("outputY", 340);
-        intent.putExtra("return-data", true);
+//        intent.putExtra("return-data", true);
+
+        /**
+         * 此方法返回的图片只能是小图片（sumsang测试为高宽160px的图片）
+         * 故将图片保存在Uri中，调用时将Uri转换为Bitmap，此方法还可解决miui系统不能return data的问题
+         */
+        //intent.putExtra("return-data", true);
+
+        //uritempFile为Uri类变量，实例化uritempFile
+        uritempFile = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uritempFile);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+
         startActivityForResult(intent, RESULT_REQUEST_CODE);
+    }
+
+    // 图片压缩
+    private Bitmap compressImage(Bitmap image) {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        int options = 100;
+        while (baos.toByteArray().length / 1024 > 100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+            baos.reset();//重置baos即清空baos
+            image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
+            options -= 10;//每次都减少10
+        }
+        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
+        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
+        return bitmap;
     }
 
 
@@ -332,9 +368,18 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
                 break;
 
             case RESULT_REQUEST_CODE : // 图片缩放完成后
-                if (data != null) {
-                    getImageToView(data);
-                }
+//                if (data != null) {
+
+                    //将Uri图片转换为Bitmap
+                    try {
+                        resultBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uritempFile));
+                        icon.setImageBitmap(resultBitmap);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+//                    getImageToView(data);
+//                }
                 break;
         }
     }

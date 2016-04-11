@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.adapter.MineIndexAdapter;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.AccountDetail;
 import com.birdex.bird.entity.Wallet;
@@ -188,7 +189,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    @OnClick({R.id.head_icon, R.id.account_manager, R.id.back})
+    @OnClick({R.id.head_icon, R.id.account_manager, R.id.back, R.id.recharge_bt, R.id.recharge_tv, R.id.account_detail})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -201,14 +202,45 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                 startActivityForResult(intent, Constant.ICON_CHANGE);
                 break;
 
-            // 点击账户管理
-            case R.id.account_manager:
-
-                break;
-
             // 点击左上角返回
             case R.id.back:
                 finish();
+                break;
+
+            // 充值按钮
+            case R.id.recharge_bt:
+                //账户管理
+                intent=new Intent(this, MyAccountInfoActivity.class);
+                //显示第1个页面
+                intent.putExtra("enterindex",0);
+                this.startActivity(intent);
+                break;
+
+            // 左下角充值
+            case R.id.recharge_tv:
+                //账户管理
+                intent=new Intent(this, MyAccountInfoActivity.class);
+                //显示第1个页面
+                intent.putExtra("enterindex",0);
+                this.startActivity(intent);
+                break;
+
+            // 账户明细
+            case R.id.account_detail:
+                //账户管理
+                intent=new Intent(this, MyAccountInfoActivity.class);
+                //显示第2个页面
+                intent.putExtra("enterindex",1);
+                this.startActivity(intent);
+                break;
+
+            // 账户管理
+            case R.id.account_manager:
+                //账户管理
+                intent=new Intent(this, MyAccountInfoActivity.class);
+                //显示第3个页面
+                intent.putExtra("enterindex",2);
+                this.startActivity(intent);
                 break;
         }
     }

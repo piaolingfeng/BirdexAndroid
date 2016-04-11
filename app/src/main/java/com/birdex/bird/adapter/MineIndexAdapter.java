@@ -135,6 +135,10 @@ public class MineIndexAdapter extends RecyclerView.Adapter<MineIndexAdapter.Mine
                     break;
                 case 3:
                     //账户管理
+                    intent=new Intent(MineIndexAdapter.this.activity, MyAccountInfoActivity.class);
+                    //显示第三个页面
+                    intent.putExtra("enterindex",2);
+                    MineIndexAdapter.this.activity.startActivity(intent);
                     break;
                 case 4:
                     //我的数据

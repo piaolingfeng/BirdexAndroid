@@ -1,43 +1,321 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.zhy.android.percent.support.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:imagecontrol="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:id="@+id/title_1l"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <com.zhy.android.percent.support.PercentRelativeLayout
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/blue_back"
+                app:layout_heightPercent="35%"
+                app:layout_marginPercent="4%" />
+        </com.zhy.android.percent.support.PercentRelativeLayout>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="@string/myaccount"
+            android:textColor="#4A4A4A"
+            app:layout_textSizePercent="30%" />
 
 
-    <ImageView
-        android:id="@+id/head_icon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_heightPercent="9%"
-        app:layout_widthPercent="16%"
-        android:layout_centerHorizontal="true"
-        android:scaleType="centerCrop"
-        app:layout_marginTopPercent="10%"
-        android:src="@drawable/contacts"/>
+        <ImageView
+            android:id="@+id/menu"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/black_menu"
+            app:layout_paddingPercent="4%" />
+
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:id="@+id/backgroud"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_1l"
+        android:background="@drawable/myaccount_background">
+
+        <com.birdex.bird.widget.RoundImageView
+            android:id="@+id/head_icon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            imagecontrol:border_inside_color="#fff7f2e9"
+            imagecontrol:border_outside_color="#ffd5d1c8"
+            imagecontrol:border_thickness="2dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/contacts"
+            app:layout_heightPercent="20%"
+            app:layout_marginTopPercent="5%"
+            app:layout_widthPercent="32%" />
+
+        <TextView
+            android:id="@+id/head_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/head_icon"
+            android:layout_centerHorizontal="true"
+            android:text="@string/welcome"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/center_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/backgroud"
+        android:orientation="horizontal"
+        app:layout_marginTopPercent="5%">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/account_type"
+            android:textColor="#979797"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#9B9B9B" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/balance"
+            android:textColor="#979797"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#9B9B9B" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/credit"
+            android:textColor="#979797"
+            android:textSize="16sp" />
+
+    </com.zhy.android.percent.support.PercentLinearLayout>
+
+
     <TextView
-        android:id="@+id/head_tv"
-        android:layout_below="@+id/head_icon"
+        android:id="@+id/division_01"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/center_ll"
+        android:background="#C7C7C7"
+        app:layout_marginLeftPercent="3%"
+        app:layout_marginRightPercent="3%"
+        app:layout_marginTopPercent="3%" />
+
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/yunfei_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/division_01"
+        android:orientation="horizontal"
+        app:layout_marginTopPercent="2%">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/freight"
+            android:textColor="#979797"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/freight_balance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/credit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#13A7DF"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:background="#C7C7C7"
+                />
+            <TextView
+                android:id="@+id/left_credit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#F5A623"
+                />
+
+        </LinearLayout>
+
+    </com.zhy.android.percent.support.PercentLinearLayout>
+
+
+    <TextView
+        android:id="@+id/division_02"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/yunfei_ll"
+        android:background="#C7C7C7"
+        app:layout_marginLeftPercent="3%"
+        app:layout_marginRightPercent="3%"
+        app:layout_marginTopPercent="2%" />
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/guanshui_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/division_02"
+        android:orientation="horizontal"
+        app:layout_marginTopPercent="2%">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/tariff"
+            android:textColor="#979797"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/tariff_balance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="---"
+                android:textColor="#13A7DF"/>
+
+
+        </RelativeLayout>
+
+    </com.zhy.android.percent.support.PercentLinearLayout>
+
+    <TextView
+        android:id="@+id/division_03"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/guanshui_ll"
+        android:background="#C7C7C7"
+        app:layout_marginLeftPercent="3%"
+        app:layout_marginRightPercent="3%"
+        app:layout_marginTopPercent="3%" />
+
+
+    <Button
+        android:id="@+id/recharge_bt"
+        android:layout_below="@+id/division_03"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="@string/welcome"/>
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:background="@drawable/rect_blue"
+        android:text="@string/recharge"
+        android:textColor="#039FFF"
+        android:textSize="20sp"
+        app:layout_marginTopPercent="5%"
+        app:layout_paddingBottomPercent="3%w"
+        app:layout_paddingLeftPercent="20%w"
+        app:layout_paddingRightPercent="20%w"
+        app:layout_paddingTopPercent="3%w" />
 
-    <FrameLayout
-        android:id="@+id/account_framelayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/recharge_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/recharge"
+        android:textSize="18sp"
+        app:layout_marginBottomPercent="5%"
+        app:layout_marginLeftPercent="8%" />
+
+    <TextView
+        android:id="@+id/account_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/account_detail"
+        android:textSize="18sp"
+        app:layout_marginBottomPercent="5%"
+         />
 
     <TextView
         android:id="@+id/account_manager"
-        android:text="账户管理"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        app:layout_marginBottomPercent="5%"
-        app:layout_marginRightPercent="5%"
-        android:textSize="18sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/myaccount_manage"
+        android:textSize="18sp"
+        app:layout_marginBottomPercent="5%"
+        app:layout_marginRightPercent="8%" />
 
 </com.zhy.android.percent.support.PercentRelativeLayout>

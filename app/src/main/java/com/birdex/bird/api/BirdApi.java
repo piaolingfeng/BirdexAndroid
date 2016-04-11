@@ -80,10 +80,6 @@ public class BirdApi {
     }
 
     public static void getTodayData(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
-        params.add("all",1+"");
-        params.add("app_debug", 1 + "");
-        params.add("user_code", MyApplication.user.getUser_code());
-        params.add("company_code", MyApplication.user.getCompany_code());
         get(context, "company/stat", params, jsonHttpResponseHandler);
     }
     // 获取更新信息
@@ -93,6 +89,9 @@ public class BirdApi {
 
     // 获取公司信息
     public static void getCompanyMes(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        params.add("app_debug", 1 + "");
+        params.add("user_code", MyApplication.user.getUser_code());
+        params.add("company_code", MyApplication.user.getCompany_code());
         get(context, "Company/get", params, jsonHttpResponseHandler);
     }
 
@@ -153,6 +152,29 @@ public class BirdApi {
     }
 
     // 获取预报列表
+    public static void getForecast(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        post(context, "Storage/all", params, jsonHttpResponseHandler);
+    }
+
+    // 获取账户余额
+    public static void getBalance(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        params.add("app_debug", 1 + "");
+        params.add("user_code", MyApplication.user.getUser_code());
+        params.add("company_code", MyApplication.user.getCompany_code());
+        get(context, "Wallet/get", params, jsonHttpResponseHandler);
+    }
+
+    // 上传公司 logo
+    public static void upLoadLogo(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        MyApplication.ahc.post("http://192.168.1.207:8090/upload/companyLogo", params, jsonHttpResponseHandler);
+    }
+
+    // 修改公司信息
+    public static void companyEdit(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        post(context, "Company/edit", params, jsonHttpResponseHandler);
+    }
+
+    // 获取预报列表
     public static void getPredicitionList(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
         params.add("app_debug", 1 + "");
         params.add("user_code", MyApplication.user.getUser_code());
@@ -167,5 +189,4 @@ public class BirdApi {
         params.add("company_code", MyApplication.user.getCompany_code());
         post(context, "storage/getStorageStatusList", params, jsonHttpResponseHandler);
     }
-
 }

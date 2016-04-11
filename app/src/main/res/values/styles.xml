@@ -1,8 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-    </style>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"></style>
 
     <style name="AppCompat.style" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:listDivider">@drawable/divider_bg</item>
@@ -60,10 +59,12 @@
         <item name="android:textSize">18sp</item>
         <item name="android:gravity">center</item>
     </style>
+
     <style name="myaccount_style_unselect" parent="myaccount_style">
         <item name="android:textColor">#8e949a</item>
         <item name="android:textStyle">normal</item>
     </style>
+
     <style name="myaccount_style_select" parent="myaccount_style">
         <item name="android:textColor">@color/selected</item>
     </style>
@@ -72,9 +73,11 @@
     <style name="inventory_item_text">
         <item name="android:textColorPrimary">@color/inventory_item_black</item>
     </style>
+
     <style name="inventory_item_info">
         <item name="android:textColorPrimary">@color/inventory_item_gray</item>
     </style>
+
     <style name="inventory_item_num">
         <item name="android:textColorPrimary">@color/inventory_item_blue</item>
         <item name="android:textColorSecondary">@color/inventory_item_blue</item>
@@ -84,12 +87,18 @@
         <item name="android:textColor">@color/inventory_item_blue</item>
         <item name="android:textSize">@dimen/inventory_item_number</item>
     </style>
+
     <style name="inventory_item_black1" parent="android:TextAppearance.Widget.TextView">
         <item name="android:textColor">@color/inventory_item_black</item>
         <item name="android:textSize">@dimen/inventory_item_number</item>
     </style>
+
     <style name="inventory_item_gray1" parent="android:TextAppearance.Widget.TextView">
         <item name="android:textColor">@color/inventory_item_gray</item>
         <item name="android:textSize">@dimen/inventory_item_text</item>
     </style>
+
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

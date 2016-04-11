@@ -29,7 +29,7 @@
     <string name="title_activity_pay_balance_list">PayBalanceListActivity</string>
 
     <string name="title_filter_textsize">26%</string>
-    
+
     <string name="listmanager">80%h</string>
 
     <string name="sixtyPercentHeight">70%h</string>
@@ -232,4 +232,5 @@
     <string name="time_three_month">近三个月</string>
     <string name="time_year">近一年</string>
     <string name="no_data">暂时没有数据哦！</string>
+    <string name="title_activity_noti_list">NotiListActivity</string>
 </resources>

@@ -122,6 +122,7 @@
         </receiver>
 
         <activity android:name=".activity.OrderDetailActivity"
+            android:theme="@style/AppCompat.style"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden"></activity>
     </application>

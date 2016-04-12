@@ -65,5 +65,5 @@
 
     <dimen name="item_margin_top_height">8dp</dimen>
 
-    <dimen name="order_detail_size">16dp</dimen>
+    <dimen name="order_detail_size">13dp</dimen>
 </resources>

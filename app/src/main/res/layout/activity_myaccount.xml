@@ -89,7 +89,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/backgroud"
         android:orientation="horizontal"
-        app:layout_marginTopPercent="5%">
+        app:layout_marginTopPercent="3%">
 
         <TextView
             android:layout_width="0dp"
@@ -279,7 +279,7 @@
         android:text="@string/recharge"
         android:textColor="#039FFF"
         android:textSize="20sp"
-        app:layout_marginTopPercent="5%"
+        app:layout_marginTopPercent="3%"
         app:layout_paddingBottomPercent="3%w"
         app:layout_paddingLeftPercent="20%w"
         app:layout_paddingRightPercent="20%w"
@@ -293,7 +293,7 @@
         android:layout_alignParentLeft="true"
         android:text="@string/recharge"
         android:textSize="18sp"
-        app:layout_marginBottomPercent="5%"
+        app:layout_marginBottomPercent="2%"
         app:layout_marginLeftPercent="8%" />
 
     <TextView
@@ -304,7 +304,7 @@
         android:layout_centerHorizontal="true"
         android:text="@string/account_detail"
         android:textSize="18sp"
-        app:layout_marginBottomPercent="5%"
+        app:layout_marginBottomPercent="2%"
          />
 
     <TextView
@@ -315,7 +315,7 @@
         android:layout_alignParentRight="true"
         android:text="@string/myaccount_manage"
         android:textSize="18sp"
-        app:layout_marginBottomPercent="5%"
+        app:layout_marginBottomPercent="2%"
         app:layout_marginRightPercent="8%" />
 
 </com.zhy.android.percent.support.PercentRelativeLayout>

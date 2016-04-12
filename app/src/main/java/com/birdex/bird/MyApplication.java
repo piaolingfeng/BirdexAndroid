@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.Notification;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -40,6 +43,14 @@ public class MyApplication extends Application {
 
     public static AsyncHttpClient ahc;
     public static String appName = "bird";
+    // 推送设备号
+    public static String device_token;
+    // app 版本号
+    public static String app_version = "";
+    // 设备信息
+    public static String device_info;
+    // 设备类型 这里写死为 android
+    public static String device_type = "android";
 
     public static List<Activity> activityList = new ArrayList<>();
 
@@ -56,13 +67,57 @@ public class MyApplication extends Application {
         }
     }
 
+    // 获取当前版本号
+    private String getVersionLocal(){
+        String versionLocal = "";
+        try {
+            // 取得当前版本号
+            PackageManager manager = MyApplication.getInstans().getPackageManager();
+            PackageInfo info = null;
+            info = manager.getPackageInfo(MyApplication.getInstans().getPackageName(), 0);
+            versionLocal = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionLocal;
+    }
+
+    // 获取设备信息
+    private String getDevice_info(){
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nDeviceModel = " + android.os.Build.MODEL);
+        sb.append("\nDeviceVERSION_RELEASE = " + android.os.Build.VERSION.RELEASE);
+        sb.append("\nDeviceId(IMEI) = " + tm.getDeviceId());
+        sb.append("\nDeviceSoftwareVersion = " + tm.getDeviceSoftwareVersion());
+        sb.append("\nLine1Number = " + tm.getLine1Number());
+        sb.append("\nNetworkCountryIso = " + tm.getNetworkCountryIso());
+        sb.append("\nNetworkOperator = " + tm.getNetworkOperator());
+        sb.append("\nNetworkOperatorName = " + tm.getNetworkOperatorName());
+        sb.append("\nNetworkType = " + tm.getNetworkType());
+        sb.append("\nPhoneType = " + tm.getPhoneType());
+        sb.append("\nSimCountryIso = " + tm.getSimCountryIso());
+        sb.append("\nSimOperator = " + tm.getSimOperator());
+        sb.append("\nSimOperatorName = " + tm.getSimOperatorName());
+        sb.append("\nSimSerialNumber = " + tm.getSimSerialNumber());
+        sb.append("\nSimState = " + tm.getSimState());
+        sb.append("\nSubscriberId(IMSI) = " + tm.getSubscriberId());
+        sb.append("\nVoiceMailNumber = " + tm.getVoiceMailNumber());
+        Log.e("info", sb.toString());
+        return sb.toString();
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         instants = this;
-        initAsyncHttpClient();
+
         initFile();
 //        iniCrash();
+
+        app_version = getVersionLocal();
+        device_info = getDevice_info();
+
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.setDebugMode(true);
 
@@ -153,13 +208,15 @@ public class MyApplication extends Application {
                 });
             }
         });
-        String device_token = UmengRegistrar.getRegistrationId(this);
+        device_token = UmengRegistrar.getRegistrationId(this);
         String pkgName = getApplicationContext().getPackageName();
         Log.e("pkgName", pkgName);
         Log.e("device_token", device_token);
 //		if (MiPushRegistar.checkDevice(this)) {
 //            MiPushRegistar.register(this, "2882303761517400865", "5501740053865");
 //		}
+
+        initAsyncHttpClient();
     }
 
     private void initFile(){
@@ -191,6 +248,8 @@ public class MyApplication extends Application {
         ahc.setTimeout(8 * 1000);//设置30秒超时
         ahc.setConnectTimeout(4 * 1000);//设置30秒超时
         ahc.setMaxConnections(5);
+        ahc.addHeader("DEVICE-TOKEN", device_token);
+        ahc.addHeader("APP-VERSION",app_version);
     }
 
 }

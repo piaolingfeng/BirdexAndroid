@@ -1,23 +1,48 @@
 package com.birdex.bird.biz;
 
+import com.birdex.bird.entity.InventoryActivityEntity;
 import com.birdex.bird.entity.InventoryDetailEntity;
 import com.birdex.bird.entity.InventoryEntity;
 import com.birdex.bird.entity.InventoryOrderEntity;
 import com.birdex.bird.entity.InventoryStockEntity;
 import com.birdex.bird.util.StringUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Level;
 
 /**
  * Created by huwei on 16/4/5.
  */
 public class InventoryBiz {
+    /*
+ * 使用gson解析
+ */
+    public ArrayList<InventoryActivityEntity> gson2list(String json){
+        ArrayList<InventoryActivityEntity> list=new ArrayList<>();
+        try{
+            Type type=new TypeToken<Map<String,InventoryActivityEntity>>(){}.getType();
+            Gson gson=new Gson();
+            Map<String,InventoryActivityEntity> map=gson.fromJson(json,type);
+//            Map<String,InventoryActivityEntity> map= GsonHelper.json2Map(json,InventoryActivityEntity.class);
+            if(map!=null){
+                for (Map.Entry<String, InventoryActivityEntity> entry : map.entrySet()) {
+                    list.add(entry.getValue());
+                }
+            }
+        }catch (Exception ex){
+
+        }
+        return list;
+    }
     /*
      *将服务器获取的数据解析成展现的数据集合
      *

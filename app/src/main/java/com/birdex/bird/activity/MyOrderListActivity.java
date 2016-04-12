@@ -42,12 +42,14 @@ import com.birdex.bird.fragment.OrderListManagerFragment;
 import com.birdex.bird.fragment.PredictionManagerFragment;
 import com.birdex.bird.interfaces.BackHandledInterface;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
+import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
 import com.birdex.bird.util.TimeUtil;
 import com.birdex.bird.widget.ClearEditText;
+import com.birdex.bird.widget.TitleView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.zhy.android.percent.support.PercentRelativeLayout;
@@ -66,7 +68,7 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/3/30.
  */
-public class MyOrderListActivity extends BaseActivity implements View.OnClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface ,TabLayout.OnTabSelectedListener{
+public class MyOrderListActivity extends BaseActivity implements View.OnClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface, TabLayout.OnTabSelectedListener {
 
     //    @Bind(R.id.viewPager)
 //    ViewPager viewpager;
@@ -75,12 +77,14 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 //    @Bind(R.id.tablayout)
 //    TabLayout tabLayout;
 
-    @Bind(R.id.title)
-    TextView title;
-    @Bind(R.id.back)
-    PercentRelativeLayout back;
-    @Bind(R.id.menu)
-    ImageView menu;
+    //    @Bind(R.id.title)
+//    TextView title;
+//    @Bind(R.id.back)
+//    PercentRelativeLayout back;
+//    @Bind(R.id.menu)
+//    ImageView menu;
+    @Bind(R.id.titleview)
+    TitleView titleview;
 
     @Bind(R.id.state_all)
     TextView state_all;
@@ -110,7 +114,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 //    @Bind(R.id.tl_inventory_change)
 //    public TabLayout tl_items;
 
-    public static final int[] name = {R.string.tool1, R.string.tool2, R.string.tool3};
     public static final int[] time = {R.string.time_all, R.string.time_today, R.string.time_week, R.string.time_month, R.string.time_three_month, R.string.time_year};
     List<String> menuList;//menu菜单list
     public String currentName;
@@ -141,10 +144,11 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         }
         bus = EventBus.getDefault();
         bus.register(this);
-        menu.setVisibility(View.VISIBLE);
+        titleview.setMenuVisble(true);
+//        menu.setVisibility(View.VISIBLE);
         menuList = new ArrayList<>();
-        for (int i = 0; i < name.length; i++) {//初始化lmenu list
-            menuList.add(getString(name[i]));
+        for (int i = 0; i < Constant.name.length; i++) {//初始化lmenu list
+            menuList.add(getString(Constant.name[i]));
         }
         requestStateCount = 0;//
         initTimeStatus();
@@ -209,19 +213,19 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
             String indexOrder = getIntent().getStringExtra("indexOrder");
             if (!StringUtils.isEmpty(indexOrder)) {
                 getIntent().removeExtra("indexOrder");
-            if (indexOrder.contains("今日")) {//初始化时间
-                entity.setStart_date(timeList.get(1).getStart_date());
-                entity.setEnd_date(timeList.get(1).getEnd_date());
-                bus.post(timeList.get(1).getName(), "changeTime");//改变显示的时间
-            } else {
-                entity.setStart_date(timeList.get(0).getStart_date());
-                entity.setEnd_date(timeList.get(0).getEnd_date());
-                bus.post(timeList.get(0).getName(), "changeTime");//改变显示的时间
-            }
+                if (indexOrder.contains("今日")) {//初始化时间
+                    entity.setStart_date(timeList.get(1).getStart_date());
+                    entity.setEnd_date(timeList.get(1).getEnd_date());
+                    bus.post(timeList.get(1).getName(), "changeTime");//改变显示的时间
+                } else {
+                    entity.setStart_date(timeList.get(0).getStart_date());
+                    entity.setEnd_date(timeList.get(0).getEnd_date());
+                    bus.post(timeList.get(0).getName(), "changeTime");//改变显示的时间
+                }
 
 
                 if (indexOrder.contains("预报")) {
-                    currentName = getString(name[1]);
+                    currentName = getString(Constant.name[1]);
                     for (int position = 0; position < predicitionStatus.getData().size(); position++) {
                         if (indexOrder.contains(predicitionStatus.getData().get(position).getStatus_name().trim())) {//包含该模块的名字
                             entity.setStatus(predicitionStatus.getData().get(position).getStatus() + "");
@@ -231,11 +235,11 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                     }
                 } else {
                     if (indexOrder.contains("库存")) {
-                        currentName = getString(name[2]);
+                        currentName = getString(Constant.name[2]);
 //                        rl_inventory.setVisibility(View.VISIBLE);
 //                        tl_items.setVisibility(View.VISIBLE);
                     } else {//订单
-                        currentName = getString(name[0]);
+                        currentName = getString(Constant.name[0]);
                         //初始化状态选择
                         for (int position = 0; position < orderStatus.getData().size(); position++) {
                             if (indexOrder.contains(orderStatus.getData().get(position).getStatus_name().trim())) {//包含该模块的名字
@@ -249,11 +253,11 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
             }
         }
         addFragment(currentName);
-        title.setText(currentName);
-        if (currentName.equals(getString(name[0]))) {
+        titleview.setTitle(currentName);
+        if (currentName.equals(getString(Constant.name[0]))) {
             bus.post(entity, "requestOrderList");
         } else {
-            if (currentName.equals(getString(name[1]))) {
+            if (currentName.equals(getString(Constant.name[1]))) {
                 bus.post(entity, "requestPredictList");
             }
         }
@@ -310,12 +314,12 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     String string = v.getText().toString();
                     entity.setKeyword(string);
-                    if (currentName.equals(getString(name[0]))) {
+                    if (currentName.equals(getString(Constant.name[0]))) {
                         bus.post(entity, "requestOrderList");
                     } else {
-                        if (currentName.equals(getString(name[1]))) {
+                        if (currentName.equals(getString(Constant.name[1]))) {
                             bus.post(entity, "requestPredictList");
-                        }else{
+                        } else {
                             bus.post(entity, "inventorytList");
                         }
                     }
@@ -493,6 +497,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                     mPopupWindow.dismiss();
                 }
 //              切换内容
+//                if ()
                 getIntent().putExtra("name", list.get(position));
                 setData();
             }
@@ -539,9 +544,9 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 //                        T.showShort(MyApplication.getInstans(), list.get(position).getStatus_name());
                         entity.setStatus(list.get(position).getStatus() + "");
                         bus.post(list.get(position), "changeState");
-                        if (currentName.equals(getString(name[0])))
+                        if (currentName.equals(getString(Constant.name[0])))
                             bus.post(entity, "requestOrderList");
-                        else if (currentName.equals(getString(name[1]))) {
+                        else if (currentName.equals(getString(Constant.name[1]))) {
                             bus.post(entity, "requestPredictList");
                         }
                     }
@@ -603,9 +608,9 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     private void setWarehouse(int position) {
         entity.setWarehouse_code(warehouseEntity.getData().get(position).getWarehouse_code());
         bus.post(warehouseEntity.getData().get(position), "changeWarehouse");
-        if (currentName.equals(getString(name[0])))
+        if (currentName.equals(getString(Constant.name[0])))
             bus.post(entity, "requestOrderList");
-        else if (currentName.equals(getString(name[1]))) {
+        else if (currentName.equals(getString(Constant.name[1]))) {
             bus.post(entity, "requestPredictList");
         }
     }
@@ -618,22 +623,22 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         entity.setStart_date(timeList.get(position).getStart_date());
         entity.setEnd_date(timeList.get(position).getEnd_date());
         bus.post(timeList.get(position).getName(), "changeTime");//改变显示的时间
-        if (currentName.equals(getString(name[0])))
+        if (currentName.equals(getString(Constant.name[0])))
             bus.post(entity, "requestOrderList");
-        else if (currentName.equals(getString(name[1]))) {
+        else if (currentName.equals(getString(Constant.name[1]))) {
             bus.post(entity, "requestPredictList");
         }
     }
 
-    @OnClick({R.id.back, R.id.menu, R.id.state_time, R.id.state_Warehouse, R.id.state_all,R.id.tv_inventory_all,R.id.tv_inventory_sort_available,R.id.tv_inventory_sort_time})
+    @OnClick({R.id.menu,R.id.state_time, R.id.state_Warehouse, R.id.state_all, R.id.tv_inventory_all, R.id.tv_inventory_sort_available, R.id.tv_inventory_sort_time})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.menu:
-                showMenuWindow((View) menu.getParent(), menuList, 3);
+                showMenuWindow((View) titleview.getMenuView().getParent(), menuList, 3);
                 break;
             case R.id.state_all:
-                if (currentName.equals(getString(name[0])))//订单管理
+                if (currentName.equals(getString(Constant.name[0])))//订单管理
                     showStateWindow((View) state_all.getParent(), orderStatus.getData(), 1);
                 else
                     showStateWindow((View) state_all.getParent(), predicitionStatus.getData(), 1);
@@ -645,28 +650,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
             case R.id.state_time:
                 showTimeWindow((View) state_time.getParent(), 1);
                 break;
-            case R.id.back:
-                finish();
-                break;
-//            case R.id.tv_inventory_all:
-//                if (warehouseEntity != null) {
-//                    if (warehouseEntity.getData() != null) {
-//                        if (mPopupWindow != null) {
-//                            if (!mPopupWindow.isShowing()) {
-//                                //显示弹框
-//                                mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
-//                            }
-//                        } else {
-//                            initPopWindow();
-//                            //显示弹框
-//                            mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
-//                        }
-//                        return;
-//                    }
-//                }
-//                //请求所有仓库
-//                getAllCompanyWarehouse();
-//                break;
             case R.id.tv_inventory_sort_available:
 
                 break;
@@ -688,7 +671,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         BaseFragment baseFragment;
         transaction = getSupportFragmentManager().beginTransaction();
         hideFragment();
-        if (string.equals(getString(name[1]))) {
+        if (string.equals(getString(Constant.name[1]))) {
             baseFragment = predictionManagerFragment;
         } else {
             baseFragment = orderListManagerFragment;
@@ -724,54 +707,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         super.onDestroy();
     }
 
-//    @Override
-//    public void onTabSelected(TabLayout.Tab tab) {
-//        //40表示发往仓库，1表示在库，10表示正常，20表示库存紧张，30表示断货
-//        switch (tab.getPosition()) {
-//            case 0:
-//                type = InventoryActivity.Type.Inner;
-//                tv_allInventory.setText(R.string.inventory_all);
-//                adapter = new InventoryAdapter(this, null);
-//                .setAdapter(adapter);
-//                entity.setTab_type(0);
-//                entity.setProduct_type(10);
-//                entity.setStock_status(1);
-//                bus.post(entity, "inventorytList");
-//                break;
-//            case 1:
-//                type = Type.Willin;
-//                tv_allInventory.setText(R.string.inventory_all);
-//                willInAdapter = new InventoryWillInAdapter(this, null);
-//                willInAdapter.setOnGoTopListener(this);
-////                willInAdapter.clearDataSource();
-//                rv_inventory.setAdapter(willInAdapter);
-//                clearParams();
-//                //商品类型，20表示物料，默认10表示商品
-//                params.put("product_type", 10);
-//                params.put("stock_status", 40);
-//                //显示加载动画
-//                reStartHttp();
-//                break;
-//            case 2:
-//                type = Type.OutofWarning;
-//                tv_allInventory.setText(R.string.inventory_all);
-//                adapter = new InventoryAdapter(this, null);
-//                adapter.setOnGoTopListener(this);
-////                adapter.clearDataSource();
-////                adapter.notifyDataSetChanged();
-//                rv_inventory.setAdapter(adapter);
-//                clearParams();
-//                //商品类型，20表示物料，默认10表示商品
-//                params.put("product_type", 10);
-//                params.put("stock_status", 20);
-//                //显示加载动画
-//                reStartHttp();
-//                break;
-//            default:
-//
-//                break;
-//        }
-//    }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {

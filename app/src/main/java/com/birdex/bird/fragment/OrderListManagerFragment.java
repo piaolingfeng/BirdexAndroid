@@ -48,7 +48,6 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
 
     @Override
     public void initializeContentViews() {
-        HideSoftKeyboardUtil.setupAppCompatUI(contentView, (BaseActivity) getActivity());
         orderListEntities = new OrderListEntity();
         entity = (OrderRequestEntity) bundle.getSerializable("entity");
         if (entity == null) {

@@ -49,7 +49,6 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
 
     @Override
     public void initializeContentViews() {
-        HideSoftKeyboardUtil.setupAppCompatUI(contentView, (BaseActivity) getActivity());
 //        orderListEntities = new OrderListEntity();
         predicitionEntity = new PredicitionEntity();
 //        if (getArguments() != null) {

@@ -190,11 +190,12 @@
             app:layout_textSizePercent="40%" />
 
         <TextView
+            android:id="@+id/tv_right_line"
             android:layout_width="1dp"
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:background="#9b9b9b"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_heightPercent="60%" />
 
         <TextView
@@ -206,6 +207,7 @@
             android:layout_weight="1"
             android:background="@drawable/list_item_ele_selector"
             android:gravity="center"
+            android:visibility="gone"
             android:text="@string/change_address"
             android:textColor="@color/context_1"
             app:layout_paddingLeftPercent="3%"

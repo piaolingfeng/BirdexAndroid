@@ -3,79 +3,87 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:background="@drawable/list_item_selector"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:background="@color/white"
+    android:orientation="vertical">
 
-    <com.zhy.android.percent.support.PercentRelativeLayout
+    <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp">
 
 
-        <TextView
-            android:id="@+id/tv_order_oms_no"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/tv_o"
-            android:drawablePadding="10dp"
-            android:drawableRight="@drawable/copy"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="232:"
-            android:textColor="@color/context_2"
-            app:layout_paddingLeftPercent="1%"
-            app:layout_textSizePercent="30%" />
+        <com.zhy.android.percent.support.PercentRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
 
-        <TextView
-            android:id="@+id/tv_status_name"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="待出库"
-            android:textColor="@color/blue"
-            app:layout_paddingLeftPercent="3%"
-            app:layout_paddingRightPercent="6%"
-            app:layout_textSizePercent="33%" />
+            <TextView
+                android:id="@+id/tv_order_oms_no"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tv_o"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/copy"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="232:"
+                android:textColor="@color/context_2"
+                app:layout_paddingLeftPercent="1%"
+                app:layout_textSizePercent="30%" />
 
-        <TextView
-            android:id="@+id/tv_created_time"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tv_status_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="待出库"
+                android:textColor="@color/blue"
+                app:layout_paddingLeftPercent="3%"
+                app:layout_paddingRightPercent="6%"
+                app:layout_textSizePercent="33%" />
+
+            <TextView
+                android:id="@+id/tv_created_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="2132136"
+                android:textColor="@color/context_2"
+                app:layout_paddingRightPercent="2%"
+                app:layout_textSizePercent="30%" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerVertical="true"
+                android:background="@color/touch_color" />
+        </com.zhy.android.percent.support.PercentRelativeLayout>
+
+        <com.zhy.android.percent.support.PercentRelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="2132136"
-            android:textColor="@color/context_2"
-            app:layout_paddingRightPercent="2%"
-            app:layout_textSizePercent="30%" />
+            app:layout_paddingLeftPercent="1%">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerVertical="true"
-            android:background="@color/touch_color" />
-    </com.zhy.android.percent.support.PercentRelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcy_productlist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <com.zhy.android.percent.support.PercentRelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_paddingLeftPercent="1%">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rcy_productlist"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        </android.support.v7.widget.RecyclerView>
+            </android.support.v7.widget.RecyclerView>
 
 
-    </com.zhy.android.percent.support.PercentRelativeLayout>
+        </com.zhy.android.percent.support.PercentRelativeLayout>
 
+
+    </com.zhy.android.percent.support.PercentLinearLayout>
 
     <com.zhy.android.percent.support.PercentRelativeLayout
         android:layout_width="match_parent"
@@ -140,15 +148,18 @@
             app:layout_textSizePercent="35%" />
     </com.zhy.android.percent.support.PercentRelativeLayout>
 
-    <com.zhy.android.percent.support.PercentRelativeLayout
+    <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="match_parent"
-        android:layout_height="35dp">
+        android:layout_height="35dp"
+        android:background="@color/order_manager_list_item">
 
         <TextView
             android:id="@+id/tv_logistics_tracking"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:background="@drawable/list_item_ele_selector"
             android:gravity="center"
             android:text="@string/logistics_tracking"
             android:textColor="@color/context_1"
@@ -157,10 +168,20 @@
             app:layout_textSizePercent="40%" />
 
         <TextView
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:background="#9b9b9b"
+            android:visibility="visible"
+            app:layout_heightPercent="60%" />
+
+        <TextView
             android:id="@+id/tv_service_type"
-            android:layout_width="wrap_content"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
+            android:layout_weight="1"
+            android:background="@drawable/list_item_ele_selector"
             android:gravity="center"
             android:text="@string/service_type"
             android:textColor="@color/context_1"
@@ -169,17 +190,29 @@
             app:layout_textSizePercent="40%" />
 
         <TextView
+            android:id="@+id/tv_right_line"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:background="#9b9b9b"
+            android:visibility="gone"
+            app:layout_heightPercent="60%" />
+
+        <TextView
             android:id="@+id/tv_change_address"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:background="@drawable/list_item_ele_selector"
             android:gravity="center"
+            android:visibility="gone"
             android:text="@string/change_address"
             android:textColor="@color/context_1"
             app:layout_paddingLeftPercent="3%"
             app:layout_paddingRightPercent="2%"
             app:layout_textSizePercent="40%" />
-    </com.zhy.android.percent.support.PercentRelativeLayout>
+    </com.zhy.android.percent.support.PercentLinearLayout>
 
 </com.zhy.android.percent.support.PercentLinearLayout>

@@ -89,7 +89,8 @@ public class HeaderView extends LinearLayout implements View.OnClickListener{
             showStatuBar=array.getBoolean(R.styleable.HeaderView_hasstatubar, false);
         }
     }
-    @TargetApi(23)
+
+    @TargetApi(Build.VERSION_CODES.M)
     private void initView(Context context) {
         inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.head_layout, null, false);

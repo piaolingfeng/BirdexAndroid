@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.activity.ChangeAdressActivity;
 import com.birdex.bird.activity.LogisticsActivity;
 import com.birdex.bird.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderListEntity;
@@ -71,6 +72,13 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
         holder.rcy_productlist.setLayoutManager(new LinearLayoutManager(mContext));
         OrderProductAdapter productAdapter = new OrderProductAdapter(mContext, list.get(position).getProducts());
         holder.rcy_productlist.setAdapter(productAdapter);
+        String statuName = list.get(position).getStatus_name();
+        if (statuName.equals("等待出库")||statuName.equals("准备出库")||statuName.equals("待下架")||
+                statuName.equals("出库中")||statuName.equals("下架中")||statuName.equals("审核不通过")
+                ||statuName.equals("身份证异常")){
+            holder.tv_change_address.setVisibility(View.VISIBLE);
+            holder. tv_right_line.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -106,6 +114,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
         TextView tv_service_type;//服务方式编码
         @Bind(R.id.tv_change_address)
         TextView tv_change_address;//改派
+        @Bind(R.id.tv_right_line)
+        TextView tv_right_line;
 
         @Bind(R.id.rcy_productlist)
         RecyclerView rcy_productlist;
@@ -130,7 +140,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
                     T.showLong(MyApplication.getInstans(), mContext.getString(R.string.please_wail));
                     break;
                 case R.id.tv_change_address:
-//                    startChangeAddrActivity(list.get(position).getOrder_code());
+                    startChangeAddrActivity(list.get(position).getOrder_code());
                     break;
                 case R.id.tv_order_oms_no://复制订单号
                     ClipboardManagerUtil.copy(tv_order_oms_no.getText().toString(), mContext);
@@ -149,7 +159,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
          * 修改地址
          * */
         public void startChangeAddrActivity(String order_oms_no) {
-            Intent intent = new Intent(mContext, LogisticsActivity.class);
+            Intent intent = new Intent(mContext, ChangeAdressActivity.class);
             intent.putExtra("order_code", order_oms_no);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(intent);

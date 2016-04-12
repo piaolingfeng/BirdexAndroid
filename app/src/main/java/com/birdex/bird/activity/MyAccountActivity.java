@@ -6,15 +6,35 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.adapter.MineIndexAdapter;
+import com.birdex.bird.api.BirdApi;
+import com.birdex.bird.entity.AccountDetail;
+import com.birdex.bird.entity.Wallet;
 import com.birdex.bird.glide.GlideUtils;
 import com.birdex.bird.util.Constant;
+import com.birdex.bird.util.JsonHelper;
+import com.birdex.bird.util.T;
+import com.birdex.bird.widget.RoundImageView;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -22,18 +42,38 @@ import butterknife.OnClick;
 /**
  * Created by hyj on 2016/3/28.
  */
-public class MyAccountActivity extends BaseActivity implements View.OnClickListener{
+public class MyAccountActivity extends BaseActivity implements View.OnClickListener {
 
+    // 顶部头像
     @Bind(R.id.head_icon)
-    ImageView head;
+    RoundImageView head;
+
+    // 顶部文字
+    @Bind(R.id.head_tv)
+    TextView head_tv;
 
     @Bind(R.id.account_manager)
     TextView accountManager;
 
-    @Bind(R.id.account_framelayout)
-    FrameLayout frameLayout;
+    // 运费余额
+    @Bind(R.id.freight_balance)
+    TextView freight_balance;
+
+    // 信用
+    @Bind(R.id.credit)
+    TextView credit;
+
+    // 可用
+    @Bind(R.id.left_credit)
+    TextView left_credit;
+
+    // 关税余额
+    @Bind(R.id.tariff_balance)
+    TextView tariff_balance;
 
 //    private String path;
+    // logo 地址
+    private String logo = "";
 
     @Override
     public int getContentLayoutResId() {
@@ -42,30 +82,165 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void initializeContentViews() {
-
+        initData();
     }
 
-    @OnClick({R.id.head_icon, R.id.account_manager})
+    // 初始化数据
+    private void initData() {
+        getInterfactData();
+    }
+
+    // 获取接口数据
+    private void getInterfactData() {
+        showLoading();
+        RequestParams params = new RequestParams();
+        BirdApi.getBalance(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                hideLoading();
+                try {
+                    if ("0".equals(response.getString("error"))) {
+                        AccountDetail accountDetail = JsonHelper.parseObject((JSONObject) response.get("data"), AccountDetail.class);
+                        if (accountDetail != null) {
+                            // 将接口数据设置上去
+                            setInterfaceData(accountDetail);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    hideLoading();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                hideLoading();
+                T.showShort(getApplication(), getString(R.string.tip_myaccount_getdatawrong));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(getApplication(), getString(R.string.tip_myaccount_getdatawrong));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(getApplication(), getString(R.string.tip_myaccount_getdatawrong));
+            }
+
+        });
+
+        // 获取头像跟 company name
+        BirdApi.getCompanyMes(MyApplication.getInstans(), new RequestParams(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    if ("0".equals(response.getString("error"))) {
+                        if (!TextUtils.isEmpty(((JSONObject) response.get("data")).getString("logo"))) {
+                            logo = ((JSONObject) response.get("data")).getString("logo");
+                            GlideUtils.setImageToLocalPathForMyaccount(head, logo);
+                        }
+                        head_tv.setText(((JSONObject) response.get("data")).getString("company_name") + "，欢迎您！");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                T.showShort(getApplication(), getString(R.string.tip_myaccount_getdatawrong));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                T.showShort(getApplication(), getString(R.string.tip_myaccount_getdatawrong));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                T.showShort(getApplication(), getString(R.string.tip_myaccount_getdatawrong));
+            }
+        });
+    }
+
+    // 将接口数据设置上去
+    private void setInterfaceData(AccountDetail accountDetail) {
+        List<Wallet> wallets = accountDetail.getWallets();
+        credit.setText(accountDetail.getCredit());
+        left_credit.setText(accountDetail.getLeft_credit());
+        for (Wallet wallet : wallets) {
+            if ("运费账户".equals(wallet.getName())) {
+                freight_balance.setText("￥" + wallet.getBalance());
+            }
+            if ("关税账户".equals(wallet.getName())) {
+                tariff_balance.setText("￥" + wallet.getBalance());
+            }
+        }
+    }
+
+    @OnClick({R.id.head_icon, R.id.account_manager, R.id.back, R.id.recharge_bt, R.id.recharge_tv, R.id.account_detail})
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.head_icon:
                 // 点击头像，进入修改头像界面
-                Intent intent = new Intent(this,IconChangeActivity.class);
+                Intent intent = new Intent(this, IconChangeActivity.class);
                 Bundle b = new Bundle();
-                Drawable drawable = head.getDrawable();
-                Bitmap bitmap = drawableToBitmap(drawable);
-                b.putParcelable("bitmap",bitmap);
-//                b.putString("path",path);
-                // 还需要把服务器加载头像的 url 传过去, 先为空测试。。。
-//                b.putString("url","");
+                b.putString("logo", logo);
                 intent.putExtras(b);
                 startActivityForResult(intent, Constant.ICON_CHANGE);
                 break;
 
-            // 点击账户管理
-            case R.id.account_manager:
+            // 点击左上角返回
+            case R.id.back:
+                finish();
+                break;
 
+            // 充值按钮
+            case R.id.recharge_bt:
+                //账户管理
+                intent=new Intent(this, MyAccountInfoActivity.class);
+                //显示第1个页面
+                intent.putExtra("enterindex",0);
+                this.startActivity(intent);
+                break;
+
+            // 左下角充值
+            case R.id.recharge_tv:
+                //账户管理
+                intent=new Intent(this, MyAccountInfoActivity.class);
+                //显示第1个页面
+                intent.putExtra("enterindex",0);
+                this.startActivity(intent);
+                break;
+
+            // 账户明细
+            case R.id.account_detail:
+                //账户管理
+                intent=new Intent(this, MyAccountInfoActivity.class);
+                //显示第2个页面
+                intent.putExtra("enterindex",1);
+                this.startActivity(intent);
+                break;
+
+            // 账户管理
+            case R.id.account_manager:
+                //账户管理
+                intent=new Intent(this, MyAccountInfoActivity.class);
+                //显示第3个页面
+                intent.putExtra("enterindex",2);
+                this.startActivity(intent);
                 break;
         }
     }
@@ -73,19 +248,28 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
+        switch (requestCode) {
             // 修改头像
             case Constant.ICON_CHANGE:
-                if(resultCode == RESULT_OK){
-                    // 返回的图片路径
-//                    path = data.getExtras().getString("path");
-//                    GlideUtils.setImageToLocalPath(head,path);
-                    if(data.getExtras()!= null) {
-                        Bitmap resultBitmap = (Bitmap) data.getExtras().get("bitmap");
-                        if(resultBitmap!=null){
-                            head.setImageBitmap(resultBitmap);
-                        }
-                    }
+                if (resultCode == RESULT_OK) {
+//                    // 返回的图片路径
+////                    path = data.getExtras().getString("path");
+////                    GlideUtils.setImageToLocalPath(head,path);
+//                    if (data.getExtras() != null) {
+////                        Bitmap resultBitmap = (Bitmap) data.getExtras().get("bitmap");
+//                        String uriStr = (String) data.getExtras().get("bitmap");
+//                        if (uriStr != null) {
+//                            Uri uri = Uri.parse(uriStr);
+//                            try {
+//                                head.setImageBitmap(BitmapFactory.decodeStream(getContentResolver().openInputStream(uri)));
+//                            } catch (FileNotFoundException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }
+
+                    // 返回后，需要重新获取数据
+                    initData();
                 }
                 break;
 

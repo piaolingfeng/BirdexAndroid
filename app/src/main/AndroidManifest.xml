@@ -82,6 +82,22 @@
             android:name=".activity.NotiListActivity"
             android:label="@string/title_activity_noti_list"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+
+        <service
+            android:name=".service.NotificationService"
+            android:enabled="true" >
+            <intent-filter android:priority="1000" >
+                <action android:name="com.dbjtech.myservice" />
+            </intent-filter>
+        </service>
+        <receiver android:name=".broadcast.NotificationBroadcast" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.PACKAGE_RESTARTED" />
+                <action android:name="com.dbjtech.waiqin.destroy" />//这个就是自定义的action
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -58,4 +58,6 @@
     <dimen name="inventory_limit_marginlr">15dp</dimen>
     <dimen name="inventory_count_data">16sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="title_height">56dp</dimen>
 </resources>

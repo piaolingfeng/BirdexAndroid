@@ -84,6 +84,7 @@ public class GlideUtils {
                         // 裁剪中心
 //						 .centerCrop()
                         // 设置占位图或者加载错误图：
+                .placeholder(R.drawable.chrome)
                 .fitCenter()
                 .error(R.drawable.contacts)
                         // 交叉淡入淡出

@@ -37,10 +37,11 @@ public class BirdApi {
     public static void post(Context context, String url, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface responseHandler){
         MyApplication.ahc.post(context, BASE_URL + "/" + url, params, responseHandler);
     }
+
     /**
-     *取消特定的tag请求
+     * 取消特定的tag请求
      */
-    public static void cancelRequestWithTag(Object tag){
+    public static void cancelRequestWithTag(Object tag) {
         MyApplication.ahc.cancelRequestsByTAG(tag, true);
     }
     /**
@@ -57,7 +58,7 @@ public class BirdApi {
         MyApplication.ahc.get(context, BASE_URL + "/" + url, params, textHttpResponseHandler);
     }
 
-    public  static void cancelAllRequest(){
+    public static void cancelAllRequest() {
         MyApplication.ahc.cancelAllRequests(false);
     }
 
@@ -89,6 +90,7 @@ public class BirdApi {
     public static void getTodayData(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
         get(context, "company/stat", params, jsonHttpResponseHandler);
     }
+
     // 获取更新信息
     public static void upDateMessage(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
         MyApplication.ahc.get(context, "http://192.168.1.201:8099/sanfangcang.html", params, jsonHttpResponseHandler);
@@ -106,6 +108,7 @@ public class BirdApi {
     public static void getConfig(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
         get(context, "Public/getConfig", params, jsonHttpResponseHandler);
     }
+
     //获取仓库，库存
     public static void getInventory(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
         StringBuilder url=new StringBuilder("stock/all");

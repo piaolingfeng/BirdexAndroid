@@ -26,6 +26,7 @@ import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.interfaces.OnRecyclerViewItemLongClickListener;
 import com.birdex.bird.lunbo.CycleViewPager;
 import com.birdex.bird.lunbo.DepthPageTransformer;
+import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.PreferenceUtils;
 import com.birdex.bird.util.T;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -131,7 +132,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 //                    if (indexOrderLocalDataList.get(position).getName().contains("库存")) {
 //
 //                    } else {//订单
-                        startActivity(intent);
+                startActivity(intent);
 //                    }
 //                }
             }
@@ -144,12 +145,12 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         mItemTouchHelper.attachToRecyclerView(rcv_order_manager);
     }
 
-//    Resources res = getResources();
+    //    Resources res = getResources();
 //    public final String[] name = getResources().getStringArray(R.array.todaybash);
 //    public final String[] nameText = res.getStringArray(R.array.todaybash_name);
     public static void getTodayData() {
         RequestParams params = new RequestParams();
-
+        params.put("all", 1);
         JsonHttpResponseHandler httpResponseHandler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -199,12 +200,12 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     }
 
 
-        public static String[] name = {"today_checkout_order_count", "today_wait_checkout_order_count", "transport_order_count",
+    public static String[] name = {"today_checkout_order_count", "today_wait_checkout_order_count", "transport_order_count",
             "today_sign_order_count", "stock_exception_order_count", "no_pass_order_count"
-            , "today_confirm_storage_count", "wait_confirm_storage_count", "no_pass_storage_count", "warning_stock_count","id_card_exception_order_count"};
+            , "today_confirm_storage_count", "wait_confirm_storage_count", "no_pass_storage_count", "warning_stock_count", "id_card_exception_order_count"};
     public static String[] nameText = {"今日已出库", "今日准备出库", "运输中",
             "今日已签收", "库存异常订单", "审核不通过的订单",
-            "今日已入库预报单", "待确认预报单", "审核不通过预报单", "库存紧张","身份证异常订单"};
+            "今日已入库预报单", "待确认预报单", "审核不通过预报单", "库存紧张", "身份证异常订单"};
 
 
     /**
@@ -340,12 +341,11 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         rcv_tool_manager.setLayoutManager(new FullyGridLayoutManager(getContext(), 3));
         final List<OrderManagerEntity> list = new ArrayList<OrderManagerEntity>();
         int[] data = {R.drawable.tool1, R.drawable.tool2, R.drawable.tool3, R.drawable.tool5, R.drawable.tool6};
-        final int[] name = {R.string.tool1, R.string.tool2, R.string.tool3, R.string.tool5, R.string.tool6};
         for (int i = 0; i < data.length; i++) {
             OrderManagerEntity entity = new OrderManagerEntity();
             entity.setCount(data[i]);
             entity.setDel_state(false);
-            entity.setName(getString(name[i]));
+            entity.setName(getString(Constant.name[i]));
             list.add(entity);
         }
         final ToolManagerAdapter toolManagerAdapter = new ToolManagerAdapter(getContext(), list);
@@ -375,7 +375,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                     return;
                 }
                 intent = new Intent(getActivity(), MyOrderListActivity.class);
-                intent.putExtra("name", getString(name[position]));
+                intent.putExtra("name", getString(Constant.name[position]));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }

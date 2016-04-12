@@ -6,49 +6,55 @@
     xmlns:imagecontrol="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <com.zhy.android.percent.support.PercentRelativeLayout
+    <!--<com.zhy.android.percent.support.PercentRelativeLayout-->
+        <!--android:id="@+id/title_1l"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="70dp"-->
+        <!--android:background="@color/white"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<com.zhy.android.percent.support.PercentRelativeLayout-->
+            <!--android:id="@+id/back"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent">-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:src="@drawable/blue_back"-->
+                <!--app:layout_heightPercent="35%"-->
+                <!--app:layout_marginPercent="4%" />-->
+        <!--</com.zhy.android.percent.support.PercentRelativeLayout>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/title"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:text="@string/myaccount"-->
+            <!--android:textColor="#4A4A4A"-->
+            <!--app:layout_textSizePercent="30%" />-->
+
+
+        <!--<ImageView-->
+            <!--android:id="@+id/menu"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:src="@drawable/black_menu"-->
+            <!--app:layout_paddingPercent="4%" />-->
+
+    <!--</com.zhy.android.percent.support.PercentRelativeLayout>-->
+
+    <com.birdex.bird.widget.TitleView
         android:id="@+id/title_1l"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@color/white"
-        android:orientation="horizontal">
-
-        <com.zhy.android.percent.support.PercentRelativeLayout
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_centerInParent="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/blue_back"
-                app:layout_heightPercent="35%"
-                app:layout_marginPercent="4%" />
-        </com.zhy.android.percent.support.PercentRelativeLayout>
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_centerVertical="true"
-            android:text="@string/myaccount"
-            android:textColor="#4A4A4A"
-            app:layout_textSizePercent="30%" />
-
-
-        <ImageView
-            android:id="@+id/menu"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/black_menu"
-            app:layout_paddingPercent="4%" />
-
-    </com.zhy.android.percent.support.PercentRelativeLayout>
+        android:layout_height="@dimen/title_height"
+        />
 
     <com.zhy.android.percent.support.PercentRelativeLayout
         android:id="@+id/backgroud"
@@ -89,7 +95,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/backgroud"
         android:orientation="horizontal"
-        app:layout_marginTopPercent="5%">
+        app:layout_marginTopPercent="3%">
 
         <TextView
             android:layout_width="0dp"
@@ -279,7 +285,7 @@
         android:text="@string/recharge"
         android:textColor="#039FFF"
         android:textSize="20sp"
-        app:layout_marginTopPercent="5%"
+        app:layout_marginTopPercent="3%"
         app:layout_paddingBottomPercent="3%w"
         app:layout_paddingLeftPercent="20%w"
         app:layout_paddingRightPercent="20%w"
@@ -293,7 +299,7 @@
         android:layout_alignParentLeft="true"
         android:text="@string/recharge"
         android:textSize="18sp"
-        app:layout_marginBottomPercent="5%"
+        app:layout_marginBottomPercent="2%"
         app:layout_marginLeftPercent="8%" />
 
     <TextView
@@ -304,7 +310,7 @@
         android:layout_centerHorizontal="true"
         android:text="@string/account_detail"
         android:textSize="18sp"
-        app:layout_marginBottomPercent="5%"
+        app:layout_marginBottomPercent="2%"
          />
 
     <TextView
@@ -315,7 +321,7 @@
         android:layout_alignParentRight="true"
         android:text="@string/myaccount_manage"
         android:textSize="18sp"
-        app:layout_marginBottomPercent="5%"
+        app:layout_marginBottomPercent="2%"
         app:layout_marginRightPercent="8%" />
 
 </com.zhy.android.percent.support.PercentRelativeLayout>

@@ -1,5 +1,6 @@
 package com.birdex.bird.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -114,6 +115,8 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     List<TimeSelectEntity> timeList;
 
     OrderRequestEntity entity;//请求数据保存的实体
+
+    private final static int SCANNIN_GREQUEST_CODE = 1;
 
     EventBus bus;
 
@@ -233,11 +236,33 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         img_scan_code.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                T.showShort(MyApplication.getInstans(), getString(R.string.please_wail));
+//                T.showShort(MyApplication.getInstans(), getString(R.string.please_wail));
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), MipcaActivityCapture.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                try {
+                    startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case SCANNIN_GREQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    Bundle bundle = data.getExtras();
+                    String result = bundle.getString("result");
+                    et_search.setText(result);
+                    search(result);
+                }
+                break;
+        }
+    }
 
     private void initTimeStatus() {
         timeList = new ArrayList<>();
@@ -270,6 +295,21 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    // 搜索
+    private void search(String search){
+        entity.setKeyword(search);
+        if (currentName.equals(getString(Constant.name[0]))) {
+            bus.post(entity, "requestOrderList");
+        } else {
+            if (currentName.equals(getString(Constant.name[1]))) {
+                bus.post(entity, "requestPredictList");
+            } else {
+                bus.post(entity, "inventorytList");
+            }
+        }
+    }
+
+
     /**
      * 初始化搜索
      */
@@ -279,16 +319,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     String string = v.getText().toString();
-                    entity.setKeyword(string);
-                    if (currentName.equals(getString(Constant.name[0]))) {
-                        bus.post(entity, "requestOrderList");
-                    } else {
-                        if (currentName.equals(getString(Constant.name[1]))) {
-                            bus.post(entity, "requestPredictList");
-                        } else {
-                            bus.post(entity, "inventorytList");
-                        }
-                    }
+                    search(string);
                 }
                 return false;
             }

@@ -1,38 +1,29 @@
 package com.birdex.bird.activity;
 
-import android.app.Activity;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.adapter.CommonSimpleAdapter;
-import com.birdex.bird.adapter.InventoryAdapter;
-import com.birdex.bird.adapter.InventoryWillInAdapter;
-import com.birdex.bird.adapter.OrderListAdapter;
 import com.birdex.bird.adapter.OrderStatusAdapter;
 import com.birdex.bird.adapter.OrderTimeAdapter;
 import com.birdex.bird.adapter.OrderWareHouseAdapter;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.entity.OrderStatus;
 import com.birdex.bird.entity.TimeSelectEntity;
@@ -44,7 +35,6 @@ import com.birdex.bird.interfaces.BackHandledInterface;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.GsonHelper;
-import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
 import com.birdex.bird.util.TimeUtil;
@@ -52,7 +42,6 @@ import com.birdex.bird.widget.ClearEditText;
 import com.birdex.bird.widget.TitleView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.zhy.android.percent.support.PercentRelativeLayout;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
@@ -68,7 +57,7 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/3/30.
  */
-public class MyOrderListActivity extends BaseActivity implements View.OnClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface, TabLayout.OnTabSelectedListener {
+public class MyOrderListActivity extends BaseActivity implements View.OnClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface{
 
     //    @Bind(R.id.viewPager)
 //    ViewPager viewpager;
@@ -177,29 +166,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
-    /*
-    *初始化状态
-    */
-//    private void initTabStatus(){
-//        String [] status=getResources().getStringArray(R.array.inventory_all_status);
-//        LayoutInflater inflater=LayoutInflater.from(this);
-//        String str="";
-//        for(int i=0;i<status.length;i++){
-//            str=status[i];
-//            View view=inflater.inflate(R.layout.status_layout,null,false);
-//            tl_items.addTab(tl_items.newTab().setCustomView(view));
-//            TextView tv_name=(TextView)view.findViewById(R.id.tv_inventory_status_name);
-//            TextView tv_num=(TextView)view.findViewById(R.id.tv_inventory_status_num);
-//            tv_name.setText(str);
-//            if(i==0||i==1){
-//                tv_num.setVisibility(View.GONE);
-//            }else{
-//                tv_num.setText("0");
-//                tv_num.setVisibility(View.GONE);
-//            }
-//        }
-//        tl_items.setOnTabSelectedListener(this);
-//    }
 
     /**
      * 重新初始化fragment
@@ -615,9 +581,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void setState(int position) {
-
-    }
 
     private void setTime(int position) {
         entity.setStart_date(timeList.get(position).getStart_date());
@@ -707,19 +670,4 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         super.onDestroy();
     }
 
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
-    }
 }

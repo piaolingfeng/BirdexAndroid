@@ -222,4 +222,8 @@ public class BirdApi {
         }
         post(context, "storage/getStorageStatusList", params, jsonHttpResponseHandler);
     }
+
+    public static void getOrder(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
+        post(context, "Order/get", params, jsonHttpResponseHandler);
+    }
 }

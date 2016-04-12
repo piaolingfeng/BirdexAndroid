@@ -24,10 +24,13 @@
             android:noHistory="true"
             android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".activity.LoginActivity"
-            android:screenOrientation="locked">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="com.bird.app.splashy.CLEARSPLASH" />
 
@@ -37,35 +40,48 @@
         <activity
             android:name=".activity.SplashActivity"
             android:hardwareAccelerated="false"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MyAccountActivity" />
-        <activity android:name=".activity.IconChangeActivity" />
-        <activity android:name=".activity.TodayDataActivity" />
+        <activity android:name=".activity.MyAccountActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".activity.IconChangeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".activity.TodayDataActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".activity.ChangeAdressActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".activity.LogisticsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".activity.InventoryActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activity.MyOrderListActivity"
             android:theme="@style/AppCompat.style"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
         <service android:name=".update.UpdateService" />
 
         <activity
             android:name=".activity.AboutActivity"
-            android:label="@string/title_activity_about" />
+            android:label="@string/title_activity_about"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
 
         <meta-data
             android:name="UMENG_APPKEY"
@@ -80,7 +96,9 @@
         <activity
             android:name=".activity.NotiListActivity"
             android:label="@string/title_activity_noti_list"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
 
         <service
             android:name=".service.NotificationService"
@@ -97,6 +115,10 @@
                 <action android:name="com.dbjtech.waiqin.destroy" />//这个就是自定义的action
             </intent-filter>
         </receiver>
+
+        <activity android:name=".activity.OrderDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
     </application>
 
 </manifest>

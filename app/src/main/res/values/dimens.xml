@@ -60,4 +60,10 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="title_height">56dp</dimen>
+    <dimen name="margin_top_height">5dp</dimen>
+    <dimen name="margin_left_width">10dp</dimen>
+
+    <dimen name="item_margin_top_height">8dp</dimen>
+
+    <dimen name="order_detail_size">16dp</dimen>
 </resources>

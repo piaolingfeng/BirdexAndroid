@@ -37,6 +37,7 @@ import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
 import com.birdex.bird.widget.ClearEditText;
 import com.birdex.bird.widget.HeaderView;
+import com.birdex.bird.widget.TitleView;
 import com.birdex.bird.xrecyclerview.XRecyclerView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -56,10 +57,10 @@ import butterknife.Bind;
  */
 public class InventoryActivity extends BaseActivity implements BaseFragment.OnFragmentInteractionListener, BackHandledInterface, HeaderView.OnHeadViewClickLister {
 
-    @Bind(R.id.hv_invenyory)
-    public HeaderView hv_title;
-
-
+//    @Bind(R.id.hv_invenyory)
+//    public HeaderView hv_title;
+    @Bind(R.id.tiv_invenyory_title)
+    public TitleView tiv_title;
     @Override
     public void onFragmentInteraction(Uri uri) {
 
@@ -117,7 +118,9 @@ public class InventoryActivity extends BaseActivity implements BaseFragment.OnFr
         InventoryFragment inventoryFragment = new InventoryFragment();
         fragments.add(inventoryFragment);
         addFragment(0);
-        hv_title.setOnHeadViewClickLister(this);
+//        hv_title.setOnHeadViewClickLister(this);
+        tiv_title.setMenuVisble(true);
+        tiv_title.setTitle(getString(R.string.inventory_title));
     }
 
 

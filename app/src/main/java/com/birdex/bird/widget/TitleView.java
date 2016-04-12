@@ -172,5 +172,13 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
     public void setTitle(String titleText) {
         title.setText(titleText);
     }
-
+    /*
+     *库存titleview
+     */
+    public void setInventoryDetail(String titleStr,int colorID){
+        setMenuVisble(false);
+        title.setText("");
+        prl_title.setBackgroundColor(colorID);
+        save.setText(titleStr);
+    }
 }

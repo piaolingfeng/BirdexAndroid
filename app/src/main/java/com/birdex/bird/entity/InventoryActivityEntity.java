@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * Created by huwei on 16/4/11.
  */
-public class InventoryActivityEntity {
+public class InventoryActivityEntity implements Serializable{
     //物品详细
     private String detail;
 
@@ -149,7 +149,7 @@ public class InventoryActivityEntity {
     private String price_unit;
     //
     private ArrayList<InventoryStockEntity> stock;
-    public class InventoryStockEntity {
+    public class InventoryStockEntity implements Serializable{
         public String getWarehouse_name() {
             return warehouse_name;
         }

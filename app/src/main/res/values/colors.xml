@@ -16,6 +16,7 @@
     <color name="background">#f5f4f4</color>
     <color name="white">#ffffff</color>
     <color name="gray">#a6a6a6</color>
+    <color name="gray1">#666666</color>
     <color name="red">#ff4444</color>
     <color name="black">#000000</color>
     <color name="blue">#039FFF</color>
@@ -25,6 +26,7 @@
     <color name="blue_1">#00ACFF</color>
     <color name="blue_2">#5392EF</color>
     <color name="blue_3">#00A5E0</color>
+    <color name="blue_4">#dcf5ff</color>
     <color name="blue_head_1">#13A7DF</color>
     <color name="selected">#039FFF</color>
 

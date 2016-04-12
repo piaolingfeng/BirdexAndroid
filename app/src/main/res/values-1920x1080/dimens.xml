@@ -28,4 +28,7 @@
     <dimen name="inventory_count_data">16sp</dimen>
     <dimen name="inventory_status_position_bottom">10dp</dimen>
     <dimen name="inventory_status_position_right">10dp</dimen>
+    <!--在库存的详细的头部文字-->
+    <dimen name="detail_inner_head_font">18sp</dimen>
+    <dimen name="detail_inner_item_font">14dp</dimen>
 </resources>

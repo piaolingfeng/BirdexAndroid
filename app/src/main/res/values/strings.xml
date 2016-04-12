@@ -245,4 +245,15 @@
     <string name="time_year">近一年</string>
     <string name="no_data">暂时没有数据哦！</string>
     <string name="title_activity_noti_list">NotiListActivity</string>
+    <string name="title_activity_inventory_inner_detail">InventoryInnerDetailActivity</string>
+    <!--仓库详细内容-->
+    <string name="inventory_inner_detail_title">商品详情</string>
+    <string name="tv_detail_inner_available">可用库存：</string>
+    <string name="tv_detail_inner_occupancy">订单占用：</string>
+    <string name="tv_detail_inner_in">总入库量：</string>
+    <string name="tv_detail_inner_out">总出库量：</string>
+    <string name="tv_detail_inner_allowout">允许超售量：</string>
+    <string name="tv_detail_inner_diff">差异：</string>
+    <string name="tv_detail_inner_broken">损耗：</string>
+    <string name="tv_detail_inner_actual">实际数量：</string>
 </resources>

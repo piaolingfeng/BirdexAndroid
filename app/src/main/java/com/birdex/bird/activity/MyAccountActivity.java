@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -25,6 +26,7 @@ import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.T;
 import com.birdex.bird.widget.RoundImageView;
+import com.birdex.bird.widget.TitleView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -71,7 +73,11 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
     @Bind(R.id.tariff_balance)
     TextView tariff_balance;
 
-//    private String path;
+    // titleview
+    @Bind(R.id.title_1l)
+    TitleView titleView;
+
+    //    private String path;
     // logo 地址
     private String logo = "";
 
@@ -87,6 +93,12 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
 
     // 初始化数据
     private void initData() {
+        titleView.setTitle(getString(R.string.myaccount));
+        titleView.setMenuVisble(true);
+        titleView.setBackground(Color.parseColor("#FFFFFF"));
+        titleView.setTitleTextcolor(Color.parseColor("#4A4A4A"));
+        titleView.setBackIv(BitmapFactory.decodeResource(getResources(), R.drawable.blue_back));
+        titleView.setMenu(BitmapFactory.decodeResource(getResources(), R.drawable.black_menu));
         getInterfactData();
     }
 
@@ -177,8 +189,8 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
     // 将接口数据设置上去
     private void setInterfaceData(AccountDetail accountDetail) {
         List<Wallet> wallets = accountDetail.getWallets();
-        credit.setText(accountDetail.getCredit());
-        left_credit.setText(accountDetail.getLeft_credit());
+        credit.setText("￥" + accountDetail.getCredit());
+        left_credit.setText("￥" + accountDetail.getLeft_credit());
         for (Wallet wallet : wallets) {
             if ("运费账户".equals(wallet.getName())) {
                 freight_balance.setText("￥" + wallet.getBalance());
@@ -210,36 +222,36 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
             // 充值按钮
             case R.id.recharge_bt:
                 //账户管理
-                intent=new Intent(this, MyAccountInfoActivity.class);
+                intent = new Intent(this, MyAccountInfoActivity.class);
                 //显示第1个页面
-                intent.putExtra("enterindex",0);
+                intent.putExtra("enterindex", 0);
                 this.startActivity(intent);
                 break;
 
             // 左下角充值
             case R.id.recharge_tv:
                 //账户管理
-                intent=new Intent(this, MyAccountInfoActivity.class);
+                intent = new Intent(this, MyAccountInfoActivity.class);
                 //显示第1个页面
-                intent.putExtra("enterindex",0);
+                intent.putExtra("enterindex", 0);
                 this.startActivity(intent);
                 break;
 
             // 账户明细
             case R.id.account_detail:
                 //账户管理
-                intent=new Intent(this, MyAccountInfoActivity.class);
+                intent = new Intent(this, MyAccountInfoActivity.class);
                 //显示第2个页面
-                intent.putExtra("enterindex",1);
+                intent.putExtra("enterindex", 1);
                 this.startActivity(intent);
                 break;
 
             // 账户管理
             case R.id.account_manager:
                 //账户管理
-                intent=new Intent(this, MyAccountInfoActivity.class);
+                intent = new Intent(this, MyAccountInfoActivity.class);
                 //显示第3个页面
-                intent.putExtra("enterindex",2);
+                intent.putExtra("enterindex", 2);
                 this.startActivity(intent);
                 break;
         }

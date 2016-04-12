@@ -62,7 +62,7 @@
                 android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerVertical="true"
-                android:background="@color/touch_color" />
+                android:background="@color/single_line" />
         </com.zhy.android.percent.support.PercentRelativeLayout>
 
         <com.zhy.android.percent.support.PercentRelativeLayout
@@ -89,12 +89,6 @@
         android:layout_width="match_parent"
         android:layout_height="40dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerVertical="true"
-            android:background="@color/touch_color" />
 
         <TextView
             android:id="@+id/tv_receiver_name"
@@ -162,7 +156,7 @@
             android:background="@drawable/list_item_ele_selector"
             android:gravity="center"
             android:text="@string/logistics_tracking"
-            android:textColor="@color/context_1"
+            android:textColor="@color/order_detail_text_color"
             app:layout_paddingLeftPercent="1%"
             app:layout_paddingRightPercent="3%"
             app:layout_textSizePercent="40%" />
@@ -171,7 +165,7 @@
             android:layout_width="1dp"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:background="#9b9b9b"
+            android:background="@color/single_line"
             android:visibility="visible"
             app:layout_heightPercent="60%" />
 
@@ -184,7 +178,7 @@
             android:background="@drawable/list_item_ele_selector"
             android:gravity="center"
             android:text="@string/service_type"
-            android:textColor="@color/context_1"
+            android:textColor="@color/order_detail_text_color"
             app:layout_paddingLeftPercent="3%"
             app:layout_paddingRightPercent="3%"
             app:layout_textSizePercent="40%" />
@@ -194,7 +188,7 @@
             android:layout_width="1dp"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:background="#9b9b9b"
+            android:background="@color/single_line"
             android:visibility="gone"
             app:layout_heightPercent="60%" />
 
@@ -209,7 +203,7 @@
             android:gravity="center"
             android:visibility="gone"
             android:text="@string/change_address"
-            android:textColor="@color/context_1"
+            android:textColor="@color/order_detail_text_color"
             app:layout_paddingLeftPercent="3%"
             app:layout_paddingRightPercent="2%"
             app:layout_textSizePercent="40%" />

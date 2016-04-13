@@ -8,15 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.activity.ChangeAdressActivity;
 import com.birdex.bird.activity.LogisticsActivity;
-import com.birdex.bird.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.ClipboardManagerUtil;

@@ -1,8 +1,6 @@
 package com.birdex.bird.activity;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
@@ -19,20 +17,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
-import com.birdex.bird.camera.CameraManager;
-import com.birdex.bird.decoding.CaptureActivityHandler;
-import com.birdex.bird.decoding.InactivityTimer;
-import com.birdex.bird.util.T;
+import com.birdex.bird.util.camera.CameraManager;
+import com.birdex.bird.util.decoding.CaptureActivityHandler;
+import com.birdex.bird.util.decoding.InactivityTimer;
 import com.birdex.bird.widget.ViewfinderView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Vector;

@@ -2,22 +2,16 @@ package com.birdex.bird.adapter;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.birdex.bird.R;
-import com.birdex.bird.activity.InventoryActivity;
 import com.birdex.bird.entity.InventoryActivityEntity;
-import com.birdex.bird.helper.OnLoadingImgListener;
-import com.birdex.bird.helper.OnShowGoTopListener;
-import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
+import com.birdex.bird.util.recycleviewhelper.OnLoadingImgListener;
+import com.birdex.bird.util.recycleviewhelper.OnShowGoTopListener;
 
 import java.util.ArrayList;
 

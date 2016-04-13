@@ -1,13 +1,11 @@
 package com.birdex.bird.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.KeyEvent;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
-import com.birdex.bird.activity.BaseActivity;
 import com.birdex.bird.activity.PredicitionDetailActivity;
 import com.birdex.bird.adapter.PredicitionAdapter;
 import com.birdex.bird.api.BirdApi;
@@ -15,9 +13,8 @@ import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.entity.PredicitionEntity;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.GsonHelper;
-import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.T;
-import com.birdex.bird.xrecyclerview.XRecyclerView;
+import com.birdex.bird.widget.xrecyclerview.XRecyclerView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -74,8 +71,8 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
             public void onItemClick(int position) {
                 String storage_code = predicitionEntity.getData().getStorages().get(position).getStorage_code();
                 Intent intent = new Intent(getActivity(), PredicitionDetailActivity.class);
-                intent.putExtra("storage_code",storage_code);
-                intent.putExtra("position",position);
+                intent.putExtra("storage_code", storage_code);
+                intent.putExtra("position", position);
                 startActivity(intent);
             }
         });
@@ -103,7 +100,7 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 predicitionEntity = GsonHelper.getPerson(response.toString(), PredicitionEntity.class);
 //                orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
-                if (predicitionEntity!=null) {
+                if (predicitionEntity != null) {
                     if (entity.getPage_no() > 1) {
                         if (predicitionEntity.getData().getStorages().size() == 0) {
                             T.showShort(MyApplication.getInstans(), "已经是最后一页");
@@ -116,8 +113,8 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
                     }
                     bus.post(predicitionEntity.getData().getCount(), "frame_layout");//刷新个数及界面
                     predicitionAdapter.notifyDataSetChanged();
-                }else{
-                    T.showLong(getActivity(),getString(R.string.parse_error));
+                } else {
+                    T.showLong(getActivity(), getString(R.string.parse_error));
                 }
             }
 

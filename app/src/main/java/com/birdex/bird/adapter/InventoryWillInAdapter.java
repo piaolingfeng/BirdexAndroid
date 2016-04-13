@@ -10,11 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.birdex.bird.R;
-import com.birdex.bird.activity.InventoryActivity;
 import com.birdex.bird.entity.InventoryActivityEntity;
-import com.birdex.bird.helper.OnLoadingImgListener;
-import com.birdex.bird.helper.OnShowGoTopListener;
-import com.bumptech.glide.Glide;
+import com.birdex.bird.util.recycleviewhelper.OnLoadingImgListener;
+import com.birdex.bird.util.recycleviewhelper.OnShowGoTopListener;
 
 import java.util.ArrayList;
 

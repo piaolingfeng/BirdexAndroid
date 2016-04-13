@@ -10,9 +10,8 @@ import android.widget.TextView;
 
 import com.birdex.bird.R;
 import com.birdex.bird.entity.OrderListProductEntity;
-import com.birdex.bird.glide.GlideUtils;
+import com.birdex.bird.util.glide.GlideUtils;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 

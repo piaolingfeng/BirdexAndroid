@@ -1,28 +1,18 @@
 package com.birdex.bird.fragment;
 
 
-import android.content.Entity;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.birdex.bird.BuildConfig;
 import com.birdex.bird.R;
 import com.birdex.bird.adapter.TransactionAdapter;
 import com.birdex.bird.api.BirdApi;
@@ -30,9 +20,8 @@ import com.birdex.bird.biz.MyAccountBiz;
 import com.birdex.bird.entity.TransactionEntity;
 import com.birdex.bird.util.T;
 import com.birdex.bird.util.TimeUtil;
-import com.birdex.bird.xrecyclerview.ProgressStyle;
-import com.birdex.bird.xrecyclerview.XRecyclerView;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.birdex.bird.widget.xrecyclerview.ProgressStyle;
+import com.birdex.bird.widget.xrecyclerview.XRecyclerView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -42,7 +31,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import butterknife.Bind;
 

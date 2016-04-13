@@ -68,10 +68,10 @@ public class PredicitionDetailActivity extends BaseActivity {
     public void initializeContentViews() {
         entity = new PredicitionDetailEntity();
         storage_code = getIntent().getStringExtra("storage_code");
-        fragment_position = getIntent().getIntExtra("position",0);
+        fragment_position = getIntent().getIntExtra("position", 0);
         bus = EventBus.getDefault();
         bus.register(this);
-        title_view.setSaveText(getString(R.string.predicition_detail));
+        title_view.setInventoryDetail(getString(R.string.predicition_detail), R.color.gray1);
         rcy.setLayoutManager(new FullyLinearLayoutManager(this));
         rcy.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL_LIST));

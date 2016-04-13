@@ -54,17 +54,18 @@ public class OrderProductAdapter extends RecyclerView.Adapter<OrderProductAdapte
         holder.tv_nums.setText("x" + productList.get(position).getNums());
         holder.tv_name.setText(productList.get(position).getName());
         holder.tv_external_no.setText(productList.get(position).getExternal_no());
+        holder.tv_error.setText(productList.get(position).getError());
     }
 
     @Override
     public int getItemCount() {
-        int size =0 ;
-        if (productList!=null)
+        int size = 0;
+        if (productList != null)
             size = productList.size();
         return size;
     }
 
-    public class ProductHold extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ProductHold extends RecyclerView.ViewHolder implements View.OnClickListener {
         //产品
         @Bind(R.id.img_pic)
         ImageView img_pic;//商品图片
@@ -74,6 +75,9 @@ public class OrderProductAdapter extends RecyclerView.Adapter<OrderProductAdapte
         TextView tv_name;//商品名称
         @Bind(R.id.tv_external_no)
         TextView tv_external_no;
+        @Bind(R.id.tv_error)
+        TextView tv_error;
+
         int position;
 
         public ProductHold(View itemView) {
@@ -84,7 +88,7 @@ public class OrderProductAdapter extends RecyclerView.Adapter<OrderProductAdapte
 
         @Override
         public void onClick(View v) {
-            if (onRecyclerViewItemClickListener!=null){
+            if (onRecyclerViewItemClickListener != null) {
                 onRecyclerViewItemClickListener.onItemClick(position);
             }
         }

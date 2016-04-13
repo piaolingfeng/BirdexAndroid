@@ -20,6 +20,7 @@ import com.birdex.bird.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.ClipboardManagerUtil;
+import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
 
 import java.util.List;
@@ -86,6 +87,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
             holder.tv_change_address.setVisibility(View.VISIBLE);
             holder.tv_right_line.setVisibility(View.VISIBLE);
         }
+        if (!StringUtils.isEmpty(list.get(position).getVerify_fail_detail())) {
+            holder.tv_id_error.setVisibility(View.VISIBLE);
+            holder.tv_id_error.setText(list.get(position).getVerify_fail_detail());
+        }
     }
 
     @Override
@@ -126,6 +131,9 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
 
         @Bind(R.id.rcy_productlist)
         RecyclerView rcy_productlist;
+
+        @Bind(R.id.tv_id_error)
+        TextView tv_id_error;
         int position = 0;
 
         public DetailHolder(View itemView) {

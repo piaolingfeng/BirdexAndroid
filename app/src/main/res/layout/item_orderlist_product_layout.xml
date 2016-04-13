@@ -91,7 +91,7 @@
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
             android:layout_centerVertical="true"
-            android:background="@color/touch_color" />
+            android:background="@color/single_line" />
     </com.zhy.android.percent.support.PercentRelativeLayout>
 
 

@@ -110,7 +110,7 @@
                                 android:layout_width="1dp"
                                 android:layout_height="0dp"
                                 android:layout_gravity="center"
-                                android:background="@color/touch_color"
+                                android:background="@color/single_line"
                                 android:visibility="visible"
                                 app:layout_heightPercent="60%" />
 
@@ -141,7 +141,7 @@
                                 android:layout_width="1dp"
                                 android:layout_height="0dp"
                                 android:layout_gravity="center"
-                                android:background="@color/touch_color"
+                                android:background="@color/single_line"
                                 android:visibility="visible"
                                 app:layout_heightPercent="60%" />
 

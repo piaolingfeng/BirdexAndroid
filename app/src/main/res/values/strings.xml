@@ -244,8 +244,9 @@
     <string name="time_three_month">近三个月</string>
     <string name="time_year">近一年</string>
     <string name="no_data">暂时没有数据哦！</string>
+    <string name="parse_error">解析失败,请重试!</string>
     <string name="title_activity_noti_list">NotiListActivity</string>
-    
+
     <string name="tv_reciver">收件人:</string>
     <string name="tv_id_name">身份证号:</string>
     <string name="tv_id_check">身份证验证</string>
@@ -265,4 +266,23 @@
     <string name="tv_count">数 量:</string>
     <string name="send_error">数据有误，请重试!</string>
     <string name="order_detail">订单详情</string>
+    <string name="predicition_detail">预报详情</string>
+
+    <string name="tv_now_status">当前状态:</string>
+    <string name="tv_confirm_predicition">批量确认预报</string>
+    <string name="tv_Destination_warehousee">目的仓库:</string>
+    <string name="tv_Logistics_tracking">物流号:</string>
+    <string name="tv_update_time">更新时间:</string>
+    <string name="tv_create_time">创建时间:</string>
+    <string name="tv_upc">UPC:</string>
+    <string name="tv_pre_inno">预报/入库:</string>
+    <string name="tv_error_count">异常数量:</string>
+    <string name="tv_valid_date">有效期:</string>
+    <string name="tv_status">状 态:</string>
+    <string name="btn_re_confirm">复 核</string>
+    <string name="btn_confirm">确 认</string>
+    <string name="tv_cancel">取 消</string>
+    <string name="tv_review_Storage_reason">输入复核的原因:</string>
+
+    <string name="request_error">请求失败,请重试</string>
 </resources>

@@ -46,6 +46,9 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
     public TitleView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
+        if (isInEditMode()) {
+            return;
+        }
         initView();
     }
 
@@ -53,12 +56,18 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
     public TitleView(Context context) {
         super(context);
         mContext = context;
+        if (isInEditMode()) {
+            return;
+        }
         initView();
     }
 
     public TitleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
+        if (isInEditMode()) {
+            return;
+        }
         initView();
     }
 
@@ -70,7 +79,7 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
                     ((Activity) mContext).finish();
                 break;
             case R.id.menu:
-                showMenuWindow((View) menu.getParent(),menuList,3);
+                showMenuWindow((View) menu.getParent(), menuList, 3);
                 break;
         }
     }
@@ -161,7 +170,7 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
         menu.setOnClickListener(listener);
     }
 
-    public View getMenuView(){
+    public View getMenuView() {
         return menu;
     }
 
@@ -175,6 +184,11 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
 
     public void setTitle(String titleText) {
         title.setText(titleText);
+    }
+
+    public void setSaveText(String text) {
+        save.setVisibility(View.VISIBLE);
+        save.setText(text);
     }
 
     public void setBackground(int col){

@@ -158,9 +158,9 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
         /**
          * 修改地址
          * */
-        public void startChangeAddrActivity(String order_oms_no) {
+        public void startChangeAddrActivity(String order_code) {
             Intent intent = new Intent(mContext, ChangeAdressActivity.class);
-            intent.putExtra("order_code", order_oms_no);
+            intent.putExtra("order_code", order_code);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(intent);
         }

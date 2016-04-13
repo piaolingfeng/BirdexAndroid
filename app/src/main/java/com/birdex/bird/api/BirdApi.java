@@ -44,6 +44,7 @@ public class BirdApi {
     public static void cancelRequestWithTag(Object tag) {
         MyApplication.ahc.cancelRequestsByTAG(tag, true);
     }
+
     /**
      * @param context
      * @param url
@@ -203,6 +204,10 @@ public class BirdApi {
     // 测试 消息头
     public static void testHeader(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
         post(context, "Public/testApp", params, jsonHttpResponseHandler);
+    }
+
+    public static void getOrder(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
+        post(context, "Order/get", params, jsonHttpResponseHandler);
     }
 
     // 上传身份证图片

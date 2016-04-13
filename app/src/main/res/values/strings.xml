@@ -255,4 +255,24 @@
     <string name="pic_notfound">图片未找到</string>
     <string name="please_full">请将资料补充完整</string>
     <string name="upload_suc">上传成功</string>
+    
+    <string name="tv_reciver">收件人:</string>
+    <string name="tv_id_name">身份证号:</string>
+    <string name="tv_id_check">身份证验证</string>
+    <string name="tv_id_check_e">身份证异常</string>
+    <string name="tv_change_addr">修改地址</string>
+    <string name="tv_free">费 用:</string>
+    <string name="tv_weight">重 量:</string>
+    <string name="tv_order_num">订单号:</string>
+    <string name="tv_upc_code">UPC码:</string>
+    <string name="tv_product_code">商品编码:</string>
+    <string name="tv_customer_code">客户编码:</string>
+    <string name="tv_customer_num">客户单号:</string>
+    <string name="tv_remarks">备 注:</string>
+
+    <string name="tv_product_name">商品名称:</string>
+    <string name="tv_delivery_warehouse">发货仓库:</string>
+    <string name="tv_count">数 量:</string>
+    <string name="send_error">数据有误，请重试!</string>
+    <string name="order_detail">订单详情</string>
 </resources>

@@ -55,7 +55,7 @@ public class OrderProductAdapter extends RecyclerView.Adapter<OrderProductAdapte
         return size;
     }
 
-    public class ProductHold extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ProductHold extends RecyclerView.ViewHolder {
         //产品
         @Bind(R.id.img_pic)
         ImageView img_pic;//商品图片
@@ -70,11 +70,6 @@ public class OrderProductAdapter extends RecyclerView.Adapter<OrderProductAdapte
         public ProductHold(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-        }
-
-        @Override
-        public void onClick(View v) {
-
         }
     }
 }

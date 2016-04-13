@@ -60,7 +60,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
     }
 
     @Override
-    public void onBindViewHolder(DetailHolder holder, int position) {
+    public void onBindViewHolder(DetailHolder holder, final int position) {
         holder.position = position;
         holder.tv_created_time.setText(list.get(position).getCreated_time());
         holder.tv_order_oms_no.setText(list.get(position).getOrder_oms_no());
@@ -71,13 +71,20 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
         holder.tv_weight.setText(list.get(position).getWeight() + "kg");
         holder.rcy_productlist.setLayoutManager(new LinearLayoutManager(mContext));
         OrderProductAdapter productAdapter = new OrderProductAdapter(mContext, list.get(position).getProducts());
+        productAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(int x) {
+                if (onRecyclerViewItemClickListener != null)
+                    onRecyclerViewItemClickListener.onItemClick(position);
+            }
+        });
         holder.rcy_productlist.setAdapter(productAdapter);
         String statuName = list.get(position).getStatus_name();
-        if (statuName.equals("等待出库")||statuName.equals("准备出库")||statuName.equals("待下架")||
-                statuName.equals("出库中")||statuName.equals("下架中")||statuName.equals("审核不通过")
-                ||statuName.equals("身份证异常")){
+        if (statuName.equals("等待出库") || statuName.equals("准备出库") || statuName.equals("待下架") ||
+                statuName.equals("出库中") || statuName.equals("下架中") || statuName.equals("审核不通过")
+                || statuName.equals("身份证异常")) {
             holder.tv_change_address.setVisibility(View.VISIBLE);
-            holder. tv_right_line.setVisibility(View.VISIBLE);
+            holder.tv_right_line.setVisibility(View.VISIBLE);
         }
     }
 
@@ -157,7 +164,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
 
         /**
          * 修改地址
-         * */
+         */
         public void startChangeAddrActivity(String order_code) {
             Intent intent = new Intent(mContext, ChangeAdressActivity.class);
             intent.putExtra("order_code", order_code);
@@ -167,7 +174,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
 
         /**
          * 物流跟踪
-         * */
+         */
         public void startTrackingActivity(String order_code, String Status_name, String Receiver_mobile) {
             Intent intent = new Intent(mContext, LogisticsActivity.class);
             intent.putExtra("order_code", order_code);

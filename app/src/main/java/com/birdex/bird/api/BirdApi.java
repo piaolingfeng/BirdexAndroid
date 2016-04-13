@@ -210,6 +210,20 @@ public class BirdApi {
         post(context, "Order/get", params, jsonHttpResponseHandler);
     }
 
+    public static void getStorageDetail(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
+        post(context, "Storage/get", params, jsonHttpResponseHandler);
+    }
+
+    //确认入库
+    public static void setConfirmStorage(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
+        post(context, "storage/confirm", params, jsonHttpResponseHandler);
+    }
+
+    //发起复核
+    public static void setReviewStorage(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
+        post(context, "storage/review", params, jsonHttpResponseHandler);
+    }
+
     // 上传身份证图片
     public static void uploadIDCardPic(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
         MyApplication.ahc.post("http://192.168.1.207:8090/upload/IDCard", params, jsonHttpResponseHandler);

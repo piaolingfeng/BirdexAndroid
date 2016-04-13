@@ -1,5 +1,6 @@
 package com.birdex.bird.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.KeyEvent;
@@ -7,10 +8,12 @@ import android.view.KeyEvent;
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.activity.BaseActivity;
+import com.birdex.bird.activity.PredicitionDetailActivity;
 import com.birdex.bird.adapter.PredicitionAdapter;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.entity.PredicitionEntity;
+import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.T;
@@ -66,6 +69,16 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
 //        rcy_orderlist.addItemDecoration(new DividerItemDecoration(getActivity(),
 //                DividerItemDecoration.VERTICAL_LIST));
         predicitionAdapter = new PredicitionAdapter(getActivity(), predicitionEntity.getData().getStorages());
+        predicitionAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                String storage_code = predicitionEntity.getData().getStorages().get(position).getStorage_code();
+                Intent intent = new Intent(getActivity(), PredicitionDetailActivity.class);
+                intent.putExtra("storage_code",storage_code);
+                intent.putExtra("position",position);
+                startActivity(intent);
+            }
+        });
         rcy_orderlist.setAdapter(predicitionAdapter);
         getPredicitionList();
     }
@@ -74,7 +87,7 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
      * 获取预报列表
      */
     private void getPredicitionList() {
-        showBar();
+        showLoading();
         RequestParams listParams = new RequestParams();
         listParams.add("page_no", entity.getPage_no() + "");
         listParams.add("page_size", entity.getPage_size());
@@ -90,16 +103,22 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 predicitionEntity = GsonHelper.getPerson(response.toString(), PredicitionEntity.class);
 //                orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
-                if (entity.getPage_no() > 1) {
-                    if (predicitionEntity.getData().getStorages().size() == 0) {
-                        T.showShort(MyApplication.getInstans(), "已经是最后一页");
-                    } else
-                        predicitionAdapter.getPredicitionDetailList().addAll(predicitionEntity.getData().getStorages());
-                } else {
-                    predicitionAdapter.setPredicitionDetailList(predicitionEntity.getData().getStorages());
+                if (predicitionEntity!=null) {
+                    if (entity.getPage_no() > 1) {
+                        if (predicitionEntity.getData().getStorages().size() == 0) {
+                            T.showShort(MyApplication.getInstans(), "已经是最后一页");
+                        } else {
+                            predicitionAdapter.getPredicitionDetailList().addAll(predicitionEntity.getData().getStorages());
+                            predicitionEntity.getData().setStorages(predicitionAdapter.getPredicitionDetailList());
+                        }
+                    } else {
+                        predicitionAdapter.setPredicitionDetailList(predicitionEntity.getData().getStorages());
+                    }
+                    bus.post(predicitionEntity.getData().getCount(), "frame_layout");//刷新个数及界面
+                    predicitionAdapter.notifyDataSetChanged();
+                }else{
+                    T.showLong(getActivity(),getString(R.string.parse_error));
                 }
-                bus.post(predicitionEntity.getData().getCount(), "frame_layout");//刷新个数及界面
-                predicitionAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -161,10 +180,11 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
      *停止动画
      */
     private void stopHttpAnim() {
-        hideBar();
+        hideLoading();
         if (rcy_orderlist != null) {
             rcy_orderlist.refreshComplete();
             rcy_orderlist.loadMoreComplete();
         }
     }
+
 }

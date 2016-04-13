@@ -18,6 +18,7 @@ public class GsonHelper {
             t = gson.fromJson(jsonString, cls);
         } catch (Exception e) {
             // TODO: handle exception
+            e.printStackTrace();
         }
         return t;
     }

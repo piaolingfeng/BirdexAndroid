@@ -156,7 +156,7 @@ public class OrderDetailActivity extends BaseActivity {
         tv_id_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                T.showLong(OrderDetailActivity.this,"验证身份证!");
+                T.showShort(OrderDetailActivity.this,"验证身份证!");
             }
         });
         String statuName = orderDetailEntity.getData().getStatus_name();

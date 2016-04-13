@@ -22,6 +22,7 @@
     <dimen name="inventory_item_row1_padding">10dp</dimen>
     <dimen name="inventory_item_row2_padding">10dp</dimen>
     <dimen name="inventory_item_row2_marginlr">10dp</dimen>
+
     <!--库存-->
     <dimen name="inventory_limit_txt">16sp</dimen>
     <dimen name="inventory_limit_marginlr">15dp</dimen>
@@ -29,9 +30,16 @@
     <dimen name="inventory_status_position_bottom">10dp</dimen>
     <dimen name="inventory_status_position_right">10dp</dimen>
     <!--在库存的详细的头部文字-->
+    <dimen name="inventory_inner_font1">16sp</dimen>
+    <dimen name="inventory_inner_font2">15sp</dimen>
+    <dimen name="inventory_inner_paddingtb">5dp</dimen>
     <dimen name="detail_inner_head_font">16sp</dimen>
     <dimen name="detail_inner_item_font">16dp</dimen>
     <dimen name="detail_willin_font">18sp</dimen>
     <dimen name="detail_willin_viewother">14sp</dimen>
     <dimen name="detail_willin_margin_top">8dp</dimen>
+    <dimen name="detail_inner_font1">16sp</dimen>
+    <dimen name="detail_inner_font2">15sp</dimen>
+    <dimen name="detail_willin_item_paddingtb">5dp</dimen>
+    <dimen name="detail_willin_item_marginlr">5dp</dimen>
 </resources>

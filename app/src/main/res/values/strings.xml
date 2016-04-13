@@ -269,13 +269,16 @@
     <string name="available_count">可用库存总数：</string>
     <string name="create_time">创建时间：</string>
     <string name="ininventory_code">入库单号：</string>
-    <string name="trans_code">物流单号</string>
+    <string name="trans_code">物流单号：</string>
     <string name="trans_style">物流方式：</string>
     <string name="willin_inventory">待入仓库：</string>
     <string name="willin_num">数量：</string>
     <string name="willin_statu">状态：</string>
     <string name="willin_product_statu">发往仓库</string>
-    <string name="willin_view_others">查看同单号的其它商品</string>
+    <string name="willin_view_others">同单号其它商品</string>
+    <string name="unkonw_product">未知商品</string>
+    <!--<string name="willin_detail_head_left">30%</string>-->
+    <!--<string name="willin_detail_head_right">70%</string>-->
 
     <string name="tv_reciver">收件人:</string>
     <string name="tv_id_name">身份证号:</string>

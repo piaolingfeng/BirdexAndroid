@@ -9,6 +9,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -48,7 +50,7 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/4/11.
  */
-public class InventoryFragment extends BaseFragment implements XRecyclerView.LoadingListener , View.OnClickListener, TabLayout.OnTabSelectedListener,OnShowGoTopListener,OnLoadingImgListener{
+public class InventoryFragment extends BaseFragment implements XRecyclerView.LoadingListener , View.OnClickListener, TabLayout.OnTabSelectedListener,OnShowGoTopListener,OnLoadingImgListener,CompoundButton.OnCheckedChangeListener{
     private RequestParams params = null;
     //当前页数，首页为1
     private int currentPage = 1;
@@ -98,6 +100,26 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
             }
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()){
+            case R.id.cb_inventory_sort_available:
+                if(isChecked){
+                    params.put("order_by","available_stock_asc");
+                }else {
+                    params.put("order_by","available_stock_desc");
+                }
+                fab_gotop.setVisibility(View.GONE);
+//                //显示数量
+//                tv_count.setText(countTxt.replace("@","0"));
+                //显示加载动画
+                showBar();
+                currentPage = 1;
+                startRequest();
+                break;
+        }
+    }
+
     //默认为在库库存
     //设置显示的类型
     public enum Type {
@@ -116,10 +138,10 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     private OrderWareHouseAdapter wareAdapter = null;
     @Bind(R.id.tv_inventory_all)
     public TextView tv_allInventory = null;
-    @Bind(R.id.tv_inventory_sort_available)
-    public TextView tv_sortavailable = null;
-    @Bind(R.id.tv_inventory_sort_time)
-    public TextView tv_sorttime;
+    @Bind(R.id.cb_inventory_sort_available)
+    public CheckBox cb_sortavailable = null;
+    @Bind(R.id.cb_inventory_sort_time)
+    public CheckBox cb_sorttime;
     //获取屏幕宽度
 //    private int width = 0;
     private String countTxt="";
@@ -141,8 +163,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         //初始化解析业务
         biz = new InventoryBiz();
         tv_allInventory.setOnClickListener(this);
-        tv_sortavailable.setOnClickListener(this);
-        tv_sorttime.setOnClickListener(this);
+        cb_sortavailable.setOnCheckedChangeListener(this);
         //获取屏幕宽度
 //        width = getWindowManager().getDefaultDisplay().getWidth();
         //网络请求参数
@@ -181,6 +202,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         initStatus();
         //设置至顶按钮
         fab_gotop.setOnClickListener(this);
+        //按照可用数量排序
     }
 
     @Override

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:headtitle="@string/mine_index_title"
-        app:hasstatubar="true"
+        app:hasstatubar="false"
         app:bgcolor="@color/blue_head_1"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_mine_list"

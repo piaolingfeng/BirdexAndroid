@@ -105,4 +105,37 @@
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <!--待入库的左右布局-->
+    <style name="detail_willin_left" >
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">2.5</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="detail_willin_right">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">7.5</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <!--在库商品的左右布局-->
+    <style name="detail_inner_title1">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:paddingTop">@dimen/inventory_inner_paddingtb</item>
+        <item name="android:paddingBottom">@dimen/inventory_inner_paddingtb</item>
+    </style>
+    <style name="detail_inner_context">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:paddingTop">@dimen/inventory_inner_paddingtb</item>
+        <item name="android:paddingBottom">@dimen/inventory_inner_paddingtb</item>
+    </style>
 </resources>

@@ -14,10 +14,13 @@
         app:layout_heightPercent="10%">
         <ImageView
             android:id="@+id/iv_myaccount_back"
-            android:layout_width="15dp"
-            android:layout_height="20dp"
+            android:layout_width="28dp"
+            android:layout_height="25dp"
             android:layout_marginLeft="15dp"
             android:layout_centerVertical="true"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:scaleType="fitXY"
             android:src="@drawable/back_chevron" />
 
 

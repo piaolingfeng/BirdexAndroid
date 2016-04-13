@@ -90,7 +90,6 @@
         <activity
             android:name=".activity.WillinDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppCompat.translucent"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
         <meta-data
             android:name="UMENG_APPKEY"

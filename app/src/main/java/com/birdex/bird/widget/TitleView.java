@@ -212,7 +212,7 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
     public void setInventoryDetail(String titleStr,int colorID){
         setMenuVisble(false);
         title.setText("");
-        prl_title.setBackgroundColor(colorID);
+        prl_title.setBackgroundResource(colorID);
         save.setText(titleStr);
     }
 }

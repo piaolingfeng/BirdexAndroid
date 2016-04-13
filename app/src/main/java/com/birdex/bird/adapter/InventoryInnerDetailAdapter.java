@@ -21,7 +21,6 @@ public class InventoryInnerDetailAdapter extends RecyclerView.Adapter<InventoryI
     public InventoryInnerDetailAdapter(Activity activity,InventoryActivityEntity entity){
         inflater=LayoutInflater.from(activity);
         this.entity=entity;
-        Log.e("android","-------0");
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

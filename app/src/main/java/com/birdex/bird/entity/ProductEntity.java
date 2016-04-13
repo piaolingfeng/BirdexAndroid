@@ -189,13 +189,7 @@ public class ProductEntity {
             this.detail = detail;
         }
 
-        public String getLength() {
-            return length;
-        }
 
-        public void setLength(String length) {
-            this.length = length;
-        }
 
         public String getWidth() {
             return width;
@@ -304,7 +298,6 @@ public class ProductEntity {
         public String weight_unit = "";
         public String pic = "";
         public String detail = "";
-        public String length = "";
         public String width = "";
         public String height = "";
         public String created_time = "";

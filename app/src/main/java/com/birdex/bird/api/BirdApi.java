@@ -204,4 +204,14 @@ public class BirdApi {
     public static void testHeader(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
         post(context, "Public/testApp", params, jsonHttpResponseHandler);
     }
+
+    // 上传身份证图片
+    public static void uploadIDCardPic(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
+        MyApplication.ahc.post("http://192.168.1.207:8090/upload/IDCard", params, jsonHttpResponseHandler);
+    }
+
+    // 删除身份证， 需要调用 修改订单 接口
+    public static void uploadIDCard(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        get(context, "Order/edit", params, jsonHttpResponseHandler);
+    }
 }

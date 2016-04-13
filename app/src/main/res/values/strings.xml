@@ -245,4 +245,14 @@
     <string name="time_year">近一年</string>
     <string name="no_data">暂时没有数据哦！</string>
     <string name="title_activity_noti_list">NotiListActivity</string>
+    
+    <!-- 上传身份证 -->
+    <string name="upload_IDCard">上传身份证</string>
+    <string name="input_IDCard">输入身份证号：</string>
+    <string name="front_IDCard">身份证-正面照片</string>
+    <string name="back_IDCard">身份证-背面照片</string>
+    <string name="upload_confirm">确认上传</string>
+    <string name="pic_notfound">图片未找到</string>
+    <string name="please_full">请将资料补充完整</string>
+    <string name="upload_suc">上传成功</string>
 </resources>

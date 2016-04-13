@@ -62,6 +62,9 @@
             android:name=".activity.InventoryActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
+            android:name=".activity.UploadIDCardActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.MyOrderListActivity"
             android:theme="@style/AppCompat.style"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />

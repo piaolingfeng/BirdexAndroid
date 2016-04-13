@@ -1,0 +1,636 @@
+package com.birdex.bird.activity;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.birdex.bird.MyApplication;
+import com.birdex.bird.R;
+import com.birdex.bird.api.BirdApi;
+import com.birdex.bird.glide.GlideUtils;
+import com.birdex.bird.util.ImageUtils;
+import com.birdex.bird.util.T;
+import com.birdex.bird.widget.TitleView;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import butterknife.Bind;
+import butterknife.OnClick;
+
+/**
+ * Created by hyj on 2016/4/12.
+ */
+public class UploadIDCardActivity extends BaseActivity implements View.OnClickListener {
+
+    @Bind(R.id.title_1l)
+    TitleView title_1l;
+
+    // 身份证号码
+    @Bind(R.id.idcard_no)
+    EditText idcardNo;
+
+    // 左边身份证
+    @Bind(R.id.left)
+    ImageView left;
+
+    // 右边身份证
+    @Bind(R.id.right)
+    ImageView right;
+
+
+    /**
+     * 头像名称
+     */
+    private static final String IMAGE_FILE_NAME = "image.jpg";
+    private static final String IMAGE_FILE_NAME_BACK = "imageback.jpg";
+
+
+    // 拍照 code
+    private final static int PHOTO_GREQUEST_CODE = 1;
+    private final static int REQUEST_CODE_PICK_IMAGE = 2;
+
+    // 压缩完成
+    private final static int COMPRESS_DOWN = 3;
+
+    // 传过来的 order_code
+    private String order_code;
+
+    // 传过来的 身份证号码
+    private String idcardNoStr;
+
+    // 保存的左右边照片
+    private File frontPic;
+    private File backPic;
+
+    // 图片上传后 返回的路径
+    private String frontPicPath;
+    private String backPicPath;
+
+
+    @Override
+    public int getContentLayoutResId() {
+        return R.layout.activity_uploadidcard;
+    }
+
+    @Override
+    public void initializeContentViews() {
+        initData();
+    }
+
+    // 初始化数据
+    private void initData() {
+        title_1l.setSaveText(getString(R.string.upload_IDCard));
+
+        order_code = getIntent().getExtras().getString("order_code");
+        idcardNoStr = getIntent().getExtras().getString("idcard");
+        idcardNo.setText(idcardNoStr);
+    }
+
+
+    @OnClick({R.id.left, R.id.right, R.id.cancel, R.id.confirm})
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            // 点击左边身份证
+            case R.id.left:
+                flag = true;
+                choiceDialog();
+                break;
+            // 点击右边身份证
+            case R.id.right:
+                flag = false;
+                choiceDialog();
+                break;
+
+            //点击确认
+            case R.id.confirm:
+                // 先要判断是否两张照片都有
+                if (frontPic == null || backPic == null || TextUtils.isEmpty(idcardNo.getText())) {
+                    T.showShort(MyApplication.getInstans(), getString(R.string.please_full));
+                } else {
+                    // 将照片上传
+                    uploadPic();
+                }
+                break;
+
+            // 点击取消 ，结束 activity
+            case R.id.cancel:
+                finish();
+                break;
+        }
+    }
+
+    public String getSDPath() {
+        File sdDir = null;
+        boolean sdCardExist = Environment.getExternalStorageState()
+                .equals(android.os.Environment.MEDIA_MOUNTED); //判断sd卡是否存在
+        if (sdCardExist) {
+            sdDir = Environment.getExternalStorageDirectory();//获取跟目录
+        }
+        return sdDir.toString();
+    }
+
+
+    // 需要前后两张照片都上传成功后才能调用保存
+    private boolean leftUploadSu = false;
+    private boolean rightUploadSu = false;
+
+    // 上传照片
+    private void uploadPic() {
+        showLoading();
+        new MyTask().execute();
+    }
+
+    // 标记位， true 左边， false 右边
+    private boolean flag = true;
+
+    private void choiceDialog() {
+        final String items[] = {getString(R.string.photo), getString(R.string.from_loacl)};
+        //dialog参数设置
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);  //先得到构造器
+//        设置列表显示，注意设置了列表显示就不要设置builder.setMessage()了，否则列表不起作用。
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    // 拍照
+                    case 0:
+                        photo();
+                        dialog.dismiss();
+                        break;
+                    // 从本地获取
+                    case 1:
+                        getImageFromAlbum();
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        });
+        builder.create().show();
+    }
+
+
+    private String filePath;
+
+
+    // 拍照
+    private void photo() {
+
+//        Intent intentFromCapture = new Intent(
+//                MediaStore.ACTION_IMAGE_CAPTURE);
+//        // 判断存储卡是否可以用，可用进行存储
+//        String state = Environment
+//                .getExternalStorageState();
+//        if (state.equals(Environment.MEDIA_MOUNTED)) {
+//            if(flag) {
+//                File path = Environment
+//                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+//                File file = new File(path, IMAGE_FILE_NAME);
+//                intentFromCapture.putExtra(
+//                        MediaStore.EXTRA_OUTPUT,
+//                        Uri.fromFile(file));
+//            } else {
+//                File path = Environment
+//                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+//                File file = new File(path, IMAGE_FILE_NAME_BACK);
+//                intentFromCapture.putExtra(
+//                        MediaStore.EXTRA_OUTPUT,
+//                        Uri.fromFile(file));
+//            }
+//        }
+//
+//        startActivityForResult(intentFromCapture,
+//                PHOTO_GREQUEST_CODE);
+
+        Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        filePath = getFileName();
+
+        photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePath)));
+
+        startActivityForResult(photoIntent, PHOTO_GREQUEST_CODE);
+    }
+
+
+    /**
+     * 生成文件路径和文件名
+     *
+     * @return
+     */
+    private String getFileName() {
+        String saveDir = Environment.getExternalStorageDirectory() + "/myPic";
+        File dir = new File(saveDir);
+        if (!dir.exists()) {
+            dir.mkdirs(); // 创建文件夹
+        }
+        //用日期作为文件名，确保唯一性
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String fileName = saveDir + "/" + formatter.format(date) + ".jpg";
+
+//        File file = new File(fileName);
+//        if (!file.exists()) {
+//            file.mkdirs();
+//        }
+        return fileName;
+    }
+
+
+    // 从相册获取
+    private void getImageFromAlbum() {
+
+        Intent intentFromGallery = new Intent();
+        intentFromGallery.setType("image/*"); // 设置文件类型
+        intentFromGallery
+                .setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intentFromGallery,
+                REQUEST_CODE_PICK_IMAGE);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            // 拍照返回
+            case PHOTO_GREQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+
+                    // 判断存储卡是否可以用，可用进行存储
+//                    String state = Environment.getExternalStorageState();
+//                    if (state.equals(Environment.MEDIA_MOUNTED)) {
+//                        if (flag) {
+//                            File path = Environment
+//                                    .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+//                            File tempFile = new File(path, IMAGE_FILE_NAME);
+//
+//                            GlideUtils.setImageToLocalPath(left, tempFile.getAbsolutePath());
+//                            frontPic = tempFile;
+//                        } else {
+//                            File path = Environment
+//                                    .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+//                            File tempFile = new File(path, IMAGE_FILE_NAME_BACK);
+//
+//                            GlideUtils.setImageToLocalPath(right, tempFile.getAbsolutePath());
+//                            backPic = tempFile;
+//                        }
+//                    } else {
+//                        Toast.makeText(getApplicationContext(),
+//                                "未找到存储卡，无法存储照片！", Toast.LENGTH_SHORT).show();
+//                    }
+
+                    String sdStatus = Environment.getExternalStorageState();
+                    if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
+                        Log.i("TestFile",
+                                "SD card is not avaiable/writeable right now.");
+                        T.showLong(this,"SDCard读取失败，请重试");
+                        return;
+                    }
+
+                    if(flag){
+                        frontPic = new File(filePath);
+                        GlideUtils.setImageToLocalPath(left, frontPic.getAbsolutePath());
+                    } else {
+                        backPic = new File(filePath);
+                        GlideUtils.setImageToLocalPath(right, backPic.getAbsolutePath());
+                    }
+
+                }
+                break;
+
+            // 从相册获取的
+            case REQUEST_CODE_PICK_IMAGE:
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                    Cursor cursor = getContentResolver().query(selectedImage,
+                            filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    cursor.close();
+                    if (flag) {
+                        GlideUtils.setImageToLocalPath(left, picturePath);
+                        frontPic = new File(picturePath);
+                    } else {
+                        GlideUtils.setImageToLocalPath(right, picturePath);
+                        backPic = new File(picturePath);
+                    }
+                }
+                break;
+        }
+    }
+
+    private Handler myHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case COMPRESS_DOWN:
+                    // 执行上传操作
+                    doUpload();
+                    break;
+            }
+        }
+    };
+
+    // 压缩的左边图片
+    private File leftFile;
+    // 压缩的右边图片
+    private File rightFile;
+
+    private void doUpload(){
+        if (frontPic != null) {
+            // 上传左边
+            RequestParams myparams = new RequestParams();
+            try {
+
+                myparams.put("front", leftFile);
+                BirdApi.uploadIDCardPic(MyApplication.getInstans(), myparams, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        try {
+                            if ("0".equals(response.getString("error"))) {
+                                // 上传成功
+                                frontPicPath = ((JSONObject) response.get("data")).getString("savepath") + ((JSONObject) response.get("data")).getString("savename");
+                                leftUploadSu = true;
+                                // 只有当两张照片都成功上传才能调用
+                                if (rightUploadSu) {
+                                    // 调用修改订单，上传
+                                    RequestParams params1 = new RequestParams();
+                                    params1.add("order_code", order_code);
+                                    params1.add("receiver_id_card", idcardNo.getText().toString());
+                                    params1.add("receiver_id_card_img", frontPicPath);
+                                    params1.add("receiver_id_card_img_back", backPicPath);
+
+                                    BirdApi.uploadIDCard(MyApplication.getInstans(), params1, new JsonHttpResponseHandler() {
+                                        @Override
+                                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                            super.onSuccess(statusCode, headers, response);
+                                            try {
+                                                if ("0".equals(response.getString("error"))) {
+                                                    T.showShort(MyApplication.getInstans(), getString(R.string.upload_suc));
+                                                } else {
+                                                    T.showShort(MyApplication.getInstans(), response.getString("data"));
+                                                }
+                                                hideLoading();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                                hideLoading();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                            super.onFailure(statusCode, headers, responseString, throwable);
+                                            T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                                            hideLoading();
+                                        }
+
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                                            T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                                            hideLoading();
+                                        }
+
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                                            T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                                            hideLoading();
+                                        }
+                                    });
+                                }
+                            } else {
+                                T.showShort(MyApplication.getInstans(), response.getString("data"));
+                                leftUploadSu = false;
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            hideLoading();
+                            leftUploadSu = false;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                        leftUploadSu = false;
+                        hideLoading();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                        leftUploadSu = false;
+                        hideLoading();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                        leftUploadSu = false;
+                        hideLoading();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                leftUploadSu = false;
+                hideLoading();
+            }
+
+        }
+
+        if (backPic != null) {
+            // 上传右边
+            RequestParams myparams = new RequestParams();
+            try {
+
+                myparams.put("back", rightFile);
+                BirdApi.uploadIDCardPic(MyApplication.getInstans(), myparams, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        try {
+                            if ("0".equals(response.getString("error"))) {
+                                // 上传成功
+                                backPicPath = ((JSONObject) response.get("data")).getString("savepath") + ((JSONObject) response.get("data")).getString("savename");
+                                rightUploadSu = true;
+                                // 只有当两张照片都成功上传才能调用
+                                if (leftUploadSu) {
+                                    // 调用修改订单，上传
+                                    // 调用修改订单，上传
+                                    RequestParams params1 = new RequestParams();
+                                    params1.add("order_code", order_code);
+                                    params1.add("receiver_id_card", idcardNo.getText().toString());
+                                    params1.add("receiver_id_card_img", frontPicPath);
+                                    params1.add("receiver_id_card_img_back", backPicPath);
+
+                                    BirdApi.uploadIDCard(MyApplication.getInstans(), params1, new JsonHttpResponseHandler() {
+                                        @Override
+                                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                            super.onSuccess(statusCode, headers, response);
+                                            try {
+                                                if ("0".equals(response.getString("error"))) {
+                                                    T.showShort(MyApplication.getInstans(), getString(R.string.upload_suc));
+                                                } else {
+                                                    T.showShort(MyApplication.getInstans(), response.getString("data"));
+                                                }
+                                                hideLoading();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                                hideLoading();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                            super.onFailure(statusCode, headers, responseString, throwable);
+                                            T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                                            hideLoading();
+                                        }
+
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                                            T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                                            hideLoading();
+                                        }
+
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                                            T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                                            hideLoading();
+                                        }
+                                    });
+                                }
+                            } else {
+                                T.showShort(MyApplication.getInstans(), response.getString("data"));
+                                rightUploadSu = false;
+                                hideLoading();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            rightUploadSu = false;
+                            hideLoading();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                        rightUploadSu = false;
+                        hideLoading();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                        rightUploadSu = false;
+                        hideLoading();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                        rightUploadSu = false;
+                        hideLoading();
+                    }
+                });
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                T.showShort(MyApplication.getInstans(), getString(R.string.pic_notfound));
+                rightUploadSu = false;
+                hideLoading();
+            }
+
+        }
+    }
+
+    class MyTask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // 先将照片进行压缩并保存
+            String dirpath = getSDPath() + File.separator + "Bird";
+            String filepath = getSDPath() + File.separator + "Bird" + File.separator + "frontPic.jpg";
+            File dir = new File(dirpath);
+            leftFile = new File(filepath);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            if (!leftFile.exists()) {
+                try {
+                    leftFile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            ImageUtils.saveBitmapFile(ImageUtils.comp(frontPic.getAbsolutePath(), 2000), leftFile.getAbsolutePath());
+
+            // 压缩右边图片
+            // 先将照片进行压缩并保存
+            String filepath2 = getSDPath() + File.separator + "Bird" + File.separator + "backPic.jpg";
+            File dir2 = new File(dirpath);
+            rightFile = new File(filepath2);
+            if (!dir2.exists()) {
+                dir2.mkdirs();
+            }
+            if (!rightFile.exists()) {
+                try {
+                    rightFile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            ImageUtils.saveBitmapFile(ImageUtils.comp(backPic.getAbsolutePath(), 2000), rightFile.getAbsolutePath());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Message message = Message.obtain();
+            message.what = COMPRESS_DOWN;
+            myHandler.sendMessage(message);
+        }
+    }
+}

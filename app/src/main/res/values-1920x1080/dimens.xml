@@ -29,6 +29,9 @@
     <dimen name="inventory_status_position_bottom">10dp</dimen>
     <dimen name="inventory_status_position_right">10dp</dimen>
     <!--在库存的详细的头部文字-->
-    <dimen name="detail_inner_head_font">18sp</dimen>
-    <dimen name="detail_inner_item_font">14dp</dimen>
+    <dimen name="detail_inner_head_font">16sp</dimen>
+    <dimen name="detail_inner_item_font">16dp</dimen>
+    <dimen name="detail_willin_font">18sp</dimen>
+    <dimen name="detail_willin_viewother">14sp</dimen>
+    <dimen name="detail_willin_margin_top">8dp</dimen>
 </resources>

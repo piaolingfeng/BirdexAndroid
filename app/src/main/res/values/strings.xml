@@ -256,4 +256,44 @@
     <string name="tv_detail_inner_diff">差异：</string>
     <string name="tv_detail_inner_broken">损耗：</string>
     <string name="tv_detail_inner_actual">实际数量：</string>
+    <!--商品信息-->
+    <string name="product_name">商品名称：</string>
+    <string name="upc_code">UPC码：</string>
+    <string name="product_code">商品编码：</string>
+    <string name="customs_code">海关备案号：</string>
+    <string name="weight">重量kg：</string>
+    <string name="capacity">长*宽*高cm：</string>
+    <string name="declare_price">申报价格：</string>
+    <string name="product_composition">商品成分：</string>
+    <string name="product_describte">商品描述：</string>
+    <string name="available_count">可用库存总数：</string>
+    <string name="create_time">创建时间：</string>
+    <string name="ininventory_code">入库单号：</string>
+    <string name="trans_code">物流单号</string>
+    <string name="trans_style">物流方式：</string>
+    <string name="willin_inventory">待入仓库：</string>
+    <string name="willin_num">数量：</string>
+    <string name="willin_statu">状态：</string>
+    <string name="willin_product_statu">发往仓库</string>
+    <string name="willin_view_others">查看同单号的其它商品</string>
+
+    <string name="tv_reciver">收件人:</string>
+    <string name="tv_id_name">身份证号:</string>
+    <string name="tv_id_check">身份证验证</string>
+    <string name="tv_id_check_e">身份证异常</string>
+    <string name="tv_change_addr">修改地址</string>
+    <string name="tv_free">费 用:</string>
+    <string name="tv_weight">重 量:</string>
+    <string name="tv_order_num">订单号:</string>
+    <string name="tv_upc_code">UPC码:</string>
+    <string name="tv_product_code">商品编码:</string>
+    <string name="tv_customer_code">客户编码:</string>
+    <string name="tv_customer_num">客户单号:</string>
+    <string name="tv_remarks">备 注:</string>
+
+    <string name="tv_product_name">商品名称:</string>
+    <string name="tv_delivery_warehouse">发货仓库:</string>
+    <string name="tv_count">数 量:</string>
+    <string name="send_error">数据有误，请重试!</string>
+    <string name="order_detail">订单详情</string>
 </resources>

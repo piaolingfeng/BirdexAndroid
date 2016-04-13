@@ -81,6 +81,14 @@ public class TimeUtil {
         String time = format2.format(date);
         return time;
     }
-
+    /*
+     *long型转时间字符串
+     */
+    public static String long2Date(long timenum){
+        String time="";
+        Date date=new Date(timenum);
+        time=format1.format(date);
+        return time;
+    }
 
 }

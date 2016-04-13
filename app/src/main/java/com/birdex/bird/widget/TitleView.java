@@ -3,6 +3,8 @@ package com.birdex.bird.widget;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,12 +39,16 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
     PercentRelativeLayout back;
     ImageView menu;
     TextView save;
+    ImageView back_iv;
     List<String> menuList;//menu菜单list
     PercentRelativeLayout prl_title;
 
     public TitleView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
+        if (isInEditMode()) {
+            return;
+        }
         initView();
     }
 
@@ -50,12 +56,18 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
     public TitleView(Context context) {
         super(context);
         mContext = context;
+        if (isInEditMode()) {
+            return;
+        }
         initView();
     }
 
     public TitleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
+        if (isInEditMode()) {
+            return;
+        }
         initView();
     }
 
@@ -67,7 +79,7 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
                     ((Activity) mContext).finish();
                 break;
             case R.id.menu:
-                showMenuWindow((View) menu.getParent(),menuList,3);
+                showMenuWindow((View) menu.getParent(), menuList, 3);
                 break;
         }
     }
@@ -141,6 +153,7 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
         title = (TextView) view.findViewById(R.id.title);
         back = (PercentRelativeLayout) view.findViewById(R.id.back);
         menu = (ImageView) view.findViewById(R.id.menu);
+        back_iv = (ImageView) view.findViewById(R.id.back_iv);
         save = (TextView) view.findViewById(R.id.save);
         prl_title = (PercentRelativeLayout) view.findViewById(R.id.prl_title);
         back.setOnClickListener(this);
@@ -157,7 +170,7 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
         menu.setOnClickListener(listener);
     }
 
-    public View getMenuView(){
+    public View getMenuView() {
         return menu;
     }
 
@@ -171,6 +184,27 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
 
     public void setTitle(String titleText) {
         title.setText(titleText);
+    }
+
+    public void setSaveText(String text) {
+        save.setVisibility(View.VISIBLE);
+        save.setText(text);
+    }
+
+    public void setBackground(int col){
+        prl_title.setBackgroundColor(col);
+    }
+
+    public void setTitleTextcolor(int col){
+        title.setTextColor(col);
+    }
+
+    public void setBackIv(Bitmap bitmap){
+        back_iv.setImageBitmap(bitmap);
+    }
+
+    public void setMenu(Bitmap bitmap){
+        menu.setImageBitmap(bitmap);
     }
     /*
      *库存titleview

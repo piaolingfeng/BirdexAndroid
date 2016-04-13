@@ -104,22 +104,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     String updateUrl = (String) jsonObject.get("url");
                     description = (String) jsonObject.get("description");
                     String versionServer = (String) jsonObject.get("version");
-
-                    // 取得当前版本号
-                    PackageManager manager = MyApplication.getInstans().getPackageManager();
-                    PackageInfo info = null;
-                    info = manager.getPackageInfo(MyApplication.getInstans().getPackageName(), 0);
-                    String versionLocal = info.versionName;
-
                     // 检查更新
-                    if (!versionLocal.equals(versionServer)) {
+                    if (!MyApplication.app_version.equals(versionServer)) {
                         UpdateManager.getInstance().setDownLoadPath(updateUrl);
                         // 如果不相等，执行更新操作
                         UpdateManager.getInstance().set(LoginActivity.this);
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
             }
@@ -137,6 +128,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void login() {
         showLoading();
         RequestParams params = new RequestParams();
+        params.put("device_info",MyApplication.device_info);
+        params.put("device_type",MyApplication.device_type);
         params.put("account", username.getText().toString());
         params.put("password", password.getText().toString());
         BirdApi.login(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
@@ -149,6 +142,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         hideLoading();
                         spEdit();
                         MyApplication.user = JsonHelper.parseObject((JSONObject) response.get("data"), User.class);
+
+                        // user_token 登录后返回
+                        String token = (String) ((JSONObject)response.get("data")).get("user_token");
+                        // 将 token 添加进去
+                        MyApplication.ahc.addHeader("USER-TOKEN",token);
+
                         T.showShort(MyApplication.getInstans(), getString(R.string.loginsu));
                         Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
 
@@ -167,6 +166,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 ////                        b.putSerializable("ContactDetail",contactDetail);
 //                        b.putString("order_code","c708fecf8f8e3b39622c35ece3371772");
 //                        intent.putExtras(b);
+
+                        // 测试
+//                        BirdApi.testHeader(MyApplication.getInstans(),null,new JsonHttpResponseHandler(){
+//                            @Override
+//                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                                super.onSuccess(statusCode, headers, response);
+//                            }
+//                        });
 
                         startActivity(intent);
                         finish();

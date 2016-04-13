@@ -1,11 +1,13 @@
 package com.birdex.bird.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.activity.BaseActivity;
+import com.birdex.bird.activity.OrderDetailActivity;
 import com.birdex.bird.adapter.OrderListAdapter;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.decoration.DividerItemDecoration;
@@ -35,6 +37,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
     OrderRequestEntity entity;//请求数据保存的实体
     @Bind(R.id.rcy_orderlist)
     XRecyclerView rcy_orderlist;
+
     @Override
     protected void key(int keyCode, KeyEvent event) {
 
@@ -66,7 +69,10 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
         OrderAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                T.showShort(getActivity(), position + "");
+//                T.showShort(getActivity(), position + "");
+                Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+                intent.putExtra("order_code", orderListEntities.getData().getOrders().get(position).getOrder_code());
+                startActivity(intent);
             }
         });
         rcy_orderlist.setAdapter(OrderAdapter);

@@ -326,9 +326,6 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     private void initData(){
         showLoading();
         RequestParams params = new RequestParams();
-        params.add("app_debug", 1 + "");
-        params.add("user_code", MyApplication.user.getUser_code());
-        params.add("company_code", MyApplication.user.getCompany_code());
         BirdApi.getCompanyMes(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

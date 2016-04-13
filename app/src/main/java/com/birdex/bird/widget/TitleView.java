@@ -207,4 +207,8 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
         menu.setImageBitmap(bitmap);
     }
 
+    public void setSaveText(String text){
+        save.setText(text);
+    }
+
 }

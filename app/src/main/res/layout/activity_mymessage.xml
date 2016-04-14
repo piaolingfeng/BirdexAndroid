@@ -9,6 +9,7 @@
     <include layout="@layout/title" />
 
     <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/warning_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -63,6 +64,7 @@
     </com.zhy.android.percent.support.PercentLinearLayout>
 
     <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/exception_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -122,6 +124,7 @@
         android:background="#F1F0F0" />
 
     <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/repertory_exception_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -180,6 +183,7 @@
         android:background="#F1F0F0" />
 
     <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/check_exception_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -234,6 +238,7 @@
 
 
     <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/account_exception_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"

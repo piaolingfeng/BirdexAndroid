@@ -7,7 +7,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.api.BirdApi;
+import com.birdex.bird.util.T;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -56,6 +64,37 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
         menu.setVisibility(View.VISIBLE);
         title.setText(getString(R.string.my_message));
 
+        showLoading();
+        // 调用今日数据接口，获取数量
+        BirdApi.getTodayData(MyApplication.getInstans(),null,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                hideLoading();
+                T.showShort(MyApplication.getInstans(),getString(R.string.tip_myaccount_getdatawrong));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
+            }
+
+        });
+
         warningBv.setText("1");
         warningBv.show();
         idcard_exception_bv.setText("2");
@@ -68,7 +107,7 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
         account_exception_bv.show();
     }
 
-    @OnClick({R.id.back, R.id.menu})
+    @OnClick({R.id.back, R.id.menu, R.id.warning_ll, R.id.exception_ll, R.id.repertory_exception_ll, R.id.check_exception_ll, R.id.account_exception_ll})
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -81,6 +120,30 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
             case R.id.menu:
                 Intent intent = new Intent(this,MessageMenuActivity.class);
                 startActivity(intent);
+                break;
+
+            // 点击 库存预警消息
+            case R.id.warning_ll:
+                T.showShort(MyApplication.getInstans(),"库存预警消息");
+                break;
+            // 点击 身份证异常消息
+            case R.id.exception_ll:
+                T.showShort(MyApplication.getInstans(),"身份证异常消息");
+                break;
+
+            // 点击 库存异常消息
+            case R.id.repertory_exception_ll:
+                T.showShort(MyApplication.getInstans(),"库存异常消息");
+                break;
+
+            // 点击 审核不通过消息
+            case R.id.check_exception_ll:
+                T.showShort(MyApplication.getInstans(),"审核不通过消息");
+                break;
+
+            // 点击 账户异常
+            case R.id.account_exception_ll:
+                T.showShort(MyApplication.getInstans(),"账户异常");
                 break;
         }
     }

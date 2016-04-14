@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -76,6 +77,9 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
     // 传过来的 logo
     private String logo;
 
+    // 传过来的 company code
+    private String companyCode;
+
     // 修改后的 bitmap
     private Bitmap resultBitmap;
 
@@ -105,6 +109,7 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
 
         // 传过来的 bitmap
         logo = (String) getIntent().getExtras().get("logo");
+        companyCode = (String) getIntent().getExtras().get("company_code");
         GlideUtils.setImageToLocalPathForMyaccount(icon, logo);
     }
 
@@ -136,9 +141,11 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
 //                IconChangeActivity.this.finish();
 
                 showLoading();
+
                 // 点击保存按钮后，需要调用 修改公司信息
                 RequestParams params = new RequestParams();
-                params.put("company_code",MyApplication.user.getCompany_code());
+                params.put("company_code",companyCode);
+                T.showShort(MyApplication.getInstans(),companyCode);
                 params.put("logo",path);
                 BirdApi.companyEdit(MyApplication.getInstans(),params,new JsonHttpResponseHandler(){
                     @Override

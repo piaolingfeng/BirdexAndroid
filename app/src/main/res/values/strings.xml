@@ -112,6 +112,7 @@
     <string name="notempty">用户名或密码不能为空</string>
     <string name="loginsu">登录成功</string>
     <string name="loginfa">用户名或密码错误</string>
+    <string name="login_no_token">登录失败，请重新登陆</string>
 
     <!-- 我的账户 -->
     <string name="welcome">亲，欢迎您！</string>
@@ -298,9 +299,9 @@
     <!-- 订阅消息列表 -->
     <string name="my_message">我的消息</string>
     <string name="warning">库存预警消息</string>
-    <string name="idcard_exception">身份证异常消息</string>
-    <string name="repertory_exception">库存证异常消息</string>
-    <string name="check_exception">审核不通过消息</string>
+    <string name="idcard_exception">身份证异常订单</string>
+    <string name="repertory_exception">库存异常订单</string>
+    <string name="check_exception">审核不通过订单</string>
     <string name="account_exception">账户异常</string>
     <string name="clear_message">清空消息</string>
     <string name="clear_message_detail">点击清空消息，即可对消息中心内的消息进行清理。</string>

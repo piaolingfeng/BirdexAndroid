@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.birdex.bird.MyApplication;
@@ -43,7 +44,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
 
     // 顶部头像
     @Bind(R.id.head_icon)
-    RoundImageView head;
+    com.birdex.bird.widget.CircularImageView head;
 
     // 顶部文字
     @Bind(R.id.head_tv)
@@ -75,6 +76,9 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
     //    private String path;
     // logo 地址
     private String logo = "";
+
+    // company code
+    private String companyCode;
 
     @Override
     public int getContentLayoutResId() {
@@ -152,7 +156,12 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                     if ("0".equals(response.getString("error"))) {
                         if (!TextUtils.isEmpty(((JSONObject) response.get("data")).getString("logo"))) {
                             logo = ((JSONObject) response.get("data")).getString("logo");
-                            GlideUtils.setImageToLocalPathForMyaccount(head, logo);
+                            companyCode = ((JSONObject) response.get("data")).getString("company_code");
+                            try {
+                                GlideUtils.setImageToLocalPathForMyaccount(head, logo);
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
                         head_tv.setText(((JSONObject) response.get("data")).getString("company_name") + "，欢迎您！");
                     }
@@ -205,6 +214,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                 Intent intent = new Intent(this, IconChangeActivity.class);
                 Bundle b = new Bundle();
                 b.putString("logo", logo);
+                b.putString("company_code",companyCode);
                 intent.putExtras(b);
                 startActivityForResult(intent, Constant.ICON_CHANGE);
                 break;

@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.birdex.bird.widget.MyScrollview xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <com.birdex.bird.widget.TitleView
+        android:id="@+id/title_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height" />
+
+    <com.birdex.bird.widget.MyScrollview
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@color/background"
+        android:scrollbars="none">
 
-        <com.birdex.bird.widget.TitleView
-            android:id="@+id/title_view"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/title_height" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/margin_top_height"
             android:layout_marginLeft="@dimen/margin_left_width"
             android:layout_marginRight="@dimen/margin_left_width"
             android:layout_marginTop="@dimen/margin_top_height"
+            android:layout_marginBottom="@dimen/margin_top_height"
             android:orientation="vertical">
 
             <LinearLayout
@@ -149,6 +152,7 @@
                             android:paddingTop="@dimen/item_margin_top_height"
                             android:textColor="@color/order_detail_text_color"
                             android:textSize="@dimen/order_detail_size" />
+
                         <TextView
                             android:id="@+id/tv_service_type"
                             android:layout_width="wrap_content"
@@ -160,6 +164,7 @@
                             android:paddingTop="@dimen/item_margin_top_height"
                             android:textColor="@color/order_detail_right_color"
                             android:textSize="@dimen/order_detail_size" />
+
                         <include
                             layout="@layout/single_line"
                             android:layout_width="match_parent"
@@ -361,7 +366,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="@dimen/item_margin_top_height"
-                                android:paddingTop="@dimen/item_margin_top_height"
                                 android:textColor="@color/order_detail_text_color" />
                         </LinearLayout>
 
@@ -424,10 +428,11 @@
                         <TextView
                             android:id="@+id/tv_id_check"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
                             android:layout_gravity="center_vertical"
                             android:layout_marginRight="5dp"
+                            android:drawablePadding="@dimen/item_margin_top_height"
                             android:gravity="center"
                             android:text="@string/tv_id_check"
                             android:textColor="@color/blue"
@@ -438,5 +443,5 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</com.birdex.bird.widget.MyScrollview>
+    </com.birdex.bird.widget.MyScrollview>
+</LinearLayout>

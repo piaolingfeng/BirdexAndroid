@@ -20,7 +20,7 @@ import com.birdex.bird.entity.OrderDetailEntity;
 import com.birdex.bird.entity.ProductEntity;
 import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.widget.TitleView;
-import com.birdex.bird.xrecyclerview.XRecyclerView;
+import com.birdex.bird.widget.xrecyclerview.XRecyclerView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 

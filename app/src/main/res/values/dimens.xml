@@ -29,6 +29,8 @@
     <dimen name="todaydata_item_height">60dp</dimen>
     <dimen name="item_height">75dp</dimen>
     <dimen name="orderlist_item_height">80dp</dimen>
+    <dimen name="btn_height">28dp</dimen>
+
 
     <dimen name="common_rcy_item_height">38dp</dimen>
     <!--headview上的字体 高度-->
@@ -62,7 +64,7 @@
 
     <dimen name="item_margin_top_height">8dp</dimen>
 
-    <dimen name="order_detail_size">16dp</dimen>
+    <!--<dimen name="order_detail_size">16dp</dimen>-->
     <!--库存-->
     <dimen name="inventory_limit_txt">16sp</dimen>
     <dimen name="inventory_limit_marginlr">15dp</dimen>
@@ -82,4 +84,9 @@
     <dimen name="detail_inner_font2">15sp</dimen>
     <dimen name="detail_willin_item_paddingtb">5dp</dimen>
     <dimen name="detail_willin_item_marginlr">5dp</dimen>
+    <dimen name="order_detail_size">13dp</dimen>
+
+    <dimen name="dialog_text_size">20dp</dimen>
+    <dimen name="dialog_title_text_size">16dp</dimen>
+
 </resources>

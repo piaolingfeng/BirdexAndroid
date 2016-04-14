@@ -12,7 +12,7 @@ public class OrderListProductEntity {
     String upc="";//: "UPC码",
     String pic="";//: "商品图片",
     String nums="";//: "数量"
-
+    String error="";
     public String getProduct_code() {
         return product_code;
     }
@@ -59,5 +59,13 @@ public class OrderListProductEntity {
 
     public void setNums(String nums) {
         this.nums = nums;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }

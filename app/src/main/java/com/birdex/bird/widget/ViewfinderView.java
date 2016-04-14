@@ -28,7 +28,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.birdex.bird.R;
-import com.birdex.bird.camera.CameraManager;
+import com.birdex.bird.util.camera.CameraManager;
 import com.google.zxing.ResultPoint;
 
 import java.util.Collection;

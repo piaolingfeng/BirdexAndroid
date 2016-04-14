@@ -1,24 +1,21 @@
 package com.birdex.bird.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.KeyEvent;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
-import com.birdex.bird.activity.BaseActivity;
 import com.birdex.bird.activity.OrderDetailActivity;
 import com.birdex.bird.adapter.OrderListAdapter;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.decoration.DividerItemDecoration;
-import com.birdex.bird.decoration.FullyLinearLayoutManager;
+import com.birdex.bird.util.decoration.DividerItemDecoration;
+import com.birdex.bird.util.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.GsonHelper;
-import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.T;
-import com.birdex.bird.xrecyclerview.XRecyclerView;
+import com.birdex.bird.widget.xrecyclerview.XRecyclerView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -100,7 +97,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
      * 获取订单列表
      */
     private void getOrderList() {
-        showBar();
+        showLoading();
         RequestParams listParams = new RequestParams();
         listParams.add("page_no", entity.getPage_no() + "");
         listParams.add("page_size", entity.getPage_size());
@@ -117,16 +114,22 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
-                if (entity.getPage_no() > 1) {
-                    if (orderListEntities.getData().getOrders().size() == 0) {
-                        T.showShort(MyApplication.getInstans(), "已经是最后一页");
-                    } else
-                        OrderAdapter.getList().addAll(orderListEntities.getData().getOrders());
+                if (orderListEntities != null) {
+                    if (entity.getPage_no() > 1)
+                        if (orderListEntities.getData().getOrders().size() == 0) {
+                            T.showShort(MyApplication.getInstans(), "已经是最后一页");
+                        } else {
+                            OrderAdapter.getList().addAll(orderListEntities.getData().getOrders());
+                            orderListEntities.getData().setOrders( OrderAdapter.getList());
+                        }
+                    else {
+                        OrderAdapter.setList(orderListEntities.getData().getOrders());
+                    }
+                    bus.post(orderListEntities.getData().getCount(), "frame_layout");//刷新个数及界面
+                    OrderAdapter.notifyDataSetChanged();
                 } else {
-                    OrderAdapter.setList(orderListEntities.getData().getOrders());
+                    T.showLong(getActivity(), getString(R.string.parse_error));
                 }
-                bus.post(orderListEntities.getData().getCount(), "frame_layout");//刷新个数及界面
-                OrderAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -164,7 +167,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
       *停止动画
       */
     private void stopHttpAnim() {
-        hideBar();
+        hideLoading();
         if (rcy_orderlist != null) {
             rcy_orderlist.refreshComplete();
             rcy_orderlist.loadMoreComplete();

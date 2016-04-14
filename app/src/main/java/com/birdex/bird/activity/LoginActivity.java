@@ -3,9 +3,6 @@ package com.birdex.bird.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -15,9 +12,8 @@ import android.widget.EditText;
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.entity.ContactDetail;
 import com.birdex.bird.entity.User;
-import com.birdex.bird.update.UpdateManager;
+import com.birdex.bird.util.update.UpdateManager;
 import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.T;
@@ -146,10 +142,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         // user_token 登录后返回
                         String token = (String) ((JSONObject)response.get("data")).get("user_token");
                         // 将 token 添加进去
-                        MyApplication.ahc.addHeader("USER-TOKEN",token);
+                        MyApplication.ahc.addHeader("USER-TOKEN", token);
 
                         T.showShort(MyApplication.getInstans(), getString(R.string.loginsu));
                         Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
+
+//                        Bundle b = new Bundle();
+//                        b.putString("order_code","f4635a3bb08f55c9d22d3f6fcc170306");
+//                        b.putString("idcard","360111111111111");
+//                        intent.putExtras(b);
 
 //                        ContactDetail contactDetail = new ContactDetail();
 //                        contactDetail.setReceiver_name("胡芦娃");

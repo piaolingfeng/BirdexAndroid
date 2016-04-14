@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:orientation="vertical">
 
     <ImageView
         android:layout_width="match_parent"
@@ -16,20 +16,20 @@
     <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical"
         app:layout_marginTopPercent="8%"
-        app:layout_widthPercent="70%"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        app:layout_widthPercent="70%">
 
         <EditText
             android:id="@+id/username_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textColor="#979797"
             android:background="@null"
             android:hint="@string/username_hint"
+            android:singleLine="true"
+            android:textColor="#979797"
             app:layout_marginLeftPercent="1%" />
 
         <TextView
@@ -43,10 +43,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:textColor="#979797"
-            android:singleLine="true"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
+            android:singleLine="true"
+            android:textColor="#979797"
             app:layout_marginLeftPercent="1%"
             app:layout_marginTopPercent="8%" />
 
@@ -76,9 +76,9 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:background="@drawable/rect_blue"
+            android:background="@drawable/rect_fullbluew_selector"
             android:text="@string/login"
-            android:textColor="#039FFF"
+            android:textColor="@color/btn_blue_selector"
             android:textSize="20sp"
             app:layout_marginTopPercent="12%"
             app:layout_paddingBottomPercent="5%w"
@@ -87,54 +87,52 @@
             app:layout_paddingTopPercent="5%w" />
 
         <!--<com.zhy.android.percent.support.PercentRelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--app:layout_marginTopPercent="8%"-->
-            <!--android:layout_gravity="center">-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_marginTopPercent="8%"-->
+        <!--android:layout_gravity="center">-->
 
-            <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="2dp"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--android:background="@drawable/imaginary" />-->
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="2dp"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:background="@drawable/imaginary" />-->
 
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--app:layout_heightPercent="20%"-->
-                <!--android:src="@drawable/group2"/>-->
+        <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--app:layout_heightPercent="20%"-->
+        <!--android:src="@drawable/group2"/>-->
 
         <!--</com.zhy.android.percent.support.PercentRelativeLayout>-->
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_marginTopPercent="15%"
             android:adjustViewBounds="true"
-            android:src="@drawable/logindown" />
+            android:src="@drawable/logindown"
+            app:layout_marginTopPercent="15%" />
 
         <com.zhy.android.percent.support.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:text="@string/register"
-                android:textColor="#979797"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                app:layout_marginLeftPercent="2%"
-                />
+                android:text="@string/register"
+                android:textColor="#979797"
+                app:layout_marginLeftPercent="2%" />
 
             <TextView
-                android:text="@string/forgetpassword"
-                android:textColor="#979797"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                app:layout_marginRightPercent="2%"
-                />
+                android:text="@string/forgetpassword"
+                android:textColor="#979797"
+                app:layout_marginRightPercent="2%" />
 
         </com.zhy.android.percent.support.PercentRelativeLayout>
 

@@ -8,7 +8,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.birdex.bird.R;
+import com.birdex.bird.adapter.OrderDetailAdapter;
 import com.birdex.bird.api.BirdApi;
+import com.birdex.bird.util.decoration.DividerItemDecoration;
+import com.birdex.bird.util.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderDetailEntity;
 import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.StringUtils;
@@ -66,6 +69,8 @@ public class OrderDetailActivity extends BaseActivity {
     EventBus bus;
     String order_code;
     OrderDetailEntity orderDetailEntity;
+    OrderDetailAdapter adapter;
+
     @Override
     public int getContentLayoutResId() {
         return R.layout.activity_order_detail_layout;
@@ -76,12 +81,15 @@ public class OrderDetailActivity extends BaseActivity {
         orderDetailEntity = new OrderDetailEntity();
         bus = EventBus.getDefault();
         bus.register(this);
+        rcy.setLayoutManager(new FullyLinearLayoutManager(this));
+        rcy.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL_LIST));
         order_code = getIntent().getStringExtra("order_code");
-        title_view.setSaveText(getString(R.string.order_detail));
-        if (!StringUtils.isEmpty(order_code)){
+        title_view.setInventoryDetail(getString(R.string.order_detail), R.color.gray1);
+        if (!StringUtils.isEmpty(order_code)) {
             getOrderDetail();
-        }else {
-            T.showLong(this,getString(R.string.send_error));
+        } else {
+            T.showLong(this, getString(R.string.send_error));
         }
     }
 
@@ -89,7 +97,7 @@ public class OrderDetailActivity extends BaseActivity {
         showBar();
         RequestParams params = new RequestParams();
         params.add("order_code", order_code);
-        BirdApi.getOrderList(this, params, new JsonHttpResponseHandler() {
+        BirdApi.getOrder(this, params, new JsonHttpResponseHandler() {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -113,51 +121,88 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     @Subscriber(tag = "detail")
-    public void setUI(final OrderDetailEntity orderDetailEntity){
+    public void setUI(final OrderDetailEntity orderDetailEntity) {
         tv_order_num.setText(orderDetailEntity.getData().getOrder_oms_no());
         tv_status.setText(orderDetailEntity.getData().getStatus_name());
         tv_customer_num.setText(orderDetailEntity.getData().getOrder_no());
         tv_delivery_warehouse.setText(orderDetailEntity.getData().getWarehouse_name());
         tv_service_type.setText(orderDetailEntity.getData().getService_type_name());
         tv_remarks.setText(orderDetailEntity.getData().getRemark());
-        tv_weight.setText(orderDetailEntity.getData().getWeight()+"KG");
-        tv_free.setText("¥"+orderDetailEntity.getData().getPrice());
+        tv_weight.setText(orderDetailEntity.getData().getWeight() + "KG");
+        tv_free.setText("¥" + orderDetailEntity.getData().getPrice());
         tv_receiver_name.setText(orderDetailEntity.getData().getReceiver_name());
         tv_receiver_phone.setText(orderDetailEntity.getData().getReceiver_mobile());
         tv_addr.setText(orderDetailEntity.getData().getReceiver_address());
         tv_id_name.setText(orderDetailEntity.getData().getReceiver_id_card());
         if (orderDetailEntity.getData().getStatus_name().contains("身份证异常")) {
-            tv_id_check.setText(getString(R.string.tv_id_check));
-            tv_id_check.setTextColor(Color.BLUE);
-            tv_id_check.setCompoundDrawables(getResources()
-                    .getDrawable(R.drawable.error), null, null, null);
-        }else{
-            tv_id_check.setText(getString(R.string.tv_id_check_e));
-            tv_id_check.setTextColor(Color.RED);
-            tv_id_check.setCompoundDrawables(getResources()
-                    .getDrawable(R.drawable.right), null, null, null);
+            bus.post(false, "checkIDCard");
+        } else {
+            bus.post(true, "checkIDCard");
         }
+        tv_id_check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                T.showShort(OrderDetailActivity.this, "验证身份证!");
+                Intent intent = new Intent(OrderDetailActivity.this, UploadIDCardActivity.class);
+                intent.putExtra("order_code", orderDetailEntity.getData().getOrder_code());
+                intent.putExtra("idcard", orderDetailEntity.getData().getReceiver_id_card());
+                startActivity(intent);
+            }
+        });
         String statuName = orderDetailEntity.getData().getStatus_name();
-        if (statuName.equals("等待出库")||statuName.equals("准备出库")||statuName.equals("待下架")||
-                statuName.equals("出库中")||statuName.equals("下架中")||statuName.equals("审核不通过")
-                ||statuName.equals("身份证异常")) {
+        if (statuName.equals("等待出库") || statuName.equals("准备出库") || statuName.equals("待下架") ||
+                statuName.equals("出库中") || statuName.equals("下架中") || statuName.equals("审核不通过")
+                || statuName.equals("身份证异常")) {
             tv_change_addr.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startChangeAddrActivity(orderDetailEntity.getData().getOrder_oms_no());
+                    startChangeAddrActivity(orderDetailEntity.getData().getOrder_code());
                 }
             });
+        } else {
+            T.showLong(this, getString(R.string.can_not_change_addr));
         }
-
+        adapter = new OrderDetailAdapter(this, orderDetailEntity.getData().getProducts());
+        rcy.setAdapter(adapter);
     }
 
     /**
      * 修改地址
-     * */
+     */
     public void startChangeAddrActivity(String order_code) {
         Intent intent = new Intent(this, ChangeAdressActivity.class);
         intent.putExtra("order_code", order_code);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.startActivity(intent);
+    }
+
+    @Subscriber(tag = "changeAddr")
+    public void changeAddr(String string) {
+        tv_addr.setText(string);
+    }
+
+    @Subscriber(tag = "checkIDCard")
+    public void checkIDCard(boolean flag) {
+        if (!flag) {
+            tv_id_check.setText(getString(R.string.tv_id_check_e));
+            tv_id_check.setTextColor(Color.RED);
+            Drawable drawable = getResources()
+                    .getDrawable(R.drawable.error);
+/// 这一步必须要做,否则不会显示.
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(),
+                    drawable.getMinimumHeight());
+            tv_id_check.setCompoundDrawables(drawable, null, null, null);
+            tv_id_check.setClickable(true);
+        } else {
+            tv_id_check.setText(getString(R.string.tv_id_check));
+            tv_id_check.setTextColor(getResources().getColor(R.color.blue));
+            Drawable drawable = getResources()
+                    .getDrawable(R.drawable.right);
+/// 这一步必须要做,否则不会显示.
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(),
+                    drawable.getMinimumHeight());
+            tv_id_check.setCompoundDrawables(drawable, null, null, null);
+            tv_id_check.setClickable(false);
+        }
     }
 }

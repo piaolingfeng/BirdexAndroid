@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height" />
 
-    <com.birdex.bird.xrecyclerview.XRecyclerView
+    <com.birdex.bird.widget.xrecyclerview.XRecyclerView
         android:id="@+id/xrv_detail_inner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

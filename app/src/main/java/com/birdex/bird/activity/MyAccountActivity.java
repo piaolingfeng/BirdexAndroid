@@ -7,21 +7,17 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
-import com.birdex.bird.adapter.MineIndexAdapter;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.AccountDetail;
 import com.birdex.bird.entity.Wallet;
-import com.birdex.bird.glide.GlideUtils;
+import com.birdex.bird.util.glide.GlideUtils;
 import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.T;
@@ -35,7 +31,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 import butterknife.Bind;

@@ -137,6 +137,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         bus = EventBus.getDefault();
         bus.register(this);
         titleview.setMenuVisble(true);
+
 //        menu.setVisibility(View.VISIBLE);
         menuList = new ArrayList<>();
         for (int i = 0; i < Constant.name.length; i++) {//初始化lmenu list
@@ -340,13 +341,14 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
      * 获取订单所有状态
      */
     private void getAllOrderStatus() {
-        showBar();
+        showLoading();
         RequestParams stateParams = new RequestParams();
         stateParams.add("order_code", "");
         BirdApi.getOrderListState(MyApplication.getInstans(), stateParams, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 //                    orderStatus = (OrderStatus) JsonHelper.parseLIst(response.getJSONArray("data"), OrderStatus.class);
+                hideLoading();
                 orderStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
                 OrderStatus.Status status = new OrderStatus().new Status();
                 status.setStatus_name("全部状态");
@@ -358,13 +360,14 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                hideLoading();
                 T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
 
             @Override
             public void onFinish() {
-                hideBar();
+                hideLoading();
                 super.onFinish();
             }
         });
@@ -386,12 +389,13 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
      * 获取预报所有状态
      */
     private void getAllPredicitionStatus() {
-        showBar();
+        showLoading();
         RequestParams stateParams = new RequestParams();
         BirdApi.getPredicitionStatus(MyApplication.getInstans(), stateParams, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 //                    orderStatus = (OrderStatus) JsonHelper.parseLIst(response.getJSONArray("data"), OrderStatus.class);
+                hideLoading();
                 predicitionStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
                 OrderStatus.Status status = new OrderStatus().new Status();
                 status.setStatus_name("全部状态");
@@ -403,13 +407,14 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                hideLoading();
                 T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
 
             @Override
             public void onFinish() {
-                hideBar();
+                hideLoading();
                 super.onFinish();
             }
         });
@@ -419,11 +424,12 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
      * 获取所有的仓库
      */
     private void getAllCompanyWarehouse() {
-        showBar();
+        showLoading();
         RequestParams wareParams = new RequestParams();
         BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                hideLoading();
                 warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
                 WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
                 detail.setName("全部仓库");
@@ -434,13 +440,14 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                hideLoading();
                 T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
 
             @Override
             public void onFinish() {
-                hideBar();
+                hideLoading();
                 super.onFinish();
             }
         });

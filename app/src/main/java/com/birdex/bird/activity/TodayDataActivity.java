@@ -6,10 +6,8 @@ import android.widget.TextView;
 
 import com.birdex.bird.R;
 import com.birdex.bird.adapter.TodayDataAdapter;
-import com.birdex.bird.decoration.FullyLinearLayoutManager;
+import com.birdex.bird.util.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderManagerEntity;
-import com.zhy.android.percent.support.PercentFrameLayout;
-import com.zhy.android.percent.support.PercentLinearLayout;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 
 import java.util.List;

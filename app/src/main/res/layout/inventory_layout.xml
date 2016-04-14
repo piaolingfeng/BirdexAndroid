@@ -120,7 +120,7 @@
                 </LinearLayout>
             </android.support.design.widget.AppBarLayout>
 
-            <com.birdex.bird.xrecyclerview.XRecyclerView
+            <com.birdex.bird.widget.xrecyclerview.XRecyclerView
                 android:id="@+id/rv_inventory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

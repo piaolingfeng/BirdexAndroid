@@ -27,6 +27,7 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.simple.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +39,7 @@ import butterknife.OnClick;
 /**
  * Created by hyj on 2016/4/5.
  */
-public class ChangeAdressActivity extends BaseActivity implements View.OnClickListener{
+public class ChangeAdressActivity extends BaseActivity implements View.OnClickListener {
 
     // 省份
     @Bind(R.id.select_view)
@@ -74,6 +75,9 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     @Bind(R.id.wheelview_ll)
     LinearLayout wheelview_ll;
 
+    // 标记，如果设置过地区信息就可以点击  否则点击无效
+    private boolean setRegionFlag = false;
+
     @Override
     public int getContentLayoutResId() {
         return R.layout.changeadress;
@@ -94,7 +98,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-                hideLoading();
+
                 try {
                     if ("0".equals(response.getString("error"))) {
                         // 正确获取到了地区数据
@@ -102,8 +106,10 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
                         JSONObject city = (JSONObject) all.get("city");
                         City myCities = JsonHelper.parseObject(city, City.class);
                         setData(myCities);
+                    } else {
+                        T.showShort(MyApplication.getInstans(),response.getString("data"));
                     }
-
+                    hideLoading();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     hideLoading();
@@ -181,7 +187,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
                 contactDetail.setReceiver_province_id(area.getAreaID());
                 contactDetail.setReceiver_province(area.getAreaName());
 
-                if(selectP != null && selectC != null && selectA != null ) {
+                if (selectP != null && selectC != null && selectA != null) {
                     region.setText(selectP.getAreaName() + selectC.getAreaName() + selectA.getAreaName());
                 }
             }
@@ -203,7 +209,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
                 contactDetail.setReceiver_city_id(area.getAreaID());
                 contactDetail.setReceiver_city(area.getAreaName());
 
-                if(selectP != null && selectC != null && selectA != null ) {
+                if (selectP != null && selectC != null && selectA != null) {
                     region.setText(selectP.getAreaName() + selectC.getAreaName() + selectA.getAreaName());
                 }
             }
@@ -226,6 +232,8 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
 
 //        select_view.setSeletion(0);
 
+        setRegionFlag = true;
+
         // 将传递过来的 值 设置上去
         setOriginalData();
 
@@ -237,7 +245,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     // 传递过来的 order_code
     private String orderNo;
 
-    private void setOriginalData(){
+    private void setOriginalData() {
         Intent intent = getIntent();
 //        contactDetail = (ContactDetail) intent.getExtras().get("ContactDetail");
 //        if (contactDetail != null){
@@ -253,20 +261,20 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
         getOrderDetail();
     }
 
-    private void getOrderDetail(){
+    private void getOrderDetail() {
         showLoading();
         RequestParams params = new RequestParams();
-//        params.put("order_code",orderNo);
-        params.add("order_code","c708fecf8f8e3b39622c35ece3371772");
-        BirdApi.getOrderDetail(MyApplication.getInstans(),params,new JsonHttpResponseHandler(){
+        params.put("order_code", orderNo);
+//        params.add("order_code","c708fecf8f8e3b39622c35ece3371772");
+        BirdApi.getOrderDetail(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 hideLoading();
                 try {
-                    if("0".equals(response.getString("error"))){
-                        contactDetail = JsonHelper.parseObject((JSONObject) response.get("data"),ContactDetail.class);
-                        if (contactDetail != null){
+                    if ("0".equals(response.getString("error"))) {
+                        contactDetail = JsonHelper.parseObject((JSONObject) response.get("data"), ContactDetail.class);
+                        if (contactDetail != null) {
                             consignee.setText(contactDetail.getReceiver_name());
                             phone.setText(contactDetail.getReceiver_mobile());
                             region.setText(contactDetail.getReceiver_province() + contactDetail.getReceiver_city() + contactDetail.getReceiver_area());
@@ -302,23 +310,23 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     }
 
     // 将传过来的 省市区 设置上 选择器上
-    private void setRegionData(){
+    private void setRegionData() {
         String provinceId = contactDetail.getReceiver_province_id();
         String cityId = contactDetail.getReceiver_city_id();
         String areaId = contactDetail.getReceiver_area_id();
 
         // 查找 provinceId 所在的位置 并设置上去
-        findAndSetAdress(provinces,provinceId,1);
-        findAndSetAdress(citts,cityId,2);
-        findAndSetAdress(areas1,areaId,3);
+        findAndSetAdress(provinces, provinceId, 1);
+        findAndSetAdress(citts, cityId, 2);
+        findAndSetAdress(areas1, areaId, 3);
     }
 
     // 通过id 查找所在的位置，并设置到 选择器上
-    private void findAndSetAdress(List<Area> list,String id,int index){
-        for(int i=0;i<list.size();i++){
+    private void findAndSetAdress(List<Area> list, String id, int index) {
+        for (int i = 0; i < list.size(); i++) {
             Area area = list.get(i);
-            if(area.getAreaID().equals(id)){
-                switch (index){
+            if (area.getAreaID().equals(id)) {
+                switch (index) {
                     // 省份
                     case 1:
                         select_view.setSeletion(i);
@@ -395,48 +403,52 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
 
     private boolean isFirst = true;
 
-    @OnClick({R.id.contacts,R.id.region_ll,R.id.confirm,R.id.back})
+    @OnClick({R.id.contacts, R.id.region_ll, R.id.confirm, R.id.back})
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.contacts:
                 // 点击选择已有联系人
-                Intent intent = new Intent(Intent.ACTION_PICK,android.provider.ContactsContract.Contacts.CONTENT_URI);
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.ContactsContract.Contacts.CONTENT_URI);
                 startActivityForResult(intent, SELECT_CONTACT);
                 break;
             // 点击 所在地区
             case R.id.region_ll:
-                // 如果隐藏 就显示， 反之亦然
-                if(wheelview_ll.getVisibility() == View.VISIBLE){
-                    wheelview_ll.setVisibility(View.GONE);
-                } else {
-                    wheelview_ll.setVisibility(View.VISIBLE);
-                    if(isFirst) {
-                        // 第一次点击 将传过来的 省市区 设置上 选择器上
-                        setRegionData();
-                        isFirst = false;
+                if(setRegionFlag) {
+                    // 如果隐藏 就显示， 反之亦然
+                    if (wheelview_ll.getVisibility() == View.VISIBLE) {
+                        wheelview_ll.setVisibility(View.GONE);
+                    } else {
+                        wheelview_ll.setVisibility(View.VISIBLE);
+                        if (isFirst) {
+                            // 第一次点击 将传过来的 省市区 设置上 选择器上
+                            setRegionData();
+                            isFirst = false;
+                        }
                     }
                 }
                 break;
 
             // 点击确定键
             case R.id.confirm:
-                if(TextUtils.isEmpty(consignee.getText())){
-                    T.showShort(MyApplication.getInstans(),getString(R.string.consignee_empty));
-                    return ;
+                if (TextUtils.isEmpty(consignee.getText())) {
+                    T.showShort(MyApplication.getInstans(), getString(R.string.consignee_empty));
+                    return;
                 }
-                if(TextUtils.isEmpty(phone.getText())){
-                    T.showShort(MyApplication.getInstans(),getString(R.string.phone_empty));
-                    return ;
+                if (TextUtils.isEmpty(phone.getText())) {
+                    T.showShort(MyApplication.getInstans(), getString(R.string.phone_empty));
+                    return;
                 }
-                if(TextUtils.isEmpty(detail_adress.getText())){
-                    T.showShort(MyApplication.getInstans(),getString(R.string.adress_empty));
-                    return ;
+                if (TextUtils.isEmpty(detail_adress.getText())) {
+                    T.showShort(MyApplication.getInstans(), getString(R.string.adress_empty));
+                    return;
                 }
 
                 contactDetail.setReceiver_name(consignee.getText().toString());
                 contactDetail.setReceiver_mobile(phone.getText().toString());
                 contactDetail.setReceiver_address(detail_adress.getText().toString());
+
+                modOrder();
 
                 break;
 
@@ -447,10 +459,65 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
+    private void modOrder() {
+        showLoading();
+        RequestParams params = new RequestParams();
+        params.put("order_code", orderNo);
+        params.put("receiver_name", contactDetail.getReceiver_name());
+        params.put("receiver_mobile", contactDetail.getReceiver_mobile());
+        params.put("receiver_province_id", contactDetail.getReceiver_province_id());
+        params.put("receiver_province", contactDetail.getReceiver_province());
+        params.put("receiver_city_id", contactDetail.getReceiver_city_id());
+        params.put("receiver_city", contactDetail.getReceiver_city());
+        params.put("receiver_area_id", contactDetail.getReceiver_area_id());
+        params.put("receiver_area", contactDetail.getReceiver_area());
+        params.put("receiver_address", contactDetail.getReceiver_address());
+
+        BirdApi.modOrder(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    hideLoading();
+                    if ("0".equals(response.getString("error"))) {
+                        T.showShort(MyApplication.getInstans(),getString(R.string.change_suc));
+                        String post = region.getText().toString() + detail_adress.getText().toString();
+                        EventBus.getDefault().post(post, "changeAddr");
+                    } else {
+                        T.showShort(MyApplication.getInstans(),response.getString("data"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                hideLoading();
+                T.showShort(MyApplication.getInstans(), getString(R.string.change_fail));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(MyApplication.getInstans(), getString(R.string.change_fail));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(MyApplication.getInstans(), getString(R.string.change_fail));
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
+        switch (requestCode) {
             case SELECT_CONTACT:
                 if (resultCode == RESULT_OK) {
                     Uri uri = data.getData();

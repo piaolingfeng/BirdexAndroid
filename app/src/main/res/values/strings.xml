@@ -208,6 +208,8 @@
     <string name="consignee_empty">收货人不能为空</string>
     <string name="phone_empty">联系电话不能为空</string>
     <string name="adress_empty">详细地址不能为空</string>
+    <string name="change_fail">修改失败！</string>
+    <string name="change_suc">修改成功！</string>
 
     <!-- 物流跟踪 -->
     <string name="order_number">订单号：</string>
@@ -292,6 +294,26 @@
     <string name="please_full">请将资料补充完整</string>
     <string name="upload_suc">上传成功</string>
     
+    
+    <!-- 订阅消息列表 -->
+    <string name="my_message">我的消息</string>
+    <string name="warning">库存预警消息</string>
+    <string name="idcard_exception">身份证异常消息</string>
+    <string name="repertory_exception">库存证异常消息</string>
+    <string name="check_exception">审核不通过消息</string>
+    <string name="account_exception">账户异常</string>
+    <string name="clear_message">清空消息</string>
+    <string name="clear_message_detail">点击清空消息，即可对消息中心内的消息进行清理。</string>
+    
+    <string name="message_setting">订阅消息设置</string>
+    <string name="message">提示消息</string>
+    <string name="system_tone">系统提示音</string>
+    <string name="system_tone_no">不提示，只在消息中显示</string>
+    <string name="message_time">消息接收时间</string>
+    <string name="all_day">全天接收</string>
+    <string name="all_day_no">休息时间免接收</string>
+    <string name="time_detail">21:00-09：00（次日）</string>
+
     <string name="tv_reciver">收件人:</string>
     <string name="tv_id_name">身份证号:</string>
     <string name="tv_id_check">身份证验证</string>

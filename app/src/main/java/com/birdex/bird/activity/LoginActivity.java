@@ -184,9 +184,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         finish();
                     } else {
                         T.showShort(MyApplication.getInstans(), response.getString("data"));
+                        hideLoading();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    hideLoading();
                 }
             }
 

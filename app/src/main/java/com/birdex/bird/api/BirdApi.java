@@ -231,6 +231,11 @@ public class BirdApi {
 
     // 删除身份证， 需要调用 修改订单 接口
     public static void uploadIDCard(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
-        get(context, "Order/edit", params, jsonHttpResponseHandler);
+        post(context, "Order/edit", params, jsonHttpResponseHandler);
+    }
+
+    // 修改订单
+    public static void modOrder(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        post(context, "Order/edit", params, jsonHttpResponseHandler);
     }
 }

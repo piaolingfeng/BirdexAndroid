@@ -166,7 +166,7 @@ public class OrderDetailActivity extends BaseActivity {
             tv_change_addr.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startChangeAddrActivity(orderDetailEntity.getData().getOrder_oms_no());
+                    startChangeAddrActivity(orderDetailEntity.getData().getOrder_code());
                 }
             });
         }
@@ -182,5 +182,10 @@ public class OrderDetailActivity extends BaseActivity {
         intent.putExtra("order_code", order_code);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.startActivity(intent);
+    }
+
+    @Subscriber(tag = "changeAddr")
+    public void changeAddr(String string) {
+        tv_addr.setText(string);
     }
 }

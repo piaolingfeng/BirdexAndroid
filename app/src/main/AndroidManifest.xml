@@ -83,6 +83,12 @@
             android:name=".activity.UploadIDCardActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.MyMessageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MessageMenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.MyOrderListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppCompat.style"

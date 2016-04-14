@@ -151,6 +151,10 @@
             android:theme="@style/AppCompat.style"
             android:windowSoftInputMode="adjustPan|stateHidden"></activity>
 
+        <activity android:name=".activity.MsgDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompat.style"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
     </application>
 
 </manifest>

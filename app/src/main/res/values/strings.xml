@@ -331,4 +331,6 @@
 
     <string name="request_error">请求失败,请重试</string>
     <string name="can_not_change_addr">当前状态不能修改地址哦!</string>
+    <string name="tv_msg_30_day">显示30天内的消息记录</string>
+    <string name="tv_clear">清 除</string>
 </resources>

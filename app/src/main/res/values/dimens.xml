@@ -89,4 +89,6 @@
     <dimen name="dialog_text_size">20dp</dimen>
     <dimen name="dialog_title_text_size">16dp</dimen>
 
+    <dimen name="msg_detail_title">16sp</dimen>
+    <dimen name="msg_detail_context">18sp</dimen>
 </resources>

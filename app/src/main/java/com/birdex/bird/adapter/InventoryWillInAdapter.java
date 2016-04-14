@@ -1,6 +1,8 @@
 package com.birdex.bird.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.birdex.bird.R;
-import com.birdex.bird.activity.InventoryActivity;
+import com.birdex.bird.activity.WillinDetailActivity;
 import com.birdex.bird.entity.InventoryActivityEntity;
-import com.birdex.bird.helper.OnLoadingImgListener;
-import com.birdex.bird.helper.OnShowGoTopListener;
-import com.bumptech.glide.Glide;
+import com.birdex.bird.util.recycleviewhelper.OnLoadingImgListener;
+import com.birdex.bird.util.recycleviewhelper.OnShowGoTopListener;
 
 import java.util.ArrayList;
 
@@ -57,6 +58,8 @@ public class InventoryWillInAdapter extends RecyclerView.Adapter<InventoryWillIn
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         entity = list.get(position);
+        //设置点击事件的tag
+        holder.itemView.setTag(position);
         if (entity != null) {
             holder.tv_upc.setText(entity.getUpc());
             holder.tv_time.setText("");
@@ -102,7 +105,7 @@ public class InventoryWillInAdapter extends RecyclerView.Adapter<InventoryWillIn
         return this.list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         //商品编码
         TextView tv_upc = null;
         //时间
@@ -123,6 +126,19 @@ public class InventoryWillInAdapter extends RecyclerView.Adapter<InventoryWillIn
             tv_name = (TextView) itemView.findViewById(R.id.tv_inventory_item_name);
             tv_willin_count = (TextView) itemView.findViewById(R.id.tv_inventory_willin_count);
             arl_inventory=(LinearLayout)itemView.findViewById(R.id.arl_inventory_number);
+            itemView.setOnClickListener(this);
+        }
+        @Override
+        public void onClick(View v) {
+            int position=(Integer)(v.getTag());
+            entity=list.get(position);
+            if(entity!=null){
+                Intent intent=new Intent(activity, WillinDetailActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("inventory_willin", entity);
+                intent.putExtras(bundle);
+                activity.startActivity(intent);
+            }
         }
     }
 

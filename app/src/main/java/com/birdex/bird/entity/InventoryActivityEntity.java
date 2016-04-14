@@ -2,11 +2,13 @@ package com.birdex.bird.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by huwei on 16/4/11.
  */
-public class InventoryActivityEntity {
+public class InventoryActivityEntity implements Serializable{
     //物品详细
     private String detail;
 
@@ -149,7 +151,7 @@ public class InventoryActivityEntity {
     private String price_unit;
     //
     private ArrayList<InventoryStockEntity> stock;
-    public class InventoryStockEntity {
+    public class InventoryStockEntity implements Serializable{
         public String getWarehouse_name() {
             return warehouse_name;
         }
@@ -175,9 +177,9 @@ public class InventoryActivityEntity {
         }
 
         //warehouse_name 仓库名称
-        private String warehouse_name ;
+        private String warehouse_name="";
         //仓库编码
-        private String warehouse_code;
+        private String warehouse_code="";
         //多个仓库详情
         private ArrayList<InventoryDetailEntity> detail;
         public class InventoryDetailEntity implements Serializable {
@@ -441,6 +443,91 @@ public class InventoryActivityEntity {
                 public void setStorage_code(String storage_code) {
                     this.storage_code = storage_code;
                 }
+            }
+
+            public HashMap<String, InventoryTransInfo> getStorages() {
+                return storages;
+            }
+
+            public void setStorages(HashMap<String, InventoryTransInfo> storages) {
+                this.storages = storages;
+            }
+
+            private HashMap<String,InventoryTransInfo> storages=new HashMap<>();
+            public class InventoryTransInfo implements Serializable{
+                private String storage_code="";
+
+                public String getStorage_no() {
+                    return storage_no;
+                }
+
+                public void setStorage_no(String storage_no) {
+                    this.storage_no = storage_no;
+                }
+
+                public String getStorage_code() {
+                    return storage_code;
+                }
+
+                public void setStorage_code(String storage_code) {
+                    this.storage_code = storage_code;
+                }
+
+                public String getBatch_no() {
+                    return batch_no;
+                }
+
+                public void setBatch_no(String batch_no) {
+                    this.batch_no = batch_no;
+                }
+
+                public String getTrack_no() {
+                    return track_no;
+                }
+
+                public void setTrack_no(String track_no) {
+                    this.track_no = track_no;
+                }
+
+                public String getCreated_time() {
+                    return created_time;
+                }
+
+                public void setCreated_time(String created_time) {
+                    this.created_time = created_time;
+                }
+
+                public String getTrack_type() {
+                    return track_type;
+                }
+
+                public void setTrack_type(String track_type) {
+                    this.track_type = track_type;
+                }
+
+                public String getNums() {
+                    return nums;
+                }
+
+                public void setNums(String nums) {
+                    this.nums = nums;
+                }
+
+                public String getTrack_type_name() {
+                    return track_type_name;
+                }
+
+                public void setTrack_type_name(String track_type_name) {
+                    this.track_type_name = track_type_name;
+                }
+
+                private String storage_no="";
+                private String batch_no="";
+                private String track_no="";
+                private String created_time="";
+                private String track_type="";
+                private String nums="";
+                private String track_type_name="";
             }
         }
     }

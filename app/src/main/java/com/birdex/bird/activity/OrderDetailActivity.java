@@ -10,8 +10,8 @@ import android.widget.TextView;
 import com.birdex.bird.R;
 import com.birdex.bird.adapter.OrderDetailAdapter;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.decoration.DividerItemDecoration;
-import com.birdex.bird.decoration.FullyLinearLayoutManager;
+import com.birdex.bird.util.decoration.DividerItemDecoration;
+import com.birdex.bird.util.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderDetailEntity;
 import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.StringUtils;
@@ -85,7 +85,7 @@ public class OrderDetailActivity extends BaseActivity {
         rcy.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL_LIST));
         order_code = getIntent().getStringExtra("order_code");
-        title_view.setSaveText(getString(R.string.order_detail));
+        title_view.setInventoryDetail(getString(R.string.order_detail), R.color.gray1);
         if (!StringUtils.isEmpty(order_code)) {
             getOrderDetail();
         } else {
@@ -135,28 +135,18 @@ public class OrderDetailActivity extends BaseActivity {
         tv_addr.setText(orderDetailEntity.getData().getReceiver_address());
         tv_id_name.setText(orderDetailEntity.getData().getReceiver_id_card());
         if (orderDetailEntity.getData().getStatus_name().contains("身份证异常")) {
-            tv_id_check.setText(getString(R.string.tv_id_check_e));
-            tv_id_check.setTextColor(Color.RED);
-            Drawable drawable= getResources()
-                    .getDrawable(R.drawable.error);
-/// 这一步必须要做,否则不会显示.
-            drawable.setBounds(0, 0, drawable.getMinimumWidth(),
-                    drawable.getMinimumHeight());
-            tv_id_check.setCompoundDrawables(drawable, null, null, null);
+            bus.post(false, "checkIDCard");
         } else {
-            tv_id_check.setText(getString(R.string.tv_id_check));
-            tv_id_check.setTextColor(getResources().getColor(R.color.blue));
-            Drawable drawable= getResources()
-                    .getDrawable(R.drawable.right);
-/// 这一步必须要做,否则不会显示.
-            drawable.setBounds(0, 0, drawable.getMinimumWidth(),
-                    drawable.getMinimumHeight());
-            tv_id_check.setCompoundDrawables(drawable, null, null, null);
+            bus.post(true, "checkIDCard");
         }
         tv_id_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                T.showShort(OrderDetailActivity.this,"验证身份证!");
+                T.showShort(OrderDetailActivity.this, "验证身份证!");
+                Intent intent = new Intent(OrderDetailActivity.this, UploadIDCardActivity.class);
+                intent.putExtra("order_code", orderDetailEntity.getData().getOrder_code());
+                intent.putExtra("idcard", orderDetailEntity.getData().getReceiver_id_card());
+                startActivity(intent);
             }
         });
         String statuName = orderDetailEntity.getData().getStatus_name();
@@ -169,8 +159,10 @@ public class OrderDetailActivity extends BaseActivity {
                     startChangeAddrActivity(orderDetailEntity.getData().getOrder_code());
                 }
             });
+        } else {
+            T.showLong(this, getString(R.string.can_not_change_addr));
         }
-        adapter = new OrderDetailAdapter(this,orderDetailEntity.getData().getProducts());
+        adapter = new OrderDetailAdapter(this, orderDetailEntity.getData().getProducts());
         rcy.setAdapter(adapter);
     }
 
@@ -187,5 +179,30 @@ public class OrderDetailActivity extends BaseActivity {
     @Subscriber(tag = "changeAddr")
     public void changeAddr(String string) {
         tv_addr.setText(string);
+    }
+
+    @Subscriber(tag = "checkIDCard")
+    public void checkIDCard(boolean flag) {
+        if (!flag) {
+            tv_id_check.setText(getString(R.string.tv_id_check_e));
+            tv_id_check.setTextColor(Color.RED);
+            Drawable drawable = getResources()
+                    .getDrawable(R.drawable.error);
+/// 这一步必须要做,否则不会显示.
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(),
+                    drawable.getMinimumHeight());
+            tv_id_check.setCompoundDrawables(drawable, null, null, null);
+            tv_id_check.setClickable(true);
+        } else {
+            tv_id_check.setText(getString(R.string.tv_id_check));
+            tv_id_check.setTextColor(getResources().getColor(R.color.blue));
+            Drawable drawable = getResources()
+                    .getDrawable(R.drawable.right);
+/// 这一步必须要做,否则不会显示.
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(),
+                    drawable.getMinimumHeight());
+            tv_id_check.setCompoundDrawables(drawable, null, null, null);
+            tv_id_check.setClickable(false);
+        }
     }
 }

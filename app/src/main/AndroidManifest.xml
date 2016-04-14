@@ -94,23 +94,28 @@
             android:theme="@style/AppCompat.style"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
-        <service android:name=".update.UpdateService" />
+        <service android:name=".util.update.UpdateService" />
 
         <activity
             android:name=".activity.AboutActivity"
             android:label="@string/title_activity_about"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity
+            android:name=".activity.WillinDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
             android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="570b0ca4e0f55a6f22001b23"></meta-data>
+            android:value="570b0ca4e0f55a6f22001b23" />
         <meta-data
             android:name="UMENG_MESSAGE_SECRET"
-            android:value="c10487564487dda1bacf9f96af6a11ab"></meta-data>
+            android:value="c10487564487dda1bacf9f96af6a11ab" />
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="Umeng"></meta-data>
+            android:value="Umeng" />
 
         <activity
             android:name=".activity.NotiListActivity"
@@ -126,14 +131,20 @@
                 <action android:name="com.dbjtech.myservice" />
             </intent-filter>
         </service>
+
         <receiver android:name=".broadcast.NotificationBroadcast">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
                 <action android:name="android.intent.action.PACKAGE_RESTARTED" />
-                <action android:name="com.dbjtech.waiqin.destroy" />//这个就是自定义的action
+                <action android:name="com.dbjtech.waiqin.destroy" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".activity.InventoryInnerDetailActivity"
+            android:label="@string/title_activity_inventory_inner_detail"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
 
         <activity
             android:name=".activity.OrderDetailActivity"

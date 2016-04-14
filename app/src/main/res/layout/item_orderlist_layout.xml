@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="8dp">
+        android:paddingLeft="@dimen/item_margin_top_height"
+        android:paddingRight="@dimen/item_margin_top_height"
+        android:paddingTop="@dimen/item_margin_top_height">
 
 
         <com.zhy.android.percent.support.PercentRelativeLayout
@@ -31,7 +31,6 @@
                 android:singleLine="true"
                 android:text="232:"
                 android:textColor="@color/context_2"
-                app:layout_paddingLeftPercent="1%"
                 app:layout_textSizePercent="30%" />
 
             <TextView
@@ -67,13 +66,12 @@
 
         <com.zhy.android.percent.support.PercentRelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_paddingLeftPercent="1%">
+            android:layout_height="wrap_content">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rcy_productlist"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:fillViewport="true"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -87,7 +85,9 @@
 
     <com.zhy.android.percent.support.PercentRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="35dp"
+        android:layout_marginLeft="@dimen/item_margin_top_height"
+        android:layout_marginRight="@dimen/item_margin_top_height">
 
 
         <TextView
@@ -95,12 +95,11 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:gravity="center"
+            android:gravity="left|center"
             android:singleLine="true"
             android:text="zhuangng"
-            android:textColor="@color/blue"
-            app:layout_paddingLeftPercent="1%"
-            app:layout_textSizePercent="35%" />
+            android:textColor="@color/context_2"
+            app:layout_textSizePercent="37%" />
 
         <TextView
             android:id="@+id/tv_receiver_mobile"
@@ -113,7 +112,7 @@
             android:text="12255655"
             android:textColor="@color/blue"
             app:layout_marginLeftPercent="3%"
-            app:layout_textSizePercent="35%" />
+            app:layout_textSizePercent="37%" />
 
         <TextView
             android:id="@+id/tv_price"
@@ -124,8 +123,8 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="yang:0.00"
-            android:textColor="@color/context_2"
-            app:layout_textSizePercent="35%" />
+            android:textColor="@color/order_detail_right_color"
+            app:layout_textSizePercent="37%" />
 
         <TextView
             android:id="@+id/tv_weight"
@@ -136,11 +135,24 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="1kg"
-            android:textColor="@color/context_2"
+            android:textColor="@color/order_detail_right_color"
             app:layout_marginLeftPercent="3%"
             app:layout_paddingRightPercent="2%"
-            app:layout_textSizePercent="35%" />
+            app:layout_textSizePercent="37%" />
     </com.zhy.android.percent.support.PercentRelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tv_id_error"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginBottom="@dimen/item_margin_top_height"
+        android:layout_marginLeft="@dimen/item_margin_top_height"
+        android:layout_marginRight="@dimen/item_margin_top_height"
+        android:gravity="left|center"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        android:textSize="13dp"/>
 
     <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="match_parent"
@@ -201,9 +213,9 @@
             android:layout_weight="1"
             android:background="@drawable/list_item_ele_selector"
             android:gravity="center"
-            android:visibility="gone"
             android:text="@string/change_address"
             android:textColor="@color/order_detail_text_color"
+            android:visibility="gone"
             app:layout_paddingLeftPercent="3%"
             app:layout_paddingRightPercent="2%"
             app:layout_textSizePercent="40%" />

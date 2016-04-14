@@ -248,6 +248,41 @@
     <string name="no_data">暂时没有数据哦！</string>
     <string name="parse_error">解析失败,请重试!</string>
     <string name="title_activity_noti_list">NotiListActivity</string>
+    <string name="title_activity_inventory_inner_detail">InventoryInnerDetailActivity</string>
+    <!--仓库详细内容-->
+    <string name="inventory_inner_detail_title">商品详情</string>
+    <string name="tv_detail_inner_available">可用库存：</string>
+    <string name="tv_detail_inner_occupancy">订单占用：</string>
+    <string name="tv_detail_inner_in">总入库量：</string>
+    <string name="tv_detail_inner_out">总出库量：</string>
+    <string name="tv_detail_inner_allowout">允许超售量：</string>
+    <string name="tv_detail_inner_diff">差异：</string>
+    <string name="tv_detail_inner_broken">损耗：</string>
+    <string name="tv_detail_inner_actual">实际数量：</string>
+    <!--商品信息-->
+    <string name="product_name">商品名称：</string>
+    <string name="upc_code">UPC码：</string>
+    <string name="product_code">商品编码：</string>
+    <string name="customs_code">海关备案号：</string>
+    <string name="weight">重量kg：</string>
+    <string name="capacity">长*宽*高cm：</string>
+    <string name="declare_price">申报价格：</string>
+    <string name="product_composition">商品成分：</string>
+    <string name="product_describte">商品描述：</string>
+    <string name="available_count">可用库存总数：</string>
+    <string name="create_time">创建时间：</string>
+    <string name="ininventory_code">入库单号：</string>
+    <string name="trans_code">物流单号：</string>
+    <string name="trans_style">物流方式：</string>
+    <string name="willin_inventory">待入仓库：</string>
+    <string name="willin_num">数量：</string>
+    <string name="willin_statu">状态：</string>
+    <string name="willin_product_statu">发往仓库</string>
+    <string name="willin_view_others">同单号其它商品</string>
+    <string name="unkonw_product">未知商品</string>
+    <!--<string name="willin_detail_head_left">30%</string>-->
+    <!--<string name="willin_detail_head_right">70%</string>-->
+
     
     <!-- 上传身份证 -->
     <string name="upload_IDCard">上传身份证</string>
@@ -317,4 +352,5 @@
     <string name="tv_review_Storage_reason">输入复核的原因:</string>
 
     <string name="request_error">请求失败,请重试</string>
+    <string name="can_not_change_addr">当前状态不能修改地址哦!</string>
 </resources>

@@ -53,10 +53,13 @@ public class OrderListEntity {
             String created_time = "";//: "订单创建时间",
             String order_oms_no = "";//: "订单号",
             String service_type = "";//: "服务方式编码",
+            String verify_fail_detail;//": "",
+            String verify_id_card_result;//": "20"
             String service_type_name = "";//: "服务方式名称",
             String warehouse_name = "";//: "仓库名称",
             String receiver_name = "";//: "收件人 ",
             String receiver_mobile = "";//: "手机号码",
+            String receiver_phone;//":
             String status = "";//: "状态",
             String status_name = "";//: "状态名称",
             String weight = "";//: "重量",
@@ -173,6 +176,30 @@ public class OrderListEntity {
 
             public void setProducts(List<OrderListProductEntity> products) {
                 this.products = products;
+            }
+
+            public String getVerify_fail_detail() {
+                return verify_fail_detail;
+            }
+
+            public void setVerify_fail_detail(String verify_fail_detail) {
+                this.verify_fail_detail = verify_fail_detail;
+            }
+
+            public String getVerify_id_card_result() {
+                return verify_id_card_result;
+            }
+
+            public void setVerify_id_card_result(String verify_id_card_result) {
+                this.verify_id_card_result = verify_id_card_result;
+            }
+
+            public String getReceiver_phone() {
+                return receiver_phone;
+            }
+
+            public void setReceiver_phone(String receiver_phone) {
+                this.receiver_phone = receiver_phone;
             }
         }
     }

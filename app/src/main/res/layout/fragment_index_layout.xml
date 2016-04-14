@@ -18,7 +18,7 @@
 
             <fragment
                 android:id="@+id/cycle_viewpage"
-                android:name="com.birdex.bird.lunbo.CycleViewPager"
+                android:name="com.birdex.bird.widget.lunbo.CycleViewPager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:background="#000000"

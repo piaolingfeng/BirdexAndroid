@@ -137,6 +137,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         bus = EventBus.getDefault();
         bus.register(this);
         titleview.setMenuVisble(true);
+
 //        menu.setVisibility(View.VISIBLE);
         menuList = new ArrayList<>();
         for (int i = 0; i < Constant.name.length; i++) {//初始化lmenu list

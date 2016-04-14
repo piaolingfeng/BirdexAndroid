@@ -238,4 +238,7 @@ public class BirdApi {
     public static void modOrder(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
         post(context, "Order/edit", params, jsonHttpResponseHandler);
     }
+    public static void getProductDetail(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
+        post(context, "Product/get", params, jsonHttpResponseHandler);
+    }
 }

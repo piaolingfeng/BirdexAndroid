@@ -56,7 +56,7 @@ public class MyAccountInfoActivity extends BaseActivity implements BaseFragment.
     public void initializeContentViews() {
         //获取列表
         enterIndex=getIntent().getIntExtra("enterindex",0);
-        initSystemBar(R.color.blue_head_1);
+//        initSystemBar(R.color.blue_head_1);
         manager=getSupportFragmentManager();
         transaction=manager.beginTransaction();
         fragments=new ArrayList<>();

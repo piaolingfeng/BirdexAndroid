@@ -52,7 +52,7 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
     @Override
     public void onBindViewHolder(PredicitionDetailHolder holder, int position) {
         holder.position = position;
-        holder.tv_product_code.setText(productList.get(position).getProduct_code());
+        holder.tv_product_code.setText(productList.get(position).getExternal_no());
         holder.tv_upc.setText(productList.get(position).getUpc());
         holder.tv_product_name.setText(productList.get(position).getName());
         holder.tv_pre_inno.setText(productList.get(position).getNums() + "/" + productList.get(position).getReal_nums());//预报/库存

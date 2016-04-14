@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <com.birdex.bird.widget.TitleView
+        android:id="@+id/tiv_detail_inner_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height" />
+
+    <com.birdex.bird.widget.xrecyclerview.XRecyclerView
+        android:id="@+id/xrv_detail_inner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never" />
+</LinearLayout>

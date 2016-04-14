@@ -6,6 +6,10 @@
     <style name="AppCompat.style" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:listDivider">@drawable/divider_bg</item>
     </style>
+    <style name="AppCompat.translucent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
     -->
     <!-- Mydialog-->
     <style name="semester_dialog" parent="@android:style/Theme.Dialog">
@@ -115,5 +119,38 @@
         <!--背景透明-->
         <item name="android:backgroundDimEnabled">false</item>
         <!--模糊-->
+    </style>
+    <!--待入库的左右布局-->
+    <style name="detail_willin_left" >
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">2.5</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="detail_willin_right">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">7.5</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <!--在库商品的左右布局-->
+    <style name="detail_inner_title1">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:paddingTop">@dimen/inventory_inner_paddingtb</item>
+        <item name="android:paddingBottom">@dimen/inventory_inner_paddingtb</item>
+    </style>
+    <style name="detail_inner_context">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:paddingTop">@dimen/inventory_inner_paddingtb</item>
+        <item name="android:paddingBottom">@dimen/inventory_inner_paddingtb</item>
     </style>
 </resources>

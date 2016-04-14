@@ -1,24 +1,21 @@
 package com.birdex.bird.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.KeyEvent;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
-import com.birdex.bird.activity.BaseActivity;
 import com.birdex.bird.activity.OrderDetailActivity;
 import com.birdex.bird.adapter.OrderListAdapter;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.decoration.DividerItemDecoration;
-import com.birdex.bird.decoration.FullyLinearLayoutManager;
+import com.birdex.bird.util.decoration.DividerItemDecoration;
+import com.birdex.bird.util.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.GsonHelper;
-import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.T;
-import com.birdex.bird.xrecyclerview.XRecyclerView;
+import com.birdex.bird.widget.xrecyclerview.XRecyclerView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 

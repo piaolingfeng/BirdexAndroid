@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_detail_inner_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue_4"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="@dimen/inventory_inner_paddingtb"
+        android:paddingBottom="@dimen/inventory_inner_paddingtb"
+        android:textSize="@dimen/inventory_inner_font1" />
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                style="@style/detail_inner_title1"
+                android:text="@string/tv_detail_inner_available"
+                android:textSize="@dimen/inventory_inner_font2" />
+            <TextView
+                style="@style/detail_inner_title1"
+                android:paddingLeft="10dp"
+                android:text="@string/tv_detail_inner_in"
+                android:textSize="@dimen/inventory_inner_font2" />
+            <TextView
+                style="@style/detail_inner_title1"
+                android:text="@string/tv_detail_inner_allowout"
+                android:textSize="@dimen/inventory_inner_font2" />
+            <TextView
+                style="@style/detail_inner_title1"
+                android:text="@string/tv_detail_inner_broken"
+                android:textSize="@dimen/inventory_inner_font2" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1.0"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_detail_inner_available"
+                style="@style/detail_inner_context"
+                android:textSize="@dimen/inventory_inner_font2" />
+            <TextView
+                android:id="@+id/tv_detail_inner_in"
+                style="@style/detail_inner_context"
+                android:textSize="@dimen/detail_inner_item_font" />
+            <TextView
+                android:id="@+id/tv_detail_inner_allowout"
+                style="@style/detail_inner_context"
+                android:textSize="@dimen/inventory_inner_font2" />
+            <TextView
+                android:id="@+id/tv_detail_inner_broken"
+                style="@style/detail_inner_context"
+                android:textSize="@dimen/inventory_inner_font2" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                style="@style/detail_inner_title1"
+                android:text="@string/tv_detail_inner_occupancy"
+                android:textSize="@dimen/inventory_inner_font2" />
+            <TextView
+                style="@style/detail_inner_title1"
+                android:text="@string/tv_detail_inner_out"
+                android:textSize="@dimen/inventory_inner_font2" />
+            <TextView
+                style="@style/detail_inner_title1"
+                android:paddingLeft="10dp"
+                android:text="@string/tv_detail_inner_diff"
+                android:textSize="@dimen/inventory_inner_font2" />
+
+            <TextView
+                style="@style/detail_inner_title1"
+                android:text="@string/tv_detail_inner_actual"
+                android:textSize="@dimen/inventory_inner_font2" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1.0"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_detail_inner_occupancy"
+                style="@style/detail_inner_context"
+                android:textSize="@dimen/inventory_inner_font2" />
+            <TextView
+                android:id="@+id/tv_detail_inner_out"
+                style="@style/detail_inner_context"
+                android:textSize="@dimen/inventory_inner_font2" />
+            <TextView
+                android:id="@+id/tv_detail_inner_diff"
+                style="@style/detail_inner_context"
+                android:textSize="@dimen/inventory_inner_font2" />
+            <TextView
+                android:id="@+id/tv_detail_inner_actual"
+                style="@style/detail_inner_context"
+                android:textSize="@dimen/inventory_inner_font2" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
+        <!--<TextView-->
+            <!--style="@style/detail_inner_title1"-->
+            <!--android:text="@string/tv_detail_inner_available"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+        <!--<TextView-->
+            <!--android:id="@+id/tv_detail_inner_available"-->
+            <!--style="@style/detail_inner_context"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+        <!--<TextView-->
+            <!--style="@style/detail_inner_title1"-->
+            <!--android:text="@string/tv_detail_inner_occupancy"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_detail_inner_occupancy"-->
+            <!--style="@style/detail_inner_context"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+
+    <!--</LinearLayout>-->
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
+        <!--<TextView-->
+            <!--style="@style/detail_inner_title1"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:text="@string/tv_detail_inner_in"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_detail_inner_in"-->
+            <!--style="@style/detail_inner_context"-->
+            <!--android:textSize="@dimen/detail_inner_item_font" />-->
+
+        <!--<TextView-->
+            <!--style="@style/detail_inner_title1"-->
+            <!--android:text="@string/tv_detail_inner_out"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_detail_inner_out"-->
+            <!--style="@style/detail_inner_context"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+    <!--</LinearLayout>-->
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
+        <!--<TextView-->
+            <!--style="@style/detail_inner_title1"-->
+            <!--android:text="@string/tv_detail_inner_allowout"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_detail_inner_allowout"-->
+            <!--style="@style/detail_inner_context"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+        <!--<TextView-->
+            <!--style="@style/detail_inner_title1"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:text="@string/tv_detail_inner_diff"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_detail_inner_diff"-->
+            <!--style="@style/detail_inner_context"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+    <!--</LinearLayout>-->
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
+        <!--<TextView-->
+            <!--style="@style/detail_inner_title1"-->
+            <!--android:text="@string/tv_detail_inner_broken"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_detail_inner_broken"-->
+            <!--style="@style/detail_inner_context"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+
+        <!--<TextView-->
+            <!--style="@style/detail_inner_title1"-->
+            <!--android:text="@string/tv_detail_inner_actual"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_detail_inner_actual"-->
+            <!--style="@style/detail_inner_context"-->
+            <!--android:textSize="@dimen/inventory_inner_font2" />-->
+    <!--</LinearLayout>-->
+
+</LinearLayout>

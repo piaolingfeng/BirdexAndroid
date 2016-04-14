@@ -206,5 +206,13 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
     public void setMenu(Bitmap bitmap){
         menu.setImageBitmap(bitmap);
     }
-
+    /*
+     *库存titleview
+     */
+    public void setInventoryDetail(String titleStr,int colorID){
+        setMenuVisble(false);
+        title.setText("");
+        prl_title.setBackgroundResource(colorID);
+        save.setText(titleStr);
+    }
 }

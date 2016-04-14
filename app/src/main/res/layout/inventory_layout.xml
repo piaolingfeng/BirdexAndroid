@@ -83,22 +83,26 @@
                             android:text="@string/inventory_all"
                             android:textSize="@dimen/inventory_limit_txt" />
 
-                        <TextView
-                            android:id="@+id/tv_inventory_sort_available"
+                        <CheckBox
+                            android:id="@+id/cb_inventory_sort_available"
+                            android:button="@null"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
+                            android:paddingRight="5dp"
+                            android:textColor="@color/gray_2"
                             android:layout_marginRight="@dimen/inventory_limit_marginlr"
-                            android:drawableRight="@drawable/triangle_down"
+                            android:drawableRight="@drawable/limit_sort_bg"
                             android:text="@string/inventory_sort_available"
                             android:textSize="@dimen/inventory_limit_txt" />
 
-                        <TextView
-                            android:id="@+id/tv_inventory_sort_time"
+                        <CheckBox
+                            android:id="@+id/cb_inventory_sort_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/inventory_limit_marginlr"
                             android:layout_marginRight="@dimen/inventory_limit_marginlr"
+                            android:visibility="gone"
                             android:layout_toLeftOf="@id/tv_inventory_sort_available"
                             android:drawableRight="@drawable/triangle_down"
                             android:text="@string/inventory_sort_time"
@@ -116,7 +120,7 @@
                 </LinearLayout>
             </android.support.design.widget.AppBarLayout>
 
-            <com.birdex.bird.xrecyclerview.XRecyclerView
+            <com.birdex.bird.widget.xrecyclerview.XRecyclerView
                 android:id="@+id/rv_inventory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

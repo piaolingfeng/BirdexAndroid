@@ -1,2 +1,2 @@
-include ':app',':PushSDK', ':daoexamplegenerator'
+include ':daoexamplegenerator', ':PushSDK', ':app'
 

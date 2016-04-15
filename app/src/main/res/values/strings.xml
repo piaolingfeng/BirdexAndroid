@@ -294,7 +294,8 @@
     <string name="pic_notfound">图片未找到</string>
     <string name="please_full">请将资料补充完整</string>
     <string name="upload_suc">上传成功</string>
-    
+    <string name="get_idcard_fail">获取身份证号码失败！</string>
+
     
     <!-- 订阅消息列表 -->
     <string name="my_message">我的消息</string>

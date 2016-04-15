@@ -587,6 +587,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 //                        T.showShort(MyApplication.getInstans(), list.get(position).getStatus_name());
                         entity.setStatus(list.get(position).getStatus() + "");
                         bus.post(list.get(position), "changeState");
+                        entity.setPage_noReset();
                         if (currentName.equals(getString(Constant.name[0])))
                             bus.post(entity, "requestOrderList");
                         else if (currentName.equals(getString(Constant.name[1]))) {
@@ -650,6 +651,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
      */
     private void setWarehouse(int position) {
         entity.setWarehouse_code(warehouseEntity.getData().get(position).getWarehouse_code());
+        entity.setPage_noReset();
         bus.post(warehouseEntity.getData().get(position), "changeWarehouse");
         if (currentName.equals(getString(Constant.name[0])))
             bus.post(entity, "requestOrderList");
@@ -662,6 +664,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     private void setTime(int position) {
         entity.setStart_date(timeList.get(position).getStart_date());
         entity.setEnd_date(timeList.get(position).getEnd_date());
+        entity.setPage_noReset();
         bus.post(timeList.get(position).getName(), "changeTime");//改变显示的时间
         if (currentName.equals(getString(Constant.name[0])))
             bus.post(entity, "requestOrderList");

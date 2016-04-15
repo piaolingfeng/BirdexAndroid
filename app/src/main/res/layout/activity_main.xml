@@ -33,7 +33,7 @@
                 android:gravity="center"
                 android:text="@string/index"
                 android:textColor="@color/menu_item_color_selector"
-                app:layout_textSizePercent="@string/item_context_size_1" />
+                app:layout_textSizePercent="@string/first_index_text_5_1w" />
 
             <TextView
                 android:id="@+id/tv_custom_service"
@@ -43,7 +43,7 @@
                 android:gravity="center"
                 android:text="@string/custom_service"
                 android:textColor="@color/menu_item_color_selector"
-                app:layout_textSizePercent="@string/item_context_size_1" />
+                app:layout_textSizePercent="@string/first_index_text_5_1w" />
 
             <TextView
                 android:id="@+id/tv_help"
@@ -53,7 +53,7 @@
                 android:gravity="center"
                 android:text="@string/help"
                 android:textColor="@color/menu_item_color_selector"
-                app:layout_textSizePercent="@string/item_context_size_1" />
+                app:layout_textSizePercent="@string/first_index_text_5_1w" />
 
             <TextView
                 android:id="@+id/tv_mine"
@@ -63,7 +63,7 @@
                 android:gravity="center"
                 android:text="@string/mine"
                 android:textColor="@color/menu_item_color_selector"
-                app:layout_textSizePercent="@string/item_context_size_1" />
+                app:layout_textSizePercent="@string/first_index_text_5_1w" />
         </com.zhy.android.percent.support.PercentLinearLayout>
     </com.zhy.android.percent.support.PercentLinearLayout>
 

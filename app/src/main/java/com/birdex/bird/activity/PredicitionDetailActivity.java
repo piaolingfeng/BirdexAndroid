@@ -2,12 +2,16 @@ package com.birdex.bird.activity;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.adapter.PredicitionDetailAdapter;
 import com.birdex.bird.api.BirdApi;
@@ -107,9 +111,10 @@ public class PredicitionDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                T.showLong(PredicitionDetailActivity.this, responseString.toString());
-                super.onFailure(statusCode, headers, responseString, throwable);
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                if (errorResponse != null)
+                    T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
+                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
     }
@@ -147,12 +152,21 @@ public class PredicitionDetailActivity extends BaseActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void showAlertDialog(final int position) {
-        final AlertDialog myDialog = new AlertDialog.Builder(this, R.style.semester_dialog).create();
+        final Dialog myDialog = new Dialog(this, R.style.semester_dialog);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_predicition_layout, null);
+//        myDialog.setView(view);
+//        try {
+//            myDialog.show();
+//            Window window = myDialog.getWindow();
+//            window.setContentView(view);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
         myDialog.show();
-        myDialog.getWindow().setContentView(view);
+        myDialog.setCanceledOnTouchOutside(false);
+        myDialog.setContentView(view);
         TextView cancel = (TextView) view.findViewById(R.id.tv_cancel);
-        final android.widget.EditText remark = (android.widget.EditText) view.findViewById(R.id.tv_review_Storage_reason);
+        final EditText remark = (EditText) view.findViewById(R.id.tv_review_Storage_reason);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

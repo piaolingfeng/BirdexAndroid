@@ -62,6 +62,10 @@ public class OrderRequestEntity implements Serializable {
         this.page_no = page_no;
     }
 
+    public void setPage_noReset(){
+        this.page_no = 1;
+    }
+
     public String getPage_size() {
         return page_size;
     }

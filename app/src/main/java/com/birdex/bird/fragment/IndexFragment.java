@@ -166,7 +166,8 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
-                T.showShort(MyApplication.getInstans(), errorResponse.toString());
+                if (errorResponse != null)
+                    T.showShort(MyApplication.getInstans(), errorResponse.toString());
             }
         };
         BirdApi.getTodayData(MyApplication.getInstans(), params, httpResponseHandler);

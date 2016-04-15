@@ -30,7 +30,7 @@
         android:layout_centerInParent="true"
         android:layout_centerVertical="true"
         android:textColor="@color/white"
-        app:layout_textSizePercent="35%" />
+        app:layout_textSizePercent="@string/size_5w" />
 
     <TextView
         android:id="@+id/save"
@@ -40,7 +40,7 @@
         android:layout_centerVertical="true"
         android:textColor="@color/white"
         app:layout_marginRightPercent="4%"
-        app:layout_textSizePercent="30%" />
+        app:layout_textSizePercent="@string/size_5w" />
 
     <ImageView
         android:id="@+id/menu"

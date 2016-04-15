@@ -365,4 +365,12 @@
     <string name="msg_inv_err">*为避免订单异常,请赶紧前往电脑端补充库存吧!</string>
     <string name="tv_function_id">重新上传身份证</string>
     <string name="tv_function_addr">修改地址</string>
+
+    <string name="msg_text_3w">3%w</string>
+    <string name="msg_text_4w">4%w</string>
+    <string name="msg_text_4_5w">4.5%w</string>
+    <string name="size_5w">5%w</string>
+    <string name="msg_text_5_5w">5.5%w</string>
+    <string name="msg_text_per"></string>
+    <string name="first_index_text_5_1w">4.9%w</string>
 </resources>

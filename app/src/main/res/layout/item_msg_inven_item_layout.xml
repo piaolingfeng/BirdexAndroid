@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:orientation="vertical">
 
         <TextView
@@ -20,9 +20,9 @@
             android:layout_marginTop="@dimen/item_margin_top_height"
             android:text="dfadfasd"
             android:textColor="@color/order_detail_text_color"
-            android:textSize="@dimen/msg_detail_title" />
+            app:layout_textSizePercent="@string/msg_text_4_5w" />
 
-        <RelativeLayout
+        <com.zhy.android.percent.support.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/item_margin_top_height">
@@ -36,7 +36,7 @@
                 android:layout_marginLeft="@dimen/item_margin_top_height"
                 android:text="@string/tv_product_code"
                 android:textColor="@color/msg_context_color"
-                android:textSize="@dimen/msg_detail_title" />
+                app:layout_textSizePercent="@string/msg_text_4_5w" />
 
             <TextView
                 android:id="@+id/tv_product_code"
@@ -48,7 +48,7 @@
                 android:layout_toRightOf="@+id/tv_product_code_t"
                 android:text="dfadfasd"
                 android:textColor="@color/msg_context_color"
-                android:textSize="@dimen/msg_detail_title" />
+                app:layout_textSizePercent="@string/msg_text_4_5w" />
 
             <TextView
                 android:id="@+id/tv_count"
@@ -59,8 +59,8 @@
                 android:layout_marginRight="@dimen/item_margin_top_height"
                 android:text="x1"
                 android:textColor="@color/msg_context_color"
-                android:textSize="@dimen/msg_detail_title" />
-        </RelativeLayout>
+                app:layout_textSizePercent="@string/msg_text_4_5w" />
+        </com.zhy.android.percent.support.PercentRelativeLayout>
 
         <TextView
             android:id="@+id/tv_inven_error"
@@ -72,7 +72,7 @@
             android:layout_marginTop="@dimen/item_margin_top_height"
             android:text="dfadfasd"
             android:textColor="@color/red"
-            android:textSize="@dimen/msg_detail_title"/>
-    </LinearLayout>
+            app:layout_textSizePercent="@string/msg_text_4_5w"/>
+    </com.zhy.android.percent.support.PercentLinearLayout>
 
 </RelativeLayout>

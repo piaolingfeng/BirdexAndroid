@@ -1,9 +1,11 @@
 package com.birdex.bird.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -11,6 +13,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -214,6 +218,8 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
     // 标记位， true 左边， false 右边
     private boolean flag = true;
 
+    public static final int CAMERA_REQUEST_CODE = 10;
+
     private void choiceDialog() {
         final String items[] = {getString(R.string.photo), getString(R.string.from_loacl)};
         //dialog参数设置
@@ -225,7 +231,22 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                 switch (which) {
                     // 拍照
                     case 0:
-                        photo();
+
+                        if (ContextCompat.checkSelfPermission(UploadIDCardActivity.this, Manifest.permission.CAMERA)
+                                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(UploadIDCardActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            try {
+
+                                //申请拍照权限
+                                ActivityCompat.requestPermissions(UploadIDCardActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        CAMERA_REQUEST_CODE);
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        } else {
+                            photo();
+                        }
+
                         dialog.dismiss();
                         break;
                     // 从本地获取
@@ -253,6 +274,21 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
         photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePath)));
 
         startActivityForResult(photoIntent, PHOTO_GREQUEST_CODE);
+    }
+
+
+    // 6.0 权限控制
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                // Permission Granted 用户允许
+                photo();
+            } else {
+                // Permission Denied
+            }
+        }
     }
 
 

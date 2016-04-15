@@ -182,7 +182,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                         saveToken(token);
 
-//                        T.showShort(MyApplication.getInstans(), getString(R.string.loginsu));
+                        T.showShort(MyApplication.getInstans(), getString(R.string.loginsu));
                         Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
 
 //                        Bundle b = new Bundle();
@@ -237,7 +237,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 hideLoading();
-                T.showShort(MyApplication.getInstans(), getString(R.string.loginfa));
+                T.showShort(MyApplication.getInstans(), getString(R.string.login_fail));
             }
 
             @Override
@@ -268,7 +268,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     // 保存接口发过来的 token
     private void saveToken(String token) {
         editor.putString("token", token);
-        T.showShort(MyApplication.getInstans(), "token:" + token);
         editor.commit();
     }
 

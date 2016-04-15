@@ -292,32 +292,32 @@
 
     </com.zhy.android.percent.support.PercentLinearLayout>
 
-    <com.zhy.android.percent.support.PercentLinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+    <!--<com.zhy.android.percent.support.PercentLinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="50dp"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:orientation="vertical">-->
 
-        <Button
-            android:id="@+id/out_account"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:background="@drawable/out_selector"
-            android:gravity="center"
-            android:text="@string/clear_message"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            app:layout_widthPercent="70%" />
+        <!--<Button-->
+            <!--android:id="@+id/out_account"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:background="@drawable/out_selector"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/clear_message"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:textSize="18sp"-->
+            <!--app:layout_widthPercent="70%" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:text="@string/clear_message_detail"
-            android:textColor="#9B9B9B"
-            android:textSize="14sp" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="3dp"-->
+            <!--android:text="@string/clear_message_detail"-->
+            <!--android:textColor="#9B9B9B"-->
+            <!--android:textSize="14sp" />-->
 
-    </com.zhy.android.percent.support.PercentLinearLayout>
+    <!--</com.zhy.android.percent.support.PercentLinearLayout>-->
 
 </LinearLayout>

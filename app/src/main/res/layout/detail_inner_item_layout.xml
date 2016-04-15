@@ -15,6 +15,7 @@
         android:paddingRight="10dp"
         android:paddingTop="@dimen/inventory_inner_paddingtb"
         android:paddingBottom="@dimen/inventory_inner_paddingtb"
+        android:textColor="@color/black_1"
         android:textSize="@dimen/inventory_inner_font1" />
     <LinearLayout
         android:paddingLeft="10dp"

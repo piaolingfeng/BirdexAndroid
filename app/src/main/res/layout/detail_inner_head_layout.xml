@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:paddingTop="8dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="8dp">
 
 
         <LinearLayout
@@ -98,20 +98,22 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/inventory_inner_paddingtb"
                 android:text="@string/available_count"
-                android:textColor="@color/gray_2"
+                android:textColor="@color/black_1"
                 android:textSize="@dimen/inventory_inner_font2" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1.0"
             android:layout_height="wrap_content"
+            android:layout_weight="1.0"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_inner_productname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingBottom="@dimen/inventory_inner_paddingtb"
                 android:textColor="@color/gray_2"
                 android:textSize="@dimen/inventory_inner_font2" />
@@ -120,6 +122,8 @@
                 android:id="@+id/tv_inner_upccode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingBottom="@dimen/inventory_inner_paddingtb"
                 android:textColor="@color/gray_2"
                 android:textSize="@dimen/inventory_inner_font2" />
@@ -128,6 +132,8 @@
                 android:id="@+id/tv_inner_productcode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingBottom="@dimen/inventory_inner_paddingtb"
                 android:textColor="@color/gray_2"
                 android:textSize="@dimen/inventory_inner_font2" />
@@ -136,6 +142,8 @@
                 android:id="@+id/tv_inner_customscode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingBottom="@dimen/inventory_inner_paddingtb"
                 android:textColor="@color/gray_2"
                 android:textSize="@dimen/inventory_inner_font2" />
@@ -144,6 +152,8 @@
                 android:id="@+id/tv_inner_weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingBottom="@dimen/inventory_inner_paddingtb"
                 android:textColor="@color/gray_2"
                 android:textSize="@dimen/inventory_inner_font2" />
@@ -152,6 +162,8 @@
                 android:id="@+id/tv_inner_capacity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingBottom="@dimen/inventory_inner_paddingtb"
                 android:textColor="@color/gray_2"
                 android:textSize="@dimen/inventory_inner_font2" />
@@ -160,6 +172,8 @@
                 android:id="@+id/tv_inner_declareprice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingBottom="@dimen/inventory_inner_paddingtb"
                 android:textColor="@color/gray_2"
                 android:textSize="@dimen/inventory_inner_font2" />
@@ -168,6 +182,8 @@
                 android:id="@+id/tv_inner_productcomposition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingBottom="@dimen/inventory_inner_paddingtb"
                 android:textColor="@color/gray_2"
                 android:textSize="@dimen/inventory_inner_font2" />
@@ -176,6 +192,8 @@
                 android:id="@+id/tv_inner_productdescribte"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingBottom="@dimen/inventory_inner_paddingtb"
                 android:textColor="@color/gray_2"
                 android:textSize="@dimen/inventory_inner_font2" />
@@ -184,6 +202,8 @@
                 android:id="@+id/tv_inner_availablecount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textColor="@color/black_1"
                 android:textSize="@dimen/inventory_inner_font1" />
         </LinearLayout>

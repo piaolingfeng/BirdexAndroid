@@ -1,10 +1,14 @@
 package com.birdex.bird.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +22,7 @@ import android.widget.TextView;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.activity.MipcaActivityCapture;
 import com.birdex.bird.adapter.InventoryAdapter;
 import com.birdex.bird.adapter.InventoryWillInAdapter;
 import com.birdex.bird.adapter.OrderWareHouseAdapter;
@@ -66,6 +71,9 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     //跳顶按钮
     @Bind(R.id.fab_inventory_gotop)
     public FloatingActionButton fab_gotop;
+    //扫码搜索
+    @Bind(R.id.iv_inventory_scan_code)
+    public ImageView iv_scan;
     //适配器
     private InventoryAdapter adapter = null;
     private InventoryWillInAdapter willInAdapter = null;
@@ -75,7 +83,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     private InventoryBiz biz = null;
     //数据集合
     private ArrayList<InventoryActivityEntity> list = null;
-
+    private final  int SCANNIN_GREQUEST_CODE = 13;
     @Override
     public void onShowFloatAtionButton(boolean isShow) {
         if(fab_gotop.getVisibility()== View.GONE&&isShow){
@@ -203,6 +211,8 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         //设置至顶按钮
         fab_gotop.setOnClickListener(this);
         //按照可用数量排序
+        //点击扫码搜索
+        iv_scan.setOnClickListener(this);
     }
 
     @Override
@@ -413,6 +423,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 }
                 //开始请求网络
                 //显示加载动画
+                tv_count.setText(countTxt.replace("@","0"));
                 showBar();
                 currentPage = 1;
                 startRequest();
@@ -463,6 +474,16 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                     rv_inventory.smoothScrollToPosition(1);
                 }
                 break;
+            case R.id.iv_inventory_scan_code:
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), MipcaActivityCapture.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                try {
+                    startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
             default:
                 break;
         }
@@ -476,7 +497,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    params.put("keyword", v.getText().toString());
+                    params.put("keyword", v.getText().toString().trim());
 //                    currentPage = 1;
                     reStartHttp();
                 }
@@ -580,5 +601,25 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         showBar();
         currentPage = 1;
         startRequest();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case SCANNIN_GREQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    Bundle bundle = data.getExtras();
+                    String result = bundle.getString("result");
+                    if(result!=null){
+                        if(!TextUtils.isEmpty(result.trim())){
+                            et_search.setText(result);
+                            params.put("keyword", result.trim());
+                            reStartHttp();
+                        }
+                    }
+                }
+                break;
+        }
     }
 }

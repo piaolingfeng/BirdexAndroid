@@ -145,7 +145,6 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
                 // 点击保存按钮后，需要调用 修改公司信息
                 RequestParams params = new RequestParams();
                 params.put("company_code",companyCode);
-                T.showShort(MyApplication.getInstans(),companyCode);
                 params.put("logo",path);
                 BirdApi.companyEdit(MyApplication.getInstans(),params,new JsonHttpResponseHandler(){
                     @Override

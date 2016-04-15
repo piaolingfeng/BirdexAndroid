@@ -54,9 +54,9 @@ public class NotificationService extends UmengBaseIntentService {
     public void onCreate() {
         super.onCreate();
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "Notimsg", null);
+        db = helper.getWritableDatabase();
         daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
-        db = helper.getWritableDatabase();
         msgDao=daoSession.getNotifiMsgDao();
         //设置时间的格式
         format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

@@ -14,6 +14,7 @@ import com.birdex.bird.fragment.BaseFragment;
 import com.birdex.bird.fragment.BillDetailFragment;
 import com.birdex.bird.fragment.RechargeFragment;
 import com.birdex.bird.interfaces.BackHandledInterface;
+import com.birdex.bird.widget.TitleView;
 
 import java.util.ArrayList;
 
@@ -35,10 +36,12 @@ public class MyAccountInfoActivity extends BaseActivity implements BaseFragment.
     public TextView tv_bill;
     @Bind(R.id.rb_myaccount_manage)
     public TextView tv_manage;
-    @Bind(R.id.tv_myaccount_title)
-    public TextView tv_title;
-    @Bind(R.id.iv_myaccount_back)
-    public ImageView iv_back;
+//    @Bind(R.id.tv_myaccount_title)
+//    public TextView tv_title;
+//    @Bind(R.id.iv_myaccount_back)
+//    public ImageView iv_back;
+    @Bind(R.id.tiv_myaccount_info)
+    public TitleView tiv_head;
     //设置选中的index
     private int selectIndex=-1;
     //
@@ -54,6 +57,8 @@ public class MyAccountInfoActivity extends BaseActivity implements BaseFragment.
     private int enterIndex=0;
     @Override
     public void initializeContentViews() {
+        //设置头部
+        tiv_head.setMenuVisble(false);
         //获取列表
         enterIndex=getIntent().getIntExtra("enterindex",0);
 //        initSystemBar(R.color.blue_head_1);
@@ -86,7 +91,7 @@ public class MyAccountInfoActivity extends BaseActivity implements BaseFragment.
         tv_bill.setOnClickListener(this);
         tv_manage.setOnClickListener(this);
         //回退
-        iv_back.setOnClickListener(this);
+//        iv_back.setOnClickListener(this);
     }
     /*
      *
@@ -146,9 +151,9 @@ public class MyAccountInfoActivity extends BaseActivity implements BaseFragment.
             case R.id.rb_myaccount_manage:
                 clickChangeFragment(v.getId());
                 break;
-            case R.id.iv_myaccount_back:
-                finish();
-                break;
+//            case R.id.iv_myaccount_back:
+//                finish();
+//                break;
         }
     }
     private void clickChangeFragment(int id){
@@ -157,17 +162,20 @@ public class MyAccountInfoActivity extends BaseActivity implements BaseFragment.
                 tv_recharge.setTextAppearance(this, R.style.myaccount_style_select);
 //                changeFragment(0);
                 addFragment(0);
-                tv_title.setText(R.string.myaccount_title_1);
+//                tv_title.setText(R.string.myaccount_title_1);
+                tiv_head.setTitle(getString(R.string.myaccount_title_1));
                 break;
             case R.id.rb_myaccount_bill:
                 tv_bill.setTextAppearance(this, R.style.myaccount_style_select);
 //                changeFragment(1);
                 addFragment(1);
-                tv_title.setText(R.string.myaccount_title_2);
+//                tv_title.setText(R.string.myaccount_title_2);
+                tiv_head.setTitle(getString(R.string.myaccount_title_2));
                 break;
             case R.id.rb_myaccount_manage:
-                tv_manage.setTextAppearance(this,R.style.myaccount_style_select);
-                tv_title.setText(R.string.myaccount_title_3);
+                tv_manage.setTextAppearance(this, R.style.myaccount_style_select);
+//                tv_title.setText(R.string.myaccount_title_3);
+                tiv_head.setTitle(getString(R.string.myaccount_title_3));
                 addFragment(2);
                 break;
         }

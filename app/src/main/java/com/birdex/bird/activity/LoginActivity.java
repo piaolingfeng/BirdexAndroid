@@ -64,7 +64,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void initializeContentViews() {
         HideSoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
-        initSystemBar(R.color.transparent);
+//        initSystemBar(R.color.transparent);
         initData();
     }
 

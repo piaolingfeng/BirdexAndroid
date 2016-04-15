@@ -33,6 +33,7 @@
                 <DatePicker
                     android:id="@+id/dp_date_startpicker"
                     android:layout_width="wrap_content"
+                    android:calendarViewShown="false"
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <LinearLayout
@@ -50,6 +51,7 @@
                 <DatePicker
                     android:id="@+id/dp_date_endpicker"
                     android:layout_width="wrap_content"
+                    android:calendarViewShown="false"
                     android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>

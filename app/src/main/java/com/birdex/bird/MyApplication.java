@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.Notification;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -51,11 +53,13 @@ public class MyApplication extends Application {
     public static String device_info;
     // 设备类型 这里写死为 android
     public static String device_type = "android";
-
+    private SharedPreferences sp;
+    //sp保存Umeng
+    public  static String SP_Umeng="umeng_token";
     public static List<Activity> activityList = new ArrayList<>();
 
     // 登录的相关信息 user
-    public static User user;
+//    public static User user;
 
 
     // 清除 activity 栈
@@ -111,7 +115,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instants = this;
-
+        sp = getSharedPreferences("login", Activity.MODE_PRIVATE);
         initFile();
 //        iniCrash();
 
@@ -120,7 +124,19 @@ public class MyApplication extends Application {
 
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.setDebugMode(true);
+        getUmengToken();
 
+//		if (MiPushRegistar.checkDevice(this)) {
+//            MiPushRegistar.register(this, "2882303761517400865", "5501740053865");
+//		}
+
+        initAsyncHttpClient();
+    }
+    public String getUmengToken(){
+        device_token=sp.getString(SP_Umeng,"");
+        if(!TextUtils.isEmpty(device_token.trim())){
+            return device_token;
+        }
         UmengMessageHandler messageHandler = new UmengMessageHandler(){
             /**
              * 参考集成文档的1.6.3
@@ -203,22 +219,15 @@ public class MyApplication extends Application {
                     @Override
                     public void run() {
                         //onRegistered方法的参数registrationId即是device_token
-                        Log.e("device_token", registrationId);
+//                        Log.e("device_token", registrationId);
+                        ahc.addHeader("DEVICE-TOKEN", device_token);
                     }
                 });
             }
         });
         device_token = UmengRegistrar.getRegistrationId(this);
-        String pkgName = getApplicationContext().getPackageName();
-        Log.e("pkgName", pkgName);
-        Log.e("device_token", device_token);
-//		if (MiPushRegistar.checkDevice(this)) {
-//            MiPushRegistar.register(this, "2882303761517400865", "5501740053865");
-//		}
-
-        initAsyncHttpClient();
+        return device_token;
     }
-
     private void initFile(){
         File file = new File(Constant.BASEPATH);
         if (!file.exists()){
@@ -248,6 +257,7 @@ public class MyApplication extends Application {
         ahc.setTimeout(8 * 1000);//设置30秒超时
         ahc.setConnectTimeout(4 * 1000);//设置30秒超时
         ahc.setMaxConnections(5);
+
         ahc.addHeader("DEVICE-TOKEN", device_token);
         ahc.addHeader("APP-VERSION",app_version);
     }

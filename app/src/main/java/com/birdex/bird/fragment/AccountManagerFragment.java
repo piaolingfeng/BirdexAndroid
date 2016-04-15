@@ -1,6 +1,8 @@
 package com.birdex.bird.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.KeyEvent;
 import android.view.View;
@@ -552,6 +554,17 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
 
             // 退出账户按钮
             case R.id.out_account:
+                // 清除掉登录的相关信息
+                SharedPreferences sp = getActivity().getSharedPreferences("login", Activity.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+
+                editor.putString("company_code", "");
+                editor.putString("company_name", "");
+                editor.putString("company_short_name", "");
+                editor.putString("user_code", "");
+                editor.putString("token", "");
+                editor.commit();
+
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 MyApplication.getInstans().clearActivities();
                 startActivity(intent);

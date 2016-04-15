@@ -63,7 +63,7 @@
         android:layout_below="@+id/title_1l"
         android:background="@drawable/myaccount_background">
 
-        <com.birdex.bird.widget.RoundImageView
+        <com.birdex.bird.widget.CircularImageView
             android:id="@+id/head_icon"
             android:layout_width="0dp"
             android:layout_height="0dp"

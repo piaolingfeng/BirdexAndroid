@@ -112,6 +112,7 @@
     <string name="notempty">用户名或密码不能为空</string>
     <string name="loginsu">登录成功</string>
     <string name="loginfa">用户名或密码错误</string>
+    <string name="login_no_token">登录失败，请重新登陆</string>
 
     <!-- 我的账户 -->
     <string name="welcome">亲，欢迎您！</string>
@@ -294,6 +295,8 @@
     <string name="pic_notfound">图片未找到</string>
     <string name="please_full">请将资料补充完整</string>
     <string name="upload_suc">上传成功</string>
+    <string name="get_idcard_fail">获取身份证号码失败！</string>
+
     
     
     <!-- 订阅消息列表 -->

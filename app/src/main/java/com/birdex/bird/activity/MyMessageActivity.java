@@ -10,6 +10,13 @@ import android.widget.TextView;
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.util.T;
+import com.birdex.bird.api.BirdApi;
+import com.birdex.bird.util.T;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -73,7 +80,6 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
     @OnClick({R.id.back, R.id.menu, R.id.warning_ll, R.id.exception_ll, R.id.repertory_exception_ll, R.id.check_exception_ll, R.id.account_exception_ll})
     @Override
     public void onClick(final View v) {
-
         switch (v.getId()) {
             // 返回
             case R.id.back:

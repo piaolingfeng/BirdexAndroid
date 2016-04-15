@@ -1,11 +1,13 @@
 package com.birdex.bird.fragment;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.KeyEvent;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.activity.MyOrderListActivity;
 import com.birdex.bird.activity.PredicitionDetailActivity;
 import com.birdex.bird.adapter.PredicitionAdapter;
 import com.birdex.bird.api.BirdApi;
@@ -19,6 +21,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.Subscriber;
 
@@ -34,6 +37,7 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
     @Bind(R.id.rcy_orderlist)
     XRecyclerView rcy_orderlist;
 
+    String tag = "PredictionManagerFragment";
 
     @Override
     protected void key(int keyCode, KeyEvent event) {
@@ -94,7 +98,7 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
         listParams.add("end_date", entity.getEnd_date());
         listParams.add("status", entity.getStatus());
 //        listParams.add("count", entity.getCount());
-        BirdApi.getPredicitionList(MyApplication.getInstans(), listParams, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -114,7 +118,14 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
                     bus.post(predicitionEntity.getData().getCount(), "frame_layout");//刷新个数及界面
                     predicitionAdapter.notifyDataSetChanged();
                 } else {
-                    T.showLong(getActivity(), getString(R.string.parse_error));
+                    try {
+                        if (response.get("data") != null)
+                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
+                        else
+                            T.showLong(MyApplication.getInstans(),getString(R.string.parse_error));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -129,7 +140,9 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
                 stopHttpAnim();
                 super.onFinish();
             }
-        });
+        };
+        handler.setTag(tag);
+        BirdApi.getPredicitionList(MyApplication.getInstans(), listParams, handler);
 
     }
 
@@ -184,4 +197,9 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
         }
     }
 
+    @Override
+    public void onDestroy() {
+        BirdApi.cancelRequestWithTag(tag);
+        super.onDestroy();
+    }
 }

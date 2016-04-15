@@ -45,6 +45,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
@@ -58,10 +59,10 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/3/30.
  */
-public class MyOrderListActivity extends BaseActivity implements View.OnClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface{
+public class MyOrderListActivity extends BaseActivity implements View.OnClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
 
-    //    @Bind(R.id.viewPager)
-//    ViewPager viewpager;
+    String tag = "MyOrderListActivity";
+
     @Bind(R.id.et_search)
     ClearEditText et_search;
 //    @Bind(R.id.tablayout)
@@ -297,7 +298,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     }
 
     // 搜索
-    private void search(String search){
+    private void search(String search) {
         entity.setKeyword(search);
         if (currentName.equals(getString(Constant.name[0]))) {
             bus.post(entity, "requestOrderList");
@@ -344,18 +345,28 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         showLoading();
         RequestParams stateParams = new RequestParams();
         stateParams.add("order_code", "");
-        BirdApi.getOrderListState(MyApplication.getInstans(), stateParams, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 //                    orderStatus = (OrderStatus) JsonHelper.parseLIst(response.getJSONArray("data"), OrderStatus.class);
                 hideLoading();
                 orderStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
-                OrderStatus.Status status = new OrderStatus().new Status();
-                status.setStatus_name("全部状态");
-                orderStatus.getData().add(0, status);
-                requestStateCount++;
-                getNetStatusCount();
-//                bus.post(status, "changeState");
+                if (orderStatus != null) {
+                    OrderStatus.Status status = new OrderStatus().new Status();
+                    status.setStatus_name("全部状态");
+                    orderStatus.getData().add(0, status);
+                    requestStateCount++;
+                    getNetStatusCount();
+                } else {
+                    try {
+                        if (response.get("data") != null)
+                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
+                        else
+                            T.showLong(MyApplication.getInstans(),getString(R.string.parse_error));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             @Override
@@ -370,7 +381,9 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                 hideLoading();
                 super.onFinish();
             }
-        });
+        };
+        handler.setTag(tag);
+        BirdApi.getOrderListState(MyApplication.getInstans(), stateParams, handler);
     }
 
     public int requestStateCount = 0;
@@ -391,23 +404,32 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     private void getAllPredicitionStatus() {
         showLoading();
         RequestParams stateParams = new RequestParams();
-        BirdApi.getPredicitionStatus(MyApplication.getInstans(), stateParams, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 //                    orderStatus = (OrderStatus) JsonHelper.parseLIst(response.getJSONArray("data"), OrderStatus.class);
-                hideLoading();
                 predicitionStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
-                OrderStatus.Status status = new OrderStatus().new Status();
-                status.setStatus_name("全部状态");
-                predicitionStatus.getData().add(0, status);
-                requestStateCount++;
-                getNetStatusCount();
+                if (predicitionStatus != null) {
+                    OrderStatus.Status status = new OrderStatus().new Status();
+                    status.setStatus_name("全部状态");
+                    predicitionStatus.getData().add(0, status);
+                    requestStateCount++;
+                    getNetStatusCount();
+                } else {
+                    try {
+                        if (response.get("data") != null)
+                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
+                        else
+                            T.showLong(MyApplication.getInstans(),getString(R.string.parse_error));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
 //                bus.post(status, "changeState");
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                hideLoading();
                 T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
@@ -417,7 +439,9 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                 hideLoading();
                 super.onFinish();
             }
-        });
+        };
+        handler.setTag(tag);
+        BirdApi.getPredicitionStatus(MyApplication.getInstans(), stateParams, handler);
     }
 
     /**
@@ -426,21 +450,34 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     private void getAllCompanyWarehouse() {
         showLoading();
         RequestParams wareParams = new RequestParams();
-        BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                hideLoading();
                 warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
-                WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
-                detail.setName("全部仓库");
+                if (warehouseEntity != null) {
+                    if (warehouseEntity.getError().equals("0")) {
+                        WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
+                        detail.setName("全部仓库");
 //                nowSelectedWarehouse = detail;//默认选中全部
-                warehouseEntity.getData().add(0, detail);
-                bus.post(detail, "changeWarehouse");
+                        warehouseEntity.getData().add(0, detail);
+                        bus.post(detail, "changeWarehouse");
+                    } else {
+                        T.showLong(MyApplication.getInstans(), warehouseEntity.getError());
+                    }
+                } else {
+                    try {
+                        if (response.get("data") != null)
+                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
+                        else
+                            T.showLong(MyApplication.getInstans(),getString(R.string.parse_error));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                hideLoading();
                 T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
@@ -450,7 +487,9 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                 hideLoading();
                 super.onFinish();
             }
-        });
+        };
+        handler.setTag(tag);
+        BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, handler);
     }
 
     @Subscriber(tag = "changeWarehouse")
@@ -631,7 +670,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    @OnClick({R.id.menu,R.id.state_time, R.id.state_Warehouse, R.id.state_all, R.id.tv_inventory_all, R.id.tv_inventory_sort_available, R.id.tv_inventory_sort_time})
+    @OnClick({R.id.menu, R.id.state_time, R.id.state_Warehouse, R.id.state_all, R.id.tv_inventory_all, R.id.tv_inventory_sort_available, R.id.tv_inventory_sort_time})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -704,7 +743,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void onDestroy() {
-        BirdApi.cancelAllRequest();
+        BirdApi.cancelRequestWithTag(tag);
         super.onDestroy();
     }
 

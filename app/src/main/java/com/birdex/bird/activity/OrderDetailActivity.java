@@ -1,5 +1,6 @@
 package com.birdex.bird.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -7,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.adapter.OrderDetailAdapter;
 import com.birdex.bird.api.BirdApi;
@@ -94,7 +96,7 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private void getOrderDetail() {
-        showBar();
+        showLoading();
         RequestParams params = new RequestParams();
         params.add("order_code", order_code);
         BirdApi.getOrder(this, params, new JsonHttpResponseHandler() {
@@ -108,13 +110,16 @@ public class OrderDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 orderDetailEntity = GsonHelper.getPerson(response.toString(), OrderDetailEntity.class);
-                bus.post(orderDetailEntity, "detail");
-                super.onSuccess(statusCode, headers, response);
+                if (orderDetailEntity != null) {
+                    bus.post(orderDetailEntity, "detail");
+                } else {
+                    T.showLong(MyApplication.getInstans(),getString(R.string.tip_myaccount_prasedatawrong));
+                }
             }
 
             @Override
             public void onFinish() {
-                hideBar();
+                hideLoading();
                 super.onFinish();
             }
         });
@@ -134,7 +139,7 @@ public class OrderDetailActivity extends BaseActivity {
         tv_receiver_phone.setText(orderDetailEntity.getData().getReceiver_mobile());
         tv_addr.setText(orderDetailEntity.getData().getReceiver_address());
         tv_id_name.setText(orderDetailEntity.getData().getReceiver_id_card());
-        if (orderDetailEntity.getData().getStatus_name().contains("身份证异常")) {
+        if (orderDetailEntity.getData().getVerify_id_card_result().equals("30")) {//30表示验证不通过
             bus.post(false, "checkIDCard");
         } else {
             bus.post(true, "checkIDCard");
@@ -142,11 +147,12 @@ public class OrderDetailActivity extends BaseActivity {
         tv_id_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                T.showShort(OrderDetailActivity.this, "验证身份证!");
-                Intent intent = new Intent(OrderDetailActivity.this, UploadIDCardActivity.class);
-                intent.putExtra("order_code", orderDetailEntity.getData().getOrder_code());
-                intent.putExtra("idcard", orderDetailEntity.getData().getReceiver_id_card());
-                startActivity(intent);
+//                T.showShort(OrderDetailActivity.this, "验证身份证!");
+//                Intent intent = new Intent(OrderDetailActivity.this, UploadIDCardActivity.class);
+//                intent.putExtra("order_code", orderDetailEntity.getData().getOrder_code());
+//                intent.putExtra("idcard", orderDetailEntity.getData().getReceiver_id_card());
+//                startActivity(intent);
+                upLoadIDCard(OrderDetailActivity.this,orderDetailEntity.getData().getOrder_code(),orderDetailEntity.getData().getReceiver_id_card());
             }
         });
         String statuName = orderDetailEntity.getData().getStatus_name();
@@ -164,6 +170,16 @@ public class OrderDetailActivity extends BaseActivity {
         }
         adapter = new OrderDetailAdapter(this, orderDetailEntity.getData().getProducts());
         rcy.setAdapter(adapter);
+    }
+
+    /**
+     * 重新上传身份证
+     * */
+    public void upLoadIDCard(Context mContext ,String Order_code,String idcard){
+        Intent intent = new Intent(mContext, UploadIDCardActivity.class);
+        intent.putExtra("order_code", Order_code);
+        intent.putExtra("idcard", idcard);
+        startActivity(intent);
     }
 
     /**
@@ -194,15 +210,25 @@ public class OrderDetailActivity extends BaseActivity {
             tv_id_check.setCompoundDrawables(drawable, null, null, null);
             tv_id_check.setClickable(true);
         } else {
-            tv_id_check.setText(getString(R.string.tv_id_check));
             tv_id_check.setTextColor(getResources().getColor(R.color.blue));
-            Drawable drawable = getResources()
-                    .getDrawable(R.drawable.right);
-/// 这一步必须要做,否则不会显示.
-            drawable.setBounds(0, 0, drawable.getMinimumWidth(),
-                    drawable.getMinimumHeight());
-            tv_id_check.setCompoundDrawables(drawable, null, null, null);
             tv_id_check.setClickable(false);
+            if (orderDetailEntity.getData().getVerify_id_card_result().equals("10")){
+                tv_id_check.setText(getString(R.string.tv_id_wait_check));
+            }else {
+                tv_id_check.setText(getString(R.string.tv_id_check));
+                Drawable drawable = getResources()
+                        .getDrawable(R.drawable.right);
+/// 这一步必须要做,否则不会显示.
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(),
+                        drawable.getMinimumHeight());
+                tv_id_check.setCompoundDrawables(drawable, null, null, null);
+            }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        BirdApi.cancelAllRequest();
+        super.onDestroy();
     }
 }

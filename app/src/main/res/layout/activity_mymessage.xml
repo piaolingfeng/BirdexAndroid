@@ -9,10 +9,11 @@
     <include layout="@layout/title" />
 
     <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/warning_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/list_item_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -35,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/warning"
+                android:text="@string/msg_warning"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -63,10 +64,11 @@
     </com.zhy.android.percent.support.PercentLinearLayout>
 
     <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/exception_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/list_item_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -89,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/idcard_exception"
+                android:text="@string/msg_idcard_exception"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -122,9 +124,10 @@
         android:background="#F1F0F0" />
 
     <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/repertory_exception_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@drawable/list_item_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -147,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/repertory_exception"
+                android:text="@string/msg_repertory_exception"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -180,9 +183,10 @@
         android:background="#F1F0F0" />
 
     <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/check_exception_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@drawable/list_item_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -205,7 +209,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/check_exception"
+                android:text="@string/msg_check_exception"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -234,10 +238,11 @@
 
 
     <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/account_exception_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/list_item_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -260,7 +265,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/account_exception"
+                android:text="@string/msg_account_exception"
                 android:textSize="18sp" />
 
             <LinearLayout

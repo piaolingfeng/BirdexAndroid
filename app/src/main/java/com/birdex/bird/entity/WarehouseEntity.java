@@ -9,7 +9,7 @@ import java.util.List;
 public class WarehouseEntity {
 
     List<WarehouseDetail> data = new ArrayList<>();
-    int error = 0;
+    String error = "";
 
     public List<WarehouseDetail> getData() {
         return data;
@@ -19,11 +19,11 @@ public class WarehouseEntity {
         this.data = data;
     }
 
-    public int getError() {
+    public String getError() {
         return error;
     }
 
-    public void setError(int error) {
+    public void setError(String error) {
         this.error = error;
     }
 

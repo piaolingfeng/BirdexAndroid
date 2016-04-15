@@ -280,6 +280,7 @@
     <string name="willin_product_statu">发往仓库</string>
     <string name="willin_view_others">同单号其它商品</string>
     <string name="unkonw_product">未知商品</string>
+    <string name="tv_recevice_addr">收件地址:</string>
     <!--<string name="willin_detail_head_left">30%</string>-->
     <!--<string name="willin_detail_head_right">70%</string>-->
 
@@ -297,11 +298,11 @@
     
     <!-- 订阅消息列表 -->
     <string name="my_message">我的消息</string>
-    <string name="warning">库存预警消息</string>
-    <string name="idcard_exception">身份证异常消息</string>
-    <string name="repertory_exception">库存证异常消息</string>
-    <string name="check_exception">审核不通过消息</string>
-    <string name="account_exception">账户异常</string>
+    <string name="msg_warning">库存预警消息</string>
+    <string name="msg_idcard_exception">身份证异常订单</string>
+    <string name="msg_repertory_exception">库存异常订单</string>
+    <string name="msg_check_exception">审核不通过订单</string>
+    <string name="msg_account_exception">账户异常</string>
     <string name="clear_message">清空消息</string>
     <string name="clear_message_detail">点击清空消息，即可对消息中心内的消息进行清理。</string>
     
@@ -318,6 +319,7 @@
     <string name="tv_id_name">身份证号:</string>
     <string name="tv_id_check">身份证验证</string>
     <string name="tv_id_check_e">身份证异常</string>
+    <string name="tv_id_wait_check">待验证</string>
     <string name="tv_change_addr">修改地址</string>
     <string name="tv_free">费 用:</string>
     <string name="tv_weight">重 量:</string>
@@ -355,4 +357,8 @@
     <string name="can_not_change_addr">当前状态不能修改地址哦!</string>
     <string name="tv_msg_30_day">显示30天内的消息记录</string>
     <string name="tv_clear">清 除</string>
+
+    <string name="msg_inv_err">*为避免订单异常,请赶紧前往电脑端补充库存吧!</string>
+    <string name="tv_function_id">重新上传身份证</string>
+    <string name="tv_function_addr">修改地址</string>
 </resources>

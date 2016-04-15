@@ -14,6 +14,7 @@ import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
 public class PredicitionAdapter extends RecyclerView.Adapter<PredicitionAdapter.PredicitionHolder> {
 
     Context mContext;
-    List<PredicitionEntity.Predicition.PredicitionDetail> predicitionDetailList;
+    List<PredicitionEntity.Predicition.PredicitionDetail> predicitionDetailList = new ArrayList<>();
     OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
 
     public PredicitionAdapter(Context mContext, List<PredicitionEntity.Predicition.PredicitionDetail> predicitionDetailList) {

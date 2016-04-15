@@ -50,4 +50,12 @@
         <item >库存紧张</item>
         <item >身份证异常订单</item>
     </string-array>
+
+    <string-array name="msg_list_name">
+        <item >@string/msg_warning</item>
+        <item >@string/msg_idcard_exception</item>
+        <item >@string/msg_repertory_exception</item>
+        <item >@string/msg_check_exception</item>
+        <item >@string/msg_account_exception</item>
+    </string-array>
 </resources>

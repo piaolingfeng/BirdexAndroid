@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.util.T;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.util.T;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -23,7 +24,7 @@ import butterknife.OnClick;
 /**
  * Created by hyj on 2016/4/13.
  */
-public class MyMessageActivity extends BaseActivity implements View.OnClickListener{
+public class MyMessageActivity extends BaseActivity implements View.OnClickListener {
 
     @Bind(R.id.prl_title)
     com.zhy.android.percent.support.PercentRelativeLayout title_rl;
@@ -78,8 +79,8 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
 
     @OnClick({R.id.back, R.id.menu, R.id.warning_ll, R.id.exception_ll, R.id.repertory_exception_ll, R.id.check_exception_ll, R.id.account_exception_ll})
     @Override
-    public void onClick(View v) {
-        switch (v.getId()){
+    public void onClick(final View v) {
+        switch (v.getId()) {
             // 返回
             case R.id.back:
                 finish();
@@ -87,33 +88,37 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
 
             // 右上角设置
             case R.id.menu:
-                Intent intent = new Intent(this,MessageMenuActivity.class);
+                Intent intent = new Intent(this, MessageMenuActivity.class);
                 startActivity(intent);
                 break;
-
             // 点击 库存预警消息
             case R.id.warning_ll:
-                T.showShort(MyApplication.getInstans(),"库存预警消息");
+                openMsgActivity(getString(R.string.msg_warning));
                 break;
             // 点击 身份证异常消息
             case R.id.exception_ll:
-                T.showShort(MyApplication.getInstans(),"身份证异常消息");
+                openMsgActivity(getString(R.string.msg_idcard_exception));
                 break;
-
             // 点击 库存异常消息
             case R.id.repertory_exception_ll:
-                T.showShort(MyApplication.getInstans(),"库存异常消息");
+                openMsgActivity(getString(R.string.msg_repertory_exception));
                 break;
-
-            // 点击 审核不通过消息
+                // 点击 审核不通过消息
             case R.id.check_exception_ll:
-                T.showShort(MyApplication.getInstans(),"审核不通过消息");
+                openMsgActivity(getString(R.string.msg_check_exception));
+                break;
+                // 点击 账户异常
+            case R.id.account_exception_ll:
+//                openMsgActivity(getString(R.string.msg_account_exception));
+                T.showLong(this,getString(R.string.please_wail));
                 break;
 
-            // 点击 账户异常
-            case R.id.account_exception_ll:
-                T.showShort(MyApplication.getInstans(),"账户异常");
-                break;
         }
+    }
+
+    public void openMsgActivity(String title) {
+        Intent intent1 = new Intent(MyMessageActivity.this, MsgDetailActivity.class);
+        intent1.putExtra("title", title);
+        startActivity(intent1);
     }
 }

@@ -20,6 +20,7 @@ import com.birdex.bird.util.ClipboardManagerUtil;
 import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -32,7 +33,7 @@ import butterknife.OnClick;
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.DetailHolder> {
 
     Context mContext;
-    List<OrderListEntity.OrderListNum.Orders> list;
+    List<OrderListEntity.OrderListNum.Orders> list = new ArrayList<>();
     OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
 
     public OrderListAdapter(Context mContext, List<OrderListEntity.OrderListNum.Orders> list) {

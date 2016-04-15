@@ -113,7 +113,7 @@ public class OrderDetailActivity extends BaseActivity {
                 if (orderDetailEntity != null) {
                     bus.post(orderDetailEntity, "detail");
                 } else {
-                    T.showLong(MyApplication.getInstans(),getString(R.string.tip_myaccount_prasedatawrong));
+                    T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
                 }
             }
 
@@ -137,7 +137,7 @@ public class OrderDetailActivity extends BaseActivity {
         tv_free.setText("¥" + orderDetailEntity.getData().getPrice());
         tv_receiver_name.setText(orderDetailEntity.getData().getReceiver_name());
         tv_receiver_phone.setText(orderDetailEntity.getData().getReceiver_mobile());
-        tv_addr.setText(orderDetailEntity.getData().getReceiver_address());
+        tv_addr.setText(orderDetailEntity.getData().getReceiver_province() + orderDetailEntity.getData().getReceiver_city() + orderDetailEntity.getData().getReceiver_area() + orderDetailEntity.getData().getReceiver_address());
         tv_id_name.setText(orderDetailEntity.getData().getReceiver_id_card());
         if (orderDetailEntity.getData().getVerify_id_card_result().equals("30")) {//30表示验证不通过
             bus.post(false, "checkIDCard");
@@ -152,7 +152,7 @@ public class OrderDetailActivity extends BaseActivity {
 //                intent.putExtra("order_code", orderDetailEntity.getData().getOrder_code());
 //                intent.putExtra("idcard", orderDetailEntity.getData().getReceiver_id_card());
 //                startActivity(intent);
-                upLoadIDCard(OrderDetailActivity.this,orderDetailEntity.getData().getOrder_code(),orderDetailEntity.getData().getReceiver_id_card());
+                upLoadIDCard(OrderDetailActivity.this, orderDetailEntity.getData().getOrder_code(), orderDetailEntity.getData().getReceiver_id_card());
             }
         });
         String statuName = orderDetailEntity.getData().getStatus_name();
@@ -174,8 +174,8 @@ public class OrderDetailActivity extends BaseActivity {
 
     /**
      * 重新上传身份证
-     * */
-    public void upLoadIDCard(Context mContext ,String Order_code,String idcard){
+     */
+    public void upLoadIDCard(Context mContext, String Order_code, String idcard) {
         Intent intent = new Intent(mContext, UploadIDCardActivity.class);
         intent.putExtra("order_code", Order_code);
         intent.putExtra("idcard", idcard);
@@ -212,9 +212,9 @@ public class OrderDetailActivity extends BaseActivity {
         } else {
             tv_id_check.setTextColor(getResources().getColor(R.color.blue));
             tv_id_check.setClickable(false);
-            if (orderDetailEntity.getData().getVerify_id_card_result().equals("10")){
+            if (orderDetailEntity.getData().getVerify_id_card_result().equals("10")) {
                 tv_id_check.setText(getString(R.string.tv_id_wait_check));
-            }else {
+            } else {
                 tv_id_check.setText(getString(R.string.tv_id_check));
                 Drawable drawable = getResources()
                         .getDrawable(R.drawable.right);

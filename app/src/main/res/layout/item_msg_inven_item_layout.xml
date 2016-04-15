@@ -72,8 +72,7 @@
             android:layout_marginTop="@dimen/item_margin_top_height"
             android:text="dfadfasd"
             android:textColor="@color/red"
-            android:textSize="@dimen/msg_detail_title"
-            android:visibility="gone" />
+            android:textSize="@dimen/msg_detail_title"/>
     </LinearLayout>
 
 </RelativeLayout>

@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
  * Created by chuming.zhuang on 2016/4/14.
  */
 public class MsgInventoryAdapter extends RecyclerView.Adapter<MsgInventoryAdapter.MsgInventoryHolder> {
-    private List<InventorySimpleEntity.InventorySimpleProduct> list = null;
+    private List<InventorySimpleEntity.InventorySimpleProduct> list = new ArrayList<>();
     Context mContext;
 
     public MsgInventoryAdapter(Context mContext, List<InventorySimpleEntity.InventorySimpleProduct> list) {

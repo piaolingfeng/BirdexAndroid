@@ -102,9 +102,10 @@ public class OrderDetailActivity extends BaseActivity {
         BirdApi.getOrder(this, params, new JsonHttpResponseHandler() {
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                T.showLong(OrderDetailActivity.this, responseString);
-                super.onFailure(statusCode, headers, responseString, throwable);
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                if (errorResponse != null)
+                    T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
+                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
 
             @Override

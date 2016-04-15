@@ -20,6 +20,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.Subscriber;
@@ -37,6 +38,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
     XRecyclerView rcy_orderlist;
 
     String tag = "OrderListManagerFragment";
+
     @Override
     protected void key(int keyCode, KeyEvent event) {
 
@@ -118,11 +120,11 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
                 orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
                 if (orderListEntities != null) {
                     if (entity.getPage_no() > 1)
-                        if (orderListEntities.getData().getOrders().size() == 0) {
+                        if (orderListEntities.getData().getOrders().size() == 0 && entity.getPage_no() > 1) {
                             T.showShort(MyApplication.getInstans(), "已经是最后一页");
                         } else {
                             OrderAdapter.getList().addAll(orderListEntities.getData().getOrders());
-                            orderListEntities.getData().setOrders( OrderAdapter.getList());
+                            orderListEntities.getData().setOrders(OrderAdapter.getList());
                         }
                     else {
                         OrderAdapter.setList(orderListEntities.getData().getOrders());
@@ -134,7 +136,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
                         if (response.get("data") != null)
                             T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
                         else
-                            T.showLong(MyApplication.getInstans(),getString(R.string.parse_error));
+                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -142,11 +144,13 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 stopHttpAnim();
-                T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
-                super.onFailure(statusCode, headers, responseString, throwable);
+                if (errorResponse != null)
+                    T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
+                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
+
 
             @Override
             public void onFinish() {

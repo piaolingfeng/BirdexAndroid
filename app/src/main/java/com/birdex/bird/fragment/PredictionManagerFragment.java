@@ -106,7 +106,7 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
 //                orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
                 if (predicitionEntity != null) {
                     if (entity.getPage_no() > 1) {
-                        if (predicitionEntity.getData().getStorages().size() == 0) {
+                        if (predicitionEntity.getData().getStorages().size() == 0 && entity.getPage_no() > 1) {
                             T.showShort(MyApplication.getInstans(), "已经是最后一页");
                         } else {
                             predicitionAdapter.getPredicitionDetailList().addAll(predicitionEntity.getData().getStorages());
@@ -122,7 +122,7 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
                         if (response.get("data") != null)
                             T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
                         else
-                            T.showLong(MyApplication.getInstans(),getString(R.string.parse_error));
+                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -130,9 +130,10 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
-                super.onFailure(statusCode, headers, responseString, throwable);
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                if (errorResponse != null)
+                    T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
+                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
 
             @Override

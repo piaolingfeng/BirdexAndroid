@@ -8,7 +8,6 @@ import com.birdex.bird.R;
 import com.birdex.bird.adapter.MsgInventoryAdapter;
 import com.birdex.bird.adapter.MsgOrderAdapter;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.biz.InventoryBiz;
 import com.birdex.bird.entity.InventorySimpleEntity;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.entity.OrderRequestEntity;
@@ -119,7 +118,7 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
                 orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
                 if (orderListEntities != null) {
                     if (requestEntity.getPage_no() > 1)
-                        if (orderListEntities.getData().getOrders().size() == 0) {
+                        if (orderListEntities.getData().getOrders().size() == 0 && requestEntity.getPage_no() > 1) {
                             T.showShort(MyApplication.getInstans(), "已经是最后一页");
                         } else {
                             orderAdapter.getList().addAll(orderListEntities.getData().getOrders());
@@ -134,7 +133,7 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
                         if (response.get("data") != null)
                             T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
                         else
-                            T.showLong(MyApplication.getInstans(),getString(R.string.parse_error));
+                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -167,11 +166,10 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 InvenEntity = GsonHelper.getPerson(response.toString(), InventorySimpleEntity.class);
                 if (InvenEntity != null) {
-                    if (InvenEntity.getProducts().size() == 0) {
+                    if (InvenEntity.getProducts().size() == 0 && inventoryPage_no > 1) {
                         T.showShort(MyApplication.getInstans(), "已经是最后一页");
                     } else {
                         inventoryAdapter.getList().addAll(InvenEntity.getProducts());
-                        rcy.setAdapter(inventoryAdapter);
                         inventoryAdapter.notifyDataSetChanged();
                     }
                 } else {
@@ -179,7 +177,7 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
                         if (response.get("data") != null)
                             T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
                         else
-                            T.showLong(MyApplication.getInstans(),getString(R.string.parse_error));
+                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -188,9 +186,10 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                if (errorResponse != null)
+                    T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
-
             @Override
             public void onFinish() {
                 stopHttpAnim();

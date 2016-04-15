@@ -12,6 +12,7 @@ import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.entity.OrderStatus;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
  */
 public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.StatusViewHolder> {
     Context mContext;
-    List<OrderStatus.Status> statusList;
+    List<OrderStatus.Status> statusList = new ArrayList<>();
     OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
 
 

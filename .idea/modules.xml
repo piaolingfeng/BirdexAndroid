@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Birdex.iml" filepath="$PROJECT_DIR$/Birdex.iml" />
       <module fileurl="file://$PROJECT_DIR$/PushSDK/PushSDK.iml" filepath="$PROJECT_DIR$/PushSDK/PushSDK.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/daoexamplegenerator/daoexamplegenerator.iml" filepath="$PROJECT_DIR$/daoexamplegenerator/daoexamplegenerator.iml" />
     </modules>
   </component>
 </project>

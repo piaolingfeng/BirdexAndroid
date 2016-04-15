@@ -7,83 +7,10 @@
     android:fitsSystemWindows="true"
     android:background="@color/background"
     android:orientation="vertical">
-    <RelativeLayout
+    <com.birdex.bird.widget.TitleView
+        android:id="@+id/tiv_myaccount_info"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/blue_head_1"
-        app:layout_heightPercent="10%">
-        <ImageView
-            android:id="@+id/iv_myaccount_back"
-            android:layout_width="28dp"
-            android:layout_height="25dp"
-            android:layout_marginLeft="15dp"
-            android:layout_centerVertical="true"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/back_chevron" />
-
-
-
-        <TextView
-            android:id="@+id/tv_myaccount_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:layout_centerInParent="true"
-            android:textSize="@dimen/title_2"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:background="@color/blue_head_1"-->
-        <!--app:layout_heightPercent="10%">-->
-        <!--<ImageView-->
-            <!--android:id="@+id/iv_myaccount_back"-->
-            <!--android:layout_width="15dp"-->
-            <!--android:layout_height="20dp"-->
-            <!--android:layout_marginLeft="15dp"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:src="@drawable/back_chevron" />-->
-        <!--<com.birdex.bird.widget.RoundAngleImageView-->
-            <!--android:id="@+id/iv_myaccount_icon"-->
-            <!--android:layout_toRightOf="@id/iv_myaccount_back"-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:src="@drawable/contacts"-->
-            <!--app:roundHeight="10dp"-->
-            <!--app:roundWidth="10dp" />-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/tv_myaccount_username"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:layout_toRightOf="@id/iv_myaccount_icon"-->
-            <!--android:text="@string/app_name"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="@dimen/title_2" />-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/tv_myaccount_title"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:text="@string/app_name"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="@dimen/title_2"-->
-            <!--android:textStyle="bold" />-->
-
-    <!--</RelativeLayout>-->
+        android:layout_height="@dimen/title_height"/>
 
     <com.zhy.android.percent.support.PercentFrameLayout
         android:id="@+id/fragment_myaccount"

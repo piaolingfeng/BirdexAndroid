@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <com.birdex.bird.widget.TitleView
+        android:id="@+id/title_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_left_width"
+        android:layout_marginRight="@dimen/margin_left_width"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/title_height">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/tv_msg_30_day"
+                android:textColor="@color/order_detail_text_color"
+                android:textSize="@dimen/msg_detail_title" />
+
+            <TextView
+                android:id="@+id/tv_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingLeft="@dimen/item_margin_top_height"
+                android:paddingRight="@dimen/item_margin_top_height"
+                android:text="@string/tv_clear"
+                android:textSize="@dimen/msg_detail_title"
+                android:textColor="@color/blue" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <com.birdex.bird.widget.xrecyclerview.XRecyclerView
+        android:id="@+id/rcy"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.birdex.bird.widget.xrecyclerview.XRecyclerView>
+</LinearLayout>

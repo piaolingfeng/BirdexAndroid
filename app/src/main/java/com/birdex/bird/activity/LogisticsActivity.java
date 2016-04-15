@@ -1,6 +1,7 @@
 package com.birdex.bird.activity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -363,6 +365,7 @@ public class LogisticsActivity extends BaseActivity implements View.OnClickListe
     }
 
     // 复制物流信息到剪切板
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void copyData() {
         List<Tracking> trackings = track.getTrackings();
         StringBuffer sb = new StringBuffer();

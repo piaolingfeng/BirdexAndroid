@@ -1,9 +1,11 @@
 package com.birdex.bird.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -11,6 +13,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -79,7 +83,7 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
     // 传过来的 order_code
     private String order_code;
 
-    // 传过来的 身份证号码
+    // 通过接口查询到的 身份证号码
     private String idcardNoStr;
 
     // 保存的左右边照片
@@ -106,8 +110,54 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
         title_1l.setSaveText(getString(R.string.upload_IDCard));
 
         order_code = getIntent().getExtras().getString("order_code");
-        idcardNoStr = getIntent().getExtras().getString("idcard");
-        idcardNo.setText(idcardNoStr);
+
+        // 获取身份证号码
+        RequestParams params = new RequestParams();
+        params.add("order_code", order_code);
+
+        showLoading();
+        BirdApi.getOrderDetail(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    if ("0".equals(response.getString("error"))) {
+                        idcardNoStr = ((JSONObject) response.get("data")).getString("receiver_id_card");
+                        idcardNo.setText(idcardNoStr);
+                    } else {
+                        T.showShort(MyApplication.getInstans(), getString(R.string.get_idcard_fail));
+                    }
+                    hideLoading();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    hideLoading();
+                    T.showShort(MyApplication.getInstans(), getString(R.string.get_idcard_fail));
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                hideLoading();
+                T.showShort(MyApplication.getInstans(), getString(R.string.get_idcard_fail));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(MyApplication.getInstans(), getString(R.string.get_idcard_fail));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(MyApplication.getInstans(), getString(R.string.get_idcard_fail));
+            }
+
+        });
+
     }
 
 
@@ -168,6 +218,8 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
     // 标记位， true 左边， false 右边
     private boolean flag = true;
 
+    public static final int CAMERA_REQUEST_CODE = 10;
+
     private void choiceDialog() {
         final String items[] = {getString(R.string.photo), getString(R.string.from_loacl)};
         //dialog参数设置
@@ -179,7 +231,22 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                 switch (which) {
                     // 拍照
                     case 0:
-                        photo();
+
+                        if (ContextCompat.checkSelfPermission(UploadIDCardActivity.this, Manifest.permission.CAMERA)
+                                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(UploadIDCardActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            try {
+
+                                //申请拍照权限
+                                ActivityCompat.requestPermissions(UploadIDCardActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        CAMERA_REQUEST_CODE);
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        } else {
+                            photo();
+                        }
+
                         dialog.dismiss();
                         break;
                     // 从本地获取
@@ -200,32 +267,6 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
     // 拍照
     private void photo() {
 
-//        Intent intentFromCapture = new Intent(
-//                MediaStore.ACTION_IMAGE_CAPTURE);
-//        // 判断存储卡是否可以用，可用进行存储
-//        String state = Environment
-//                .getExternalStorageState();
-//        if (state.equals(Environment.MEDIA_MOUNTED)) {
-//            if(flag) {
-//                File path = Environment
-//                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-//                File file = new File(path, IMAGE_FILE_NAME);
-//                intentFromCapture.putExtra(
-//                        MediaStore.EXTRA_OUTPUT,
-//                        Uri.fromFile(file));
-//            } else {
-//                File path = Environment
-//                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-//                File file = new File(path, IMAGE_FILE_NAME_BACK);
-//                intentFromCapture.putExtra(
-//                        MediaStore.EXTRA_OUTPUT,
-//                        Uri.fromFile(file));
-//            }
-//        }
-//
-//        startActivityForResult(intentFromCapture,
-//                PHOTO_GREQUEST_CODE);
-
         Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         filePath = getFileName();
@@ -233,6 +274,21 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
         photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePath)));
 
         startActivityForResult(photoIntent, PHOTO_GREQUEST_CODE);
+    }
+
+
+    // 6.0 权限控制
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                // Permission Granted 用户允许
+                photo();
+            } else {
+                // Permission Denied
+            }
+        }
     }
 
 
@@ -252,10 +308,6 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String fileName = saveDir + "/" + formatter.format(date) + ".jpg";
 
-//        File file = new File(fileName);
-//        if (!file.exists()) {
-//            file.mkdirs();
-//        }
         return fileName;
     }
 
@@ -279,29 +331,6 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
             // 拍照返回
             case PHOTO_GREQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
-
-                    // 判断存储卡是否可以用，可用进行存储
-//                    String state = Environment.getExternalStorageState();
-//                    if (state.equals(Environment.MEDIA_MOUNTED)) {
-//                        if (flag) {
-//                            File path = Environment
-//                                    .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-//                            File tempFile = new File(path, IMAGE_FILE_NAME);
-//
-//                            GlideUtils.setImageToLocalPath(left, tempFile.getAbsolutePath());
-//                            frontPic = tempFile;
-//                        } else {
-//                            File path = Environment
-//                                    .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-//                            File tempFile = new File(path, IMAGE_FILE_NAME_BACK);
-//
-//                            GlideUtils.setImageToLocalPath(right, tempFile.getAbsolutePath());
-//                            backPic = tempFile;
-//                        }
-//                    } else {
-//                        Toast.makeText(getApplicationContext(),
-//                                "未找到存储卡，无法存储照片！", Toast.LENGTH_SHORT).show();
-//                    }
 
                     String sdStatus = Environment.getExternalStorageState();
                     if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用

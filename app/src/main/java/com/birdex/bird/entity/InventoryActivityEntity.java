@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Created by huwei on 16/4/11.
  */
-public class InventoryActivityEntity implements Serializable{
+public class InventoryActivityEntity implements Serializable {
     //物品详细
     private String detail;
 
@@ -150,8 +150,29 @@ public class InventoryActivityEntity implements Serializable{
     //价值单位
     private String price_unit;
     //
+    private String last_storage_time;
+
+    private String available_stock;
+    //
     private ArrayList<InventoryStockEntity> stock;
-    public class InventoryStockEntity implements Serializable{
+
+    public String getLast_storage_time() {
+        return last_storage_time;
+    }
+
+    public void setLast_storage_time(String last_storage_time) {
+        this.last_storage_time = last_storage_time;
+    }
+
+    public String getAvailable_stock() {
+        return available_stock;
+    }
+
+    public void setAvailable_stock(String available_stock) {
+        this.available_stock = available_stock;
+    }
+
+    public class InventoryStockEntity implements Serializable {
         public String getWarehouse_name() {
             return warehouse_name;
         }
@@ -177,11 +198,12 @@ public class InventoryActivityEntity implements Serializable{
         }
 
         //warehouse_name 仓库名称
-        private String warehouse_name="";
+        private String warehouse_name = "";
         //仓库编码
-        private String warehouse_code="";
+        private String warehouse_code = "";
         //多个仓库详情
         private ArrayList<InventoryDetailEntity> detail;
+
         public class InventoryDetailEntity implements Serializable {
             public String getShortage_stock() {
                 return shortage_stock;
@@ -403,7 +425,8 @@ public class InventoryActivityEntity implements Serializable{
             private String warehouse_code;
             //overage_stock: "盘盈数量"
             private String overage_stock;
-            public class InventoryOrderEntity implements Serializable{
+
+            public class InventoryOrderEntity implements Serializable {
                 //storage_code: "入库通知单唯一编码",
                 private String storage_code;
                 //TrackingNo跟踪单号
@@ -412,6 +435,7 @@ public class InventoryActivityEntity implements Serializable{
                 private int Quantity;
                 //到期时间
                 private String Expire;
+
                 public String getExpire() {
                     return Expire;
                 }
@@ -453,9 +477,10 @@ public class InventoryActivityEntity implements Serializable{
                 this.storages = storages;
             }
 
-            private HashMap<String,InventoryTransInfo> storages=new HashMap<>();
-            public class InventoryTransInfo implements Serializable{
-                private String storage_code="";
+            private HashMap<String, InventoryTransInfo> storages = new HashMap<>();
+
+            public class InventoryTransInfo implements Serializable {
+                private String storage_code = "";
 
                 public String getStorage_no() {
                     return storage_no;
@@ -521,13 +546,13 @@ public class InventoryActivityEntity implements Serializable{
                     this.track_type_name = track_type_name;
                 }
 
-                private String storage_no="";
-                private String batch_no="";
-                private String track_no="";
-                private String created_time="";
-                private String track_type="";
-                private String nums="";
-                private String track_type_name="";
+                private String storage_no = "";
+                private String batch_no = "";
+                private String track_no = "";
+                private String created_time = "";
+                private String track_type = "";
+                private String nums = "";
+                private String track_type_name = "";
             }
         }
     }

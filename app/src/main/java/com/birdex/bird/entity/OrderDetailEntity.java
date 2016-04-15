@@ -51,6 +51,8 @@ public class OrderDetailEntity {
         String receiver_id_card;//: "身份证",
         String service_type;//: "服务方式",
         String need_insurance;//: "是否购买保险",
+        String need_verify_id_card;//: "是否需要验证身份证",
+        String verify_id_card_result;//: "身份证验证结果，10表示待验证，20表示验证通过，30表示验证不通过",
         String need_steady;//: “是否加固”,
         String remark;//: "备注",
         String paid_company;//: "支付平台",
@@ -66,6 +68,22 @@ public class OrderDetailEntity {
         String status_name;//: "状态名称",
         String service_type_name;//: "服务方式名称",
         List<OrderListProductEntity> products = new ArrayList<>();
+
+        public String getNeed_verify_id_card() {
+            return need_verify_id_card;
+        }
+
+        public void setNeed_verify_id_card(String need_verify_id_card) {
+            this.need_verify_id_card = need_verify_id_card;
+        }
+
+        public String getVerify_id_card_result() {
+            return verify_id_card_result;
+        }
+
+        public void setVerify_id_card_result(String verify_id_card_result) {
+            this.verify_id_card_result = verify_id_card_result;
+        }
 
         public String getOrder_code() {
             return order_code;

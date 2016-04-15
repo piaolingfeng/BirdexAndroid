@@ -1,7 +1,12 @@
 package com.birdex.bird.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -322,6 +327,19 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
 
     private  List<QgModel> qgModels;
 
+    private static final int UPDATE_UI = 1;
+
+    // handler
+    private Handler myHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what == UPDATE_UI){
+                setDetailData(companyInf, myCities, myMarkest, businessModels, qgModels);
+            }
+        }
+    };
+
     // 初始化数据
     private void initData(){
         showLoading();
@@ -389,43 +407,8 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                 try {
 
                     all = (JSONObject) response.get("data");
-                    JSONObject city = (JSONObject) all.get("city");
-                    myCities = JsonHelper.parseObject(city, City.class);
-                    JSONObject markets = (JSONObject) all.get("markets");
 
-                    myMarkest = new ArrayList<Market>();
-
-                    Iterator<String> marketIter = markets.keys();
-                    while (marketIter.hasNext()) {
-                        String ma = marketIter.next();
-                        JSONObject mm = (JSONObject) markets.get(ma);
-                        Market market1 = JsonHelper.parseObject(mm, Market.class);
-                        myMarkest.add(market1);
-                    }
-
-                    JSONObject business = (JSONObject) all.get("business_models");
-                    businessModels = new ArrayList<BusinessModel>();
-                    Iterator<String> businessIt = business.keys();
-                    while (businessIt.hasNext()) {
-                        String bb = businessIt.next();
-                        JSONObject bm = (JSONObject) business.get(bb);
-                        businessModels.add(JsonHelper.parseObject(bm, BusinessModel.class));
-                    }
-
-                    JSONObject qgModel = (JSONObject) all.get("qg_models");
-                    qgModels = new ArrayList<QgModel>();
-                    Iterator<String> models = qgModel.keys();
-                    while (models.hasNext()) {
-                        String mo = models.next();
-                        JSONObject moo = (JSONObject) qgModel.get(mo);
-                        qgModels.add(JsonHelper.parseObject(moo, QgModel.class));
-                    }
-
-                    typeReady = true;
-
-                    if(dataReady) {
-                        setDetailData(companyInf, myCities, myMarkest, businessModels, qgModels);
-                    }
+                    new MyTask().execute(all);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -457,6 +440,62 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     }
 
 
+    class MyTask extends AsyncTask<JSONObject,Void,Void> {
+
+        @Override
+        protected Void doInBackground(JSONObject... params) {
+            try {
+                JSONObject all = params[0];
+                JSONObject city = (JSONObject) all.get("city");
+                myCities = JsonHelper.parseObject(city, City.class);
+                JSONObject markets = (JSONObject) all.get("markets");
+
+                myMarkest = new ArrayList<Market>();
+
+                Iterator<String> marketIter = markets.keys();
+                while (marketIter.hasNext()) {
+                    String ma = marketIter.next();
+                    JSONObject mm = (JSONObject) markets.get(ma);
+                    Market market1 = JsonHelper.parseObject(mm, Market.class);
+                    myMarkest.add(market1);
+                }
+
+                JSONObject business = (JSONObject) all.get("business_models");
+                businessModels = new ArrayList<BusinessModel>();
+                Iterator<String> businessIt = business.keys();
+                while (businessIt.hasNext()) {
+                    String bb = businessIt.next();
+                    JSONObject bm = (JSONObject) business.get(bb);
+                    businessModels.add(JsonHelper.parseObject(bm, BusinessModel.class));
+                }
+
+                JSONObject qgModel = (JSONObject) all.get("qg_models");
+                qgModels = new ArrayList<QgModel>();
+                Iterator<String> models = qgModel.keys();
+                while (models.hasNext()) {
+                    String mo = models.next();
+                    JSONObject moo = (JSONObject) qgModel.get(mo);
+                    qgModels.add(JsonHelper.parseObject(moo, QgModel.class));
+                }
+
+                typeReady = true;
+
+            } catch (JSONException e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (dataReady) {
+                Message msg = Message.obtain();
+                msg.what = UPDATE_UI;
+                myHandler.sendMessage(msg);
+            }
+        }
+    }
 
     @Override
     protected void lazyLoad() {
@@ -552,6 +591,17 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
 
             // 退出账户按钮
             case R.id.out_account:
+                // 清除掉登录的相关信息
+                SharedPreferences sp = getActivity().getSharedPreferences("login", Activity.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+
+                editor.putString("company_code", "");
+                editor.putString("company_name", "");
+                editor.putString("company_short_name", "");
+                editor.putString("user_code", "");
+                editor.putString("token", "");
+                editor.commit();
+
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 MyApplication.getInstans().clearActivities();
                 startActivity(intent);

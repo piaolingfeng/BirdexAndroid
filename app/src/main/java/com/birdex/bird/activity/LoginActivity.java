@@ -72,6 +72,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void initData() {
         sp = getSharedPreferences("login", Activity.MODE_PRIVATE);
         editor = sp.edit();
+
+        // 先检查是否保存了 token，如果不为空说明不再需要登录
+        String oldToken = sp.getString("token", "");
+        if (!TextUtils.isEmpty(oldToken)) {
+            // 将 token 添加进去
+            MyApplication.ahc.addHeader("USER-TOKEN", oldToken);
+
+            Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
+
+            startActivity(intent);
+            finish();
+        }
+
         // 确认是否勾选了 记住密码
         boolean ischecked = sp.getBoolean("remember", false);
         if (ischecked) {
@@ -119,13 +132,35 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
+    // 存储返回的 user
+    private void saveUser(User user) {
+        editor.putString("company_code", user.getCompany_code());
+        editor.putString("company_name", user.getCompany_name());
+        editor.putString("company_short_name", user.getCompany_short_name());
+        editor.putString("user_code", user.getUser_code());
+
+        editor.commit();
+    }
+
 
     // 执行登录操作
     private void login() {
         showLoading();
+        MyApplication application = (MyApplication) getApplication();
+        String utoken = application.getUmengToken();
+        if (TextUtils.isEmpty(utoken)) {
+            T.showShort(MyApplication.getInstans(), getString(R.string.login_no_token));
+            return;
+        } else {
+            editor.putString(MyApplication.SP_Umeng,utoken);
+            editor.commit();
+        }
+
+        MyApplication.ahc.addHeader("DEVICE-TOKEN", utoken);
+
         RequestParams params = new RequestParams();
-        params.put("device_info",MyApplication.device_info);
-        params.put("device_type",MyApplication.device_type);
+        params.put("device_info", MyApplication.device_info);
+        params.put("device_type", MyApplication.device_type);
         params.put("account", username.getText().toString());
         params.put("password", password.getText().toString());
         BirdApi.login(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
@@ -137,12 +172,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if ("0".equals(result)) {
                         hideLoading();
                         spEdit();
-                        MyApplication.user = JsonHelper.parseObject((JSONObject) response.get("data"), User.class);
-
+                        User user = JsonHelper.parseObject((JSONObject) response.get("data"), User.class);
+                        //将 user 信息存入到 sp
+                        saveUser(user);
                         // user_token 登录后返回
-                        String token = (String) ((JSONObject)response.get("data")).get("user_token");
+                        String token = (String) ((JSONObject) response.get("data")).get("user_token");
                         // 将 token 添加进去
                         MyApplication.ahc.addHeader("USER-TOKEN", token);
+
+                        saveToken(token);
 
                         T.showShort(MyApplication.getInstans(), getString(R.string.loginsu));
                         Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
@@ -180,9 +218,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         finish();
                     } else {
                         T.showShort(MyApplication.getInstans(), response.getString("data"));
+                        hideLoading();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    hideLoading();
                 }
             }
 
@@ -197,7 +237,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 hideLoading();
-                T.showShort(MyApplication.getInstans(), getString(R.string.loginfa));
+                T.showShort(MyApplication.getInstans(), getString(R.string.login_fail));
             }
 
             @Override
@@ -210,7 +250,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
 
-    private void spEdit(){
+    private void spEdit() {
         if (remember.isChecked()) {
             // 选中了， 执行保存操作
             editor.putString("username", username.getText().toString());
@@ -222,6 +262,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             editor.putString("password", "");
             editor.putBoolean("remember", false);
         }
+        editor.commit();
+    }
+
+    // 保存接口发过来的 token
+    private void saveToken(String token) {
+        editor.putString("token", token);
         editor.commit();
     }
 

@@ -20,6 +20,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.Subscriber;
 
@@ -35,6 +36,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
     @Bind(R.id.rcy_orderlist)
     XRecyclerView rcy_orderlist;
 
+    String tag = "OrderListManagerFragment";
     @Override
     protected void key(int keyCode, KeyEvent event) {
 
@@ -109,7 +111,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
 //        listParams.add("count", entity.getCount());
         listParams.add("service_type", entity.getService_type());
         listParams.add("receiver_moblie", entity.getReceiver_moblie());
-        BirdApi.getOrderList(MyApplication.getInstans(), listParams, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -128,7 +130,14 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
                     bus.post(orderListEntities.getData().getCount(), "frame_layout");//刷新个数及界面
                     OrderAdapter.notifyDataSetChanged();
                 } else {
-                    T.showLong(getActivity(), getString(R.string.parse_error));
+                    try {
+                        if (response.get("data") != null)
+                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
+                        else
+                            T.showLong(MyApplication.getInstans(),getString(R.string.parse_error));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -144,7 +153,9 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
                 stopHttpAnim();
                 super.onFinish();
             }
-        });
+        };
+        handler.setTag(tag);
+        BirdApi.getOrderList(MyApplication.getInstans(), listParams, handler);
     }
 
     @Override
@@ -172,5 +183,11 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
             rcy_orderlist.refreshComplete();
             rcy_orderlist.loadMoreComplete();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        BirdApi.cancelRequestWithTag(tag);
+        super.onDestroy();
     }
 }

@@ -154,6 +154,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     @Bind(R.id.clear_server)
     TextView clear_server;
 
+    String tag = "AccountManagerFragment";
 
     // 通过 省份 城市 地区 id ，得到 地址
     private String getAddressDetail(City city,String provinceId,String cityId,String areaId){
@@ -344,7 +345,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     private void initData(){
         showLoading();
         RequestParams params = new RequestParams();
-        BirdApi.getCompanyMes(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -389,7 +390,9 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                 hideLoading();
                 T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
             }
-        });
+        };
+        handler.setTag(tag);
+        BirdApi.getCompanyMes(MyApplication.getInstans(), params, handler);
 
 
         // 请求获取相关的 type 数据，成功获取后再展现数据
@@ -398,7 +401,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
         requestParams.put("markets", "all");
         requestParams.put("business_models", "all");
         requestParams.put("qg_models", "all");
-        BirdApi.getConfig(MyApplication.getInstans(), requestParams, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler1 = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -436,7 +439,9 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                 hideLoading();
                 T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
             }
-        });
+        };
+        handler1.setTag(tag);
+        BirdApi.getConfig(MyApplication.getInstans(), requestParams, handler1);
     }
 
 
@@ -607,5 +612,11 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        BirdApi.cancelRequestWithTag(tag);
+        super.onDestroy();
     }
 }

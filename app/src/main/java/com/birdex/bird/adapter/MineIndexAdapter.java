@@ -18,7 +18,9 @@ import com.birdex.bird.activity.AboutActivity;
 import com.birdex.bird.activity.MyAccountActivity;
 import com.birdex.bird.activity.MyAccountInfoActivity;
 import com.birdex.bird.activity.MyMessageActivity;
+import com.birdex.bird.activity.TodayDataActivity;
 import com.birdex.bird.entity.MineEntity;
+import com.birdex.bird.util.T;
 
 import java.util.ArrayList;
 
@@ -136,6 +138,7 @@ public class MineIndexAdapter extends RecyclerView.Adapter<MineIndexAdapter.Mine
                     break;
                 case 2:
                     //我的设置
+                    T.showShort(activity,activity.getString(R.string.please_wail));
                     break;
                 case 3:
                     //账户管理
@@ -146,9 +149,12 @@ public class MineIndexAdapter extends RecyclerView.Adapter<MineIndexAdapter.Mine
                     break;
                 case 4:
                     //我的数据
+                    intent = new Intent(activity, TodayDataActivity.class);
+                    activity.startActivity(intent);
                     break;
                 case 5:
                     //我的客户经理
+                    T.showShort(activity,activity.getString(R.string.please_wail));
                     break;
                 case 6:
                     //关于

@@ -133,7 +133,8 @@ public class PredicitionDetailActivity extends BaseActivity {
         tv_confirm_predicition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                T.showShort(PredicitionDetailActivity.this, "confirm_predicition");
+//                T.showShort(PredicitionDetailActivity.this, "confirm_predicition");
+                setConfirmStorage(entity.getData().getStorage_code(), "", -1);//批量复核//-1为刷新全部状态
             }
         });
         tv_Logistics_tracking.setText(entity.getData().getTrack_no());
@@ -151,7 +152,6 @@ public class PredicitionDetailActivity extends BaseActivity {
 
             @Override
             public void onItemReConfirmClick(int position) {
-
                 showAlertDialog(position);
             }
         });
@@ -212,12 +212,16 @@ public class PredicitionDetailActivity extends BaseActivity {
                     try {
                         String success = (String) response.get("data");
                         int error = (int) response.get("error");
-                        T.showLong(PredicitionDetailActivity.this, success);
                         if (error == 0) {
-                            if (success.equals("success")) {
+                            if (success != null && success.equals("success")) {
                                 bus.post(position, "confirm");//刷新当前页面
-                                bus.post(fragment_position,"confirm_fragment");//刷新fragment页面
+                                if (position == -1) {//-1为刷新全部状态
+                                    bus.post(fragment_position, "confirm_fragment");//刷新fragment页面
+                                }
+                                T.showLong(PredicitionDetailActivity.this, getString(R.string.confirm_success));
                             }
+                        } else {
+                            T.showLong(PredicitionDetailActivity.this, success);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

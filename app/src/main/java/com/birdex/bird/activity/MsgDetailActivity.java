@@ -9,8 +9,10 @@ import com.birdex.bird.adapter.MsgInventoryAdapter;
 import com.birdex.bird.adapter.MsgOrderAdapter;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.InventorySimpleEntity;
+import com.birdex.bird.entity.MsgListEntity;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.entity.OrderRequestEntity;
+import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.T;
 import com.birdex.bird.util.TimeUtil;
@@ -46,16 +48,19 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
 
     MsgInventoryAdapter inventoryAdapter;
     MsgOrderAdapter orderAdapter;
-    OrderListEntity orderListEntities;//订单列表
+    //    OrderListEntity orderListEntities;//订单列表
     private InventorySimpleEntity InvenEntity = null;
 
-    OrderRequestEntity requestEntity = new OrderRequestEntity();
+//    OrderRequestEntity requestEntity = new OrderRequestEntity();
 
     EventBus bus;
 
     int inventoryPage_no = 1;
 
     String tag = "MsgDetailActivity";
+
+    //new 接口
+    MsgListEntity listEntity;
 
     @Override
     public int getContentLayoutResId() {
@@ -67,10 +72,11 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
         title = getIntent().getStringExtra("title");
         bus = EventBus.getDefault();
         bus.register(this);
-        InvenEntity = new InventorySimpleEntity();
-        orderListEntities = new OrderListEntity();
-        inventoryAdapter = new MsgInventoryAdapter(MsgDetailActivity.this, InvenEntity.getProducts());
-        orderAdapter = new MsgOrderAdapter(this, orderListEntities.getData().getOrders(), title);
+//        InvenEntity = new InventorySimpleEntity();
+//        orderListEntities = new OrderListEntity();
+        listEntity = new MsgListEntity();
+        inventoryAdapter = new MsgInventoryAdapter(MsgDetailActivity.this, listEntity.getData().getMessages());
+        orderAdapter = new MsgOrderAdapter(this, listEntity.getData().getMessages(), title);
 
         title_view.setInventoryDetail(title, R.color.gray1);
         rcy.setLayoutManager(new FullyLinearLayoutManager(this));
@@ -81,106 +87,170 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
         rcy.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL_LIST));
         msg_list_name = getResources().getStringArray(R.array.msg_list_name);
-        if (msg_list_name.length >= 5) {
-            if (msg_list_name[0].equals(title)) {
-                rcy.setAdapter(inventoryAdapter);
-                getInvenList();
-            } else if (msg_list_name[4].equals(title)) {
-                T.showLong(this, getString(R.string.please_wail));
-            } else {
-                if (msg_list_name[1].equals(title)) {
-                    requestEntity.setStatus("3");
-                }
-                if (msg_list_name[2].equals(title)) {
-                    requestEntity.setStatus("4");
-                }
-                if (msg_list_name[3].equals(title)) {
-                    requestEntity.setStatus("30");//审核不通过
-                }
-                getOrderList("");
-                rcy.setAdapter(orderAdapter);
-            }
-        }
+//        if (msg_list_name.length >= 5) {
+//            if (msg_list_name[0].equals(title)) {
+//                rcy.setAdapter(inventoryAdapter);
+////                getInvenList();
+//            } else if (msg_list_name[4].equals(title)) {
+//                T.showLong(this, getString(R.string.please_wail));
+//            } else {
+//                if (msg_list_name[1].equals(title)) {
+////                    requestEntity.setStatus("3");
+//                }
+//                if (msg_list_name[2].equals(title)) {
+////                    requestEntity.setStatus("4");
+//                }
+//                if (msg_list_name[3].equals(title)) {
+////                    requestEntity.setStatus("30");//审核不通过
+//                }
+////                getOrderList("");
+        getMsgList("");
+//                rcy.setAdapter(orderAdapter);
+//            }
+//        }
     }
 
+
+//    @Subscriber(tag = "MsgOrderLoadMore")
+//    public void getOrderList(String text) {
+//        showLoading();
+//        RequestParams params = new RequestParams();
+//        params.add("status", requestEntity.getStatus());
+//        params.add("start_date", TimeUtil.getMonthDelayData());//默认30天内的
+//        params.add("end_date", TimeUtil.getCurrentData());
+//        params.add("page_no", requestEntity.getPage_no() + "");
+//        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
+//                if (orderListEntities != null) {
+//                    if (requestEntity.getPage_no() > 1)
+//                        if (orderListEntities.getData().getOrders().size() == 0 && requestEntity.getPage_no() > 1) {
+//                            T.showShort(MyApplication.getInstans(), "已经是最后一页");
+//                        } else {
+//                            orderAdapter.getList().addAll(orderListEntities.getData().getOrders());
+//                            orderListEntities.getData().setOrders(orderAdapter.getList());
+//                        }
+//                    else {
+//                        orderAdapter.setList(orderListEntities.getData().getOrders());
+//                    }
+//                    orderAdapter.notifyDataSetChanged();
+//                } else {
+//                    try {
+//                        if (response.get("data") != null)
+//                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + " 请重新登录");
+//                        else
+//                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                super.onFailure(statusCode, headers, throwable, errorResponse);
+//
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                stopHttpAnim();
+//                super.onFinish();
+//            }
+//        };
+//        handler.setTag(tag);
+//        BirdApi.getOrderList(this, params, handler);
+//    }
+
+//    public void getInvenList() {
+//        showLoading();
+//        RequestParams params = new RequestParams();
+//        params.add("stock_status", "20");
+//        params.add("page_no", inventoryPage_no + "");
+//        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                InvenEntity = GsonHelper.getPerson(response.toString(), InventorySimpleEntity.class);
+//                if (InvenEntity != null) {
+//                    if (InvenEntity.getProducts().size() == 0 && inventoryPage_no > 1) {
+//                        T.showShort(MyApplication.getInstans(), "已经是最后一页");
+//                    } else {
+//                        inventoryAdapter.getList().addAll(InvenEntity.getProducts());
+//                        inventoryAdapter.notifyDataSetChanged();
+//                    }
+//                } else {
+//                    try {
+//                        if (response.get("data") != null)
+//                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + " 请重新登录");
+//                        else
+//                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                if (errorResponse != null)
+//                    T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
+//                super.onFailure(statusCode, headers, throwable, errorResponse);
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                stopHttpAnim();
+//                super.onFinish();
+//            }
+//        };
+//        handler.setTag(tag);
+//        BirdApi.getInventory(this, params, handler);
+//    }
 
     @Subscriber(tag = "MsgOrderLoadMore")
-    public void getOrderList(String text) {
+    public void getMsgList(String text) {
         showLoading();
         RequestParams params = new RequestParams();
-        params.add("status", requestEntity.getStatus());
+        params.add("page_no", inventoryPage_no + "");
         params.add("start_date", TimeUtil.getMonthDelayData());//默认30天内的
         params.add("end_date", TimeUtil.getCurrentData());
-        params.add("page_no", requestEntity.getPage_no() + "");
+        if (msg_list_name[0].equals(title))
+            params.add("msg_type", Constant.MSG_STOCK_WARNING);
+        if (msg_list_name[1].equals(title))
+            params.add("msg_type", Constant.MSG_ORDER_IDCARD_EXCEPTION);
+        if (msg_list_name[2].equals(title))
+            params.add("msg_type", Constant.MSG_ORDER_STOCK_EXCEPTION);
+        if (msg_list_name[3].equals(title))
+            params.add("msg_type", Constant.MSG_ORDER_VERIFY_FAIL);
+        if (msg_list_name[4].equals(title))
+            params.add("msg_type", Constant.MSG_ACCOUNT_EXCEPTION);
         JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
-                if (orderListEntities != null) {
-                    if (requestEntity.getPage_no() > 1)
-                        if (orderListEntities.getData().getOrders().size() == 0 && requestEntity.getPage_no() > 1) {
+                if (response != null) {
+                    MsgListEntity entity = GsonHelper.getPerson(response.toString(), MsgListEntity.class);
+                    if (entity != null) {
+                        if (entity.getData().getPage_num() != 20 && inventoryPage_no > 1) {
                             T.showShort(MyApplication.getInstans(), "已经是最后一页");
                         } else {
-                            orderAdapter.getList().addAll(orderListEntities.getData().getOrders());
-                            orderListEntities.getData().setOrders(orderAdapter.getList());
+                            listEntity.getData().getMessages().addAll(entity.getData().getMessages());
+//                            inventoryAdapter.getList().addAll(InvenEntity.getProducts());
+//                            inventoryAdapter.notifyDataSetChanged();
+                            bus.post("", "msg_list_update");
                         }
-                    else {
-                        orderAdapter.setList(orderListEntities.getData().getOrders());
-                    }
-                    orderAdapter.notifyDataSetChanged();
-                } else {
-                    try {
-                        if (response.get("data") != null)
-                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
-                        else
-                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-
-            }
-
-            @Override
-            public void onFinish() {
-                stopHttpAnim();
-                super.onFinish();
-            }
-        };
-        handler.setTag(tag);
-        BirdApi.getOrderList(this, params, handler);
-    }
-
-    public void getInvenList() {
-        showLoading();
-        RequestParams params = new RequestParams();
-        params.add("stock_status", "20");
-        params.add("page_no", inventoryPage_no + "");
-        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                InvenEntity = GsonHelper.getPerson(response.toString(), InventorySimpleEntity.class);
-                if (InvenEntity != null) {
-                    if (InvenEntity.getProducts().size() == 0 && inventoryPage_no > 1) {
-                        T.showShort(MyApplication.getInstans(), "已经是最后一页");
                     } else {
-                        inventoryAdapter.getList().addAll(InvenEntity.getProducts());
-                        inventoryAdapter.notifyDataSetChanged();
+                        try {
+                            if (response.get("data") != null)
+                                T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
+                            else
+                                T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 } else {
-                    try {
-                        if (response.get("data") != null)
-                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
-                        else
-                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    T.showLong(MsgDetailActivity.this, getString(R.string.request_err));
                 }
             }
 
@@ -190,6 +260,7 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
                     T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
+
             @Override
             public void onFinish() {
                 stopHttpAnim();
@@ -197,7 +268,7 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
             }
         };
         handler.setTag(tag);
-        BirdApi.getInventory(this, params, handler);
+        BirdApi.getMsgList(this, params, handler);
     }
 
     @Override
@@ -216,13 +287,13 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
 //        entity.setPage_no(entity.getPage_no() + 1);
 //        bus.post(entity, "requestOrderList");
 //        requestEntity.se
-        if (msg_list_name[0].equals(title)) {
-            inventoryPage_no++;
-            getInvenList();
-        } else {
-            requestEntity.setPage_no(requestEntity.getPage_no() + 1);
-            bus.post("", "MsgOrderLoadMore");
-        }
+//        if (msg_list_name[0].equals(title)) {
+        inventoryPage_no++;
+//            getInvenList();
+//        } else {
+//            requestEntity.setPage_no(requestEntity.getPage_no() + 1);
+        bus.post("", "MsgOrderLoadMore");
+//        }
     }
 
     /*
@@ -243,6 +314,23 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
         orderAdapter.notifyDataSetChanged();
         inventoryAdapter.getList().clear();
         inventoryAdapter.notifyDataSetChanged();
+    }
+
+    @Subscriber(tag = "msg_list_update")
+    public void listUpdate(String text) {
+        if (msg_list_name[0].equals(title)) {
+            inventoryAdapter.setList(listEntity.getData().getMessages());
+            rcy.setAdapter(inventoryAdapter);
+            inventoryAdapter.notifyDataSetChanged();
+        } else {
+            if (msg_list_name[4].equals(title)) {
+
+            } else {
+                orderAdapter.setList(listEntity.getData().getMessages());
+                rcy.setAdapter(orderAdapter);
+                orderAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
 }

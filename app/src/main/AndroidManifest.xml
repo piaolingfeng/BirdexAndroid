@@ -132,6 +132,11 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name=".service.CacheService"
+            android:enabled="true">
+        </service>
+
         <receiver android:name=".broadcast.NotificationBroadcast">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

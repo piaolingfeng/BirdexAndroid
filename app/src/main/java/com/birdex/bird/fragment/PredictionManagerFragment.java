@@ -1,23 +1,27 @@
 package com.birdex.bird.fragment;
 
+import android.content.Intent;
+import android.nfc.Tag;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.KeyEvent;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
-import com.birdex.bird.activity.BaseActivity;
+import com.birdex.bird.activity.MyOrderListActivity;
+import com.birdex.bird.activity.PredicitionDetailActivity;
 import com.birdex.bird.adapter.PredicitionAdapter;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.entity.PredicitionEntity;
+import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.GsonHelper;
-import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.T;
-import com.birdex.bird.xrecyclerview.XRecyclerView;
+import com.birdex.bird.widget.xrecyclerview.XRecyclerView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.Subscriber;
 
@@ -33,11 +37,13 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
     @Bind(R.id.rcy_orderlist)
     XRecyclerView rcy_orderlist;
 
+    String tag = "PredictionManagerFragment";
 
     @Override
     protected void key(int keyCode, KeyEvent event) {
 
     }
+
 
     @Override
     public int getContentLayoutResId() {
@@ -47,10 +53,14 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
 
     @Override
     public void initializeContentViews() {
-        HideSoftKeyboardUtil.setupAppCompatUI(contentView, (BaseActivity) getActivity());
 //        orderListEntities = new OrderListEntity();
         predicitionEntity = new PredicitionEntity();
-        entity = new OrderRequestEntity();
+//        if (getArguments() != null) {
+        entity = (OrderRequestEntity) bundle.getSerializable("entity");
+        if (entity == null) {
+            entity = new OrderRequestEntity();
+        }
+//        }
         bus.register(this);
         rcy_orderlist.setLoadingListener(this);
         rcy_orderlist.setPullRefreshEnabled(false);
@@ -60,6 +70,16 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
 //        rcy_orderlist.addItemDecoration(new DividerItemDecoration(getActivity(),
 //                DividerItemDecoration.VERTICAL_LIST));
         predicitionAdapter = new PredicitionAdapter(getActivity(), predicitionEntity.getData().getStorages());
+        predicitionAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                String storage_code = predicitionEntity.getData().getStorages().get(position).getStorage_code();
+                Intent intent = new Intent(getActivity(), PredicitionDetailActivity.class);
+                intent.putExtra("storage_code", storage_code);
+                intent.putExtra("position", position);
+                startActivity(intent);
+            }
+        });
         rcy_orderlist.setAdapter(predicitionAdapter);
         getPredicitionList();
     }
@@ -68,38 +88,52 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
      * 获取预报列表
      */
     private void getPredicitionList() {
-        showBar();
+        showLoading();
         RequestParams listParams = new RequestParams();
         listParams.add("page_no", entity.getPage_no() + "");
         listParams.add("page_size", entity.getPage_size());
         listParams.add("keyword", entity.getKeyword());
-        listParams.add("warehouse_code", entity.getWarehouse_cod());
+        listParams.add("warehouse_code", entity.getWarehouse_code());
         listParams.add("start_date", entity.getStart_date());
         listParams.add("end_date", entity.getEnd_date());
         listParams.add("status", entity.getStatus());
 //        listParams.add("count", entity.getCount());
-        BirdApi.getPredicitionList(MyApplication.getInstans(), listParams, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 predicitionEntity = GsonHelper.getPerson(response.toString(), PredicitionEntity.class);
 //                orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
-                if (entity.getPage_no() > 1) {
-                    if (predicitionEntity.getData().getStorages().size() == 0) {
-                        T.showShort(MyApplication.getInstans(), "已经是最后一页");
-                    } else
-                        predicitionAdapter.getPredicitionDetailList().addAll(predicitionEntity.getData().getStorages());
+                if (predicitionEntity != null) {
+                    if (entity.getPage_no() > 1) {
+                        if (predicitionEntity.getData().getStorages().size() == 0 && entity.getPage_no() > 1) {
+                            T.showShort(MyApplication.getInstans(), "已经是最后一页");
+                        } else {
+                            predicitionAdapter.getPredicitionDetailList().addAll(predicitionEntity.getData().getStorages());
+                            predicitionEntity.getData().setStorages(predicitionAdapter.getPredicitionDetailList());
+                        }
+                    } else {
+                        predicitionAdapter.setPredicitionDetailList(predicitionEntity.getData().getStorages());
+                    }
+                    bus.post(predicitionEntity.getData().getCount(), "frame_layout");//刷新个数及界面
+                    predicitionAdapter.notifyDataSetChanged();
                 } else {
-                    predicitionAdapter.setPredicitionDetailList(predicitionEntity.getData().getStorages());
+                    try {
+                        if (response.get("data") != null)
+                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
+                        else
+                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-                bus.post(predicitionEntity.getData().getCount(), "frame_layout");//刷新个数及界面
-                predicitionAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
-                super.onFailure(statusCode, headers, responseString, throwable);
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                if (errorResponse != null)
+                    T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
+                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
 
             @Override
@@ -107,7 +141,9 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
                 stopHttpAnim();
                 super.onFinish();
             }
-        });
+        };
+        handler.setTag(tag);
+        BirdApi.getPredicitionList(MyApplication.getInstans(), listParams, handler);
 
     }
 
@@ -155,10 +191,16 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
      *停止动画
      */
     private void stopHttpAnim() {
-        hideBar();
+        hideLoading();
         if (rcy_orderlist != null) {
             rcy_orderlist.refreshComplete();
             rcy_orderlist.loadMoreComplete();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        BirdApi.cancelRequestWithTag(tag);
+        super.onDestroy();
     }
 }

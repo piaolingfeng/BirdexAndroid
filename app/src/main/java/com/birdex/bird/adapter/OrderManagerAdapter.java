@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.birdex.bird.R;
 import com.birdex.bird.entity.OrderManagerEntity;
-import com.birdex.bird.helper.ItemTouchHelperAdapter;
-import com.birdex.bird.helper.ItemTouchHelperViewHolder;
-import com.birdex.bird.helper.OnStartDragListener;
+import com.birdex.bird.util.recycleviewhelper.ItemTouchHelperAdapter;
+import com.birdex.bird.util.recycleviewhelper.ItemTouchHelperViewHolder;
+import com.birdex.bird.util.recycleviewhelper.OnStartDragListener;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.interfaces.OnRecyclerViewItemLongClickListener;
 

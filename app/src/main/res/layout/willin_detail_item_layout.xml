@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_willin_item_marginlr"
+        android:layout_marginRight="@dimen/detail_willin_item_marginlr"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/detail_willin_item_paddingtb"
+        android:paddingTop="@dimen/detail_willin_item_paddingtb">
+
+        <TextView
+            style="@style/detail_willin_left"
+            android:gravity="right"
+            android:text="@string/create_time"
+            android:textColor="@color/gray_2"
+            android:textSize="@dimen/detail_inner_font2" />
+
+        <TextView
+            android:id="@+id/tv_willin_detail_createtime"
+            style="@style/detail_willin_right"
+            android:textColor="@color/gray_2"
+            android:textSize="@dimen/detail_inner_font2" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_willin_item_marginlr"
+        android:layout_marginRight="@dimen/detail_willin_item_marginlr"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/detail_willin_item_paddingtb"
+        android:paddingTop="@dimen/detail_willin_item_paddingtb">
+
+        <TextView
+            style="@style/detail_willin_left"
+            android:gravity="right"
+            android:text="@string/ininventory_code"
+            android:textColor="@color/gray_2"
+            android:textSize="@dimen/detail_inner_font2" />
+
+        <TextView
+            android:id="@+id/tv_willin_detail_incode"
+            style="@style/detail_willin_right"
+            android:textColor="@color/blue_5"
+            android:textSize="@dimen/detail_inner_font1" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_willin_item_marginlr"
+        android:layout_marginRight="@dimen/detail_willin_item_marginlr"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/detail_willin_item_paddingtb"
+        android:paddingTop="@dimen/detail_willin_item_paddingtb">
+
+        <TextView
+            style="@style/detail_willin_left"
+            android:gravity="right"
+            android:text="@string/trans_code"
+            android:textColor="@color/gray_2"
+            android:textSize="@dimen/detail_inner_font2" />
+
+        <TextView
+            android:id="@+id/tv_willin_detail_transcode"
+            style="@style/detail_willin_right"
+            android:textColor="@color/gray_2"
+            android:textSize="@dimen/detail_inner_font2" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_willin_item_marginlr"
+        android:layout_marginRight="@dimen/detail_willin_item_marginlr"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/detail_willin_item_paddingtb"
+        android:paddingTop="@dimen/detail_willin_item_paddingtb">
+
+        <TextView
+            style="@style/detail_willin_left"
+            android:gravity="right"
+            android:text="@string/trans_style"
+            android:textColor="@color/gray_2"
+            android:textSize="@dimen/detail_inner_font2" />
+
+        <TextView
+            android:id="@+id/tv_willin_detail_transstayle"
+            style="@style/detail_willin_right"
+            android:textColor="@color/gray_2"
+            android:textSize="@dimen/detail_inner_font2" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_willin_item_marginlr"
+        android:layout_marginRight="@dimen/detail_willin_item_marginlr"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/detail_willin_item_paddingtb">
+
+        <TextView
+            style="@style/detail_willin_left"
+            android:gravity="right"
+            android:text="@string/willin_num"
+            android:textColor="@color/gray_2"
+            android:textSize="@dimen/detail_inner_font2" />
+
+        <TextView
+            android:id="@+id/tv_willin_detail_num"
+            style="@style/detail_willin_right"
+            android:textColor="@color/gray_2"
+            android:textSize="@dimen/detail_inner_font2" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/detail_willin_viewother"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/blue_5"
+        android:layout_gravity="right"
+        android:layout_marginRight="@dimen/detail_willin_item_marginlr"
+        android:paddingBottom="12dp"
+        android:textSize="@dimen/detail_willin_viewother"
+        android:text="@string/willin_view_others"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/detail_willin_item_marginlr"
+        android:layout_marginRight="@dimen/detail_willin_item_marginlr"
+        android:layout_height="1.5px"
+        android:background="@color/single_line"/>
+</LinearLayout>

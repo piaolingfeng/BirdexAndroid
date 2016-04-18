@@ -12,7 +12,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/title" />
+        <com.birdex.bird.widget.TitleView
+            android:id="@+id/titleview"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/title_height"/>
 
 
         <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,7 +30,15 @@
                 android:background="@color/background"
                 android:orientation="vertical">
 
-
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tl_inventory_change"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll"
+                    app:tabIndicatorColor="@color/blue"
+                    app:tabSelectedTextColor="@color/blue"
+                    app:tabTextColor="@color/gray"
+                    android:visibility="gone"/>
                 <com.zhy.android.percent.support.PercentLinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -63,105 +74,148 @@
                             android:src="@drawable/scan_code" />
                     </com.zhy.android.percent.support.PercentRelativeLayout>
 
-                    <com.zhy.android.percent.support.PercentLinearLayout
+                    <com.zhy.android.percent.support.PercentRelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@color/white"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content">
 
-                        <com.zhy.android.percent.support.PercentRelativeLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/list_item_selector"
-                            android:gravity="center">
+                        <com.zhy.android.percent.support.PercentLinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:background="@color/white"
+                            android:orientation="horizontal">
+
+                            <com.zhy.android.percent.support.PercentRelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@drawable/list_item_selector"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/state_Warehouse"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:drawablePadding="10dp"
+                                    android:drawableRight="@drawable/laydown"
+                                    android:gravity="center"
+                                    android:text="@string/state_Warehouse"
+                                    android:textColor="@color/menu_item_color_selector"
+                                    app:layout_paddingLeftPercent="5%"
+                                    app:layout_paddingRightPercent="5%"
+                                    app:layout_textSizePercent="@string/title_filter_textsize" />
+
+                            </com.zhy.android.percent.support.PercentRelativeLayout>
 
                             <TextView
-                                android:id="@+id/state_Warehouse"
-                                android:layout_width="wrap_content"
+                                android:layout_width="1dp"
+                                android:layout_height="0dp"
+                                android:layout_gravity="center"
+                                android:background="@color/single_line"
+                                android:visibility="visible"
+                                app:layout_heightPercent="60%" />
+
+                            <com.zhy.android.percent.support.PercentRelativeLayout
+                                android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:drawablePadding="10dp"
-                                android:drawableRight="@drawable/laydown"
-                                android:gravity="center"
-                                android:text="@string/state_Warehouse"
-                                android:textColor="@color/menu_item_color_selector"
-                                app:layout_paddingLeftPercent="5%"
-                                app:layout_paddingRightPercent="5%"
-                                app:layout_textSizePercent="@string/title_filter_textsize" />
+                                android:layout_weight="1"
+                                android:background="@drawable/list_item_selector"
+                                android:gravity="center">
 
-                        </com.zhy.android.percent.support.PercentRelativeLayout>
+                                <TextView
+                                    android:id="@+id/state_all"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:drawablePadding="10dp"
+                                    android:drawableRight="@drawable/laydown"
+                                    android:gravity="center"
+                                    android:text="@string/state_all"
+                                    android:textColor="@color/menu_item_color_selector"
+                                    app:layout_paddingLeftPercent="5%"
+                                    app:layout_paddingRightPercent="5%"
+                                    app:layout_textSizePercent="@string/title_filter_textsize" />
 
-                        <TextView
-                            android:layout_width="1dp"
-                            android:layout_height="0dp"
-                            android:layout_gravity="center"
-                            android:background="@color/touch_color"
-                            android:visibility="visible"
-                            app:layout_heightPercent="60%" />
 
-                        <com.zhy.android.percent.support.PercentRelativeLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/list_item_selector"
-                            android:gravity="center">
+                            </com.zhy.android.percent.support.PercentRelativeLayout>
 
                             <TextView
-                                android:id="@+id/state_all"
-                                android:layout_width="wrap_content"
+                                android:layout_width="1dp"
+                                android:layout_height="0dp"
+                                android:layout_gravity="center"
+                                android:background="@color/single_line"
+                                android:visibility="visible"
+                                app:layout_heightPercent="60%" />
+
+                            <com.zhy.android.percent.support.PercentRelativeLayout
+                                android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:drawablePadding="10dp"
-                                android:drawableRight="@drawable/laydown"
-                                android:gravity="center"
-                                android:text="@string/state_all"
-                                android:textColor="@color/menu_item_color_selector"
-                                app:layout_paddingLeftPercent="5%"
-                                app:layout_paddingRightPercent="5%"
-                                app:layout_textSizePercent="@string/title_filter_textsize" />
+                                android:layout_weight="1"
+                                android:background="@drawable/list_item_selector"
+                                android:gravity="center">
 
+                                <TextView
+                                    android:id="@+id/state_time"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:drawablePadding="10dp"
+                                    android:drawableRight="@drawable/laydown"
+                                    android:gravity="center"
+                                    android:text="@string/time_all"
+                                    android:textColor="@color/menu_item_color_selector"
+                                    app:layout_paddingLeftPercent="5%"
+                                    app:layout_paddingRightPercent="5%"
+                                    app:layout_textSizePercent="@string/title_filter_textsize" />
 
-                        </com.zhy.android.percent.support.PercentRelativeLayout>
+                            </com.zhy.android.percent.support.PercentRelativeLayout>
 
-                        <TextView
-                            android:layout_width="1dp"
-                            android:layout_height="0dp"
-                            android:layout_gravity="center"
-                            android:background="@color/touch_color"
-                            android:visibility="visible"
-                            app:layout_heightPercent="60%" />
+                        </com.zhy.android.percent.support.PercentLinearLayout>
 
-                        <com.zhy.android.percent.support.PercentRelativeLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/list_item_selector"
-                            android:gravity="center">
+                        <RelativeLayout
+                            android:id="@+id/rl_inventory"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone">
 
                             <TextView
-                                android:id="@+id/state_time"
+                                android:id="@+id/tv_inventory_all"
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:drawablePadding="10dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_marginLeft="@dimen/inventory_limit_marginlr"
                                 android:drawableRight="@drawable/laydown"
-                                android:gravity="center"
-                                android:text="@string/time_all"
-                                android:textColor="@color/menu_item_color_selector"
-                                app:layout_paddingLeftPercent="5%"
-                                app:layout_paddingRightPercent="5%"
-                                app:layout_textSizePercent="@string/title_filter_textsize" />
+                                android:text="@string/inventory_all"
+                                android:textSize="@dimen/inventory_limit_txt" />
 
-                        </com.zhy.android.percent.support.PercentRelativeLayout>
+                            <TextView
+                                android:id="@+id/tv_inventory_sort_available"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="@dimen/inventory_limit_marginlr"
+                                android:drawableRight="@drawable/triangle_down"
+                                android:text="@string/inventory_sort_available"
+                                android:textSize="@dimen/inventory_limit_txt" />
 
-                    </com.zhy.android.percent.support.PercentLinearLayout>
+                            <TextView
+                                android:id="@+id/tv_inventory_sort_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/inventory_limit_marginlr"
+                                android:layout_marginRight="@dimen/inventory_limit_marginlr"
+                                android:layout_toLeftOf="@id/tv_inventory_sort_available"
+                                android:drawableRight="@drawable/triangle_down"
+                                android:text="@string/inventory_sort_time"
+                                android:textSize="@dimen/inventory_limit_txt" />
+                        </RelativeLayout>
+                    </com.zhy.android.percent.support.PercentRelativeLayout>
 
                     <TextView
                         android:id="@+id/tv_list_count"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="left|center"
                         android:textColor="@color/blue"
                         android:textSize="14dp"
-                        app:layout_marginPercent="2%"
-                        android:gravity="left|center"/>
+                        app:layout_marginPercent="2%" />
                 </com.zhy.android.percent.support.PercentLinearLayout>
 
             </android.support.design.widget.AppBarLayout>

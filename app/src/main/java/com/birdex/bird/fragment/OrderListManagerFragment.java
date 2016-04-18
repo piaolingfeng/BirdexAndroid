@@ -1,25 +1,27 @@
 package com.birdex.bird.fragment;
 
+import android.content.Intent;
 import android.view.KeyEvent;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
-import com.birdex.bird.activity.BaseActivity;
+import com.birdex.bird.activity.OrderDetailActivity;
 import com.birdex.bird.adapter.OrderListAdapter;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.decoration.DividerItemDecoration;
-import com.birdex.bird.decoration.FullyLinearLayoutManager;
+import com.birdex.bird.util.decoration.DividerItemDecoration;
+import com.birdex.bird.util.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.GsonHelper;
-import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.T;
-import com.birdex.bird.xrecyclerview.XRecyclerView;
+import com.birdex.bird.widget.xrecyclerview.XRecyclerView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.Subscriber;
 
@@ -35,10 +37,13 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
     @Bind(R.id.rcy_orderlist)
     XRecyclerView rcy_orderlist;
 
+    String tag = "OrderListManagerFragment";
+
     @Override
     protected void key(int keyCode, KeyEvent event) {
 
     }
+
 
     @Override
     public int getContentLayoutResId() {
@@ -47,9 +52,11 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
 
     @Override
     public void initializeContentViews() {
-        HideSoftKeyboardUtil.setupAppCompatUI(contentView, (BaseActivity) getActivity());
         orderListEntities = new OrderListEntity();
-        entity = new OrderRequestEntity();
+        entity = (OrderRequestEntity) bundle.getSerializable("entity");
+        if (entity == null) {
+            entity = new OrderRequestEntity();
+        }
         bus.register(this);
         rcy_orderlist.setLoadingListener(this);
 //        rcy_orderlist.setPullRefreshEnabled(false);
@@ -63,7 +70,10 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
         OrderAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                T.showShort(getActivity(), position + "");
+//                T.showShort(getActivity(), position + "");
+                Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+                intent.putExtra("order_code", orderListEntities.getData().getOrders().get(position).getOrder_code());
+                startActivity(intent);
             }
         });
         rcy_orderlist.setAdapter(OrderAdapter);
@@ -91,48 +101,65 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
      * 获取订单列表
      */
     private void getOrderList() {
-        showBar();
+        showLoading();
         RequestParams listParams = new RequestParams();
         listParams.add("page_no", entity.getPage_no() + "");
         listParams.add("page_size", entity.getPage_size());
         listParams.add("keyword", entity.getKeyword());
-        listParams.add("warehouse_code", entity.getWarehouse_cod());
+        listParams.add("warehouse_code", entity.getWarehouse_code());
         listParams.add("start_date", entity.getStart_date());
         listParams.add("end_date", entity.getEnd_date());
         listParams.add("status", entity.getStatus());
 //        listParams.add("count", entity.getCount());
         listParams.add("service_type", entity.getService_type());
         listParams.add("receiver_moblie", entity.getReceiver_moblie());
-        BirdApi.getOrderList(MyApplication.getInstans(), listParams, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
-                if (entity.getPage_no() > 1) {
-                    if (orderListEntities.getData().getOrders().size() == 0) {
-                        T.showShort(MyApplication.getInstans(), "已经是最后一页");
-                    } else
-                        OrderAdapter.getList().addAll(orderListEntities.getData().getOrders());
+                if (orderListEntities != null) {
+                    if (entity.getPage_no() > 1)
+                        if (orderListEntities.getData().getOrders().size() == 0 && entity.getPage_no() > 1) {
+                            T.showShort(MyApplication.getInstans(), "已经是最后一页");
+                        } else {
+                            OrderAdapter.getList().addAll(orderListEntities.getData().getOrders());
+                            orderListEntities.getData().setOrders(OrderAdapter.getList());
+                        }
+                    else {
+                        OrderAdapter.setList(orderListEntities.getData().getOrders());
+                    }
+                    bus.post(orderListEntities.getData().getCount(), "frame_layout");//刷新个数及界面
+                    OrderAdapter.notifyDataSetChanged();
                 } else {
-                    OrderAdapter.setList(orderListEntities.getData().getOrders());
+                    try {
+                        if (response.get("data") != null)
+                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
+                        else
+                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-                bus.post(orderListEntities.getData().getCount(), "frame_layout");//刷新个数及界面
-                OrderAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 stopHttpAnim();
-                T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
-                super.onFailure(statusCode, headers, responseString, throwable);
+                if (errorResponse != null)
+                    T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
+                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
+
 
             @Override
             public void onFinish() {
                 stopHttpAnim();
                 super.onFinish();
             }
-        });
+        };
+        handler.setTag(tag);
+        BirdApi.getOrderList(MyApplication.getInstans(), listParams, handler);
     }
 
     @Override
@@ -155,10 +182,16 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
       *停止动画
       */
     private void stopHttpAnim() {
-        hideBar();
+        hideLoading();
         if (rcy_orderlist != null) {
             rcy_orderlist.refreshComplete();
             rcy_orderlist.loadMoreComplete();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        BirdApi.cancelRequestWithTag(tag);
+        super.onDestroy();
     }
 }

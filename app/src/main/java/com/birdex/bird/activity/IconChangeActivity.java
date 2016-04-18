@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,10 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,10 +21,8 @@ import android.widget.Toast;
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.glide.GlideUtils;
-import com.birdex.bird.util.ImageUtils;
+import com.birdex.bird.util.glide.GlideUtils;
 import com.birdex.bird.util.T;
-import com.bumptech.glide.Glide;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -82,6 +77,9 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
     // 传过来的 logo
     private String logo;
 
+    // 传过来的 company code
+    private String companyCode;
+
     // 修改后的 bitmap
     private Bitmap resultBitmap;
 
@@ -111,6 +109,7 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
 
         // 传过来的 bitmap
         logo = (String) getIntent().getExtras().get("logo");
+        companyCode = (String) getIntent().getExtras().get("company_code");
         GlideUtils.setImageToLocalPathForMyaccount(icon, logo);
     }
 
@@ -142,9 +141,10 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
 //                IconChangeActivity.this.finish();
 
                 showLoading();
+
                 // 点击保存按钮后，需要调用 修改公司信息
                 RequestParams params = new RequestParams();
-                params.put("company_code",MyApplication.user.getCompany_code());
+                params.put("company_code",companyCode);
                 params.put("logo",path);
                 BirdApi.companyEdit(MyApplication.getInstans(),params,new JsonHttpResponseHandler(){
                     @Override
@@ -421,8 +421,8 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
                                     if("0".equals(response.getString("error"))) {
                                         try {
                                             String savepath = ((JSONObject)response.get("data")).getString("savepath");
-                                            String savename = ((JSONObject)response.get("data")).getString("savename");
-                                            path = savepath + savename;
+                                            String thumb = ((JSONObject)response.get("data")).getString("thumb");
+                                            path = savepath + thumb;
                                             resultBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uritempFile));
                                             icon.setImageBitmap(resultBitmap);
                                         } catch (FileNotFoundException e) {

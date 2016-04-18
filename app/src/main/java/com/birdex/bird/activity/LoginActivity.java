@@ -3,9 +3,6 @@ package com.birdex.bird.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -15,9 +12,8 @@ import android.widget.EditText;
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.entity.ContactDetail;
 import com.birdex.bird.entity.User;
-import com.birdex.bird.update.UpdateManager;
+import com.birdex.bird.util.update.UpdateManager;
 import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.T;
@@ -68,7 +64,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void initializeContentViews() {
         HideSoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
-        initSystemBar(R.color.transparent);
+//        initSystemBar(R.color.transparent);
         initData();
     }
 
@@ -76,6 +72,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void initData() {
         sp = getSharedPreferences("login", Activity.MODE_PRIVATE);
         editor = sp.edit();
+
+        // 先检查是否保存了 token，如果不为空说明不再需要登录
+        String oldToken = sp.getString("token", "");
+        if (!TextUtils.isEmpty(oldToken)) {
+            // 将 token 添加进去
+            MyApplication.ahc.addHeader("USER-TOKEN", oldToken);
+
+            Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
+
+            startActivity(intent);
+            finish();
+        }
+
         // 确认是否勾选了 记住密码
         boolean ischecked = sp.getBoolean("remember", false);
         if (ischecked) {
@@ -104,22 +113,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     String updateUrl = (String) jsonObject.get("url");
                     description = (String) jsonObject.get("description");
                     String versionServer = (String) jsonObject.get("version");
-
-                    // 取得当前版本号
-                    PackageManager manager = MyApplication.getInstans().getPackageManager();
-                    PackageInfo info = null;
-                    info = manager.getPackageInfo(MyApplication.getInstans().getPackageName(), 0);
-                    String versionLocal = info.versionName;
-
                     // 检查更新
-                    if (!versionLocal.equals(versionServer)) {
+                    if (!MyApplication.app_version.equals(versionServer)) {
                         UpdateManager.getInstance().setDownLoadPath(updateUrl);
                         // 如果不相等，执行更新操作
                         UpdateManager.getInstance().set(LoginActivity.this);
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
             }
@@ -132,11 +132,35 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
+    // 存储返回的 user
+    private void saveUser(User user) {
+        editor.putString("company_code", user.getCompany_code());
+        editor.putString("company_name", user.getCompany_name());
+        editor.putString("company_short_name", user.getCompany_short_name());
+        editor.putString("user_code", user.getUser_code());
+
+        editor.commit();
+    }
+
 
     // 执行登录操作
     private void login() {
         showLoading();
+        MyApplication application = (MyApplication) getApplication();
+        String utoken = application.getUmengToken();
+        if (TextUtils.isEmpty(utoken)) {
+            T.showShort(MyApplication.getInstans(), getString(R.string.login_no_token));
+            return;
+        } else {
+            editor.putString(MyApplication.SP_Umeng,utoken);
+            editor.commit();
+        }
+
+        MyApplication.ahc.addHeader("DEVICE-TOKEN", utoken);
+
         RequestParams params = new RequestParams();
+        params.put("device_info", MyApplication.device_info);
+        params.put("device_type", MyApplication.device_type);
         params.put("account", username.getText().toString());
         params.put("password", password.getText().toString());
         BirdApi.login(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
@@ -148,9 +172,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if ("0".equals(result)) {
                         hideLoading();
                         spEdit();
-                        MyApplication.user = JsonHelper.parseObject((JSONObject) response.get("data"), User.class);
+                        User user = JsonHelper.parseObject((JSONObject) response.get("data"), User.class);
+                        //将 user 信息存入到 sp
+                        saveUser(user);
+                        // user_token 登录后返回
+                        String token = (String) ((JSONObject) response.get("data")).get("user_token");
+                        // 将 token 添加进去
+                        MyApplication.ahc.addHeader("USER-TOKEN", token);
+
+                        saveToken(token);
+
                         T.showShort(MyApplication.getInstans(), getString(R.string.loginsu));
                         Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
+
+//                        Bundle b = new Bundle();
+//                        b.putString("order_code","f4635a3bb08f55c9d22d3f6fcc170306");
+//                        b.putString("idcard","360111111111111");
+//                        intent.putExtras(b);
 
 //                        ContactDetail contactDetail = new ContactDetail();
 //                        contactDetail.setReceiver_name("胡芦娃");
@@ -168,13 +206,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //                        b.putString("order_code","c708fecf8f8e3b39622c35ece3371772");
 //                        intent.putExtras(b);
 
+                        // 测试
+//                        BirdApi.testHeader(MyApplication.getInstans(),null,new JsonHttpResponseHandler(){
+//                            @Override
+//                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                                super.onSuccess(statusCode, headers, response);
+//                            }
+//                        });
+
                         startActivity(intent);
                         finish();
                     } else {
                         T.showShort(MyApplication.getInstans(), response.getString("data"));
+                        hideLoading();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    hideLoading();
                 }
             }
 
@@ -189,7 +237,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 hideLoading();
-                T.showShort(MyApplication.getInstans(), getString(R.string.loginfa));
+                T.showShort(MyApplication.getInstans(), getString(R.string.login_fail));
             }
 
             @Override
@@ -202,7 +250,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
 
-    private void spEdit(){
+    private void spEdit() {
         if (remember.isChecked()) {
             // 选中了， 执行保存操作
             editor.putString("username", username.getText().toString());
@@ -214,6 +262,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             editor.putString("password", "");
             editor.putBoolean("remember", false);
         }
+        editor.commit();
+    }
+
+    // 保存接口发过来的 token
+    private void saveToken(String token) {
+        editor.putString("token", token);
         editor.commit();
     }
 

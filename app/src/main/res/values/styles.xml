@@ -1,11 +1,14 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-    </style>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"></style>
 
     <style name="AppCompat.style" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:listDivider">@drawable/divider_bg</item>
+    </style>
+    <style name="AppCompat.translucent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
     -->
     <!-- Mydialog-->
@@ -60,10 +63,12 @@
         <item name="android:textSize">18sp</item>
         <item name="android:gravity">center</item>
     </style>
+
     <style name="myaccount_style_unselect" parent="myaccount_style">
         <item name="android:textColor">#8e949a</item>
         <item name="android:textStyle">normal</item>
     </style>
+
     <style name="myaccount_style_select" parent="myaccount_style">
         <item name="android:textColor">@color/selected</item>
     </style>
@@ -72,9 +77,11 @@
     <style name="inventory_item_text">
         <item name="android:textColorPrimary">@color/inventory_item_black</item>
     </style>
+
     <style name="inventory_item_info">
         <item name="android:textColorPrimary">@color/inventory_item_gray</item>
     </style>
+
     <style name="inventory_item_num">
         <item name="android:textColorPrimary">@color/inventory_item_blue</item>
         <item name="android:textColorSecondary">@color/inventory_item_blue</item>
@@ -84,12 +91,68 @@
         <item name="android:textColor">@color/inventory_item_blue</item>
         <item name="android:textSize">@dimen/inventory_item_number</item>
     </style>
+
     <style name="inventory_item_black1" parent="android:TextAppearance.Widget.TextView">
         <item name="android:textColor">@color/inventory_item_black</item>
         <item name="android:textSize">@dimen/inventory_item_number</item>
     </style>
+
     <style name="inventory_item_gray1" parent="android:TextAppearance.Widget.TextView">
         <item name="android:textColor">@color/inventory_item_gray</item>
         <item name="android:textSize">@dimen/inventory_item_text</item>
+    </style>
+
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <!--边框-->
+        <item name="android:windowIsFloating">true</item>
+        <!--是否浮现在activity之上-->
+        <item name="android:windowIsTranslucent">false</item>
+        <!--半透明-->
+        <item name="android:windowNoTitle">true</item>
+        <!--无标题-->
+        <item name="android:windowBackground">@color/transparent</item>
+        <!--背景透明-->
+        <item name="android:backgroundDimEnabled">false</item>
+        <!--模糊-->
+    </style>
+    <!--待入库的左右布局-->
+    <style name="detail_willin_left" >
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">2.5</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="detail_willin_right">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">7.5</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <!--在库商品的左右布局-->
+    <style name="detail_inner_title1">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:paddingTop">@dimen/inventory_inner_paddingtb</item>
+        <item name="android:paddingBottom">@dimen/inventory_inner_paddingtb</item>
+        <item name="android:textColor">@color/gray_2</item>
+    </style>
+    <style name="detail_inner_context">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:paddingTop">@dimen/inventory_inner_paddingtb</item>
+        <item name="android:paddingBottom">@dimen/inventory_inner_paddingtb</item>
+        <item name="android:textColor">@color/gray_2</item>
     </style>
 </resources>

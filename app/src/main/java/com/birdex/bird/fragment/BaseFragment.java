@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 
 import com.birdex.bird.R;
+import com.birdex.bird.activity.BaseActivity;
 import com.birdex.bird.interfaces.BackHandledInterface;
+import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.SafeProgressDialog;
 import com.birdex.bird.widget.RotateLoading;
 
@@ -44,6 +46,7 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
     private int mContentLayoutResId;
     ProgressDialog bar;
     Dialog loadingDialog;
+    Bundle bundle;
     /**
      * 缓存content布局
      */
@@ -72,6 +75,14 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
 //        return fragment;
 //    }
 
+    public void setUIArguments(final Bundle args) {
+//        getActivity().runOnUiThread(new Runnable() {
+//            public void run() {
+            /* do your UI stuffs */
+                bundle = args;
+//            }
+//        });
+    }
 
     public void showLoading() {
         loadingDialog = new SafeProgressDialog(getActivity(), R.style.semester_dialog);// 创建自定义样式dialog
@@ -154,6 +165,7 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
             contentView = inflater.inflate(mContentLayoutResId, container, false);
             // 注解方式初始化控件
             ButterKnife.bind(this, contentView);
+            HideSoftKeyboardUtil.setupAppCompatUI(contentView, (BaseActivity) getActivity());
             initializeContentViews();
             isPrepared = true;
             lazyLoad();

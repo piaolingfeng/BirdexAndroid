@@ -18,7 +18,7 @@
 
             <fragment
                 android:id="@+id/cycle_viewpage"
-                android:name="com.birdex.bird.lunbo.CycleViewPager"
+                android:name="com.birdex.bird.widget.lunbo.CycleViewPager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:background="#000000"
@@ -41,7 +41,7 @@
                     app:layout_paddingLeftPercent="@string/common_padding_left"
                     app:layout_paddingRightPercent="@string/common_padding_top"
                     app:layout_paddingTopPercent="@string/common_padding_top"
-                    app:layout_textSizePercent="30%" />
+                    app:layout_textSizePercent="@string/msg_text_4_5w" />
 
                 <TextView
                     android:id="@+id/edit1"
@@ -55,7 +55,7 @@
                     app:layout_paddingLeftPercent="@string/common_padding_top"
                     app:layout_paddingRightPercent="@string/common_padding_top"
                     app:layout_paddingTopPercent="@string/common_padding_top"
-                    app:layout_textSizePercent="@string/item_context_size_1" />
+                    app:layout_textSizePercent="@string/msg_text_4_5w" />
 
             </com.zhy.android.percent.support.PercentRelativeLayout>
 
@@ -88,7 +88,7 @@
                     app:layout_paddingLeftPercent="@string/common_padding_left"
                     app:layout_paddingRightPercent="@string/common_padding_top"
                     app:layout_paddingTopPercent="@string/common_padding_top"
-                    app:layout_textSizePercent="30%" />
+                    app:layout_textSizePercent="@string/msg_text_4_5w" />
 
                 <TextView
                     android:id="@+id/edit"
@@ -102,7 +102,7 @@
                     app:layout_paddingLeftPercent="@string/common_padding_top"
                     app:layout_paddingRightPercent="@string/common_padding_top"
                     app:layout_paddingTopPercent="@string/common_padding_top"
-                    app:layout_textSizePercent="@string/item_context_size_1" />
+                    app:layout_textSizePercent="@string/first_index_text_5_1w" />
 
             </com.zhy.android.percent.support.PercentRelativeLayout>
 

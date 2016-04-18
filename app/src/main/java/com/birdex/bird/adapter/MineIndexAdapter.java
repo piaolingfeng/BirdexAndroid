@@ -17,6 +17,7 @@ import com.birdex.bird.R;
 import com.birdex.bird.activity.AboutActivity;
 import com.birdex.bird.activity.MyAccountActivity;
 import com.birdex.bird.activity.MyAccountInfoActivity;
+import com.birdex.bird.activity.MyMessageActivity;
 import com.birdex.bird.entity.MineEntity;
 
 import java.util.ArrayList;
@@ -130,6 +131,8 @@ public class MineIndexAdapter extends RecyclerView.Adapter<MineIndexAdapter.Mine
                     break;
                 case 1:
                     //我的订阅消息
+                    intent = new Intent(MineIndexAdapter.this.activity, MyMessageActivity.class);
+                    MineIndexAdapter.this.activity.startActivity(intent);
                     break;
                 case 2:
                     //我的设置

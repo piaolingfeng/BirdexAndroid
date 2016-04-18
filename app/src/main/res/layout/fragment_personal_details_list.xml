@@ -83,7 +83,7 @@
             android:textSize="16sp" />
     </LinearLayout>
     <!--</android.support.design.widget.AppBarLayout>-->
-    <com.birdex.bird.xrecyclerview.XRecyclerView
+    <com.birdex.bird.widget.xrecyclerview.XRecyclerView
         android:id="@+id/xrv_personal_detail_list"
         android:background="@color/white"
         android:layout_width="match_parent"

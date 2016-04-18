@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
@@ -43,7 +44,8 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
     public RadioButton rb_tran;
     @Bind(R.id.rb_recharge_tax)
     public RadioButton rb_tax;
-
+    @Bind(R.id.btn_pay_recharge)
+    public Button btn_pay;
     // 商户PID
     public static final String PARTNER = "";
     // 商户收款账号
@@ -106,6 +108,7 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
         rb_tax.setOnCheckedChangeListener(this);
         rb_tran.setOnClickListener(this);
         rb_tax.setOnClickListener(this);
+        btn_pay.setOnClickListener(this);
     }
 
     @Override
@@ -113,17 +116,7 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
 
     }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        View view=inflater.inflate(R.layout.fragment_recharge,null,false);
-//        rb_tran=(RadioButton)view.findViewById(R.id.rb_recharge_tran);
-//        rb_tax=(RadioButton)view.findViewById(R.id.rb_recharge_tax);
-//        rb_tran.setOnCheckedChangeListener(this);
-//        rb_tax.setOnCheckedChangeListener(this);
-//        rb_tran.setOnClickListener(this);
-//        rb_tax.setOnClickListener(this);
-//        return view;
-//    }
+
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -140,6 +133,9 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
                 rb_tran.setChecked(false);
                 rb_tax.setChecked(true);
                 break;
+            case R.id.btn_pay_recharge:
+                pay(v);
+                break;
             default:
                 break;
         }
@@ -150,36 +146,36 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
      *
      */
     public void pay(View v) {
-        if (TextUtils.isEmpty(PARTNER) || TextUtils.isEmpty(RSA_PRIVATE) || TextUtils.isEmpty(SELLER)) {
-            new AlertDialog.Builder(getActivity()).setTitle("警告").setMessage("需要配置PARTNER | RSA_PRIVATE| SELLER")
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialoginterface, int i) {
-                            //
-//                            finish();
-                        }
-                    }).show();
-            return;
-        }
-        String orderInfo = getOrderInfo("测试的商品", "该测试商品的详细描述", "0.01");
-
-        /**
-         * 特别注意，这里的签名逻辑需要放在服务端，切勿将私钥泄露在代码中！
-         */
-        String sign = sign(orderInfo);
-        try {
-            /**
-             * 仅需对sign 做URL编码
-             */
-            sign = URLEncoder.encode(sign, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+//        if (TextUtils.isEmpty(PARTNER) || TextUtils.isEmpty(RSA_PRIVATE) || TextUtils.isEmpty(SELLER)) {
+//            new AlertDialog.Builder(getActivity()).setTitle("警告").setMessage("需要配置PARTNER | RSA_PRIVATE| SELLER")
+//                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialoginterface, int i) {
+//                            //
+////                            finish();
+//                        }
+//                    }).show();
+//            return;
+//        }
+//        String orderInfo = getOrderInfo("测试的商品", "该测试商品的详细描述", "0.01");
+//
+//        /**
+//         * 特别注意，这里的签名逻辑需要放在服务端，切勿将私钥泄露在代码中！
+//         */
+//        String sign = sign(orderInfo);
+//        try {
+//            /**
+//             * 仅需对sign 做URL编码
+//             */
+//            sign = URLEncoder.encode(sign, "UTF-8");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
 
         /**
          * 完整的符合支付宝参数规范的订单信息
          */
-        final String payInfo = orderInfo + "&sign=\"" + sign + "\"&" + getSignType();
-
+//        final String payInfo = orderInfo + "&sign=\"" + sign + "\"&" + getSignType();
+        final String  payInfo="_input_charset=utf-8&body=2&notify_url=http://birdex.f3322.net:8013/bs-product/alipay&out_trade_no=20160412180238&partner=2088311639604764&payment_type=1&seller_id=zhifubao@birdex.cn&service=mobile.securitypay.pay&sign_type=0001&subject=1&total_fee=3&sign=cyFQRjmiDGoAanDpJFpDKTM1ZmcNBlJhZfDPg+AofVyyXdv6ddPlGvXXKVPSKQlVNSHDVTlVT+2Btn1T5+rky//SVLDa9E5nNsCaDCe046oViiQSNZubFc7jZoZYttIirbdwvjfePnHq6P7+0i3jau78qzQFw/xtXLH0hssAiWQ=";
         Runnable payRunnable = new Runnable() {
 
             @Override

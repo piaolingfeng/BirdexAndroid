@@ -53,6 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         HideSoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
         bar = new ProgressDialog(this);
+        loadingDialog = new SafeProgressDialog(this, R.style.semester_dialog);// 创建自定义样式dialog
         bar.setCanceledOnTouchOutside(false);
         initializeContentViews();
 
@@ -60,7 +61,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * 获取根布局
-     * */
+     */
     public static View getRootView(Activity context) {
         return ((ViewGroup) context.findViewById(android.R.id.content)).getChildAt(0);
     }
@@ -85,7 +86,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showLoading() {
-        loadingDialog = new SafeProgressDialog(this, R.style.semester_dialog);// 创建自定义样式dialog
+        if (loadingDialog == null)
+            loadingDialog = new SafeProgressDialog(this, R.style.semester_dialog);// 创建自定义样式dialog
 //        loadingDialog.setCancelable(false);// 不可以用“返回键”取消
         loadingDialog.setCanceledOnTouchOutside(false);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_loading, null);

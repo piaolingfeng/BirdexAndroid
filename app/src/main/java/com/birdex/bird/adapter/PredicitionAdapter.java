@@ -11,6 +11,10 @@ import com.birdex.bird.R;
 import com.birdex.bird.entity.PredicitionEntity;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -22,7 +26,7 @@ import butterknife.ButterKnife;
 public class PredicitionAdapter extends RecyclerView.Adapter<PredicitionAdapter.PredicitionHolder> {
 
     Context mContext;
-    List<PredicitionEntity.Predicition.PredicitionDetail> predicitionDetailList;
+    List<PredicitionEntity.Predicition.PredicitionDetail> predicitionDetailList = new ArrayList<>();
     OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
 
     public PredicitionAdapter(Context mContext, List<PredicitionEntity.Predicition.PredicitionDetail> predicitionDetailList) {
@@ -64,7 +68,7 @@ public class PredicitionAdapter extends RecyclerView.Adapter<PredicitionAdapter.
     }
 
 
-    public class PredicitionHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class PredicitionHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.tv_storage_no)
         TextView tv_storage_no;
         @Bind(R.id.tv_status)
@@ -77,12 +81,21 @@ public class PredicitionAdapter extends RecyclerView.Adapter<PredicitionAdapter.
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+            EventBus.getDefault().register(this);
         }
 
         @Override
         public void onClick(View v) {
             if (onRecyclerViewItemClickListener != null)
                 onRecyclerViewItemClickListener.onItemClick(position);
+        }
+
+        @Subscriber(tag = "confirm_fragment")
+        public void confirmPredicition(int position) {
+            if (this.position == position) {
+                tv_status.setText("已入库");
+                predicitionDetailList.get(position).setStatus_name("已入库");
+            }
         }
     }
 }

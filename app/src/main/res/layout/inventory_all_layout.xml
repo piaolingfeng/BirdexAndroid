@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <!--<com.birdex.bird.widget.HeaderView-->
+        <!--android:id="@+id/hv_invenyory"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:visibility="gone"-->
+        <!--app:bgcolor="@color/blue_head_1"-->
+        <!--app:hasstatubar="false"-->
+        <!--app:headtitle="@string/inventory_title"-->
+        <!--app:leftimg="@drawable/back_chevron"-->
+        <!--app:rightimg="@drawable/menu" />-->
+    <com.birdex.bird.widget.TitleView
+        android:id="@+id/tiv_invenyory_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height" />
+    <LinearLayout
+        android:id="@+id/ll_inventory_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:orientation="vertical"/>
+</LinearLayout>

@@ -4,13 +4,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,11 +18,12 @@ import com.birdex.bird.R;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.AccountDetail;
 import com.birdex.bird.entity.Wallet;
-import com.birdex.bird.glide.GlideUtils;
+import com.birdex.bird.util.glide.GlideUtils;
 import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.T;
 import com.birdex.bird.widget.RoundImageView;
+import com.birdex.bird.widget.TitleView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -32,7 +32,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 import butterknife.Bind;
@@ -45,7 +44,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
 
     // 顶部头像
     @Bind(R.id.head_icon)
-    RoundImageView head;
+    com.birdex.bird.widget.CircularImageView head;
 
     // 顶部文字
     @Bind(R.id.head_tv)
@@ -70,9 +69,16 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
     @Bind(R.id.tariff_balance)
     TextView tariff_balance;
 
-//    private String path;
+    // titleview
+    @Bind(R.id.title_1l)
+    TitleView titleView;
+
+    //    private String path;
     // logo 地址
     private String logo = "";
+
+    // company code
+    private String companyCode;
 
     @Override
     public int getContentLayoutResId() {
@@ -86,6 +92,12 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
 
     // 初始化数据
     private void initData() {
+        titleView.setTitle(getString(R.string.myaccount));
+        titleView.setMenuVisble(true);
+        titleView.setBackground(Color.parseColor("#FFFFFF"));
+        titleView.setTitleTextcolor(Color.parseColor("#4A4A4A"));
+        titleView.setBackIv(BitmapFactory.decodeResource(getResources(), R.drawable.blue_back));
+        titleView.setMenu(BitmapFactory.decodeResource(getResources(), R.drawable.black_menu));
         getInterfactData();
     }
 
@@ -144,7 +156,12 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                     if ("0".equals(response.getString("error"))) {
                         if (!TextUtils.isEmpty(((JSONObject) response.get("data")).getString("logo"))) {
                             logo = ((JSONObject) response.get("data")).getString("logo");
-                            GlideUtils.setImageToLocalPathForMyaccount(head, logo);
+                            companyCode = ((JSONObject) response.get("data")).getString("company_code");
+                            try {
+                                GlideUtils.setImageToLocalPathForMyaccount(head, logo);
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
                         head_tv.setText(((JSONObject) response.get("data")).getString("company_name") + "，欢迎您！");
                     }
@@ -176,8 +193,8 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
     // 将接口数据设置上去
     private void setInterfaceData(AccountDetail accountDetail) {
         List<Wallet> wallets = accountDetail.getWallets();
-        credit.setText(accountDetail.getCredit());
-        left_credit.setText(accountDetail.getLeft_credit());
+        credit.setText("￥" + accountDetail.getCredit());
+        left_credit.setText("￥" + accountDetail.getLeft_credit());
         for (Wallet wallet : wallets) {
             if ("运费账户".equals(wallet.getName())) {
                 freight_balance.setText("￥" + wallet.getBalance());
@@ -188,7 +205,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    @OnClick({R.id.head_icon, R.id.account_manager, R.id.back})
+    @OnClick({R.id.head_icon, R.id.account_manager, R.id.back, R.id.recharge_bt, R.id.recharge_tv, R.id.account_detail})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -197,18 +214,50 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                 Intent intent = new Intent(this, IconChangeActivity.class);
                 Bundle b = new Bundle();
                 b.putString("logo", logo);
+                b.putString("company_code",companyCode);
                 intent.putExtras(b);
                 startActivityForResult(intent, Constant.ICON_CHANGE);
-                break;
-
-            // 点击账户管理
-            case R.id.account_manager:
-
                 break;
 
             // 点击左上角返回
             case R.id.back:
                 finish();
+                break;
+
+            // 充值按钮
+            case R.id.recharge_bt:
+                //账户管理
+                intent = new Intent(this, MyAccountInfoActivity.class);
+                //显示第1个页面
+                intent.putExtra("enterindex", 0);
+                this.startActivity(intent);
+                break;
+
+            // 左下角充值
+            case R.id.recharge_tv:
+                //账户管理
+                intent = new Intent(this, MyAccountInfoActivity.class);
+                //显示第1个页面
+                intent.putExtra("enterindex", 0);
+                this.startActivity(intent);
+                break;
+
+            // 账户明细
+            case R.id.account_detail:
+                //账户管理
+                intent = new Intent(this, MyAccountInfoActivity.class);
+                //显示第2个页面
+                intent.putExtra("enterindex", 1);
+                this.startActivity(intent);
+                break;
+
+            // 账户管理
+            case R.id.account_manager:
+                //账户管理
+                intent = new Intent(this, MyAccountInfoActivity.class);
+                //显示第3个页面
+                intent.putExtra("enterindex", 2);
+                this.startActivity(intent);
                 break;
         }
     }

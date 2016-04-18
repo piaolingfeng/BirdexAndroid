@@ -8,5 +8,5 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="center"
-        android:background="@color/touch_color" />
+        android:background="@color/single_line" />
 </com.zhy.android.percent.support.PercentLinearLayout>

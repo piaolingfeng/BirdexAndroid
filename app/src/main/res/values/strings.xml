@@ -29,7 +29,7 @@
     <string name="title_activity_pay_balance_list">PayBalanceListActivity</string>
 
     <string name="title_filter_textsize">26%</string>
-    
+
     <string name="listmanager">80%h</string>
 
     <string name="sixtyPercentHeight">70%h</string>
@@ -112,6 +112,8 @@
     <string name="notempty">用户名或密码不能为空</string>
     <string name="loginsu">登录成功</string>
     <string name="loginfa">用户名或密码错误</string>
+    <string name="login_no_token">登录失败，请重新登陆</string>
+    <string name="login_fail">连接失败，请稍后重试！</string>
 
     <!-- 我的账户 -->
     <string name="welcome">亲，欢迎您！</string>
@@ -186,7 +188,7 @@
     <string name="inventory_title">我的库存</string>
     <string name="inventory_item_1">在库商品</string>
     <string name="inventory_item_2">待入库商品</string>
-    <string name="inventory_search_hint">输入商品编码或UPC或商品编码</string>
+    <string name="inventory_search_hint">输入商品编码或UPC或商品名</string>
     <string name="inventory_all">所有仓库</string>
     <string name="inventory_sort_time">时间排序</string>
     <string name="inventory_sort_available">可用数量</string>
@@ -208,6 +210,8 @@
     <string name="consignee_empty">收货人不能为空</string>
     <string name="phone_empty">联系电话不能为空</string>
     <string name="adress_empty">详细地址不能为空</string>
+    <string name="change_fail">修改失败！</string>
+    <string name="change_suc">修改成功！</string>
 
     <!-- 物流跟踪 -->
     <string name="order_number">订单号：</string>
@@ -236,6 +240,16 @@
     <string name="freight">运费</string>
     <string name="tariff">关税</string>
 
+    <!-- 我的账户，首页 -->
+    <string name="recharge">充  值</string>
+    <string name="myaccount">我的账户</string>
+    <string name="account_detail">账户明细</string>
+    <string name="account_type">账户类型</string>
+    <string name="balance">余额</string>
+    <string name="credit">信用/可用</string>
+    <string name="freight">运费</string>
+    <string name="tariff">关税</string>
+
     <string name="please_wail">敬请期待</string>
     <string name="time_all">不限时间</string>
     <string name="time_today">今天</string>
@@ -244,4 +258,129 @@
     <string name="time_three_month">近三个月</string>
     <string name="time_year">近一年</string>
     <string name="no_data">暂时没有数据哦！</string>
+    <string name="parse_error">解析失败,请重试!</string>
+    <string name="title_activity_noti_list">NotiListActivity</string>
+    <string name="title_activity_inventory_inner_detail">InventoryInnerDetailActivity</string>
+    <!--仓库详细内容-->
+    <string name="inventory_inner_detail_title">商品详情</string>
+    <string name="tv_detail_inner_available">可用库存：</string>
+    <string name="tv_detail_inner_occupancy">订单占用：</string>
+    <string name="tv_detail_inner_in">总入库量：</string>
+    <string name="tv_detail_inner_out">总出库量：</string>
+    <string name="tv_detail_inner_allowout">允许超售量：</string>
+    <string name="tv_detail_inner_diff">差异：</string>
+    <string name="tv_detail_inner_broken">损耗：</string>
+    <string name="tv_detail_inner_actual">实际数量：</string>
+    <!--商品信息-->
+    <string name="product_name">商品名称：</string>
+    <string name="upc_code">UPC码：</string>
+    <string name="product_code">商品编码：</string>
+    <string name="customs_code">海关备案号：</string>
+    <string name="weight">重量kg：</string>
+    <string name="capacity">长*宽*高cm：</string>
+    <string name="declare_price">申报价格：</string>
+    <string name="product_composition">商品成分：</string>
+    <string name="product_describte">商品描述：</string>
+    <string name="available_count">可用库存总数：</string>
+    <string name="create_time">创建时间：</string>
+    <string name="ininventory_code">入库单号：</string>
+    <string name="trans_code">物流单号：</string>
+    <string name="trans_style">物流方式：</string>
+    <string name="willin_inventory">待入仓库：</string>
+    <string name="willin_num">数量：</string>
+    <string name="willin_statu">状态：</string>
+    <string name="willin_product_statu">发往仓库</string>
+    <string name="willin_view_others">同单号其它商品</string>
+    <string name="unkonw_product">未知商品</string>
+    <string name="tv_recevice_addr">收件地址:</string>
+    <!--<string name="willin_detail_head_left">30%</string>-->
+    <!--<string name="willin_detail_head_right">70%</string>-->
+
+    
+    <!-- 上传身份证 -->
+    <string name="upload_IDCard">上传身份证</string>
+    <string name="input_IDCard">输入身份证号：</string>
+    <string name="front_IDCard">身份证-正面照片</string>
+    <string name="back_IDCard">身份证-背面照片</string>
+    <string name="upload_confirm">确认上传</string>
+    <string name="pic_notfound">图片未找到</string>
+    <string name="please_full">请将资料补充完整</string>
+    <string name="upload_suc">上传成功</string>
+    <string name="get_idcard_fail">获取身份证号码失败！</string>
+
+    
+    
+    <!-- 订阅消息列表 -->
+    <string name="my_message">我的消息</string>
+    <string name="msg_warning">库存预警消息</string>
+    <string name="msg_idcard_exception">身份证异常订单</string>
+    <string name="msg_repertory_exception">库存异常订单</string>
+    <string name="msg_check_exception">审核不通过订单</string>
+    <string name="msg_account_exception">账户异常</string>
+    <string name="clear_message">清空消息</string>
+    <string name="clear_message_detail">点击清空消息，即可对消息中心内的消息进行清理。</string>
+    
+    <string name="message_setting">订阅消息设置</string>
+    <string name="message">提示消息</string>
+    <string name="system_tone">系统提示音</string>
+    <string name="system_tone_no">不提示，只在消息中显示</string>
+    <string name="message_time">消息接收时间</string>
+    <string name="all_day">全天接收</string>
+    <string name="all_day_no">休息时间免接收</string>
+    <string name="time_detail">21:00-09：00（次日）</string>
+
+    <string name="tv_reciver">收件人:</string>
+    <string name="tv_id_name">身份证号:</string>
+    <string name="tv_id_check">身份证验证</string>
+    <string name="tv_id_check_e">身份证异常</string>
+    <string name="tv_id_wait_check">待验证</string>
+    <string name="tv_change_addr">修改地址</string>
+    <string name="tv_free">费 用:</string>
+    <string name="tv_weight">重 量:</string>
+    <string name="tv_order_num">订单号:</string>
+    <string name="tv_upc_code">UPC码:</string>
+    <string name="tv_product_code">商品编码:</string>
+    <string name="tv_customer_code">客户编码:</string>
+    <string name="tv_customer_num">客户单号:</string>
+    <string name="tv_remarks">备 注:</string>
+
+    <string name="tv_product_name">商品名称:</string>
+    <string name="tv_delivery_warehouse">发货仓库:</string>
+    <string name="tv_count">数 量:</string>
+    <string name="send_error">数据有误，请重试!</string>
+    <string name="order_detail">订单详情</string>
+    <string name="predicition_detail">预报详情</string>
+
+    <string name="tv_now_status">当前状态:</string>
+    <string name="tv_confirm_predicition">批量确认预报</string>
+    <string name="tv_Destination_warehousee">目的仓库:</string>
+    <string name="tv_Logistics_tracking">物流号:</string>
+    <string name="tv_update_time">更新时间:</string>
+    <string name="tv_create_time">创建时间:</string>
+    <string name="tv_upc">UPC:</string>
+    <string name="tv_pre_inno">预报/入库:</string>
+    <string name="tv_error_count">异常数量:</string>
+    <string name="tv_valid_date">有效期:</string>
+    <string name="tv_status">状 态:</string>
+    <string name="btn_re_confirm">复 核</string>
+    <string name="btn_confirm">确 认</string>
+    <string name="tv_cancel">取 消</string>
+    <string name="tv_review_Storage_reason">输入复核的原因:</string>
+
+    <string name="request_error">请求失败,请重试</string>
+    <string name="can_not_change_addr">当前状态不能修改地址哦!</string>
+    <string name="tv_msg_30_day">显示30天内的消息记录</string>
+    <string name="tv_clear">清 除</string>
+
+    <string name="msg_inv_err">*为避免订单异常,请赶紧前往电脑端补充库存吧!</string>
+    <string name="tv_function_id">重新上传身份证</string>
+    <string name="tv_function_addr">修改地址</string>
+
+    <string name="msg_text_3w">3%w</string>
+    <string name="msg_text_4w">4%w</string>
+    <string name="msg_text_4_5w">4.5%w</string>
+    <string name="size_5w">5%w</string>
+    <string name="msg_text_5_5w">5.5%w</string>
+    <string name="msg_text_per"></string>
+    <string name="first_index_text_5_1w">4.9%w</string>
 </resources>

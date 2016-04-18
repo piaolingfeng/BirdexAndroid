@@ -117,51 +117,52 @@ public class InventoryInnerDetailActivity extends BaseActivity {
             TextView tv_availablecount=(TextView)view.findViewById(R.id.tv_inner_availablecount);
             int availableCount = 0;
             for (InventoryActivityEntity.InventoryStockEntity entity1 : entity.getStock()) {
-                for (InventoryActivityEntity.InventoryStockEntity.InventoryDetailEntity entity2 : entity1.getDetail()) {
-                    //可用=总入库-总出库-损耗-盘亏-占用-丢失-过期-破损+盘盈+允许超收数量
-                    int in_stock =0,out_stock=0,spoilage_stock=0,shortage_stock=0,block_stock=0,lose_stock=0,expire_stock=0,damage_stock=0,overage_stock=0,overdraft_stock=0;
-                    //可用=总入库-总出库-损耗-盘亏-占用-丢失-过期-破损+盘盈+允许超收数量
-                    if(entity2.getIn_stock()!=null){
-                        in_stock = Integer.parseInt(entity2.getIn_stock());
-                    }
-                    if(entity2.getOut_stock()!=null){
-                        out_stock = Integer.parseInt(entity2.getOut_stock());
-                    }
-                    if(entity2.getSpoilage_stock()!=null){
-                        spoilage_stock = Integer.parseInt(entity2.getSpoilage_stock());
-                    }
-                    if(entity2.getShortage_stock()!=null){
-                        shortage_stock = Integer.parseInt(entity2.getShortage_stock());
-                    }
-                    if(entity2.getBlock_stock()!=null){
-                        block_stock = Integer.parseInt(entity2.getBlock_stock());
-                    }
-                    if(entity2.getLose_stock()!=null){
-                        lose_stock = Integer.parseInt(entity2.getLose_stock());
-                    }
-                    if(entity2.getExpire_stock()!=null){
-                        expire_stock = Integer.parseInt(entity2.getExpire_stock());
-                    }
-                    if(entity2.getDamage_stock()!=null){
-                        damage_stock = Integer.parseInt(entity2.getDamage_stock());
-                    }
-                    if(entity2.getOverage_stock()!=null){
-                        overage_stock = Integer.parseInt(entity2.getOverage_stock());
-                    }
-                    if(entity2.getOverdraft_stock()!=null){
-                        overdraft_stock = Integer.parseInt(entity2.getOverdraft_stock());
-                    }
-                    availableCount += (in_stock - out_stock - spoilage_stock - shortage_stock - block_stock - lose_stock - expire_stock - damage_stock - overage_stock + overdraft_stock);
+                if(entity1.getDetail()!=null){
+                    for (InventoryActivityEntity.InventoryStockEntity.InventoryDetailEntity entity2 : entity1.getDetail()) {
+                        //可用=总入库-总出库-损耗-盘亏-占用-丢失-过期-破损+盘盈+允许超收数量
+                        int in_stock =0,out_stock=0,spoilage_stock=0,shortage_stock=0,block_stock=0,lose_stock=0,expire_stock=0,damage_stock=0,overage_stock=0,overdraft_stock=0;
+                        //可用=总入库-总出库-损耗-盘亏-占用-丢失-过期-破损+盘盈+允许超收数量
+                        if(entity2.getIn_stock()!=null){
+                            in_stock = Integer.parseInt(entity2.getIn_stock());
+                        }
+                        if(entity2.getOut_stock()!=null){
+                            out_stock = Integer.parseInt(entity2.getOut_stock());
+                        }
+                        if(entity2.getSpoilage_stock()!=null){
+                            spoilage_stock = Integer.parseInt(entity2.getSpoilage_stock());
+                        }
+                        if(entity2.getShortage_stock()!=null){
+                            shortage_stock = Integer.parseInt(entity2.getShortage_stock());
+                        }
+                        if(entity2.getBlock_stock()!=null){
+                            block_stock = Integer.parseInt(entity2.getBlock_stock());
+                        }
+                        if(entity2.getLose_stock()!=null){
+                            lose_stock = Integer.parseInt(entity2.getLose_stock());
+                        }
+                        if(entity2.getExpire_stock()!=null){
+                            expire_stock = Integer.parseInt(entity2.getExpire_stock());
+                        }
+                        if(entity2.getDamage_stock()!=null){
+                            damage_stock = Integer.parseInt(entity2.getDamage_stock());
+                        }
+                        if(entity2.getOverage_stock()!=null){
+                            overage_stock = Integer.parseInt(entity2.getOverage_stock());
+                        }
+                        if(entity2.getOverdraft_stock()!=null){
+                            overdraft_stock = Integer.parseInt(entity2.getOverdraft_stock());
+                        }
+                        availableCount += (in_stock - out_stock - spoilage_stock - shortage_stock - block_stock - lose_stock - expire_stock - damage_stock - overage_stock + overdraft_stock);
 //                    //占用=
 //                    if(entity2.getBlock_stock()!=null){
 //                        occupancyCount += Integer.parseInt(entity2.getBlock_stock());
 //                    }else{
 //                        occupancyCount += 0;
 //                    }
-                    tv_availablecount.setText(String.valueOf(availableCount));
+                    }
                 }
-
             }
+            tv_availablecount.setText(String.valueOf(availableCount));
             xrv_inner.addHeaderView(view);
             xrv_inner.setAdapter(adapter);
         }

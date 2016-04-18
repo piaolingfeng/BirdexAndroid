@@ -86,14 +86,16 @@ public class InventoryWillInAdapter extends RecyclerView.Adapter<InventoryWillIn
             int count=0;
             holder.arl_inventory.removeAllViews();
             for (InventoryActivityEntity.InventoryStockEntity entity1 : entity.getStock()) {
-                for (InventoryActivityEntity.InventoryStockEntity.InventoryDetailEntity entity2 : entity1.getDetail()) {
-                    count+=Integer.parseInt(entity2.getStock());
-                    View view=inflater.inflate(R.layout.inventory_item_willinnum_layout,null,false);
-                    TextView tv_willin_name=(TextView)view.findViewById(R.id.tv_inventory_willin_name);
-                    TextView tv_willin_num=(TextView)view.findViewById(R.id.tv_inventory_willin_num);
-                    tv_willin_name.setText(entity1.getWarehouse_name()+":");
-                    tv_willin_num.setText(entity2.getStock());
-                    holder.arl_inventory.addView(view,params);
+                if(entity1.getDetail()!=null){
+                    for (InventoryActivityEntity.InventoryStockEntity.InventoryDetailEntity entity2 : entity1.getDetail()) {
+                        count+=Integer.parseInt(entity2.getStock());
+                        View view=inflater.inflate(R.layout.inventory_item_willinnum_layout,null,false);
+                        TextView tv_willin_name=(TextView)view.findViewById(R.id.tv_inventory_willin_name);
+                        TextView tv_willin_num=(TextView)view.findViewById(R.id.tv_inventory_willin_num);
+                        tv_willin_name.setText(entity1.getWarehouse_name()+":");
+                        tv_willin_num.setText(entity2.getStock());
+                        holder.arl_inventory.addView(view,params);
+                    }
                 }
             }
             holder.tv_willin_count.setText(String.valueOf(count));

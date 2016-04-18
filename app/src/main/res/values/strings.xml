@@ -240,6 +240,7 @@
     <string name="freight">运费</string>
     <string name="tariff">关税</string>
 
+
     <string name="please_wail">敬请期待</string>
     <string name="time_all">不限时间</string>
     <string name="time_today">今天</string>
@@ -376,4 +377,6 @@
     <string name="msg_text_per"></string>
     <string name="first_index_text_5_1w">4.9%w</string>
     <string name="request_err">服务器错误,请稍后重试</string>
+    <!---->
+
 </resources>

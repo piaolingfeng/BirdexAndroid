@@ -42,4 +42,8 @@
     <dimen name="detail_inner_font2">15sp</dimen>
     <dimen name="detail_willin_item_paddingtb">5dp</dimen>
     <dimen name="detail_willin_item_marginlr">5dp</dimen>
+    <!--相同订单号的其他商品-->
+    <dimen name="same_order_other_marginlr">10dp</dimen>
+    <dimen name="same_order_other_font1">16dp</dimen>
+    <dimen name="same_order_other_font2">14dp</dimen>
 </resources>

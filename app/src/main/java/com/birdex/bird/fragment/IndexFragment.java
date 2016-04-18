@@ -125,15 +125,14 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                 Intent intent = new Intent(getActivity(), MyOrderListActivity.class);
                 intent.putExtra("indexOrder", indexOrderLocalDataList.get(position).getName());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                if (indexOrderLocalDataList.get(position).getName().contains("预报")) {
-//                    startActivity(intent);
-//                } else {
-//                    if (indexOrderLocalDataList.get(position).getName().contains("库存")) {
-//
-//                    } else {//订单
-                startActivity(intent);
-//                    }
-//                }
+                if (indexOrderLocalDataList.get(position).getName().contains("库存")) {
+                    if (!indexOrderLocalDataList.get(position).getName().contains("订单")){
+                        intent.setClass(getActivity(), InventoryActivity.class);
+                    }
+                    startActivity(intent);
+                } else {
+                    startActivity(intent);
+                }
             }
         });
         rcv_order_manager.setAdapter(orderManagerAdapter);
@@ -203,9 +202,9 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     public static String[] name = {"today_checkout_order_count", "today_wait_checkout_order_count", "transport_order_count",
             "today_sign_order_count", "stock_exception_order_count", "no_pass_order_count"
             , "today_confirm_storage_count", "wait_confirm_storage_count", "no_pass_storage_count", "warning_stock_count", "id_card_exception_order_count"};
-    public static String[] nameText = {"今日已出库", "今日准备出库", "运输中",
+    public static String[] nameText = {"今日已出库", "今日等待出库", "运输中",
             "今日已签收", "库存异常订单", "审核不通过的订单",
-            "今日已入库预报单", "待确认预报单", "审核不通过预报单", "库存紧张", "身份证异常订单"};
+            "今日已入库预报单", "待确认预报单", "审核不通过预报单", "库存预警", "身份证异常订单"};
 
 
     /**

@@ -79,15 +79,20 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
         });
         holder.rcy_productlist.setAdapter(productAdapter);
         String statuName = list.get(position).getStatus_name();
-        if (statuName.equals("等待出库") || statuName.equals("准备出库") || statuName.equals("待下架") ||
-                statuName.equals("出库中") || statuName.equals("下架中") || statuName.equals("审核不通过")
+        if (statuName.equals("等待出库") || statuName.equals("准备出库") || statuName.equals("待下架")
+                || statuName.equals("下架中") || statuName.equals("审核不通过")
                 || statuName.equals("身份证异常")) {
             holder.tv_change_address.setVisibility(View.VISIBLE);
             holder.tv_right_line.setVisibility(View.VISIBLE);
+        }else{
+            holder.tv_change_address.setVisibility(View.GONE);
+            holder.tv_right_line.setVisibility(View.GONE);
         }
         if (!StringUtils.isEmpty(list.get(position).getVerify_fail_detail())) {
             holder.tv_id_error.setVisibility(View.VISIBLE);
             holder.tv_id_error.setText(list.get(position).getVerify_fail_detail());
+        }else {
+            holder.tv_id_error.setVisibility(View.GONE);
         }
     }
 

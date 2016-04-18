@@ -179,8 +179,16 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         //商品类型，20表示物料，默认10表示商品
         params.put("product_type", 10);
         //40表示发往仓库，1表示在库，10表示正常，20表示库存紧张，30表示断货
-        //默认进入为“待入库”
-        params.put("stock_status", 1);
+        String enterKey= getActivity().getIntent().getStringExtra("indexOrder");
+        String key= IndexFragment.nameText[IndexFragment.nameText.length-2];
+        if(key.equals(enterKey)){
+            //默认进入为“待入库”
+            params.put("stock_status", 1);
+            tl_items.getTabAt(2).select();
+        }else{
+            //默认进入为“待入库”
+            params.put("stock_status", 20);
+        }
 //        rv_inventory = (XRecyclerView)getActivity().findViewById(R.id.rv_inventory);
         rv_inventory.setLoadingMoreEnabled(true);
         rv_inventory.setPullRefreshEnabled(false);

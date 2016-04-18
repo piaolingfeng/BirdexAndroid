@@ -240,15 +240,6 @@
     <string name="freight">运费</string>
     <string name="tariff">关税</string>
 
-    <!-- 我的账户，首页 -->
-    <string name="recharge">充  值</string>
-    <string name="myaccount">我的账户</string>
-    <string name="account_detail">账户明细</string>
-    <string name="account_type">账户类型</string>
-    <string name="balance">余额</string>
-    <string name="credit">信用/可用</string>
-    <string name="freight">运费</string>
-    <string name="tariff">关税</string>
 
     <string name="please_wail">敬请期待</string>
     <string name="time_all">不限时间</string>

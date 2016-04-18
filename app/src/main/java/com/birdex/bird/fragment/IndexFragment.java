@@ -131,7 +131,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 //                    if (indexOrderLocalDataList.get(position).getName().contains("库存")) {
 //
 //                    } else {//订单
-                startActivity(intent);
+                    startActivity(intent);
 //                    }
 //                }
             }

@@ -167,6 +167,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     @Override
     public void initializeContentViews() {
         EventBus.getDefault().register(this);
+        initStatus();
         countTxt=getString(R.string.inventory_all_data);
         //初始化解析业务
         biz = new InventoryBiz();
@@ -215,7 +216,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         showBar();
         //请求正式数据
         startRequest();
-        initStatus();
+
         //设置至顶按钮
         fab_gotop.setOnClickListener(this);
         //按照可用数量排序

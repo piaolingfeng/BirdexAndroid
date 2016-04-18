@@ -205,21 +205,21 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                         }
                     }
                 } else {
-                    if (indexOrder.contains("库存")) {
-                        currentName = getString(Constant.name[2]);
+//                    if (indexOrder.contains("库存")) {
+//                        currentName = getString(Constant.name[2]);
 //                        rl_inventory.setVisibility(View.VISIBLE);
 //                        tl_items.setVisibility(View.VISIBLE);
-                    } else {//订单
-                        currentName = getString(Constant.name[0]);
-                        //初始化状态选择
-                        for (int position = 0; position < orderStatus.getData().size(); position++) {
-                            if (indexOrder.contains(orderStatus.getData().get(position).getStatus_name().trim())) {//包含该模块的名字
-                                entity.setStatus(orderStatus.getData().get(position).getStatus() + "");
-                                bus.post(orderStatus.getData().get(position), "changeState");
-                                break;
-                            }
+//                    } else {//订单
+                    currentName = getString(Constant.name[0]);
+                    //初始化状态选择
+                    for (int position = 0; position < orderStatus.getData().size(); position++) {
+                        if (indexOrder.contains(orderStatus.getData().get(position).getStatus_name().trim())) {//包含该模块的名字
+                            entity.setStatus(orderStatus.getData().get(position).getStatus() + "");
+                            bus.post(orderStatus.getData().get(position), "changeState");
+                            break;
                         }
                     }
+//                    }
                 }
             }
         }
@@ -362,7 +362,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                         if (response.get("data") != null)
                             T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
                         else
-                            T.showLong(MyApplication.getInstans(),getString(R.string.parse_error));
+                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -420,7 +420,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                         if (response.get("data") != null)
                             T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
                         else
-                            T.showLong(MyApplication.getInstans(),getString(R.string.parse_error));
+                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -469,7 +469,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                         if (response.get("data") != null)
                             T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
                         else
-                            T.showLong(MyApplication.getInstans(),getString(R.string.parse_error));
+                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

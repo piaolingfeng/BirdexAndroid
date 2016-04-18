@@ -108,9 +108,9 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
                         }
                     }
                 }
-                holder.tv_available.setText(String.valueOf(availableCount));
-                holder.tv_occupancy.setText(String.valueOf(occupancyCount));
             }
+            holder.tv_available.setText(String.valueOf(availableCount));
+            holder.tv_occupancy.setText(String.valueOf(occupancyCount));
 //            if (RecyclerView.SCROLL_STATE_SETTLING != ((InventoryActivity) activity).rv_inventory.getScrollState()) {
 //                if (!"".equals(entity.getPic())) {
 //                    //非飞翔状态

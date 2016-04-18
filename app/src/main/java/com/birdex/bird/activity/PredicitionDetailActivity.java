@@ -106,7 +106,14 @@ public class PredicitionDetailActivity extends BaseActivity {
                 if (entity != null)
                     bus.post("", "predicitiondetail");
                 else {
-                    T.showLong(PredicitionDetailActivity.this, "解析失败请重试!");
+                    try {
+                        if (response.get("data") != null)
+                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
+                        else
+                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 

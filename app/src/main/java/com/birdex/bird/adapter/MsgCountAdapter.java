@@ -50,10 +50,12 @@ public class MsgCountAdapter extends RecyclerView.Adapter<MsgCountAdapter.MsgCou
     public void onBindViewHolder(MsgCountHolder holder, int position) {
         holder.position = position;
         holder.tv_create_time.setText(list.get(position).getUpdated_date());
-        SharedPreferences sp = mContext.getSharedPreferences("login", Activity.MODE_PRIVATE);
+//        SharedPreferences sp = mContext.getSharedPreferences("login", Activity.MODE_PRIVATE);
 //        sp.getString("company_name", "");
-        holder.tv_context.setText(sp.getString("company_name", "") + mContext.getString(R.string.msg_count_1) + mContext.getString(R.string.msg_count_2) +
-                mContext.getString(R.string.msg_count_3) + mContext.getString(R.string.msg_count_4) + mContext.getString(R.string.msg_count_5));
+        holder.tv_context.setText(mContext.getString(R.string.msg_count_1) + list.get(position).getMsg_content().getCompany_name() +
+                mContext.getString(R.string.msg_count_2)+list.get(position).getMsg_content().getOrder_count() + mContext.getString(R.string.msg_count_3) +
+                list.get(position).getMsg_content().getCost() + mContext.getString(R.string.msg_count_4) +
+                list.get(position).getMsg_content().getWallet() + mContext.getString(R.string.msg_count_5));
         if (list.get(position).getRead_status().equals("0"))//0表示未读，1表示已读
         {
             holder.img_read_status.setVisibility(View.VISIBLE);

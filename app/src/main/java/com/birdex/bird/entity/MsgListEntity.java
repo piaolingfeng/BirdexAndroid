@@ -44,6 +44,44 @@ public class MsgListEntity {
                 String warning_stock = "";//: "12",
                 String overdraft_stock = "";//: "0"
 
+                //账户异常
+                String company_name = "";//: "公司名称",
+                String cost = "";//: 预计总费用,
+                String wallet = "";//: 账户余额,
+                String order_count = "";//: "当时可以出库的订单数量"
+
+                public String getCompany_name() {
+                    return company_name;
+                }
+
+                public void setCompany_name(String company_name) {
+                    this.company_name = company_name;
+                }
+
+                public String getCost() {
+                    return cost;
+                }
+
+                public void setCost(String cost) {
+                    this.cost = cost;
+                }
+
+                public String getWallet() {
+                    return wallet;
+                }
+
+                public void setWallet(String wallet) {
+                    this.wallet = wallet;
+                }
+
+                public String getOrder_count() {
+                    return order_count;
+                }
+
+                public void setOrder_count(String order_count) {
+                    this.order_count = order_count;
+                }
+
                 public String getProduct_code() {
                     return product_code;
                 }
@@ -172,7 +210,8 @@ public class MsgListEntity {
                     this.receiver_name = receiver_name;
                 }
             }
-            String table_code="";
+
+            String table_code = "";
             String created_date = "";//:"2016-04-15 12:26:59",
             String updated_date = "";//:"2016-04-15 12:26:59",
             String read_status = "";//:"0",0表示未读，1表示已读

@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.adapter.MsgCountAdapter;
 import com.birdex.bird.adapter.MsgInventoryAdapter;
 import com.birdex.bird.adapter.MsgOrderAdapter;
 import com.birdex.bird.api.BirdApi;
@@ -48,6 +49,7 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
 
     MsgInventoryAdapter inventoryAdapter;
     MsgOrderAdapter orderAdapter;
+    MsgCountAdapter countAdapter;
     //    OrderListEntity orderListEntities;//订单列表
     private InventorySimpleEntity InvenEntity = null;
 
@@ -77,7 +79,7 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
         listEntity = new MsgListEntity();
         inventoryAdapter = new MsgInventoryAdapter(MsgDetailActivity.this, listEntity.getData().getMessages());
         orderAdapter = new MsgOrderAdapter(this, listEntity.getData().getMessages(), title);
-
+        countAdapter = new MsgCountAdapter(this,listEntity.getData().getMessages());
         title_view.setInventoryDetail(title, R.color.gray1);
         rcy.setLayoutManager(new FullyLinearLayoutManager(this));
         rcy.setLoadingListener(this);
@@ -237,7 +239,7 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
                             listEntity.getData().getMessages().addAll(entity.getData().getMessages());
 //                            inventoryAdapter.getList().addAll(InvenEntity.getProducts());
 //                            inventoryAdapter.notifyDataSetChanged();
-                            bus.post("", "msg_list_update");
+                            bus.post(title, "msg_list_update");
                         }
                     } else {
                         try {
@@ -324,7 +326,9 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
             inventoryAdapter.notifyDataSetChanged();
         } else {
             if (msg_list_name[4].equals(title)) {
-
+                countAdapter.setList(listEntity.getData().getMessages());
+                rcy.setAdapter(countAdapter);
+                countAdapter.notifyDataSetChanged();
             } else {
                 orderAdapter.setList(listEntity.getData().getMessages());
                 rcy.setAdapter(orderAdapter);

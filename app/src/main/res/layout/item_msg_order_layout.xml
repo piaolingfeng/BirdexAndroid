@@ -10,12 +10,20 @@
         android:layout_width="match_parent"
         android:layout_height="38dp">
 
+        <ImageView
+            android:id="@+id/img_read_status"
+            android:layout_width="wrap_content"
+            android:src="@drawable/read_status"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
         <TextView
             android:id="@+id/tv_text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/item_margin_top_height"
+            android:layout_toRightOf="@+id/img_read_status"
             android:layout_marginLeft="@dimen/item_margin_top_height"
             android:text="@string/msg_warning"
             android:textColor="@color/order_detail_text_color"

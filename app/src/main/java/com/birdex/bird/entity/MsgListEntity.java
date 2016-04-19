@@ -32,7 +32,65 @@ public class MsgListEntity {
                 String receiver_city = "";//: "深圳市",
                 String receiver_area = "";//: "宝安区",
                 String receiver_address = "";//: "呵呵s",
+                String receiver_mobile = "";//: "手机号（或 电话）",
+                String receiver_name = "";//: "名字",
                 String verify_fail_detail = "";//: "审核不通过的原因，或身份证异常的原因"
+
+                //库存内容
+                String product_code = "";//: "04b117311cda2da844564b22f177ab31",
+                String external_no = "";//: "SN2015110707",
+                String name = "";//: "皮鞋",
+                String stock = "";//: "11",
+                String warning_stock = "";//: "12",
+                String overdraft_stock = "";//: "0"
+
+                public String getProduct_code() {
+                    return product_code;
+                }
+
+                public void setProduct_code(String product_code) {
+                    this.product_code = product_code;
+                }
+
+                public String getExternal_no() {
+                    return external_no;
+                }
+
+                public void setExternal_no(String external_no) {
+                    this.external_no = external_no;
+                }
+
+                public String getName() {
+                    return name;
+                }
+
+                public void setName(String name) {
+                    this.name = name;
+                }
+
+                public String getStock() {
+                    return stock;
+                }
+
+                public void setStock(String stock) {
+                    this.stock = stock;
+                }
+
+                public String getWarning_stock() {
+                    return warning_stock;
+                }
+
+                public void setWarning_stock(String warning_stock) {
+                    this.warning_stock = warning_stock;
+                }
+
+                public String getOverdraft_stock() {
+                    return overdraft_stock;
+                }
+
+                public void setOverdraft_stock(String overdraft_stock) {
+                    this.overdraft_stock = overdraft_stock;
+                }
 
                 public String getOrder_code() {
                     return order_code;
@@ -97,12 +155,36 @@ public class MsgListEntity {
                 public void setVerify_fail_detail(String verify_fail_detail) {
                     this.verify_fail_detail = verify_fail_detail;
                 }
-            }
 
+                public String getReceiver_mobile() {
+                    return receiver_mobile;
+                }
+
+                public void setReceiver_mobile(String receiver_mobile) {
+                    this.receiver_mobile = receiver_mobile;
+                }
+
+                public String getReceiver_name() {
+                    return receiver_name;
+                }
+
+                public void setReceiver_name(String receiver_name) {
+                    this.receiver_name = receiver_name;
+                }
+            }
+            String table_code="";
             String created_date = "";//:"2016-04-15 12:26:59",
             String updated_date = "";//:"2016-04-15 12:26:59",
-            String read_status = "";//:"0",
+            String read_status = "";//:"0",0表示未读，1表示已读
             String push_status = "";//:"0"
+
+            public String getTable_code() {
+                return table_code;
+            }
+
+            public void setTable_code(String table_code) {
+                this.table_code = table_code;
+            }
 
             public String getId() {
                 return id;

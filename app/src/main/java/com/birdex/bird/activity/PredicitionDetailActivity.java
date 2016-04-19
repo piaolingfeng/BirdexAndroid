@@ -215,8 +215,9 @@ public class PredicitionDetailActivity extends BaseActivity {
                         if (error == 0) {
                             if (success != null && success.equals("success")) {
                                 bus.post(position, "confirm");//刷新当前页面
+                                bus.post("","getTodayData");//刷新今日看板数据
                                 if (position == -1) {//-1为刷新全部状态
-                                    bus.post(fragment_position, "confirm_fragment");//刷新fragment页面
+                                    bus.post(fragment_position, "confirm_fragment_adapter");//刷新fragment页面
                                 }
                                 T.showLong(PredicitionDetailActivity.this, getString(R.string.confirm_success));
                             }

@@ -16,18 +16,19 @@ import com.birdex.bird.activity.TodayDataActivity;
 import com.birdex.bird.adapter.OrderManagerAdapter;
 import com.birdex.bird.adapter.ToolManagerAdapter;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.util.decoration.FullyGridLayoutManager;
 import com.birdex.bird.entity.OrderManagerEntity;
-import com.birdex.bird.util.glide.GlideUtils;
-import com.birdex.bird.util.recycleviewhelper.OnStartDragListener;
-import com.birdex.bird.util.recycleviewhelper.SimpleItemTouchHelperCallback;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.interfaces.OnRecyclerViewItemLongClickListener;
-import com.birdex.bird.widget.lunbo.CycleViewPager;
-import com.birdex.bird.widget.lunbo.DepthPageTransformer;
+import com.birdex.bird.util.AnimationUtils;
 import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.PreferenceUtils;
 import com.birdex.bird.util.T;
+import com.birdex.bird.util.decoration.FullyGridLayoutManager;
+import com.birdex.bird.util.glide.GlideUtils;
+import com.birdex.bird.util.recycleviewhelper.OnStartDragListener;
+import com.birdex.bird.util.recycleviewhelper.SimpleItemTouchHelperCallback;
+import com.birdex.bird.widget.lunbo.CycleViewPager;
+import com.birdex.bird.widget.lunbo.DepthPageTransformer;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -55,10 +56,13 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     @Bind(R.id.rcv_tool_manager)
     RecyclerView rcv_tool_manager;
 
+    @Bind(R.id.edit1)
+    ImageView edit1;
     private ItemTouchHelper mItemTouchHelper;
 
     public static boolean firstCome = false;
 
+    public String tag = "IndexFragment";
     @Override
     public int getContentLayoutResId() {
         return R.layout.fragment_index_layout;
@@ -86,7 +90,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                         new DepthPageTransformer());
         initToolManager();
         initOrderManager();
-        getTodayData();
+        getTodayData("");
     }
 
     public static OrderManagerAdapter orderManagerAdapter;
@@ -98,7 +102,15 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
      * 数据看板初始化
      */
     private void initOrderManager() {
-
+//        edit1.setInAnimation(AnimationUtils.loadAnimatio(showProductByStore.this,android.R.anim.slide_in_left));
+//        ims.setOutAnimation(AnimationUtils.loadAnimatio(showProductByStore.this,android.R.anim.slide_out_right));
+        edit1.setOnClickListener(new View.OnClickListener() {//返回
+            @Override
+            public void onClick(View v) {
+                bus.post(false, "LongClick");
+                bus.post("","getTodayData");
+            }
+        });
         rcv_order_manager.setLayoutManager(new FullyGridLayoutManager(getContext(), 3));
         if (indexOrderLocalDataList != null)
             indexOrderLocalDataList.add(null);//首页最后一个为进入数据更多
@@ -126,7 +138,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                 intent.putExtra("indexOrder", indexOrderLocalDataList.get(position).getName());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 if (indexOrderLocalDataList.get(position).getName().contains("库存")) {
-                    if (!indexOrderLocalDataList.get(position).getName().contains("订单")){
+                    if (!indexOrderLocalDataList.get(position).getName().contains("订单")) {
                         intent.setClass(getActivity(), InventoryActivity.class);
                     }
                     startActivity(intent);
@@ -146,7 +158,8 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     //    Resources res = getResources();
 //    public final String[] name = getResources().getStringArray(R.array.todaybash);
 //    public final String[] nameText = res.getStringArray(R.array.todaybash_name);
-    public static void getTodayData() {
+    @Subscriber(tag = "getTodayData")
+    public void getTodayData(String text) {
         RequestParams params = new RequestParams();
         params.put("all", 1);
         JsonHttpResponseHandler httpResponseHandler = new JsonHttpResponseHandler() {
@@ -169,13 +182,14 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                     T.showShort(MyApplication.getInstans(), errorResponse.toString());
             }
         };
+        httpResponseHandler.setTag(tag);
         BirdApi.getTodayData(MyApplication.getInstans(), params, httpResponseHandler);
     }
 
     /**
      * 解析网络请求返回的今日数据
      */
-    public static void parseNetData(final JSONObject response) throws JSONException {
+    public void parseNetData(final JSONObject response) throws JSONException {
         JSONObject object = response.getJSONObject("data");
         OrderManagerEntity entity;
         boolean state;
@@ -392,6 +406,13 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     @Subscriber(tag = "LongClick")
     public void changeLongClickState(boolean state) {
         orderManagerAdapter.setLongClickState(state);
+        if (state) {
+            edit1.setVisibility(View.VISIBLE);
+            edit1.setAnimation(AnimationUtils.getShowAlphaAnimation());
+        }else {
+            edit1.setVisibility(View.GONE);
+            edit1.setAnimation(AnimationUtils.getHiddenAlphaAnimation());
+        }
         for (int i = 0; i < orderManagerAdapter.getOrderList().size(); i++) {
             if (orderManagerAdapter.getOrderList().get(i) != null) {
                 orderManagerAdapter.getOrderList().get(i).setDel_state(state);
@@ -454,4 +475,9 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         mItemTouchHelper.startDrag(viewHolder);
     }
 
+    @Override
+    public void onDestroy() {
+        BirdApi.cancelRequestWithTag(tag);
+        super.onDestroy();
+    }
 }

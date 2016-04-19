@@ -43,19 +43,19 @@
                     app:layout_paddingTopPercent="@string/common_padding_top"
                     app:layout_textSizePercent="@string/msg_text_4_5w" />
 
-                <TextView
+                <ImageView
                     android:id="@+id/edit1"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:layout_alignParentRight="true"
-                    android:gravity="center"
-                    android:text="@string/edit"
+                    android:layout_centerVertical="true"
+                    app:layout_marginRightPercent="@string/msg_text_3w"
+                    app:layout_heightPercent="70%"
                     android:visibility="gone"
-                    app:layout_paddingBottomPercent="@string/common_padding_top"
-                    app:layout_paddingLeftPercent="@string/common_padding_top"
-                    app:layout_paddingRightPercent="@string/common_padding_top"
-                    app:layout_paddingTopPercent="@string/common_padding_top"
-                    app:layout_textSizePercent="@string/msg_text_4_5w" />
+                    app:layout_paddingLeftPercent="@string/msg_text_3w"
+                    app:layout_paddingRightPercent="@string/msg_text_3w"
+                    android:gravity="center"
+                    android:src="@drawable/reflash"/>
 
             </com.zhy.android.percent.support.PercentRelativeLayout>
 

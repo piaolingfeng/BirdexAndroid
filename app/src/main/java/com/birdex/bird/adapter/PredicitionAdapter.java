@@ -90,11 +90,13 @@ public class PredicitionAdapter extends RecyclerView.Adapter<PredicitionAdapter.
                 onRecyclerViewItemClickListener.onItemClick(position);
         }
 
-        @Subscriber(tag = "confirm_fragment")
+        @Subscriber(tag = "confirm_fragment_adapter")
         public void confirmPredicition(int position) {
             if (this.position == position) {
-                tv_status.setText("已入库");
-                predicitionDetailList.get(position).setStatus_name("已入库");
+//                tv_status.setText("已入库");
+//                predicitionDetailList.get(position).setStatus_name("已入库");
+                predicitionDetailList.remove(position);
+                notifyDataSetChanged();
             }
         }
     }

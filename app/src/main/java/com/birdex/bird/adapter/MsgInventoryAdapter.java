@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by chuming.zhuang on 2016/4/14.
+ * 库存紧张消息
  */
 public class MsgInventoryAdapter extends RecyclerView.Adapter<MsgInventoryAdapter.MsgInventoryHolder> {
     private List<MsgListEntity.MsgList.MsgListMessages> list = new ArrayList<>();
@@ -50,10 +51,15 @@ public class MsgInventoryAdapter extends RecyclerView.Adapter<MsgInventoryAdapte
     public void onBindViewHolder(MsgInventoryHolder holder, int position) {
         holder.position = position;
         holder.tv_create_time.setText(list.get(position).getUpdated_date());
-        holder.tv_product_code.setText(list.get(position).getMsg_content().getOrder_oms_no());
-
-//        holder.tv_name.setText(list.get(position).getMsg_content().get);
-//        holder.tv_error.setText("可用库存为:" + list.get(position).getAvailable_stock());
+        holder.tv_product_code.setText(list.get(position).getMsg_content().getProduct_code());
+        if (list.get(position).getRead_status().equals("0"))//0表示未读，1表示已读
+        {
+            holder.img_read_status.setVisibility(View.VISIBLE);
+        } else {
+            holder.img_read_status.setVisibility(View.GONE);
+        }
+        holder.tv_error.setText("可用库存为:" + list.get(position).getMsg_content().getStock());
+        holder.tv_name.setText(list.get(position).getMsg_content().getName());
     }
 
     @Override
@@ -76,6 +82,8 @@ public class MsgInventoryAdapter extends RecyclerView.Adapter<MsgInventoryAdapte
         TextView tv_name;
         @Bind(R.id.tv_error)
         TextView tv_error;
+        @Bind(R.id.img_read_status)
+        ImageView img_read_status;
         int position = 0;
 
         public MsgInventoryHolder(View itemView) {
@@ -86,8 +94,8 @@ public class MsgInventoryAdapter extends RecyclerView.Adapter<MsgInventoryAdapte
 
         @Override
         public void onClick(View v) {
-            ClipboardManagerUtil.copy(list.get(position).getMsg_content().getOrder_oms_no().toString(), mContext);
-            T.showShort(mContext,mContext.getString(R.string.copy_tip));
+            ClipboardManagerUtil.copy(list.get(position).getMsg_content().getOrder_oms_no(), mContext);
+            T.showShort(mContext, mContext.getString(R.string.copy_tip));
         }
     }
 }

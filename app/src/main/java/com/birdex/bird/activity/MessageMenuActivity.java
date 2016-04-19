@@ -1,13 +1,23 @@
 package com.birdex.bird.activity;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.view.View;
 import android.widget.TextView;
 
+import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.service.IPushAidlInterface;
+import com.birdex.bird.service.NotificationService;
+import com.birdex.bird.util.Constant;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -40,16 +50,15 @@ public class MessageMenuActivity extends BaseActivity implements View.OnClickLis
 
     private SharedPreferences.Editor editor;
 
-    public static final String SP_NAME = "MESSAGE_SETTING";
-    public static final String TONE_SETTING = "tone";
-    public static final String TIME_SETTING = "time";
-
-
+//    public static final String SP_NAME = "MESSAGE_SETTING";
+//    public static final String TONE_SETTING = "tone";
+//    public static final String TIME_SETTING = "time";
+    private IPushAidlInterface pushAIDL=null;
     @Override
     public int getContentLayoutResId() {
         return R.layout.activity_messagemenu;
     }
-
+    private ServiceConnection connection=null;
     @Override
     public void initializeContentViews() {
         initData();
@@ -60,18 +69,48 @@ public class MessageMenuActivity extends BaseActivity implements View.OnClickLis
         title_rl.setBackgroundColor(Color.parseColor("#666666"));
         title.setText(getString(R.string.message_setting));
 
-        initRadioButton();
+//        initRadioButton();
+        //绑定服务获取数据
+        connection=new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                pushAIDL=IPushAidlInterface.Stub.asInterface(service);
+                initRadioButton();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        };
+        //开启服务
+        Intent intent=new Intent(this, NotificationService.class);
+        intent.setAction("com.dbjtech.myservice");
+        startService(intent);
+        //绑定服务
+        bindService(intent,connection, Context.BIND_AUTO_CREATE);
     }
 
     private void initRadioButton() {
 
-        sp = getSharedPreferences(SP_NAME, Activity.MODE_PRIVATE);
-        editor = sp.edit();
+//        sp = getSharedPreferences(Constant.SP_NAME, Activity.MODE_WORLD_READABLE);
+//        editor = sp.edit();
 
         // 先通过 sp 进行设置， 如果sp 没有内容，则默认选择前面那项
-        boolean tone = sp.getBoolean(TONE_SETTING, true);
-        boolean time = sp.getBoolean(TIME_SETTING, true);
-
+//        boolean tone = sp.getBoolean(Constant.TONE_SETTING, true);
+//        boolean time = sp.getBoolean(Constant.TIME_SETTING, true);
+        boolean tone =true ;
+        try {
+            tone =pushAIDL.getVoiceStatus();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        boolean time =true ;
+        try {
+            time =pushAIDL.getTimeVoiceStatus();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         if(tone){
             warning_tone_rb1.setChecked(true);
             warning_tone_rb2.setChecked(false);
@@ -102,34 +141,70 @@ public class MessageMenuActivity extends BaseActivity implements View.OnClickLis
                 if (warning_tone_rb2.isChecked()) {
                     warning_tone_rb2.setChecked(false);
                 }
-                editor.putBoolean(TONE_SETTING,true);
-                editor.commit();
+//                editor.putBoolean(Constant.TONE_SETTING,true);
+//                editor.commit();
+                if(pushAIDL!=null){
+                    try {
+                        pushAIDL.setVoiceStatus(true);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
                 break;
             // 不提示，只在消息中显示
             case R.id.warning_tone_rb2:
                 if (warning_tone_rb1.isChecked()) {
                     warning_tone_rb1.setChecked(false);
                 }
-                editor.putBoolean(TONE_SETTING,false);
-                editor.commit();
+//                editor.putBoolean(Constant.TONE_SETTING,false);
+//                editor.commit();
+                if(pushAIDL!=null){
+                    try {
+                        pushAIDL.setVoiceStatus(false);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
                 break;
             // 全天接收
             case R.id.time_rb1:
                 if (time_rb2.isChecked()) {
                     time_rb2.setChecked(false);
                 }
-                editor.putBoolean(TIME_SETTING,true);
-                editor.commit();
+//                editor.putBoolean(Constant.TIME_SETTING,true);
+//                editor.commit();
+                if(pushAIDL!=null){
+                    try {
+                        pushAIDL.setTimeVoiceStatus(true);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
                 break;
             // 不提示，只在消息中显示
             case R.id.time_rb2:
                 if (time_rb1.isChecked()) {
                     time_rb1.setChecked(false);
                 }
-                editor.putBoolean(TIME_SETTING,false);
-                editor.commit();
+//                editor.putBoolean(Constant.TIME_SETTING,false);
+//                editor.commit();
+                if(pushAIDL!=null){
+                    try {
+                        pushAIDL.setTimeVoiceStatus(false);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
                 break;
 
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(connection!=null){
+            unbindService(connection);
         }
     }
 }

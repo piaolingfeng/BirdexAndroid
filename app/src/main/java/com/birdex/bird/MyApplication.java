@@ -22,6 +22,7 @@ import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.CrashHandler;
 import com.loopj.android.http.AsyncHttpClient;
 import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.MsgConstant;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.PushAgent;
@@ -147,13 +148,14 @@ public class MyApplication extends Application {
                     @Override
                     public void run() {
                         //onRegistered方法的参数registrationId即是device_token
-//                        Log.e("device_token", registrationId);
+                        Log.e("device_token", registrationId);
                         ahc.addHeader("DEVICE-TOKEN", device_token);
                     }
                 });
             }
         });
         device_token = UmengRegistrar.getRegistrationId(this);
+        Log.e("device_token", device_token);
         return device_token;
 
     }

@@ -79,7 +79,7 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
 //        getActivity().runOnUiThread(new Runnable() {
 //            public void run() {
             /* do your UI stuffs */
-                bundle = args;
+        bundle = args;
 //            }
 //        });
     }

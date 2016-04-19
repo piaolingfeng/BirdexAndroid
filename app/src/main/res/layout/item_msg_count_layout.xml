@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/detail_background"
+    android:orientation="vertical">
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+
+        <ImageView
+            android:id="@+id/img_read_status"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/read_status"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/item_margin_top_height"
+            android:layout_marginLeft="@dimen/item_margin_top_height"
+            android:layout_toRightOf="@+id/img_read_status"
+            android:text="@string/msg_account_exception"
+            android:textColor="@color/order_detail_text_color"
+            app:layout_textSizePercent="@string/msg_text_4w" />
+
+        <TextView
+            android:id="@+id/tv_create_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/item_margin_top_height"
+            android:text="dfadfasd"
+            android:textColor="@color/order_detail_text_color"
+            app:layout_textSizePercent="@string/msg_text_4w" />
+
+        <include
+            layout="@layout/single_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true" />
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_context"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/item_margin_top_height"
+        android:layout_marginLeft="@dimen/item_margin_top_height"
+        android:layout_marginTop="@dimen/item_margin_top_height"
+        app:layout_textSizePercent="@string/msg_text_4w" />
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/item_margin_top_height"
+            android:background="@drawable/rect_fullbluew_selector"
+            android:text="@string/msg_count_recharge"
+            android:textColor="@color/btn_blue_selector"
+            app:layout_heightPercent="8%w"
+            app:layout_textSizePercent="@string/msg_text_4_5w" />
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+</com.zhy.android.percent.support.PercentLinearLayout>

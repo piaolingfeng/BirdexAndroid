@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.birdex.bird.R;
 import com.birdex.bird.entity.OrderManagerEntity;
+import com.birdex.bird.util.AnimationUtils;
 import com.birdex.bird.util.recycleviewhelper.ItemTouchHelperAdapter;
 import com.birdex.bird.util.recycleviewhelper.ItemTouchHelperViewHolder;
 import com.birdex.bird.util.recycleviewhelper.OnStartDragListener;
@@ -103,6 +104,7 @@ public class OrderManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             orderManagerHolder.order_item_count.setText(orderList.get(position).getCount() + "");
             if (orderList.get(position).isDel_state()) {//长按删除状态
                 orderManagerHolder.order_item_del.setVisibility(View.VISIBLE);
+                orderManagerHolder.order_item_del.setAnimation(AnimationUtils.getShowAlphaAnimation());
             } else {
                 orderManagerHolder.order_item_del.setVisibility(View.INVISIBLE);
             }

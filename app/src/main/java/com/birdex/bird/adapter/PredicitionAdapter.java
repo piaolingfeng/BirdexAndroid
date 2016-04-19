@@ -57,6 +57,10 @@ public class PredicitionAdapter extends RecyclerView.Adapter<PredicitionAdapter.
         holder.tv_status.setText(predicitionDetailList.get(position).getStatus_name());
         holder.tv_storage_no.setText(predicitionDetailList.get(position).getStorage_no());
         holder.tv_warehouse_name.setText(predicitionDetailList.get(position).getWarehouse_name());
+        if (position>15)
+            EventBus.getDefault().post(true,"predicition_visible");
+        else
+            EventBus.getDefault().post(false,"predicition_visible");
     }
 
     @Override
@@ -90,11 +94,13 @@ public class PredicitionAdapter extends RecyclerView.Adapter<PredicitionAdapter.
                 onRecyclerViewItemClickListener.onItemClick(position);
         }
 
-        @Subscriber(tag = "confirm_fragment")
+        @Subscriber(tag = "confirm_fragment_adapter")
         public void confirmPredicition(int position) {
             if (this.position == position) {
-                tv_status.setText("已入库");
-                predicitionDetailList.get(position).setStatus_name("已入库");
+//                tv_status.setText("已入库");
+//                predicitionDetailList.get(position).setStatus_name("已入库");
+                predicitionDetailList.remove(position);
+                notifyDataSetChanged();
             }
         }
     }

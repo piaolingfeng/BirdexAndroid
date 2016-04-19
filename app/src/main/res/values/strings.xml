@@ -47,7 +47,7 @@
     <string name="tool4">进销存管理</string>
     <string name="tool5">我的支出</string>
     <string name="tool6">账户充值</string>
-    <string name="edit">编辑</string>
+    <string name="edit">返回</string>
     <string name="tools">管理工具</string>
     <string name="data">数据看板</string>
     <!-- 按照页面命名 index,detail等等-->
@@ -367,6 +367,8 @@
     <string name="tv_function_id">重新上传身份证</string>
     <string name="tv_function_addr">修改地址</string>
 
+    <string name="confirm_success">确认成功</string>
+
     <string name="msg_text_3w">3%w</string>
     <string name="msg_text_4w">4%w</string>
     <string name="msg_text_4_5w">4.5%w</string>
@@ -374,6 +376,14 @@
     <string name="msg_text_5_5w">5.5%w</string>
     <!--<string name="msg_text_per"></string>-->
     <string name="first_index_text_5_1w">4.9%w</string>
+    <string name="request_err">服务器错误,请稍后重试</string>
+    <!---->
+    <string name="msg_count_1">亲爱的:</string>
+    <string name="msg_count_2">,截止到目前为止,您有</string>
+    <string name="msg_count_3">笔订单出库,将产生</string>
+    <string name="msg_count_4">元运费,您的账户余额为</string>
+    <string name="msg_count_5">,可能造成部分订单无法正常扣取费用，为避免影响订单配送时效，请尽快充值!</string>
+    <string name="msg_count_recharge">马上充值</string>
     <!--同单号其他商品-->
     <string name="sameorder_others_title">同单号其它商品</string>
     <string name="sameorder_others_inventorycode">入库单号:</string>

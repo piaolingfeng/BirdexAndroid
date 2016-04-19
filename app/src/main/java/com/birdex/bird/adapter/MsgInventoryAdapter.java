@@ -11,7 +11,9 @@ import android.widget.TextView;
 import com.birdex.bird.R;
 import com.birdex.bird.entity.InventoryActivityEntity;
 import com.birdex.bird.entity.InventorySimpleEntity;
+import com.birdex.bird.entity.MsgListEntity;
 import com.birdex.bird.util.ClipboardManagerUtil;
+import com.birdex.bird.util.T;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +23,13 @@ import butterknife.ButterKnife;
 
 /**
  * Created by chuming.zhuang on 2016/4/14.
+ * 库存紧张消息
  */
 public class MsgInventoryAdapter extends RecyclerView.Adapter<MsgInventoryAdapter.MsgInventoryHolder> {
-    private List<InventorySimpleEntity.InventorySimpleProduct> list = new ArrayList<>();
+    private List<MsgListEntity.MsgList.MsgListMessages> list = new ArrayList<>();
     Context mContext;
 
-    public MsgInventoryAdapter(Context mContext, List<InventorySimpleEntity.InventorySimpleProduct> list) {
+    public MsgInventoryAdapter(Context mContext, List<MsgListEntity.MsgList.MsgListMessages> list) {
         this.mContext = mContext;
         this.list = list;
     }
@@ -36,20 +39,27 @@ public class MsgInventoryAdapter extends RecyclerView.Adapter<MsgInventoryAdapte
         return new MsgInventoryHolder(LayoutInflater.from(mContext).inflate(R.layout.item_msg_inve_tension_layout, null));
     }
 
-    public List<InventorySimpleEntity.InventorySimpleProduct> getList() {
+    public List<MsgListEntity.MsgList.MsgListMessages> getList() {
         return list;
     }
 
-    public void setList(List<InventorySimpleEntity.InventorySimpleProduct> list) {
+    public void setList(List<MsgListEntity.MsgList.MsgListMessages> list) {
         this.list = list;
     }
 
     @Override
     public void onBindViewHolder(MsgInventoryHolder holder, int position) {
         holder.position = position;
-        holder.tv_create_time.setText(list.get(position).getLast_storage_time());
-        holder.tv_name.setText(list.get(position).getName());
-        holder.tv_error.setText("可用库存为:" + list.get(position).getAvailable_stock());
+        holder.tv_create_time.setText(list.get(position).getUpdated_date());
+        holder.tv_product_code.setText(list.get(position).getMsg_content().getProduct_code());
+        if (list.get(position).getRead_status().equals("0"))//0表示未读，1表示已读
+        {
+            holder.img_read_status.setVisibility(View.VISIBLE);
+        } else {
+            holder.img_read_status.setVisibility(View.GONE);
+        }
+        holder.tv_error.setText("可用库存为:" + list.get(position).getMsg_content().getStock());
+        holder.tv_name.setText(list.get(position).getMsg_content().getName());
     }
 
     @Override
@@ -60,16 +70,20 @@ public class MsgInventoryAdapter extends RecyclerView.Adapter<MsgInventoryAdapte
         return size;
     }
 
-    public class MsgInventoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MsgInventoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @Bind(R.id.tv_create_time)
         TextView tv_create_time;
+        @Bind(R.id.tv_product_code)
+        TextView tv_product_code;
         @Bind(R.id.tv_copy)
         ImageView tv_copy;
         @Bind(R.id.tv_name)
         TextView tv_name;
         @Bind(R.id.tv_error)
         TextView tv_error;
+        @Bind(R.id.img_read_status)
+        ImageView img_read_status;
         int position = 0;
 
         public MsgInventoryHolder(View itemView) {
@@ -80,7 +94,8 @@ public class MsgInventoryAdapter extends RecyclerView.Adapter<MsgInventoryAdapte
 
         @Override
         public void onClick(View v) {
-            ClipboardManagerUtil.copy(list.get(position).getProduct_code().toString(), mContext);
+            ClipboardManagerUtil.copy(list.get(position).getMsg_content().getOrder_oms_no(), mContext);
+            T.showShort(mContext, mContext.getString(R.string.copy_tip));
         }
     }
 }

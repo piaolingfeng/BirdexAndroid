@@ -22,7 +22,7 @@ public class ClipboardManagerUtil {
 // 得到剪贴板管理器
         ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            cmb.setText(content.trim());
+            cmb.setText(content);
         }
     }
 

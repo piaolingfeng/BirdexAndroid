@@ -12,8 +12,16 @@ public class Constant {
     public static final String BASEPATH = Environment
             .getExternalStorageDirectory().getAbsolutePath() + NAME;
 
-    public static final int ICON_CHANGE =  1001;
+    public static final int ICON_CHANGE = 1001;
     public static final int[] name = {R.string.tool1, R.string.tool2, R.string.tool3, R.string.tool5, R.string.tool6};
+
+    public static final String MSG_ORDER_STOCK_EXCEPTION = "ORDER_STOCK_EXCEPTION";//订单库存异常
+    public static final String MSG_ORDER_VERIFY_FAIL = "ORDER_VERIFY_FAIL";//订单审核不通过
+    public static final String MSG_ORDER_IDCARD_EXCEPTION = "ORDER_IDCARD_EXCEPTION";//订单身份证异常
+    public static final String MSG_ACCOUNT_EXCEPTION = "ACCOUNT_EXCEPTION";//账号异常
+    public static final String MSG_STOCK_WARNING = "STOCK_WARNING";//库存预警
+
+    public static final int[] time = {R.string.time_all, R.string.time_today, R.string.time_week, R.string.time_month, R.string.time_three_month, R.string.time_year};
     //数据库名
     public static final String DBName="BirdexData";
     //notifi启动的action

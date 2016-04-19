@@ -7,6 +7,7 @@ package com.birdex.bird.greendao;
 public class city {
 
     private Long id;
+    private String Area;
     private String AreaID;
     private String AreaName;
     private String ParentID;
@@ -18,8 +19,9 @@ public class city {
         this.id = id;
     }
 
-    public city(Long id, String AreaID, String AreaName, String ParentID) {
+    public city(Long id, String Area, String AreaID, String AreaName, String ParentID) {
         this.id = id;
+        this.Area = Area;
         this.AreaID = AreaID;
         this.AreaName = AreaName;
         this.ParentID = ParentID;
@@ -31,6 +33,14 @@ public class city {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getArea() {
+        return Area;
+    }
+
+    public void setArea(String Area) {
+        this.Area = Area;
     }
 
     public String getAreaID() {

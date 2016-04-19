@@ -17,6 +17,9 @@ import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.Area;
 import com.birdex.bird.entity.City;
 import com.birdex.bird.entity.ContactDetail;
+import com.birdex.bird.greendao.DaoUtils;
+import com.birdex.bird.greendao.city;
+import com.birdex.bird.greendao.cityDao;
 import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.T;
 import com.birdex.bird.widget.WheelView;
@@ -35,6 +38,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import de.greenrobot.dao.query.QueryBuilder;
 
 /**
  * Created by hyj on 2016/4/5.
@@ -75,6 +79,9 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     @Bind(R.id.wheelview_ll)
     LinearLayout wheelview_ll;
 
+
+    private cityDao cityDao;
+
     // 标记，如果设置过地区信息就可以点击  否则点击无效
     private boolean setRegionFlag = false;
 
@@ -91,68 +98,87 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     // 初始化数据
     private void initData() {
         // 通过接口获取 地址信息
-        RequestParams params = new RequestParams();
-        params.put("city", "北京");
-        showLoading();
-        BirdApi.getConfig(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
+//        RequestParams params = new RequestParams();
+//        params.put("city", "北京");
+        cityDao = DaoUtils.getDaoSession().getCityDao();
+        // 取得省
+        QueryBuilder<city> queryBuilder = cityDao.queryBuilder().where(com.birdex.bird.greendao.cityDao.Properties.Area.eq("1"));
+        List<city> p = queryBuilder.list();
+        // 取得 市
+        queryBuilder = cityDao.queryBuilder().where(com.birdex.bird.greendao.cityDao.Properties.Area.eq("2"));
+        List<city> c = queryBuilder.list();
+        // 取得 区
+        queryBuilder = cityDao.queryBuilder().where(com.birdex.bird.greendao.cityDao.Properties.Area.eq("3"));
+        List<city> a = queryBuilder.list();
 
-                try {
-                    if ("0".equals(response.getString("error"))) {
-                        // 正确获取到了地区数据
-                        JSONObject all = (JSONObject) response.get("data");
-                        JSONObject city = (JSONObject) all.get("city");
-                        City myCities = JsonHelper.parseObject(city, City.class);
-                        setData(myCities);
-                    } else {
-                        T.showShort(MyApplication.getInstans(),response.getString("data"));
-                    }
-                    hideLoading();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    hideLoading();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
-                hideLoading();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
-                hideLoading();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
-                hideLoading();
-            }
-        });
+        City myCity = new City();
+        myCity.setAreas(a);
+        myCity.setCities(c);
+        myCity.setProvinces(p);
+        // 获取省份列表
+        setData(myCity);
+//        showLoading();
+//        BirdApi.getConfig(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                super.onSuccess(statusCode, headers, response);
+//
+//                try {
+//                    if ("0".equals(response.getString("error"))) {
+//                        // 正确获取到了地区数据
+//                        JSONObject all = (JSONObject) response.get("data");
+//                        JSONObject city = (JSONObject) all.get("city");
+//                        City myCities = JsonHelper.parseObject(city, City.class);
+//
+//                        // 获取省份列表
+//                        setData(myCities);
+//                    } else {
+//                        T.showShort(MyApplication.getInstans(), response.getString("data"));
+//                    }
+//                    hideLoading();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    hideLoading();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+//                super.onFailure(statusCode, headers, responseString, throwable);
+//                T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
+//                hideLoading();
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                super.onFailure(statusCode, headers, throwable, errorResponse);
+//                T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
+//                hideLoading();
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+//                super.onFailure(statusCode, headers, throwable, errorResponse);
+//                T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
+//                hideLoading();
+//            }
+//        });
 
         save.setText(getString(R.string.change_adress));
     }
 
-    private List<Area> provinces = new ArrayList<Area>();
-    private List<Area> cities = new ArrayList<Area>();
-    private List<Area> areas = new ArrayList<Area>();
+    private List<city> provinces = new ArrayList<city>();
+    private List<city> cities = new ArrayList<city>();
+    private List<city> areas = new ArrayList<city>();
 
     // 记录被选中的实体
-    private Area selectP;
-    private Area selectC;
-    private Area selectA;
+    private city selectP;
+    private city selectC;
+    private city selectA;
 
     // 存在 显示城市的 List
-    private List<Area> citts = new ArrayList<Area>();
-    private List<Area> areas1 = new ArrayList<Area>();
+    private List<city> citts = new ArrayList<city>();
+    private List<city> areas1 = new ArrayList<city>();
 
     public static final int OFF_SET_DEFAULT = 2;
 
@@ -175,11 +201,11 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onSelected(int selectedIndex, String item) {
                 // 获取到 省份的 父 id
-                Area area = getArea(item, provinces);
+                city area = getArea(item, provinces);
                 String parentId = area.getAreaID();
                 // 获取该省份下所有的城市
                 HashMap map = getCitiesStr(parentId);
-                citts = (List<Area>) map.get("area");
+                citts = (List<city>) map.get("area");
                 select_view2.setItems((List<String>) map.get("name"));
                 select_view2.setSeletion(0);
                 selectP = area;
@@ -197,11 +223,11 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onSelected(int selectedIndex, String item) {
                 // 获取 城市的 id   再查找 地区 id
-                Area area = getArea(item, cities);
+                city area = getArea(item, cities);
                 String parentId = area.getAreaID();
                 // 获取该城市下所有的地区
                 HashMap map = getAreasStr(parentId);
-                areas1 = (List<Area>) map.get("area");
+                areas1 = (List<city>) map.get("area");
                 select_view3.setItems((List<String>) map.get("name"));
 
                 select_view3.setSeletion(0);
@@ -218,7 +244,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
         select_view3.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
             @Override
             public void onSelected(int selectedIndex, String item) {
-                Area area = getArea(item, areas);
+                city area = getArea(item, areas);
                 selectA = area;
 
                 contactDetail.setReceiver_area_id(area.getAreaID());
@@ -322,9 +348,9 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     }
 
     // 通过id 查找所在的位置，并设置到 选择器上
-    private void findAndSetAdress(List<Area> list, String id, int index) {
+    private void findAndSetAdress(List<city> list, String id, int index) {
         for (int i = 0; i < list.size(); i++) {
-            Area area = list.get(i);
+            city area = list.get(i);
             if (area.getAreaID().equals(id)) {
                 switch (index) {
                     // 省份
@@ -346,8 +372,8 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     }
 
     // 通过 item 判断选中的
-    private Area getArea(String cityName, List<Area> areas) {
-        for (Area area : areas) {
+    private city getArea(String cityName, List<city> areas) {
+        for (city area : areas) {
             if (area.getAreaName().equals(cityName)) {
                 return area;
             }
@@ -356,9 +382,9 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     }
 
     // 获取所有的省份 城市 或者 地区 的 name 返回 list
-    private List<String> getAreaStr(List<Area> areas) {
+    private List<String> getAreaStr(List<city> areas) {
         List<String> provinces = new ArrayList<String>();
-        for (Area area : areas) {
+        for (city area : areas) {
             provinces.add(area.getAreaName());
         }
 
@@ -369,9 +395,9 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     private HashMap<String, List> getCitiesStr(String parentId) {
         HashMap<String, List> map = new HashMap();
 
-        List<Area> list = new ArrayList<Area>();
+        List<city> list = new ArrayList<city>();
         List<String> strs = new ArrayList<String>();
-        for (Area area : cities) {
+        for (city area : cities) {
             if (area.getParentID().equals(parentId)) {
                 list.add(area);
                 strs.add(area.getAreaName());
@@ -386,9 +412,9 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     private HashMap<String, List> getAreasStr(String parentId) {
         HashMap<String, List> map = new HashMap();
 
-        List<Area> list = new ArrayList<Area>();
+        List<city> list = new ArrayList<city>();
         List<String> strs = new ArrayList<String>();
-        for (Area area : areas) {
+        for (city area : areas) {
             if (area.getParentID().equals(parentId)) {
                 list.add(area);
                 strs.add(area.getAreaName());
@@ -414,7 +440,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
                 break;
             // 点击 所在地区
             case R.id.region_ll:
-                if(setRegionFlag) {
+                if (setRegionFlag) {
                     // 如果隐藏 就显示， 反之亦然
                     if (wheelview_ll.getVisibility() == View.VISIBLE) {
                         wheelview_ll.setVisibility(View.GONE);
@@ -480,11 +506,11 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
                 try {
                     hideLoading();
                     if ("0".equals(response.getString("error"))) {
-                        T.showShort(MyApplication.getInstans(),getString(R.string.change_suc));
+                        T.showShort(MyApplication.getInstans(), getString(R.string.change_suc));
                         String post = region.getText().toString() + detail_adress.getText().toString();
                         EventBus.getDefault().post(post, "changeAddr");
                     } else {
-                        T.showShort(MyApplication.getInstans(),response.getString("data"));
+                        T.showShort(MyApplication.getInstans(), response.getString("data"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

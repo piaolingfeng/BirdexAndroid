@@ -24,9 +24,10 @@ public class cityDao extends AbstractDao<city, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property AreaID = new Property(1, String.class, "AreaID", false, "AREA_ID");
-        public final static Property AreaName = new Property(2, String.class, "AreaName", false, "AREA_NAME");
-        public final static Property ParentID = new Property(3, String.class, "ParentID", false, "PARENT_ID");
+        public final static Property Area = new Property(1, String.class, "Area", false, "AREA");
+        public final static Property AreaID = new Property(2, String.class, "AreaID", false, "AREA_ID");
+        public final static Property AreaName = new Property(3, String.class, "AreaName", false, "AREA_NAME");
+        public final static Property ParentID = new Property(4, String.class, "ParentID", false, "PARENT_ID");
     };
 
 
@@ -43,9 +44,10 @@ public class cityDao extends AbstractDao<city, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"CITY\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"AREA_ID\" TEXT," + // 1: AreaID
-                "\"AREA_NAME\" TEXT," + // 2: AreaName
-                "\"PARENT_ID\" TEXT);"); // 3: ParentID
+                "\"AREA\" TEXT," + // 1: Area
+                "\"AREA_ID\" TEXT," + // 2: AreaID
+                "\"AREA_NAME\" TEXT," + // 3: AreaName
+                "\"PARENT_ID\" TEXT);"); // 4: ParentID
     }
 
     /** Drops the underlying database table. */
@@ -64,19 +66,24 @@ public class cityDao extends AbstractDao<city, Long> {
             stmt.bindLong(1, id);
         }
  
+        String Area = entity.getArea();
+        if (Area != null) {
+            stmt.bindString(2, Area);
+        }
+ 
         String AreaID = entity.getAreaID();
         if (AreaID != null) {
-            stmt.bindString(2, AreaID);
+            stmt.bindString(3, AreaID);
         }
  
         String AreaName = entity.getAreaName();
         if (AreaName != null) {
-            stmt.bindString(3, AreaName);
+            stmt.bindString(4, AreaName);
         }
  
         String ParentID = entity.getParentID();
         if (ParentID != null) {
-            stmt.bindString(4, ParentID);
+            stmt.bindString(5, ParentID);
         }
     }
 
@@ -91,9 +98,10 @@ public class cityDao extends AbstractDao<city, Long> {
     public city readEntity(Cursor cursor, int offset) {
         city entity = new city( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // AreaID
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // AreaName
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // ParentID
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // Area
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // AreaID
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // AreaName
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // ParentID
         );
         return entity;
     }
@@ -102,9 +110,10 @@ public class cityDao extends AbstractDao<city, Long> {
     @Override
     public void readEntity(Cursor cursor, city entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setAreaID(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setAreaName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setParentID(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setArea(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setAreaID(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setAreaName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setParentID(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
      }
     
     /** @inheritdoc */

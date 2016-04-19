@@ -25,6 +25,7 @@ import com.birdex.bird.entity.Contact;
 import com.birdex.bird.entity.Market;
 import com.birdex.bird.entity.Markets;
 import com.birdex.bird.entity.QgModel;
+import com.birdex.bird.greendao.city;
 import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
@@ -160,20 +161,20 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
         String provstr = "";
         String citystr = "";
         String areastr = "";
-        List<Area> pro = city.getProvinces();
-        for(Area area:pro){
+        List<com.birdex.bird.greendao.city> pro = city.getProvinces();
+        for(city area:pro){
             if(area.getAreaID()!=null && area.getAreaID().equals(provinceId)){
                 provstr = area.getAreaName();
             }
         }
-        List<Area> cit = city.getCities();
-        for(Area area:cit){
+        List<city> cit = city.getCities();
+        for(city area:cit){
             if(area.getAreaID()!=null && area.getAreaID().equals(cityId)){
                 citystr = area.getAreaName();
             }
         }
-        List<Area> are = city.getAreas();
-        for(Area area:are){
+        List<city> are = city.getAreas();
+        for(city area:are){
             if(area.getAreaID()!=null && area.getAreaID().equals(areaId)){
                 areastr = area.getAreaName();
             }

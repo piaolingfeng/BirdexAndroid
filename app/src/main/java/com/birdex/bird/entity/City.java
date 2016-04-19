@@ -1,5 +1,7 @@
 package com.birdex.bird.entity;
 
+import com.birdex.bird.greendao.city;
+
 import java.util.List;
 
 /**
@@ -7,31 +9,31 @@ import java.util.List;
  */
 public class City {
 
-    private List<Area> provinces;
-    private List<Area> areas;
-    private List<Area> cities;
+    private List<city> provinces;
+    private List<city> areas;
+    private List<city> cities;
 
-    public List<Area> getProvinces() {
+    public List<city> getProvinces() {
         return provinces;
     }
 
-    public void setProvinces(List<Area> provinces) {
+    public void setProvinces(List<city> provinces) {
         this.provinces = provinces;
     }
 
-    public List<Area> getAreas() {
+    public List<city> getAreas() {
         return areas;
     }
 
-    public void setAreas(List<Area> areas) {
+    public void setAreas(List<city> areas) {
         this.areas = areas;
     }
 
-    public List<Area> getCities() {
+    public List<city> getCities() {
         return cities;
     }
 
-    public void setCities(List<Area> cities) {
+    public void setCities(List<city> cities) {
         this.cities = cities;
     }
 }

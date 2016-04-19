@@ -3,6 +3,7 @@ package com.birdex.bird.service;
 import android.app.Service;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
@@ -70,6 +71,9 @@ public class CacheService extends Service {
     private List<businessmodel> businessModelList = new ArrayList<>();
     private List<ticket> ticketList = new ArrayList<>();
     private City cityList;
+
+    // 重试次数， 最多5 次。
+    private int retry_count = 0;
 
     //设置数据库的操作
     private SQLiteDatabase db=null;
@@ -189,25 +193,28 @@ public class CacheService extends Service {
         cityDao = daoSession.getCityDao();
 
         if(cityList != null){
-            List<Area> provinces = cityList.getProvinces();
-            for(Area p:provinces){
+            List<city> provinces = cityList.getProvinces();
+            for(city p:provinces){
                 city c = new city();
+                c.setArea("1");
                 c.setAreaID(p.getAreaID());
                 c.setAreaName(p.getAreaName());
                 c.setParentID(p.getParentID());
                 cityDao.insert(c);
             }
-            List<Area> cities = cityList.getCities();
-            for(Area p:cities){
+            List<city> cities = cityList.getCities();
+            for(city p:cities){
                 city c = new city();
+                c.setArea("2");
                 c.setAreaID(p.getAreaID());
                 c.setAreaName(p.getAreaName());
                 c.setParentID(p.getParentID());
                 cityDao.insert(c);
             }
-            List<Area> areas = cityList.getAreas();
-            for(Area p:areas){
+            List<city> areas = cityList.getAreas();
+            for(city p:areas){
                 city c = new city();
+                c.setArea("3");
                 c.setAreaID(p.getAreaID());
                 c.setAreaName(p.getAreaName());
                 c.setParentID(p.getParentID());
@@ -289,65 +296,52 @@ public class CacheService extends Service {
                 super.onSuccess(statusCode, headers, response);
                 try {
                     if("0".equals(response.getString("error"))){
-                        JSONObject data = (JSONObject) response.get("data");
-                        JSONObject warehouses = (JSONObject) data.get("warehouses");
-                        setWarehouses(warehouses);
-
-                        JSONObject markets = (JSONObject) data.get("markets");
-                        setMarkets(markets);
-
-                        JSONArray priceUnits = (JSONArray) data.get("price_units");
-                        setPriceUnits(priceUnits);
-
-                        JSONObject serviceTypes = (JSONObject) data.get("service_types");
-                        setServiceTypes(serviceTypes);
-
-                        JSONObject boxs = (JSONObject) data.get("boxs");
-                        setBoxs(boxs);
-
-                        JSONObject qgModel = (JSONObject) data.get("qg_models");
-                        setQgModel(qgModel);
-
-//                        JSONObject categories = (JSONObject) data.get("categories");
-//                        setCategories(categories);
-
-                        JSONObject tapes = (JSONObject) data.get("tapes");
-                        setTapes(tapes);
-
-                        JSONObject businessModels = (JSONObject) data.get("business_models");
-                        setBusinessModels(businessModels);
-
-                        JSONObject tickets = (JSONObject) data.get("tickets");
-                        setTickets(tickets);
-
-                        JSONObject city = (JSONObject) data.get("city");
-                        cityList = JsonHelper.parseObject(city, City.class);
-
-                        // 执行数据插入操作
-                        insertData();
-
+                        new MyTask().execute(response);
                     } else {
-                        // 获取失败
-
+                        // 获取失败  失败次数 + 1 ， 如果不小于5次，重试
+                        retry_count ++;
+                        if(retry_count < 5) {
+                            saveData();
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    // 获取失败  失败次数 + 1 ， 如果不小于5次，重试
+                    retry_count ++;
+                    if(retry_count < 5) {
+                        saveData();
+                    }
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
+                // 获取失败  失败次数 + 1 ， 如果不小于5次，重试
+                retry_count ++;
+                if(retry_count < 5) {
+                    saveData();
+                }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                // 获取失败  失败次数 + 1 ， 如果不小于5次，重试
+                retry_count ++;
+                if(retry_count < 5) {
+                    saveData();
+                }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                // 获取失败  失败次数 + 1 ， 如果不小于5次，重试
+                retry_count ++;
+                if(retry_count < 5) {
+                    saveData();
+                }
             }
         });
     }
@@ -519,6 +513,57 @@ public class CacheService extends Service {
 
         }
         return list;
+    }
+
+    class MyTask extends AsyncTask<Object,Void,Void> {
+
+        @Override
+        protected Void doInBackground(Object... params) {
+            JSONObject response = (JSONObject) params[0];
+
+            JSONObject data = null;
+            try {
+                data = (JSONObject) response.get("data");
+                JSONObject warehouses = (JSONObject) data.get("warehouses");
+                setWarehouses(warehouses);
+
+                JSONObject markets = (JSONObject) data.get("markets");
+                setMarkets(markets);
+
+                JSONArray priceUnits = (JSONArray) data.get("price_units");
+                setPriceUnits(priceUnits);
+
+                JSONObject serviceTypes = (JSONObject) data.get("service_types");
+                setServiceTypes(serviceTypes);
+
+                JSONObject boxs = (JSONObject) data.get("boxs");
+                setBoxs(boxs);
+
+                JSONObject qgModel = (JSONObject) data.get("qg_models");
+                setQgModel(qgModel);
+
+//                        JSONObject categories = (JSONObject) data.get("categories");
+//                        setCategories(categories);
+
+                JSONObject tapes = (JSONObject) data.get("tapes");
+                setTapes(tapes);
+
+                JSONObject businessModels = (JSONObject) data.get("business_models");
+                setBusinessModels(businessModels);
+
+                JSONObject tickets = (JSONObject) data.get("tickets");
+                setTickets(tickets);
+
+                JSONObject city = (JSONObject) data.get("city");
+                cityList = JsonHelper.parseObject(city, City.class);
+
+                // 执行数据插入操作
+                insertData();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 
 }

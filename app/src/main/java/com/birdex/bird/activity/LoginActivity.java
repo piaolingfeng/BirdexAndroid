@@ -68,7 +68,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //        initSystemBar(R.color.transparent);
         // 开启缓存 service
         Intent service = new Intent(this, CacheService.class);
-        startService(service);
+//        startService(service);
 
         initData();
     }

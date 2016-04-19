@@ -57,6 +57,10 @@ public class PredicitionAdapter extends RecyclerView.Adapter<PredicitionAdapter.
         holder.tv_status.setText(predicitionDetailList.get(position).getStatus_name());
         holder.tv_storage_no.setText(predicitionDetailList.get(position).getStorage_no());
         holder.tv_warehouse_name.setText(predicitionDetailList.get(position).getWarehouse_name());
+        if (position>15)
+            EventBus.getDefault().post(true,"predicition_visible");
+        else
+            EventBus.getDefault().post(false,"predicition_visible");
     }
 
     @Override

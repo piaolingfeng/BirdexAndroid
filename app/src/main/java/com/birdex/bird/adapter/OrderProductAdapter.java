@@ -77,7 +77,7 @@ public class OrderProductAdapter extends RecyclerView.Adapter<OrderProductAdapte
         @Bind(R.id.tv_error)
         TextView tv_error;
 
-        int position;
+        int position=0;
 
         public ProductHold(View itemView) {
             super(itemView);

@@ -20,6 +20,8 @@ import com.birdex.bird.util.ClipboardManagerUtil;
 import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
 
+import org.simple.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,15 +86,20 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
                 || statuName.equals("身份证异常")) {
             holder.tv_change_address.setVisibility(View.VISIBLE);
             holder.tv_right_line.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             holder.tv_change_address.setVisibility(View.GONE);
             holder.tv_right_line.setVisibility(View.GONE);
         }
         if (!StringUtils.isEmpty(list.get(position).getVerify_fail_detail())) {
             holder.tv_id_error.setVisibility(View.VISIBLE);
             holder.tv_id_error.setText(list.get(position).getVerify_fail_detail());
-        }else {
+        } else {
             holder.tv_id_error.setVisibility(View.GONE);
+        }
+        if (position > 5) {
+            EventBus.getDefault().post(true,"order_visible");
+        }else{
+            EventBus.getDefault().post(false,"order_visible");
         }
     }
 

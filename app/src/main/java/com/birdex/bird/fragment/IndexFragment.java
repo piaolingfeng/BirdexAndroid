@@ -367,26 +367,26 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
             public void onItemClick(int position) {
 //                T.showShort(MyApplication.getInstans(), list.get(position).getName());
                 Intent intent = null;
-                if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool6))) {
-                    //我的充值
-                    intent = new Intent(getActivity(), MyAccountInfoActivity.class);
-                    //显示第一个页面
-                    intent.putExtra("enterindex", 0);
-                    getActivity().startActivity(intent);
-                    return;
-                } else if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool5))) {
-                    //我的支出记录
-                    intent = new Intent(getActivity(), MyAccountInfoActivity.class);
-                    //显示第二个页面
-                    intent.putExtra("enterindex", 1);
-                    getActivity().startActivity(intent);
-                    return;
-                } else if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool3))) {
-                    //我的库存
-                    intent = new Intent(getActivity(), InventoryActivity.class);
-                    startActivity(intent);
-                    return;
-                }
+//                if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool6))) {
+//                    //我的充值
+//                    intent = new Intent(getActivity(), MyAccountInfoActivity.class);
+//                    //显示第一个页面
+//                    intent.putExtra("enterindex", 0);
+//                    getActivity().startActivity(intent);
+//                    return;
+//                } else if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool5))) {
+//                    //我的支出记录
+//                    intent = new Intent(getActivity(), MyAccountInfoActivity.class);
+//                    //显示第二个页面
+//                    intent.putExtra("enterindex", 1);
+//                    getActivity().startActivity(intent);
+//                    return;
+//                } else if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool3))) {
+//                    //我的库存
+//                    intent = new Intent(getActivity(), InventoryActivity.class);
+//                    startActivity(intent);
+//                    return;
+//                }
                 intent = new Intent(getActivity(), MyOrderListActivity.class);
                 intent.putExtra("name", getString(Constant.name[position]));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

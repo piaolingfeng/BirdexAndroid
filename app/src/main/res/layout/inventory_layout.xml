@@ -103,7 +103,7 @@
                             android:layout_marginLeft="@dimen/inventory_limit_marginlr"
                             android:layout_marginRight="@dimen/inventory_limit_marginlr"
                             android:visibility="gone"
-                            android:layout_toLeftOf="@id/tv_inventory_sort_available"
+                            android:layout_toLeftOf="@+id/tv_inventory_sort_available"
                             android:drawableRight="@drawable/triangle_down"
                             android:text="@string/inventory_sort_time"
                             android:textSize="@dimen/inventory_limit_txt" />

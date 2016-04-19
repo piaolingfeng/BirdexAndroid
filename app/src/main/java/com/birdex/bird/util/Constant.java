@@ -20,4 +20,6 @@ public class Constant {
     public static final String MSG_ORDER_IDCARD_EXCEPTION = "ORDER_IDCARD_EXCEPTION";//订单身份证异常
     public static final String MSG_ACCOUNT_EXCEPTION = "ACCOUNT_EXCEPTION";//账号异常
     public static final String MSG_STOCK_WARNING = "STOCK_WARNING";//库存预警
+
+    public static final int[] time = {R.string.time_all, R.string.time_today, R.string.time_week, R.string.time_month, R.string.time_three_month, R.string.time_year};
 }

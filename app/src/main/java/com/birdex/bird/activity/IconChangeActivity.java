@@ -51,6 +51,8 @@ import butterknife.OnClick;
  */
 public class IconChangeActivity extends BaseActivity implements View.OnClickListener {
 
+    private static final String TAG = "IconChangeActivity";
+
     // 标题
     @Bind(R.id.title)
     TextView title;
@@ -145,8 +147,9 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
                 // 点击保存按钮后，需要调用 修改公司信息
                 RequestParams params = new RequestParams();
                 params.put("company_code",companyCode);
-                params.put("logo",path);
-                BirdApi.companyEdit(MyApplication.getInstans(),params,new JsonHttpResponseHandler(){
+                params.put("logo", path);
+
+                JsonHttpResponseHandler handler = new JsonHttpResponseHandler(){
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
@@ -181,7 +184,9 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
                         hideLoading();
                         T.showShort(MyApplication.getInstans(), getString(R.string.save_fail));
                     }
-                });
+                };
+                handler.setTag(TAG);
+                BirdApi.companyEdit(MyApplication.getInstans(),params,handler);
 
                 break;
             case R.id.iconchange_icon:
@@ -210,6 +215,11 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
         return fileName;
     }
 
+    @Override
+    protected void onDestroy() {
+        BirdApi.cancelRequestWithTag(TAG);
+        super.onDestroy();
+    }
 
     // 拍照
     private void photo() {
@@ -407,11 +417,12 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
                     // 将图片上传到服务器
                     try {
                         File file = new File(new URI(uritempFile.toString()));
-                        saveBitmapFile(comp(file.getAbsolutePath()),file.getAbsolutePath());
+                        saveBitmapFile(comp(file.getAbsolutePath()), file.getAbsolutePath());
                         RequestParams params = new RequestParams();
                         params.put("logo", file);
                         showLoading();
-                        BirdApi.upLoadLogo(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+
+                        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                 super.onSuccess(statusCode, headers, response);
@@ -455,7 +466,9 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
                                 hideLoading();
                                 T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
                             }
-                        });
+                        };
+                        handler.setTag(TAG);
+                        BirdApi.upLoadLogo(MyApplication.getInstans(), params, handler);
                     } catch (URISyntaxException e) {
                         e.printStackTrace();
                     }

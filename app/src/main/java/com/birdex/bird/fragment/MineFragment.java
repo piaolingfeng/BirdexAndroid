@@ -178,6 +178,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                         UpdateManager.getInstance().setDownLoadPath(updateUrl);
                         // 如果不相等，执行更新操作
                         UpdateManager.getInstance().set(getActivity(), description);
+                    }else {
+                        T.showShort(getActivity(),getString(R.string.version_new));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

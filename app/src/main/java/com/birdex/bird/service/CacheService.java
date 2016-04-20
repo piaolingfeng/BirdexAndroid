@@ -39,6 +39,7 @@ import com.birdex.bird.greendao.ticket;
 import com.birdex.bird.greendao.ticketDao;
 import com.birdex.bird.greendao.warehouse;
 import com.birdex.bird.greendao.warehouseDao;
+import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.JsonHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -99,8 +100,11 @@ public class CacheService extends Service {
 
     // 接口返回的版本号
     private String categoriesVersion;
+    private String business_modelsVersion;
     private String cityVersion;
+    private String marketsVersion;
     private String price_unitsVersion;
+    private String qg_modelsVersion;
     private String service_typesVersion;
     private String transaction_typesVersion;
     private String wallet_typesVersion;
@@ -143,14 +147,23 @@ public class CacheService extends Service {
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject jb = array.getJSONObject(i);
                                 if (jb != null) {
+                                    if ("business_models".equals(jb.getString("name"))) {
+                                        business_modelsVersion = jb.getString("version");
+                                    }
                                     if ("categories".equals(jb.getString("name"))) {
                                         categoriesVersion = jb.getString("version");
                                     }
                                     if ("city".equals(jb.getString("name"))) {
                                         cityVersion = jb.getString("version");
                                     }
+                                    if ("markets".equals(jb.getString("name"))) {
+                                        marketsVersion = jb.getString("version");
+                                    }
                                     if ("price_units".equals(jb.getString("name"))) {
                                         price_unitsVersion = jb.getString("version");
+                                    }
+                                    if ("qg_models".equals(jb.getString("name"))) {
+                                        qg_modelsVersion = jb.getString("version");
                                     }
                                     if ("service_types".equals(jb.getString("name"))) {
                                         service_typesVersion = jb.getString("version");
@@ -198,20 +211,36 @@ public class CacheService extends Service {
         // 先不做这个
 //        String categoriesVersionLocal = sp.getString("categoriesVersion", "");
 
+        String business_modelsVersionLocal = sp.getString("business_models", "");
         String cityVersionLocal = sp.getString("cityVersion", "");
+        String marketsVersionLocal = sp.getString("marketsVersion", "");
         String price_unitsVersionLocal = sp.getString("price_unitsVersion", "");
+        String qg_modelsVersionLocal = sp.getString("qg_modelsVersion", "");
         String service_typesVersionLocal = sp.getString("service_typesVersion", "");
         String transaction_typesVersionLocal = sp.getString("transaction_typesVersion", "");
         String wallet_typesVersionLocal = sp.getString("wallet_typesVersion", "");
         String warehousesVersionLocal = sp.getString("warehousesVersion", "");
 
+        if( !business_modelsVersionLocal.equals(business_modelsVersion)){
+            params.add("business_models","1");
+            editor.putString("business_models",business_modelsVersion);
+        }
+
         if (!cityVersionLocal.equals(cityVersion)) {
             params.add("city", "1");
             editor.putString("cityVersion", cityVersion);
         }
+        if (!marketsVersionLocal.equals(marketsVersion)) {
+            params.add("markets", "1");
+            editor.putString("marketsVersion", marketsVersion);
+        }
         if (!price_unitsVersionLocal.equals(price_unitsVersion)) {
             params.add("price_units", "1");
             editor.putString("price_unitsVersion", price_unitsVersion);
+        }
+        if (!qg_modelsVersionLocal.equals(qg_modelsVersion)) {
+            params.add("qg_models", "1");
+            editor.putString("qg_modelsVersion", qg_modelsVersion);
         }
         if (!service_typesVersionLocal.equals(service_typesVersion)) {
             params.add("service_types", "1");
@@ -239,7 +268,7 @@ public class CacheService extends Service {
 
     private void insertData() {
 
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "Bird", null);
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, Constant.DBName, null);
         db = helper.getWritableDatabase();
         daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
@@ -664,10 +693,10 @@ public class CacheService extends Service {
                         setWarehouses(warehouses);
                     }
 
-//                    JSONObject markets = (JSONObject) data.get("markets");
-//                    if(markets != null) {
-//                        setMarkets(markets);
-//                    }
+                    JSONObject markets = data.get("markets") instanceof JSONObject ? (JSONObject) data.get("markets") : null;
+                    if(markets != null) {
+                        setMarkets(markets);
+                    }
 
                     JSONArray priceUnits = data.get("price_units") instanceof JSONArray ? (JSONArray) data.get("price_units") : null;
                     if(priceUnits != null) {
@@ -684,10 +713,10 @@ public class CacheService extends Service {
 //                        setBoxs(boxs);
 //                    }
 
-//                    JSONObject qgModel = (JSONObject) data.get("qg_models");
-//                    if(qgModel!= null){
-//                        setQgModel(qgModel);
-//                    }
+                    JSONObject qgModel = data.get("qg_models") instanceof JSONObject ? (JSONObject) data.get("qg_models"): null;
+                    if(qgModel!= null){
+                        setQgModel(qgModel);
+                    }
 
 //                        JSONObject categories = (JSONObject) data.get("categories");
 //                        setCategories(categories);

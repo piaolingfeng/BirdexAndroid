@@ -94,7 +94,8 @@ public class BirdApi {
 
     // 获取更新信息
     public static void upDateMessage(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
-        MyApplication.ahc.get(context, "http://192.168.1.201:8099/sanfangcang.html", params, jsonHttpResponseHandler);
+//        MyApplication.ahc.get(context, "http://192.168.1.201:8099/sanfangcang.html", params, jsonHttpResponseHandler);
+        MyApplication.ahc.get(context, "http://app.birdex.cn/sanfangcang.html", params, jsonHttpResponseHandler);
     }
 
     // 获取公司信息

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -39,6 +40,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -49,6 +52,8 @@ import butterknife.OnClick;
  * Created by hyj on 2016/4/12.
  */
 public class UploadIDCardActivity extends BaseActivity implements View.OnClickListener {
+
+    private static final String TAG = "UploadIDCardActivity";
 
     @Bind(R.id.title_1l)
     TitleView title_1l;
@@ -79,6 +84,9 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
 
     // 压缩完成
     private final static int COMPRESS_DOWN = 3;
+
+    // 裁剪返回
+    private final static int RESULT_REQUEST_CODE = 4;
 
     // 传过来的 order_code
     private String order_code;
@@ -116,7 +124,8 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
         params.add("order_code", order_code);
 
         showLoading();
-        BirdApi.getOrderDetail(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -156,7 +165,9 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                 T.showShort(MyApplication.getInstans(), getString(R.string.get_idcard_fail));
             }
 
-        });
+        };
+        handler.setTag(TAG);
+        BirdApi.getOrderDetail(MyApplication.getInstans(), params, handler);
 
     }
 
@@ -340,14 +351,16 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                         return;
                     }
 
-                    if(flag){
-                        frontPic = new File(filePath);
-                        GlideUtils.setImageToLocalPath(left, frontPic.getAbsolutePath());
-                    } else {
-                        backPic = new File(filePath);
-                        GlideUtils.setImageToLocalPath(right, backPic.getAbsolutePath());
-                    }
+//                    if(flag){
+//                        frontPic = new File(filePath);
+//                        GlideUtils.setImageToLocalPath(left, frontPic.getAbsolutePath());
+//                    } else {
+//                        backPic = new File(filePath);
+//                        GlideUtils.setImageToLocalPath(right, backPic.getAbsolutePath());
+//                    }
 
+                    File file = new File(filePath);
+                    startPhotoZoom(Uri.fromFile(file));
                 }
                 break;
 
@@ -364,17 +377,75 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     String picturePath = cursor.getString(columnIndex);
                     cursor.close();
+//                    if (flag) {
+//                        GlideUtils.setImageToLocalPath(left, picturePath);
+//                        frontPic = new File(picturePath);
+//                    } else {
+//                        GlideUtils.setImageToLocalPath(right, picturePath);
+//                        backPic = new File(picturePath);
+//                    }
+                    File file = new File(picturePath);
+                    startPhotoZoom(Uri.fromFile(file));
+                }
+                break;
+
+            // 剪切 返回
+            case RESULT_REQUEST_CODE:
+                try {
                     if (flag) {
-                        GlideUtils.setImageToLocalPath(left, picturePath);
-                        frontPic = new File(picturePath);
+                        GlideUtils.setImageToLocalPath(left, uritempFileLeft.toString());
+                        frontPic = new File(new URI(uritempFileLeft.toString()));
                     } else {
-                        GlideUtils.setImageToLocalPath(right, picturePath);
-                        backPic = new File(picturePath);
+                        GlideUtils.setImageToLocalPath(right, uritempFileRight.toString());
+                        backPic = new File(new URI(uritempFileRight.toString()));
                     }
+                } catch (URISyntaxException e){
+                    e.printStackTrace();
                 }
                 break;
         }
     }
+
+    Uri uritempFileLeft;
+    Uri uritempFileRight;
+
+    /**
+     * 裁剪图片方法实现
+     *
+     * @param uri
+     */
+    public void startPhotoZoom(Uri uri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        // 设置裁剪
+        intent.putExtra("crop", "true");
+        // aspectX aspectY 是宽高的比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        // outputX outputY 是裁剪图片宽高
+        intent.putExtra("outputX", 340);
+        intent.putExtra("outputY", 340);
+//        intent.putExtra("return-data", true);
+
+        /**
+         * 此方法返回的图片只能是小图片（sumsang测试为高宽160px的图片）
+         * 故将图片保存在Uri中，调用时将Uri转换为Bitmap，此方法还可解决miui系统不能return data的问题
+         */
+        //intent.putExtra("return-data", true);
+
+        //uritempFile为Uri类变量，实例化uritempFile
+        uritempFileLeft = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "front.jpg");
+        uritempFileRight = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "back.jpg");
+        if(flag) {
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uritempFileLeft);
+        } else {
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uritempFileRight);
+        }
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+
+        startActivityForResult(intent, RESULT_REQUEST_CODE);
+    }
+
 
     private Handler myHandler = new Handler(){
         @Override
@@ -401,7 +472,8 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
             try {
 
                 myparams.put("front", leftFile);
-                BirdApi.uploadIDCardPic(MyApplication.getInstans(), myparams, new JsonHttpResponseHandler() {
+
+                JsonHttpResponseHandler handler =  new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
@@ -419,7 +491,7 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                                     params1.add("receiver_id_card_img", frontPicPath);
                                     params1.add("receiver_id_card_img_back", backPicPath);
 
-                                    BirdApi.uploadIDCard(MyApplication.getInstans(), params1, new JsonHttpResponseHandler() {
+                                    JsonHttpResponseHandler handler1 = new JsonHttpResponseHandler() {
                                         @Override
                                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                             super.onSuccess(statusCode, headers, response);
@@ -456,7 +528,10 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                                             T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
                                             hideLoading();
                                         }
-                                    });
+                                    };
+                                    handler1.setTag(TAG);
+
+                                    BirdApi.uploadIDCard(MyApplication.getInstans(), params1, handler1);
                                 }
                             } else {
                                 T.showShort(MyApplication.getInstans(), response.getString("data"));
@@ -492,7 +567,9 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                         leftUploadSu = false;
                         hideLoading();
                     }
-                });
+                };
+                handler.setTag(TAG);
+                BirdApi.uploadIDCardPic(MyApplication.getInstans(), myparams,handler);
             } catch (Exception e) {
                 e.printStackTrace();
                 T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
@@ -508,7 +585,8 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
             try {
 
                 myparams.put("back", rightFile);
-                BirdApi.uploadIDCardPic(MyApplication.getInstans(), myparams, new JsonHttpResponseHandler() {
+
+                JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
@@ -527,7 +605,7 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                                     params1.add("receiver_id_card_img", frontPicPath);
                                     params1.add("receiver_id_card_img_back", backPicPath);
 
-                                    BirdApi.uploadIDCard(MyApplication.getInstans(), params1, new JsonHttpResponseHandler() {
+                                    JsonHttpResponseHandler handler1 = new JsonHttpResponseHandler() {
                                         @Override
                                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                             super.onSuccess(statusCode, headers, response);
@@ -564,7 +642,9 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                                             T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
                                             hideLoading();
                                         }
-                                    });
+                                    };
+                                    handler1.setTag(TAG);
+                                    BirdApi.uploadIDCard(MyApplication.getInstans(), params1, handler1);
                                 }
                             } else {
                                 T.showShort(MyApplication.getInstans(), response.getString("data"));
@@ -601,7 +681,9 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                         rightUploadSu = false;
                         hideLoading();
                     }
-                });
+                };
+                handler.setTag(TAG);
+                BirdApi.uploadIDCardPic(MyApplication.getInstans(), myparams, handler);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 T.showShort(MyApplication.getInstans(), getString(R.string.pic_notfound));
@@ -610,6 +692,12 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
             }
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        BirdApi.cancelRequestWithTag(TAG);
+        super.onDestroy();
     }
 
     class MyTask extends AsyncTask<Void,Void,Void>{

@@ -111,7 +111,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:text="@string/system_tone_no"
+                    android:text="@string/no_receive"
                     android:textColor="#666666" />
             </LinearLayout>
 

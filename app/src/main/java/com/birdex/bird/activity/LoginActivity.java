@@ -14,6 +14,7 @@ import com.birdex.bird.R;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.User;
 import com.birdex.bird.service.CacheService;
+import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.update.UpdateManager;
 import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.JsonHelper;
@@ -33,6 +34,8 @@ import butterknife.OnClick;
  * Created by hyj on 2016/3/25.
  */
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
+
+    private static final String TAG = "LoginActivity";
 
     // 用户名
     @Bind(R.id.username_edit)
@@ -134,9 +137,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //					super.onFailure(statusCode, headers, responseString, throwable);
                 T.showShort(MyApplication.getInstans(), "获取更新信息失败");
             }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                T.showShort(MyApplication.getInstans(), "获取更新信息失败");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                T.showShort(MyApplication.getInstans(), "获取更新信息失败");
+            }
         };
-        handler.setTag("");
-        BirdApi.upDateMessage(MyApplication.getInstans(), null,handler );
+        BirdApi.upDateMessage(MyApplication.getInstans(), null, handler);
+    }
+
+    @Override
+    protected void onDestroy() {
+        BirdApi.cancelRequestWithTag(TAG);
+        super.onDestroy();
     }
 
     // 存储返回的 user
@@ -170,7 +190,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         params.put("device_type", MyApplication.device_type);
         params.put("account", username.getText().toString());
         params.put("password", password.getText().toString());
-        BirdApi.login(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -179,6 +200,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if ("0".equals(result)) {
                         hideLoading();
                         spEdit();
+                        editor.putString(Constant.BIND_USER_ID, ((JSONObject) response.get("data")).getString("bind_user_id")+"");
+                        editor.commit();
                         User user = JsonHelper.parseObject((JSONObject) response.get("data"), User.class);
                         //将 user 信息存入到 sp
                         saveUser(user);
@@ -253,7 +276,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 hideLoading();
                 T.showShort(MyApplication.getInstans(), getString(R.string.loginfa));
             }
-        });
+        };
+        handler.setTag(TAG);
+        BirdApi.login(MyApplication.getInstans(), params, handler);
     }
 
 

@@ -4,6 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.entity.City;
+import com.birdex.bird.entity.Contact;
+import com.birdex.bird.util.Constant;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class DaoUtils {
 
     public static DaoSession getDaoSession(){
         if(daoSession == null) {
-            DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(MyApplication.getInstans(), "Bird", null);
+            DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(MyApplication.getInstans(), Constant.DBName, null);
             db = helper.getWritableDatabase();
             daoMaster = new DaoMaster(db);
             daoSession = daoMaster.newSession();

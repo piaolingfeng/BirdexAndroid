@@ -408,53 +408,6 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
         };
         handler.setTag(tag);
         BirdApi.getCompanyMes(MyApplication.getInstans(), params, handler);
-
-
-        // 请求获取相关的 type 数据，成功获取后再展现数据
-        RequestParams requestParams = new RequestParams();
-        requestParams.put("city", "北京");
-        requestParams.put("markets", "all");
-        requestParams.put("business_models", "all");
-        requestParams.put("qg_models", "all");
-        BirdApi.getConfig(MyApplication.getInstans(), requestParams, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-
-                JSONObject all = null;
-                try {
-
-                    all = (JSONObject) response.get("data");
-
-                    new MyTask().execute(all);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                hideLoading();
-                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                hideLoading();
-                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                hideLoading();
-                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
-            }
-        });
     }
 
 

@@ -24,6 +24,7 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
 import java.util.List;
@@ -73,6 +74,8 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
     @Bind(R.id.account_exception_bv)
     com.birdex.bird.widget.BadgeView account_exception_bv;
 
+    String tag = "MyMessageActivity";
+
     // 订单库存异常
     private static final String ORDER_STOCK_EXCEPTION = "ORDER_STOCK_EXCEPTION";
     private String orderStockCount = "0";
@@ -120,6 +123,7 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
 
     // 初始化数据
     private void initData() {
+        EventBus.getDefault().register(this);
         title_rl.setBackgroundColor(Color.parseColor("#666666"));
         menu.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_setting));
         menu.setVisibility(View.VISIBLE);
@@ -212,7 +216,7 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
 
     private void getUnreadData() {
         showLoading();
-        BirdApi.getMessageStat(MyApplication.getInstans(), null, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler =  new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -268,8 +272,9 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 hideLoading();
             }
-        });
-
+        };
+        handler.setTag(tag);
+        BirdApi.getMessageStat(MyApplication.getInstans(), null,handler);
     }
 
     private void setUnreadData(){
@@ -352,5 +357,11 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
         Intent intent1 = new Intent(MyMessageActivity.this, MsgDetailActivity.class);
         intent1.putExtra("title", title);
         startActivity(intent1);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BirdApi.cancelRequestWithTag(tag);
     }
 }

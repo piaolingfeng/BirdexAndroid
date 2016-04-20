@@ -384,4 +384,6 @@
     <string name="msg_count_4">元运费,您的账户余额为</string>
     <string name="msg_count_5">,可能造成部分订单无法正常扣取费用，为避免影响订单配送时效，请尽快充值!</string>
     <string name="msg_count_recharge">马上充值</string>
+    <string name="margin_left_5w">5%w</string>
+    <string name="margin_top_3w">3%w</string>
 </resources>

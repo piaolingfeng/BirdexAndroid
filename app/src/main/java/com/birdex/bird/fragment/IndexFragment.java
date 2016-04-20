@@ -459,7 +459,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 //                        Intent intent = new Intent(getActivity(), MainActivity.class);
 //                        intent.putExtra("position", position);
 //                        startActivity(intent);
-                        T.showLong(MyApplication.getInstans(), "跳转到产品引导" + position);
+//                        T.showLong(MyApplication.getInstans(), "跳转到产品引导" + position);
                     }
                 });
             }

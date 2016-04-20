@@ -473,9 +473,6 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
 
             typeReady = true;
 
-            } catch (JSONException e){
-                e.printStackTrace();
-            }
             return null;
         }
 

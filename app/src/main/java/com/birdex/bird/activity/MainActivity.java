@@ -1,5 +1,6 @@
 package com.birdex.bird.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +17,7 @@ import com.birdex.bird.fragment.HelpFragment;
 import com.birdex.bird.fragment.IndexFragment;
 import com.birdex.bird.fragment.MineFragment;
 import com.birdex.bird.interfaces.BackHandledInterface;
+import com.birdex.bird.util.T;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -144,11 +146,15 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
                 break;
             case R.id.tv_custom_service:
                 tag = 2;
-                addFragment(customServiceFragment);
+//                addFragment(customServiceFragment);
+                T.showShort(MainActivity.this,getString(R.string.please_wail));
                 break;
             case R.id.tv_help:
-                tag = 3;
-                addFragment(helpFragment);
+//                tag = 3;
+//                addFragment(helpFragment);
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, MyMessageActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_mine:
                 tag = 4;

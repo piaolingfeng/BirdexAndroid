@@ -99,6 +99,7 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void initializeContentViews() {
+        EventBus.getDefault().register(this);
         initData();
     }
 

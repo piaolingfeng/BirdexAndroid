@@ -106,7 +106,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         remember.setChecked(ischecked);
 
         // 检查更新
-        checkUpdate();
+//        checkUpdate();
     }
 
     // 检查更新
@@ -201,7 +201,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if ("0".equals(result)) {
                         hideLoading();
                         spEdit();
-                        editor.putString(Constant.BIND_USER_ID, response.getString("bind_user_id"));
+                        editor.putString(Constant.BIND_USER_ID, ((JSONObject) response.get("data")).getString("bind_user_id")+"");
                         editor.commit();
                         User user = JsonHelper.parseObject((JSONObject) response.get("data"), User.class);
                         //将 user 信息存入到 sp

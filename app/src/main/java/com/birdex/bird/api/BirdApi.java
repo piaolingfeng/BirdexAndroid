@@ -241,4 +241,14 @@ public class BirdApi {
     public static void getProductDetail(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
         post(context, "Product/get", params, jsonHttpResponseHandler);
     }
+
+    // 未读消息统计
+    public static void getMessageStat(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        get(context, "Message/stat", params, jsonHttpResponseHandler);
+    }
+
+    // 获取公用配置当前版本
+    public static void getConfigVersion(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        get(context, "Public/getConfigVersion", params, jsonHttpResponseHandler);
+    }
 }

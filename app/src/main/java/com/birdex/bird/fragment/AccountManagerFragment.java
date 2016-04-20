@@ -25,7 +25,11 @@ import com.birdex.bird.entity.Contact;
 import com.birdex.bird.entity.Market;
 import com.birdex.bird.entity.Markets;
 import com.birdex.bird.entity.QgModel;
+import com.birdex.bird.greendao.DaoUtils;
+import com.birdex.bird.greendao.businessmodel;
 import com.birdex.bird.greendao.city;
+import com.birdex.bird.greendao.market;
+import com.birdex.bird.greendao.qgmodel;
 import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
@@ -47,7 +51,7 @@ import butterknife.OnClick;
 /**
  * Created by hyj on 2016/3/29.
  */
-public class AccountManagerFragment extends BaseFragment implements View.OnClickListener{
+public class AccountManagerFragment extends BaseFragment implements View.OnClickListener {
 
     @Bind(R.id.base_content)
     com.zhy.android.percent.support.PercentLinearLayout baseContent;
@@ -157,25 +161,25 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
 
 
     // 通过 省份 城市 地区 id ，得到 地址
-    private String getAddressDetail(City city,String provinceId,String cityId,String areaId){
+    private String getAddressDetail(City city, String provinceId, String cityId, String areaId) {
         String provstr = "";
         String citystr = "";
         String areastr = "";
         List<com.birdex.bird.greendao.city> pro = city.getProvinces();
-        for(city area:pro){
-            if(area.getAreaID()!=null && area.getAreaID().equals(provinceId)){
+        for (city area : pro) {
+            if (area.getAreaID() != null && area.getAreaID().equals(provinceId)) {
                 provstr = area.getAreaName();
             }
         }
         List<city> cit = city.getCities();
-        for(city area:cit){
-            if(area.getAreaID()!=null && area.getAreaID().equals(cityId)){
+        for (city area : cit) {
+            if (area.getAreaID() != null && area.getAreaID().equals(cityId)) {
                 citystr = area.getAreaName();
             }
         }
         List<city> are = city.getAreas();
-        for(city area:are){
-            if(area.getAreaID()!=null && area.getAreaID().equals(areaId)){
+        for (city area : are) {
+            if (area.getAreaID() != null && area.getAreaID().equals(areaId)) {
                 areastr = area.getAreaName();
             }
         }
@@ -185,8 +189,8 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     }
 
     // 将接口获取到的值 set 进去
-    private void setDetailData(CompanyInformation information, City cities,List<Market> markets, List<BusinessModel> businessModels,List<QgModel> qgModels){
-        if(information != null) {
+    private void setDetailData(CompanyInformation information, City cities, List<market> markets, List<businessmodel> businessModels, List<qgmodel> qgModels) {
+        if (information != null) {
             sign_company_name.setText(information.getCompany_name());
             company_short_name.setText(information.getCompany_short_name());
 
@@ -197,7 +201,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
             String cityId = information.getCity_id();
             // 所在地区县
             String areaId = information.getArea_id();
-            if(cities != null) {
+            if (cities != null) {
                 headquarters_address.setText(getAddressDetail(cities, provinceId, cityId, areaId));
             }
             detail_address.setText(information.getAddress());
@@ -205,7 +209,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
             // 主营市场   -- 缺少
             // 返回主营市场 list
             List<String> marTypes = StringUtils.spiltStringArray(information.getMarkets());
-            if(markets != null) {
+            if (markets != null) {
                 main_market.setText(getMarketStr(markets, marTypes));
             }
 
@@ -218,13 +222,13 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
 
             // 业务模式 list
             List<String> businessType = StringUtils.spiltStringArray(information.getBusiness_models());
-            if(businessModels != null) {
+            if (businessModels != null) {
                 pattern.setText(getBusinessStr(businessModels, businessType));
             }
 
             // 清关服务  -- 未知
             List<String> qgs = StringUtils.spiltStringArray(information.getQg_models());
-            if(qgModels != null) {
+            if (qgModels != null) {
                 clear_server.setText(getQgStr(qgModels, qgs));
             }
 
@@ -233,11 +237,11 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     }
 
     // 获取 主营市场 字符串
-    private String getMarketStr(List<Market> markets,List<String> marTypes){
+    private String getMarketStr(List<market> markets, List<String> marTypes) {
         List<String> result = new ArrayList<>();
-        for(String no:marTypes){
-            for(Market market:markets){
-                if(market.getId().equals(no)){
+        for (String no : marTypes) {
+            for (market market : markets) {
+                if (market.getId().equals(no)) {
                     result.add(market.getName());
                 }
             }
@@ -246,11 +250,11 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     }
 
     // 获取 业务模式 字符串
-    private String getBusinessStr(List<BusinessModel> businessModels,List<String>businessType){
+    private String getBusinessStr(List<businessmodel> businessModels, List<String> businessType) {
         List<String> result = new ArrayList<>();
-        for(String no:businessType){
-            for(BusinessModel model:businessModels){
-                if(model.getId().equals(no)){
+        for (String no : businessType) {
+            for (businessmodel model : businessModels) {
+                if (model.getId().equals(no)) {
                     result.add(model.getName());
                 }
             }
@@ -259,11 +263,11 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     }
 
     // 获取 清关服务 字符串
-    private String getQgStr(List<QgModel> qgModels,List<String> qgType){
+    private String getQgStr(List<qgmodel> qgModels, List<String> qgType) {
         List<String> result = new ArrayList<>();
-        for(String no:qgType){
-            for(QgModel qgModel:qgModels){
-                if(qgModel.getId().equals(no)){
+        for (String no : qgType) {
+            for (qgmodel qgModel : qgModels) {
+                if (qgModel.getId().equals(no)) {
                     result.add(qgModel.getName());
                 }
             }
@@ -272,21 +276,21 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     }
 
     // 设置联系人信息
-    private void setContactInf(List<Contact> contacts){
-        for(Contact contact : contacts){
-            if("10".equals(contact.getContact_type())){
+    private void setContactInf(List<Contact> contacts) {
+        for (Contact contact : contacts) {
+            if ("10".equals(contact.getContact_type())) {
                 principal.setText(contact.getName());
                 principal_phone_no.setText(contact.getPhone());
                 principal_email.setText(contact.getEmail());
-            } else if("20".equals(contact.getContact_type())){
+            } else if ("20".equals(contact.getContact_type())) {
                 outin.setText(contact.getName());
                 outin_phone_no.setText(contact.getPhone());
                 outin_email.setText(contact.getEmail());
-            } else if("30".equals(contact.getContact_type())){
+            } else if ("30".equals(contact.getContact_type())) {
                 finance.setText(contact.getName());
                 finance_phone_no.setText(contact.getPhone());
                 finance_email.setText(contact.getEmail());
-            } else if("40".equals(contact.getContact_type())){
+            } else if ("40".equals(contact.getContact_type())) {
                 it.setText(contact.getName());
                 it_phone_no.setText(contact.getPhone());
                 it_email.setText(contact.getEmail());
@@ -322,28 +326,32 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     // 获取的城市信息
     private City myCities;
 
-    private List<Market> myMarkest;
+    private List<market> myMarkest;
 
-    private List<BusinessModel> businessModels;
+    private List<businessmodel> businessModels;
 
-    private  List<QgModel> qgModels;
+    private List<qgmodel> qgModels;
 
     private static final int UPDATE_UI = 1;
 
     // handler
-    private Handler myHandler = new Handler(){
+    private Handler myHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if(msg.what == UPDATE_UI){
+            if (msg.what == UPDATE_UI) {
                 setDetailData(companyInf, myCities, myMarkest, businessModels, qgModels);
             }
         }
     };
 
     // 初始化数据
-    private void initData(){
+    private void initData() {
         showLoading();
+
+        new MyTask().execute();
+
+
         RequestParams params = new RequestParams();
         BirdApi.getCompanyMes(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
             @Override
@@ -357,16 +365,22 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
 
                             dataReady = true;
 
-                            if(typeReady){
+                            if (typeReady) {
                                 setDetailData(companyInf, myCities, myMarkest, businessModels, qgModels);
                             }
-
+                        } else {
+                            hideLoading();
                         }
 
 
+                    } else {
+                        hideLoading();
+                        T.showShort(getActivity(), response.getString("data"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    hideLoading();
+                    T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
                 }
             }
 
@@ -392,98 +406,24 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
             }
         });
 
-
-        // 请求获取相关的 type 数据，成功获取后再展现数据
-        RequestParams requestParams = new RequestParams();
-        requestParams.put("city", "北京");
-        requestParams.put("markets", "all");
-        requestParams.put("business_models", "all");
-        requestParams.put("qg_models", "all");
-        BirdApi.getConfig(MyApplication.getInstans(), requestParams, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-
-                JSONObject all = null;
-                try {
-
-                    all = (JSONObject) response.get("data");
-
-                    new MyTask().execute(all);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                hideLoading();
-                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                hideLoading();
-                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                hideLoading();
-                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
-            }
-        });
     }
 
 
-    class MyTask extends AsyncTask<JSONObject,Void,Void> {
+    class MyTask extends AsyncTask<JSONObject, Void, Void> {
 
         @Override
         protected Void doInBackground(JSONObject... params) {
-            try {
-                JSONObject all = params[0];
-                JSONObject city = (JSONObject) all.get("city");
-                myCities = JsonHelper.parseObject(city, City.class);
-                JSONObject markets = (JSONObject) all.get("markets");
 
-                myMarkest = new ArrayList<Market>();
+            myCities = DaoUtils.getcity();
 
-                Iterator<String> marketIter = markets.keys();
-                while (marketIter.hasNext()) {
-                    String ma = marketIter.next();
-                    JSONObject mm = (JSONObject) markets.get(ma);
-                    Market market1 = JsonHelper.parseObject(mm, Market.class);
-                    myMarkest.add(market1);
-                }
+            myMarkest = DaoUtils.getmarkest();
 
-                JSONObject business = (JSONObject) all.get("business_models");
-                businessModels = new ArrayList<BusinessModel>();
-                Iterator<String> businessIt = business.keys();
-                while (businessIt.hasNext()) {
-                    String bb = businessIt.next();
-                    JSONObject bm = (JSONObject) business.get(bb);
-                    businessModels.add(JsonHelper.parseObject(bm, BusinessModel.class));
-                }
+            businessModels = DaoUtils.getbusinessmodel();
 
-                JSONObject qgModel = (JSONObject) all.get("qg_models");
-                qgModels = new ArrayList<QgModel>();
-                Iterator<String> models = qgModel.keys();
-                while (models.hasNext()) {
-                    String mo = models.next();
-                    JSONObject moo = (JSONObject) qgModel.get(mo);
-                    qgModels.add(JsonHelper.parseObject(moo, QgModel.class));
-                }
+            qgModels = DaoUtils.getqgmodel();
 
-                typeReady = true;
+            typeReady = true;
 
-            } catch (JSONException e){
-                e.printStackTrace();
-            }
             return null;
         }
 
@@ -505,8 +445,8 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
 
 
     // 控制 打开的信息
-    private void control(int index){
-        if( index == 0){
+    private void control(int index) {
+        if (index == 0) {
             // 打开了 base_ll
             baseContent.setVisibility(View.VISIBLE);
             baseJia.setBackgroundResource(R.drawable.arrow_down_select);
@@ -517,7 +457,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
             contactsJia.setBackgroundResource(R.drawable.arrow_up_select);
             patternContent.setVisibility(View.GONE);
             patternJia.setBackgroundResource(R.drawable.arrow_up_select);
-        } else if( index == 1){
+        } else if (index == 1) {
             // 打开了 main_ll
             mainContent.setVisibility(View.VISIBLE);
             mainJia.setBackgroundResource(R.drawable.arrow_down_select);
@@ -528,7 +468,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
             contactsJia.setBackgroundResource(R.drawable.arrow_up_select);
             patternContent.setVisibility(View.GONE);
             patternJia.setBackgroundResource(R.drawable.arrow_up_select);
-        } else if( index == 2){
+        } else if (index == 2) {
             // 打开了 contacts_ll
             contactsContent.setVisibility(View.VISIBLE);
             contactsJia.setBackgroundResource(R.drawable.arrow_down_select);
@@ -539,7 +479,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
             mainJia.setBackgroundResource(R.drawable.arrow_up_select);
             patternContent.setVisibility(View.GONE);
             patternJia.setBackgroundResource(R.drawable.arrow_up_select);
-        } else if( index == 3){
+        } else if (index == 3) {
             // 打开了 pattern_ll
             patternContent.setVisibility(View.VISIBLE);
             patternJia.setBackgroundResource(R.drawable.arrow_down_select);
@@ -554,12 +494,12 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     }
 
 
-    @OnClick({R.id.base_ll, R.id.main_ll, R.id.contacts_ll, R.id.pattern_ll, R.id.out_account})
+    @OnClick({R.id.base_ll, R.id.main_ll, R.id.contacts_ll, R.id.pattern_ll})
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.base_ll:
-                if(baseContent.getVisibility() != View.VISIBLE){
+                if (baseContent.getVisibility() != View.VISIBLE) {
                     baseContent.setVisibility(View.VISIBLE);
                     baseJia.setBackgroundResource(R.drawable.arrow_down_select);
                     control(0);
@@ -567,7 +507,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                 break;
 
             case R.id.main_ll:
-                if(mainContent.getVisibility() != View.VISIBLE){
+                if (mainContent.getVisibility() != View.VISIBLE) {
                     mainContent.setVisibility(View.VISIBLE);
                     mainJia.setBackgroundResource(R.drawable.arrow_down_select);
                     control(1);
@@ -575,7 +515,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                 break;
 
             case R.id.contacts_ll:
-                if(contactsContent.getVisibility() != View.VISIBLE){
+                if (contactsContent.getVisibility() != View.VISIBLE) {
                     contactsContent.setVisibility(View.VISIBLE);
                     contactsJia.setBackgroundResource(R.drawable.arrow_down_select);
                     control(2);
@@ -583,7 +523,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                 break;
 //
             case R.id.pattern_ll:
-                if(patternContent.getVisibility() != View.VISIBLE){
+                if (patternContent.getVisibility() != View.VISIBLE) {
                     patternContent.setVisibility(View.VISIBLE);
                     patternJia.setBackgroundResource(R.drawable.arrow_down_select);
                     control(3);
@@ -591,22 +531,22 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                 break;
 
             // 退出账户按钮
-            case R.id.out_account:
-                // 清除掉登录的相关信息
-                SharedPreferences sp = getActivity().getSharedPreferences("login", Activity.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sp.edit();
-
-                editor.putString("company_code", "");
-                editor.putString("company_name", "");
-                editor.putString("company_short_name", "");
-                editor.putString("user_code", "");
-                editor.putString("token", "");
-                editor.commit();
-
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                MyApplication.getInstans().clearActivities();
-                startActivity(intent);
-                break;
+//            case R.id.out_account:
+//                // 清除掉登录的相关信息
+//                SharedPreferences sp = getActivity().getSharedPreferences("login", Activity.MODE_PRIVATE);
+//                SharedPreferences.Editor editor = sp.edit();
+//
+//                editor.putString("company_code", "");
+//                editor.putString("company_name", "");
+//                editor.putString("company_short_name", "");
+//                editor.putString("user_code", "");
+//                editor.putString("token", "");
+//                editor.commit();
+//
+//                Intent intent = new Intent(getActivity(), LoginActivity.class);
+//                MyApplication.getInstans().clearActivities();
+//                startActivity(intent);
+//                break;
         }
     }
 }

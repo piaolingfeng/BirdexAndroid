@@ -97,72 +97,8 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
 
     // 初始化数据
     private void initData() {
-        // 通过接口获取 地址信息
-//        RequestParams params = new RequestParams();
-//        params.put("city", "北京");
-        cityDao = DaoUtils.getDaoSession().getCityDao();
-        // 取得省
-        QueryBuilder<city> queryBuilder = cityDao.queryBuilder().where(com.birdex.bird.greendao.cityDao.Properties.Area.eq("1"));
-        List<city> p = queryBuilder.list();
-        // 取得 市
-        queryBuilder = cityDao.queryBuilder().where(com.birdex.bird.greendao.cityDao.Properties.Area.eq("2"));
-        List<city> c = queryBuilder.list();
-        // 取得 区
-        queryBuilder = cityDao.queryBuilder().where(com.birdex.bird.greendao.cityDao.Properties.Area.eq("3"));
-        List<city> a = queryBuilder.list();
-
-        City myCity = new City();
-        myCity.setAreas(a);
-        myCity.setCities(c);
-        myCity.setProvinces(p);
         // 获取省份列表
-        setData(myCity);
-//        showLoading();
-//        BirdApi.getConfig(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                super.onSuccess(statusCode, headers, response);
-//
-//                try {
-//                    if ("0".equals(response.getString("error"))) {
-//                        // 正确获取到了地区数据
-//                        JSONObject all = (JSONObject) response.get("data");
-//                        JSONObject city = (JSONObject) all.get("city");
-//                        City myCities = JsonHelper.parseObject(city, City.class);
-//
-//                        // 获取省份列表
-//                        setData(myCities);
-//                    } else {
-//                        T.showShort(MyApplication.getInstans(), response.getString("data"));
-//                    }
-//                    hideLoading();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    hideLoading();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                super.onFailure(statusCode, headers, responseString, throwable);
-//                T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
-//                hideLoading();
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                super.onFailure(statusCode, headers, throwable, errorResponse);
-//                T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
-//                hideLoading();
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-//                super.onFailure(statusCode, headers, throwable, errorResponse);
-//                T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
-//                hideLoading();
-//            }
-//        });
+        setData(DaoUtils.getcity());
 
         save.setText(getString(R.string.change_adress));
     }
@@ -185,81 +121,79 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     private List<String> provincesStr;
 
     private void setData(City city) {
+        if(city != null) {
+            provinces = city.getProvinces();
+            cities = city.getCities();
+            areas = city.getAreas();
+            provincesStr = getAreaStr(provinces);
 
-        provinces = city.getProvinces();
-        cities = city.getCities();
-        areas = city.getAreas();
-        provincesStr = getAreaStr(provinces);
+            select_view.setOffset(OFF_SET_DEFAULT);
+            select_view2.setOffset(OFF_SET_DEFAULT);
+            select_view3.setOffset(OFF_SET_DEFAULT);
 
-        select_view.setOffset(OFF_SET_DEFAULT);
-        select_view2.setOffset(OFF_SET_DEFAULT);
-        select_view3.setOffset(OFF_SET_DEFAULT);
+            select_view.setItems(provincesStr);
 
-        select_view.setItems(provincesStr);
+            select_view.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+                @Override
+                public void onSelected(int selectedIndex, String item) {
+                    // 获取到 省份的 父 id
+                    city area = getArea(item, provinces);
+                    String parentId = area.getAreaID();
+                    // 获取该省份下所有的城市
+                    HashMap map = getCitiesStr(parentId);
+                    citts = (List<city>) map.get("area");
+                    select_view2.setItems((List<String>) map.get("name"));
+                    select_view2.setSeletion(0);
+                    selectP = area;
 
-        select_view.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
-            @Override
-            public void onSelected(int selectedIndex, String item) {
-                // 获取到 省份的 父 id
-                city area = getArea(item, provinces);
-                String parentId = area.getAreaID();
-                // 获取该省份下所有的城市
-                HashMap map = getCitiesStr(parentId);
-                citts = (List<city>) map.get("area");
-                select_view2.setItems((List<String>) map.get("name"));
-                select_view2.setSeletion(0);
-                selectP = area;
+                    contactDetail.setReceiver_province_id(area.getAreaID());
+                    contactDetail.setReceiver_province(area.getAreaName());
 
-                contactDetail.setReceiver_province_id(area.getAreaID());
-                contactDetail.setReceiver_province(area.getAreaName());
-
-                if (selectP != null && selectC != null && selectA != null) {
-                    region.setText(selectP.getAreaName() + selectC.getAreaName() + selectA.getAreaName());
+                    if (selectP != null && selectC != null && selectA != null) {
+                        region.setText(selectP.getAreaName() + selectC.getAreaName() + selectA.getAreaName());
+                    }
                 }
-            }
-        });
+            });
 
-        select_view2.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
-            @Override
-            public void onSelected(int selectedIndex, String item) {
-                // 获取 城市的 id   再查找 地区 id
-                city area = getArea(item, cities);
-                String parentId = area.getAreaID();
-                // 获取该城市下所有的地区
-                HashMap map = getAreasStr(parentId);
-                areas1 = (List<city>) map.get("area");
-                select_view3.setItems((List<String>) map.get("name"));
+            select_view2.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+                @Override
+                public void onSelected(int selectedIndex, String item) {
+                    // 获取 城市的 id   再查找 地区 id
+                    city area = getArea(item, cities);
+                    String parentId = area.getAreaID();
+                    // 获取该城市下所有的地区
+                    HashMap map = getAreasStr(parentId);
+                    areas1 = (List<city>) map.get("area");
+                    select_view3.setItems((List<String>) map.get("name"));
 
-                select_view3.setSeletion(0);
-                selectC = area;
-                contactDetail.setReceiver_city_id(area.getAreaID());
-                contactDetail.setReceiver_city(area.getAreaName());
+                    select_view3.setSeletion(0);
+                    selectC = area;
+                    contactDetail.setReceiver_city_id(area.getAreaID());
+                    contactDetail.setReceiver_city(area.getAreaName());
 
-                if (selectP != null && selectC != null && selectA != null) {
-                    region.setText(selectP.getAreaName() + selectC.getAreaName() + selectA.getAreaName());
+                    if (selectP != null && selectC != null && selectA != null) {
+                        region.setText(selectP.getAreaName() + selectC.getAreaName() + selectA.getAreaName());
+                    }
                 }
-            }
-        });
+            });
 
-        select_view3.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
-            @Override
-            public void onSelected(int selectedIndex, String item) {
-                city area = getArea(item, areas);
-                selectA = area;
+            select_view3.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+                @Override
+                public void onSelected(int selectedIndex, String item) {
+                    city area = getArea(item, areas);
+                    selectA = area;
 
-                contactDetail.setReceiver_area_id(area.getAreaID());
-                contactDetail.setReceiver_area(area.getAreaName());
+                    contactDetail.setReceiver_area_id(area.getAreaID());
+                    contactDetail.setReceiver_area(area.getAreaName());
 
-                if (selectP != null && selectC != null && selectA != null) {
-                    region.setText(selectP.getAreaName() + selectC.getAreaName() + selectA.getAreaName());
+                    if (selectP != null && selectC != null && selectA != null) {
+                        region.setText(selectP.getAreaName() + selectC.getAreaName() + selectA.getAreaName());
+                    }
                 }
-            }
-        });
+            });
 
-//        select_view.setSeletion(0);
-
-        setRegionFlag = true;
-
+            setRegionFlag = true;
+        }
         // 将传递过来的 值 设置上去
         setOriginalData();
 

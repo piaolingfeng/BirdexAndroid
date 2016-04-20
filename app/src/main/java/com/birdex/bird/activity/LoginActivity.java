@@ -67,7 +67,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         HideSoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
 //        initSystemBar(R.color.transparent);
         // 开启缓存 service
-        Intent service = new Intent(this, CacheService.class);
+//        Intent service = new Intent(this, CacheService.class);
 //        startService(service);
 
         initData();

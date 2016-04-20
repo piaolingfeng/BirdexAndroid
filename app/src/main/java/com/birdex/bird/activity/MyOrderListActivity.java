@@ -1,37 +1,32 @@
 package com.birdex.bird.activity;
 
-import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.adapter.CommonSimpleAdapter;
-import com.birdex.bird.adapter.OrderStatusAdapter;
-import com.birdex.bird.adapter.OrderTimeAdapter;
-import com.birdex.bird.adapter.OrderWareHouseAdapter;
+import com.birdex.bird.adapter.ToolPagerAdapter;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.entity.OrderStatus;
 import com.birdex.bird.entity.TimeSelectEntity;
 import com.birdex.bird.entity.WarehouseEntity;
 import com.birdex.bird.fragment.BaseFragment;
+import com.birdex.bird.fragment.BillDetailFragment;
+import com.birdex.bird.fragment.InventoryFragment;
 import com.birdex.bird.fragment.OrderListManagerFragment;
 import com.birdex.bird.fragment.PredictionManagerFragment;
+import com.birdex.bird.fragment.RechargeFragment;
 import com.birdex.bird.interfaces.BackHandledInterface;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.Constant;
@@ -39,7 +34,6 @@ import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
 import com.birdex.bird.util.TimeUtil;
-import com.birdex.bird.widget.ClearEditText;
 import com.birdex.bird.widget.TitleView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -48,7 +42,6 @@ import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
-import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,65 +56,23 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 
     String tag = "MyOrderListActivity";
 
-    @Bind(R.id.et_search)
-    ClearEditText et_search;
-//    @Bind(R.id.tablayout)
-//    TabLayout tabLayout;
-
-    //    @Bind(R.id.title)
-//    TextView title;
-//    @Bind(R.id.back)
-//    PercentRelativeLayout back;
-//    @Bind(R.id.menu)
-//    ImageView menu;
     @Bind(R.id.titleview)
     TitleView titleview;
-
-    @Bind(R.id.state_all)
-    TextView state_all;
-    @Bind(R.id.state_time)
-    TextView state_time;
-    @Bind(R.id.state_Warehouse)
-    TextView state_Warehouse;
-    @Bind(R.id.img_scan_code)
-    ImageView img_scan_code;
-    @Bind(R.id.fab_inventory_gotop)
-    FloatingActionButton fab_inventory_gotop;
-    @Bind(R.id.frame_layout)
-    FrameLayout frame_layout;
-    @Bind(R.id.tv_no_text)
-    TextView tv_no_text;
-    @Bind(R.id.tv_list_count)
-    TextView tv_list_count;
-    //库存布局
-//    @Bind(R.id.tv_inventory_all)
-//    public TextView tv_allInventory = null;
-//    @Bind(R.id.tv_inventory_sort_available)
-//    public TextView tv_sortavailable = null;
-//    @Bind(R.id.tv_inventory_sort_time)
-//    public TextView tv_sorttime;
-//    @Bind(R.id.rl_inventory)
-//    public RelativeLayout rl_inventory;
-//    @Bind(R.id.tl_inventory_change)
-//    public TabLayout tl_items;
-
-    public static final int[] time = {R.string.time_all, R.string.time_today, R.string.time_week, R.string.time_month, R.string.time_three_month, R.string.time_year};
+//    @Bind(R.id.tool_viewpager)
+    ViewPager tool_viewpager;
     List<String> menuList;//menu菜单list
     public String currentName;
-    public int position = 0;
 
-    OrderStatus orderStatus;//订单状态列表
-    OrderStatus predicitionStatus;//预报状态列表
-    WarehouseEntity warehouseEntity;//所有仓库列表
-    List<TimeSelectEntity> timeList;
+    public static OrderStatus orderStatus;//订单状态列表
+    public static OrderStatus predicitionStatus;//预报状态列表
+    public static WarehouseEntity warehouseEntity;//所有仓库列表
+    public static List<TimeSelectEntity> timeList;
 
     OrderRequestEntity entity;//请求数据保存的实体
-
-    private final static int SCANNIN_GREQUEST_CODE = 1;
-
     EventBus bus;
-
     private FragmentTransaction transaction;
+    List<BaseFragment> fragmentList;
+    ToolPagerAdapter pageAdapter;
 
     @Override
     public int getContentLayoutResId() {
@@ -130,147 +81,107 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void initializeContentViews() {
+        if (orderListManagerFragment == null)
+            orderListManagerFragment = new OrderListManagerFragment();
         if (predictionManagerFragment == null)
             predictionManagerFragment = new PredictionManagerFragment();
-        if (orderListManagerFragment == null) {
-            orderListManagerFragment = new OrderListManagerFragment();
-        }
+        if (inventoryFragment == null)
+            inventoryFragment = new InventoryFragment();
+        if (billfragment == null)
+            billfragment = new BillDetailFragment();
+        if (rechargefragment == null)
+            rechargefragment = new RechargeFragment();
         bus = EventBus.getDefault();
         bus.register(this);
         titleview.setMenuVisble(true);
 
-//        menu.setVisibility(View.VISIBLE);
         menuList = new ArrayList<>();
         for (int i = 0; i < Constant.name.length; i++) {//初始化lmenu list
             menuList.add(getString(Constant.name[i]));
         }
         requestStateCount = 0;//
         initTimeStatus();
-        initscan_code();
-        initSearch();
-//        initTabStatus();
         getAllOrderStatus();//获取订单所有状态
         getAllPredicitionStatus();//获取预报所有状态
         getAllCompanyWarehouse();//获取所有仓库
-        initFloatAction();
-//        setData();//库存，订单管理
-//        nowSelectedWarehouse = new WarehouseEntity().new WarehouseDetail();
-//        nowSelectedStatus = new OrderStatus().new Status();
     }
 
-    /**
-     * 滚动到顶部
-     */
-    public void initFloatAction() {
 
-        fab_inventory_gotop.setOnClickListener(new View.OnClickListener() {
+    private void initViewPager() {
+        fragmentList = new ArrayList<>();
+        fragmentList.add(orderListManagerFragment);
+        fragmentList.add(predictionManagerFragment);
+        fragmentList.add(inventoryFragment);
+        fragmentList.add(billfragment);
+        fragmentList.add(rechargefragment);
+        pageAdapter = new ToolPagerAdapter(getSupportFragmentManager(), this, fragmentList);
+        tool_viewpager.setAdapter(pageAdapter);
+        tool_viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onClick(View v) {
-                bus.post(currentName, "AdapterTop");
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                titleview.setTitle(getString(Constant.name[position]));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
     }
-
 
     /**
      * 重新初始化fragment
      */
     public void setData() {
-//        rl_inventory.setVisibility(View.GONE);//非库存时，隐藏
-//        tl_items.setVisibility(View.GONE);
         entity = new OrderRequestEntity();//请求实体初始化,切换时也要新建一个实体
-        currentName = getIntent().getStringExtra("name");
+        currentName = getIntent().getStringExtra("name");//首页的工具进来时
         if (StringUtils.isEmpty(currentName)) {
             String indexOrder = getIntent().getStringExtra("indexOrder");
+//            if (indexOrder != null)
+//                getIntent().removeExtra("indexOrder");
             if (!StringUtils.isEmpty(indexOrder)) {
-                getIntent().removeExtra("indexOrder");
-                if (indexOrder.contains("今日")) {//初始化时间
-                    entity.setStart_date(timeList.get(1).getStart_date());
-                    entity.setEnd_date(timeList.get(1).getEnd_date());
-                    bus.post(timeList.get(1).getName(), "changeTime");//改变显示的时间
-                } else {
-                    entity.setStart_date(timeList.get(0).getStart_date());
-                    entity.setEnd_date(timeList.get(0).getEnd_date());
-                    bus.post(timeList.get(0).getName(), "changeTime");//改变显示的时间
-                }
-
-
+//                getIntent().removeExtra("indexOrder");
                 if (indexOrder.contains("预报")) {
                     currentName = getString(Constant.name[1]);
-                    for (int position = 0; position < predicitionStatus.getData().size(); position++) {
-                        if (indexOrder.contains(predicitionStatus.getData().get(position).getStatus_name().trim())) {//包含该模块的名字
-                            entity.setStatus(predicitionStatus.getData().get(position).getStatus() + "");
-                            bus.post(predicitionStatus.getData().get(position), "changeState");
-                            break;
-                        }
-                    }
                 } else {
-//                    if (indexOrder.contains("库存")) {
-//                        currentName = getString(Constant.name[2]);
-//                        rl_inventory.setVisibility(View.VISIBLE);
-//                        tl_items.setVisibility(View.VISIBLE);
-//                    } else {//订单
-                    currentName = getString(Constant.name[0]);
-                    //初始化状态选择
-                    for (int position = 0; position < orderStatus.getData().size(); position++) {
-                        if (indexOrder.contains(orderStatus.getData().get(position).getStatus_name().trim())) {//包含该模块的名字
-                            entity.setStatus(orderStatus.getData().get(position).getStatus() + "");
-                            bus.post(orderStatus.getData().get(position), "changeState");
-                            break;
-                        }
+                    if (indexOrder.contains("库存") && !indexOrder.contains("订单")) {
+                        currentName = getString(Constant.name[2]);
+                    } else {//订单
+                        currentName = getString(Constant.name[0]);
                     }
-//                    }
                 }
             }
         }
+//        int position = 0;
+//        for (int i = 0; i < Constant.name.length; i++) {//判断是哪个位置
+//            if (currentName.equals(getString(Constant.name[i]))) {
+//                position = i;
+//                break;
+//            }
+//        }
+//        tool_viewpager.setCurrentItem(position);
         addFragment(currentName);
         titleview.setTitle(currentName);
-        if (currentName.equals(getString(Constant.name[0]))) {
-            bus.post(entity, "requestOrderList");
-        } else {
-            if (currentName.equals(getString(Constant.name[1]))) {
-                bus.post(entity, "requestPredictList");
-            }
-        }
+//        if (currentName.equals(getString(Constant.name[0]))) {
+//            bus.post(entity, "requestOrderList");
+//        } else {
+//            if (currentName.equals(getString(Constant.name[1]))) {
+//                bus.post(entity, "requestPredictList");
+//            }
+//        }
     }
 
-    private void initscan_code() {
-        img_scan_code.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                T.showShort(MyApplication.getInstans(), getString(R.string.please_wail));
-                Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), MipcaActivityCapture.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                try {
-                    startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case SCANNIN_GREQUEST_CODE:
-                if (resultCode == RESULT_OK) {
-                    Bundle bundle = data.getExtras();
-                    String result = bundle.getString("result");
-                    et_search.setText(result);
-                    search(result);
-                }
-                break;
-        }
-    }
 
     private void initTimeStatus() {
         timeList = new ArrayList<>();
-        for (int i = 0; i < time.length; i++) {
+        for (int i = 0; i < Constant.time.length; i++) {
             TimeSelectEntity entity = new TimeSelectEntity();
-            entity.setName(getString(time[i]));
+            entity.setName(getString(Constant.time[i]));
             entity.setEnd_date(TimeUtil.getCurrentData());
             switch (i) {
                 case 0:
@@ -296,47 +207,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
             timeList.add(entity);
         }
     }
-
-    // 搜索
-    private void search(String search) {
-        entity.setKeyword(search);
-        if (currentName.equals(getString(Constant.name[0]))) {
-            bus.post(entity, "requestOrderList");
-        } else {
-            if (currentName.equals(getString(Constant.name[1]))) {
-                bus.post(entity, "requestPredictList");
-            } else {
-                bus.post(entity, "inventorytList");
-            }
-        }
-    }
-
-
-    /**
-     * 初始化搜索
-     */
-    private void initSearch() {
-        et_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {//系统键盘搜索入口
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    String string = v.getText().toString();
-                    search(string);
-                }
-                return false;
-            }
-        });
-
-        et_search.setOnClearTextListener(new ClearEditText.OnClearTextListener() {
-            @Override
-            public void clearTextListenr() {
-                entity.setKeyword("");
-//                currentPage = 1;
-//                reStartHttp();
-            }
-        });
-    }
-
 
     /**
      * 获取订单所有状态
@@ -394,6 +264,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     public synchronized void getNetStatusCount() {
         if (requestStateCount == 2) {
             requestStateCount = 0;
+//            initViewPager();//获取完全部的全台才去初始化
             setData();
         }
     }
@@ -492,36 +363,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, handler);
     }
 
-    @Subscriber(tag = "changeWarehouse")
-    public void changeWarehouse(WarehouseEntity.WarehouseDetail detail) {
-//        nowSelectedWarehouse = detail;
-        state_Warehouse.setText(detail.getName());
-    }
-
-    @Subscriber(tag = "changeState")
-    public void changeState(OrderStatus.Status status) {
-//        nowSelectedStatus = status;
-        state_all.setText(status.getStatus_name());
-    }
-
-    @Subscriber(tag = "changeTime")
-    public void changeTime(String text) {
-//        nowSelectedStatus = status;
-        state_time.setText(text);
-    }
-
-    @Subscriber(tag = "frame_layout")
-    private void setFrameLayoutVisble(int value) {
-        tv_list_count.setText("共" + value + "条数据");
-        if (value > 0) {
-            frame_layout.setVisibility(View.VISIBLE);
-            tv_no_text.setVisibility(View.GONE);
-        } else {
-            frame_layout.setVisibility(View.GONE);
-            tv_no_text.setVisibility(View.VISIBLE);
-        }
-    }
-
 
     PopupWindow mPopupWindow;
 
@@ -549,79 +390,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     }
 
     /**
-     * 展示弹出框
-     * menu,时间
-     * w,用来除以父控件的宽度
-     * viewID 显示在其下方
-     */
-    public void showTimeWindow(View viewID, final int w) {
-//
-        OrderTimeAdapter adapter = new OrderTimeAdapter(this, timeList);
-        adapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                if (mPopupWindow.isShowing()) {
-                    mPopupWindow.dismiss();
-                }
-//                T.showShort(MyApplication.getInstans(), list.get(position));
-//                entity.setStatus(list.get(position) + "");
-                setTime(position);
-            }
-        });
-        showPopupWindow(viewID, w, adapter);
-    }
-
-    /**
-     * 展示弹出框
-     * Warehouse
-     */
-    public void showStateWindow(View viewID, final List<OrderStatus.Status> list, int w) {
-        OrderStatusAdapter adapter = new OrderStatusAdapter(this, list);
-        adapter.setOnRecyclerViewItemClickListener(
-                new OnRecyclerViewItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        if (mPopupWindow.isShowing()) {
-                            mPopupWindow.dismiss();
-                        }
-//                        T.showShort(MyApplication.getInstans(), list.get(position).getStatus_name());
-                        entity.setStatus(list.get(position).getStatus() + "");
-                        bus.post(list.get(position), "changeState");
-                        entity.setPage_noReset();
-                        if (currentName.equals(getString(Constant.name[0])))
-                            bus.post(entity, "requestOrderList");
-                        else if (currentName.equals(getString(Constant.name[1]))) {
-                            bus.post(entity, "requestPredictList");
-                        }
-                    }
-                }
-        );
-        showPopupWindow(viewID, w, adapter);
-    }
-
-
-    /**
-     * 展示弹出框
-     * Warehouse
-     */
-    public void showWarehouseWindow(View viewID, int w) {
-        OrderWareHouseAdapter adapter = new OrderWareHouseAdapter(this, warehouseEntity.getData());
-        adapter.setOnRecyclerViewItemClickListener(
-                new OnRecyclerViewItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        if (mPopupWindow.isShowing()) {
-                            mPopupWindow.dismiss();
-                        }
-                        setWarehouse(position);
-                    }
-                }
-        );
-
-        showPopupWindow(viewID, w, adapter);
-    }
-
-    /**
      * 弹出框
      */
 
@@ -645,59 +413,12 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
             mPopupWindow.showAsDropDown(viewID, 0, 0);
     }
 
-
-    /**
-     * 设置仓库条件
-     */
-    private void setWarehouse(int position) {
-        entity.setWarehouse_code(warehouseEntity.getData().get(position).getWarehouse_code());
-        entity.setPage_noReset();
-        bus.post(warehouseEntity.getData().get(position), "changeWarehouse");
-        if (currentName.equals(getString(Constant.name[0])))
-            bus.post(entity, "requestOrderList");
-        else if (currentName.equals(getString(Constant.name[1]))) {
-            bus.post(entity, "requestPredictList");
-        }
-    }
-
-
-    private void setTime(int position) {
-        entity.setStart_date(timeList.get(position).getStart_date());
-        entity.setEnd_date(timeList.get(position).getEnd_date());
-        entity.setPage_noReset();
-        bus.post(timeList.get(position).getName(), "changeTime");//改变显示的时间
-        if (currentName.equals(getString(Constant.name[0])))
-            bus.post(entity, "requestOrderList");
-        else if (currentName.equals(getString(Constant.name[1]))) {
-            bus.post(entity, "requestPredictList");
-        }
-    }
-
-    @OnClick({R.id.menu, R.id.state_time, R.id.state_Warehouse, R.id.state_all, R.id.tv_inventory_all, R.id.tv_inventory_sort_available, R.id.tv_inventory_sort_time})
+    @OnClick(R.id.menu)
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.menu:
                 showMenuWindow((View) titleview.getMenuView().getParent(), menuList, 3);
-                break;
-            case R.id.state_all:
-                if (currentName.equals(getString(Constant.name[0])))//订单管理
-                    showStateWindow((View) state_all.getParent(), orderStatus.getData(), 1);
-                else
-                    showStateWindow((View) state_all.getParent(), predicitionStatus.getData(), 1);
-                break;
-            case R.id.tv_inventory_all:
-            case R.id.state_Warehouse://所有仓库
-                showWarehouseWindow((View) state_Warehouse.getParent(), 1);
-                break;
-            case R.id.state_time:
-                showTimeWindow((View) state_time.getParent(), 1);
-                break;
-            case R.id.tv_inventory_sort_available:
-
-                break;
-            case R.id.tv_inventory_sort_time:
-
                 break;
         }
     }
@@ -714,13 +435,25 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         BaseFragment baseFragment;
         transaction = getSupportFragmentManager().beginTransaction();
         hideFragment();
-        if (string.equals(getString(Constant.name[1]))) {
-            baseFragment = predictionManagerFragment;
-        } else {
+        if (string.equals(getString(Constant.name[0]))) {
             baseFragment = orderListManagerFragment;
+        } else {
+            if (string.equals(getString(Constant.name[1]))) {
+                baseFragment = predictionManagerFragment;
+            } else {
+                if (string.equals(getString(Constant.name[2]))) {
+                    baseFragment = inventoryFragment;
+                } else {
+                    if (string.equals(getString(Constant.name[3]))) {
+                        baseFragment = billfragment;
+                    } else {
+                        baseFragment = rechargefragment;
+                    }
+                }
+            }
         }
         if (!baseFragment.isAdded())
-            transaction.add(R.id.frame_layout, baseFragment);
+            transaction.add(R.id.tool_framelayout, baseFragment);
         transaction.show(baseFragment);
         Bundle b = new Bundle();
         b.putSerializable("entity", entity);
@@ -728,8 +461,11 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         transaction.commit();
     }
 
-    PredictionManagerFragment predictionManagerFragment;
-    OrderListManagerFragment orderListManagerFragment;
+    private PredictionManagerFragment predictionManagerFragment;
+    private OrderListManagerFragment orderListManagerFragment;
+    private RechargeFragment rechargefragment = null;
+    private BillDetailFragment billfragment = null;
+    private InventoryFragment inventoryFragment;
 
     //隐藏所有fragment
     private void hideFragment() {
@@ -737,6 +473,12 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
             transaction.hide(orderListManagerFragment);
         if (predictionManagerFragment != null)
             transaction.hide(predictionManagerFragment);
+        if (rechargefragment != null)
+            transaction.hide(rechargefragment);
+        if (billfragment != null)
+            transaction.hide(billfragment);
+        if (inventoryFragment != null)
+            transaction.hide(inventoryFragment);
     }
 
     @Override

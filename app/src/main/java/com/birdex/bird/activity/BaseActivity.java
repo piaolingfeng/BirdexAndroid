@@ -5,11 +5,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
@@ -130,7 +126,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 //            // 透明状态栏
 ////            activity.getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //        }
-
     }
 
     @TargetApi(19)
@@ -144,5 +139,19 @@ public abstract class BaseActivity extends AppCompatActivity {
             winParams.flags &= ~bits;
         }
         win.setAttributes(winParams);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //长时间不运行，推送服务会在部分手机被停止（视厂商修改系统的而定）
+        ((MyApplication)getApplication()).getUmengToken();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //长时间不运行，推送服务会在部分手机被停止（视厂商修改系统的而定）
+        ((MyApplication)getApplication()).getUmengToken();
     }
 }

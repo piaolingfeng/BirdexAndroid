@@ -77,6 +77,8 @@ public class DaoExampleGenerator {
         note.addStringProperty("msgdate");
         //消息类型
         note.addStringProperty("typeid");
+        //消息里的字段参数
+        note.addStringProperty("params");
     }
 
 

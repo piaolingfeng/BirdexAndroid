@@ -1,11 +1,246 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.birdex.bird.widget.xrecyclerview.XRecyclerView
-        android:id="@+id/rcy_orderlist"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background"
+                android:orientation="vertical"
+                android:fitsSystemWindows="true">
+
+                <com.zhy.android.percent.support.PercentLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_scrollFlags="scroll|enterAlways">
+
+                    <com.zhy.android.percent.support.PercentRelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_marginRight="10dp">
+
+                        <com.birdex.bird.widget.ClearEditText
+                            android:id="@+id/et_search"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="8dp"
+                            android:layout_toLeftOf="@+id/img_scan_code"
+                            android:background="@drawable/aboutus_search"
+                            android:drawableLeft="@drawable/ic_search"
+                            android:hint="请输入关键字..."
+                            android:imeOptions="actionSearch"
+                            android:singleLine="true"
+                            android:textColor="@color/context_2"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/img_scan_code"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/scan_code" />
+                    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+                    <com.zhy.android.percent.support.PercentRelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.zhy.android.percent.support.PercentLinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:background="@color/white"
+                            android:orientation="horizontal">
+
+                            <com.zhy.android.percent.support.PercentRelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@drawable/list_item_selector"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/state_Warehouse"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:drawablePadding="10dp"
+                                    android:drawableRight="@drawable/laydown"
+                                    android:gravity="center"
+                                    android:text="@string/state_Warehouse"
+                                    android:textColor="@color/menu_item_color_selector"
+                                    app:layout_paddingLeftPercent="5%"
+                                    app:layout_paddingRightPercent="5%"
+                                    app:layout_textSizePercent="@string/title_filter_textsize" />
+
+                            </com.zhy.android.percent.support.PercentRelativeLayout>
+
+                            <TextView
+                                android:layout_width="1dp"
+                                android:layout_height="0dp"
+                                android:layout_gravity="center"
+                                android:background="@color/single_line"
+                                android:visibility="visible"
+                                app:layout_heightPercent="60%" />
+
+                            <com.zhy.android.percent.support.PercentRelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@drawable/list_item_selector"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/state_all"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:drawablePadding="10dp"
+                                    android:drawableRight="@drawable/laydown"
+                                    android:gravity="center"
+                                    android:text="@string/state_all"
+                                    android:textColor="@color/menu_item_color_selector"
+                                    app:layout_paddingLeftPercent="5%"
+                                    app:layout_paddingRightPercent="5%"
+                                    app:layout_textSizePercent="@string/title_filter_textsize" />
+
+
+                            </com.zhy.android.percent.support.PercentRelativeLayout>
+
+                            <TextView
+                                android:layout_width="1dp"
+                                android:layout_height="0dp"
+                                android:layout_gravity="center"
+                                android:background="@color/single_line"
+                                android:visibility="visible"
+                                app:layout_heightPercent="60%" />
+
+                            <com.zhy.android.percent.support.PercentRelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@drawable/list_item_selector"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/state_time"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:drawablePadding="10dp"
+                                    android:drawableRight="@drawable/laydown"
+                                    android:gravity="center"
+                                    android:text="@string/time_all"
+                                    android:textColor="@color/menu_item_color_selector"
+                                    app:layout_paddingLeftPercent="5%"
+                                    app:layout_paddingRightPercent="5%"
+                                    app:layout_textSizePercent="@string/title_filter_textsize" />
+
+                            </com.zhy.android.percent.support.PercentRelativeLayout>
+
+                        </com.zhy.android.percent.support.PercentLinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/rl_inventory"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/tv_inventory_all"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_marginLeft="@dimen/inventory_limit_marginlr"
+                                android:drawableRight="@drawable/laydown"
+                                android:text="@string/inventory_all"
+                                android:textSize="@dimen/inventory_limit_txt" />
+
+                            <TextView
+                                android:id="@+id/tv_inventory_sort_available"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="@dimen/inventory_limit_marginlr"
+                                android:drawableRight="@drawable/triangle_down"
+                                android:text="@string/inventory_sort_available"
+                                android:textSize="@dimen/inventory_limit_txt" />
+
+                            <TextView
+                                android:id="@+id/tv_inventory_sort_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/inventory_limit_marginlr"
+                                android:layout_marginRight="@dimen/inventory_limit_marginlr"
+                                android:layout_toLeftOf="@id/tv_inventory_sort_available"
+                                android:drawableRight="@drawable/triangle_down"
+                                android:text="@string/inventory_sort_time"
+                                android:textSize="@dimen/inventory_limit_txt" />
+                        </RelativeLayout>
+                    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+                    <TextView
+                        android:id="@+id/tv_list_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left|center"
+                        android:textColor="@color/blue"
+                        android:textSize="14dp"
+                        app:layout_marginPercent="2%" />
+                </com.zhy.android.percent.support.PercentLinearLayout>
+
+            </android.support.design.widget.AppBarLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <com.birdex.bird.widget.xrecyclerview.XRecyclerView
+                    android:id="@+id/rcy_orderlist"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true"
+                    android:overScrollMode="never" />
+
+                <TextView
+                    android:id="@+id/tv_no_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/no_data"
+                    android:textColor="@color/context_2"
+                    android:textSize="20dp"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+
+        </android.support.design.widget.CoordinatorLayout>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_inventory_gotop"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fillViewport="true" />
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp"
+        android:background="@drawable/list_item_selector"
+        android:src="@drawable/floatbutton"
+        app:backgroundTint="#ffD1D3D4"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        app:rippleColor="#33728dff" />
+</RelativeLayout>

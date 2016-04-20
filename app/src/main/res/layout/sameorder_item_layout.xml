@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/sameorder_item_bg"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/same_order_fontmarginlr"
+        android:layout_marginRight="@dimen/same_order_fontmarginlr"
+        android:paddingLeft="@dimen/same_order_paddinglf"
+        android:paddingRight="@dimen/same_order_paddinglf">
+
+        <TextView
+            android:id="@+id/tv_sameorder_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginTop="@dimen/same_order_fontmargintb"
+            android:layout_marginBottom="@dimen/same_order_fontmargintb"
+            android:textColor="@color/black_1"
+            android:textSize="@dimen/same_order_other_font1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/same_order_fontmargintb">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/sameorder_item_code"
+                android:textColor="@color/gray_2"
+                android:textSize="@dimen/same_order_other_font2" />
+
+            <TextView
+                android:id="@+id/tv_sameorder_code"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/gray_2"
+                android:textSize="@dimen/same_order_other_font2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/sameorder_item_num"
+                android:textColor="@color/blue_5"
+                android:textSize="@dimen/same_order_other_font2" />
+
+            <TextView
+                android:id="@+id/tv_sameorder_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/blue_5"
+                android:textSize="@dimen/same_order_other_font2" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

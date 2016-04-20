@@ -251,4 +251,7 @@ public class BirdApi {
     public static void getConfigVersion(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
         get(context, "Public/getConfigVersion", params, jsonHttpResponseHandler);
     }
+    public static void getMsgList(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
+        post(context, "Message/all", params, jsonHttpResponseHandler);
+    }
 }

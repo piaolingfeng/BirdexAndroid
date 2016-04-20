@@ -60,7 +60,7 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
         holder.tv_remarks.setText(productList.get(position).getRemark().getMsg());
         holder.tv_status.setText(productList.get(position).getStatus_name());
         holder.tv_valid_date.setText(productList.get(position).getExpired_date());
-        if (holder.tv_status.getText().toString().contains("待确认")){
+        if (holder.tv_status.getText().toString().contains("待确认")) {
             holder.btn_confirm.setVisibility(View.VISIBLE);
             holder.btn_re_confirm.setVisibility(View.VISIBLE);
         }
@@ -122,8 +122,8 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
         }
 
         @Subscriber(tag = "confirm")
-        public void setBtn_confirm(int position){
-            if (this.position == position){
+        public void setBtn_confirm(int position) {
+            if (this.position == position || position == -1) {//-1为刷新全部状态
                 btn_confirm.setVisibility(View.INVISIBLE);
                 btn_re_confirm.setVisibility(View.INVISIBLE);
             }

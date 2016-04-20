@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.birdex.bird.R;
 import com.birdex.bird.adapter.TodayDataAdapter;
+import com.birdex.bird.fragment.IndexFragment;
 import com.birdex.bird.util.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderManagerEntity;
 import com.zhy.android.percent.support.PercentRelativeLayout;
@@ -24,7 +25,7 @@ public class TodayDataActivity extends BaseActivity implements View.OnClickListe
     PercentRelativeLayout back;
     @Bind(R.id.title)
     TextView title;
-    
+
     private TodayDataAdapter adapter;
     private List<OrderManagerEntity> orderList;
 
@@ -39,6 +40,9 @@ public class TodayDataActivity extends BaseActivity implements View.OnClickListe
         title.setText(getString(R.string.data));
         back.setOnClickListener(this);
         orderList = (List<OrderManagerEntity>) getIntent().getSerializableExtra("TodayData");
+        if (orderList == null || orderList.size() == 0) {
+            orderList = IndexFragment.indexOrderNetDatatList;
+        }
         rcy.setLayoutManager(new FullyLinearLayoutManager(this));
         adapter = new TodayDataAdapter(this, orderList);
         rcy.setAdapter(adapter);

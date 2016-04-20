@@ -37,7 +37,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
     @Override
     public void onBindViewHolder(OrderDetailHolder holder, int position) {
         holder.tv_count.setText(productList.get(position).getNums());
-        holder.tv_product_code.setText(productList.get(position).getProduct_code());
+        holder.tv_product_code.setText(productList.get(position).getExternal_no());
         holder.tv_product_name.setText(productList.get(position).getName());
         holder.tv_upc_code.setText(productList.get(position).getUpc());
     }

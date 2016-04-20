@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by chuming.zhuang on 2016/4/15.
+ * 消息-3种订单内部的产品list
  */
 public class MsgOrderProductAdapter extends RecyclerView.Adapter<MsgOrderProductAdapter.MsgOrderProductHolder> {
     List<OrderListProductEntity> productList;

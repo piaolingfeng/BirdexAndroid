@@ -159,6 +159,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     @Bind(R.id.clear_server)
     TextView clear_server;
 
+    String tag = "AccountManagerFragment";
 
     // 通过 省份 城市 地区 id ，得到 地址
     private String getAddressDetail(City city, String provinceId, String cityId, String areaId) {
@@ -353,7 +354,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
 
 
         RequestParams params = new RequestParams();
-        BirdApi.getCompanyMes(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -404,8 +405,56 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                 hideLoading();
                 T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
             }
-        });
+        };
+        handler.setTag(tag);
+        BirdApi.getCompanyMes(MyApplication.getInstans(), params, handler);
 
+
+        // 请求获取相关的 type 数据，成功获取后再展现数据
+        RequestParams requestParams = new RequestParams();
+        requestParams.put("city", "北京");
+        requestParams.put("markets", "all");
+        requestParams.put("business_models", "all");
+        requestParams.put("qg_models", "all");
+        BirdApi.getConfig(MyApplication.getInstans(), requestParams, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+
+                JSONObject all = null;
+                try {
+
+                    all = (JSONObject) response.get("data");
+
+                    new MyTask().execute(all);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                hideLoading();
+                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(getActivity(), getString(R.string.tip_myaccount_getdatawrong));
+            }
+        });
     }
 
 
@@ -424,6 +473,9 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
 
             typeReady = true;
 
+            } catch (JSONException e){
+                e.printStackTrace();
+            }
             return null;
         }
 
@@ -548,5 +600,11 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
 //                startActivity(intent);
 //                break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        BirdApi.cancelRequestWithTag(tag);
+        super.onDestroy();
     }
 }

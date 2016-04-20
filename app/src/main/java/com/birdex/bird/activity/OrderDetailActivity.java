@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -28,11 +29,12 @@ import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * Created by chuming.zhuang on 2016/4/12.
  */
-public class OrderDetailActivity extends BaseActivity {
+public class OrderDetailActivity extends BaseActivity implements View.OnClickListener{
 
     @Bind(R.id.title_view)
     TitleView title_view;
@@ -145,17 +147,17 @@ public class OrderDetailActivity extends BaseActivity {
         } else {
             bus.post(true, "checkIDCard");
         }
-        tv_id_check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                T.showShort(OrderDetailActivity.this, "验证身份证!");
-//                Intent intent = new Intent(OrderDetailActivity.this, UploadIDCardActivity.class);
-//                intent.putExtra("order_code", orderDetailEntity.getData().getOrder_code());
-//                intent.putExtra("idcard", orderDetailEntity.getData().getReceiver_id_card());
-//                startActivity(intent);
-                upLoadIDCard(OrderDetailActivity.this, orderDetailEntity.getData().getOrder_code(), orderDetailEntity.getData().getReceiver_id_card());
-            }
-        });
+//        tv_id_check.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                T.showShort(OrderDetailActivity.this, "验证身份证!");
+////                Intent intent = new Intent(OrderDetailActivity.this, UploadIDCardActivity.class);
+////                intent.putExtra("order_code", orderDetailEntity.getData().getOrder_code());
+////                intent.putExtra("idcard", orderDetailEntity.getData().getReceiver_id_card());
+////                startActivity(intent);
+//
+//            }
+//        });
         String statuName = orderDetailEntity.getData().getStatus_name();
         if (statuName.equals("等待出库") || statuName.equals("准备出库") || statuName.equals("待下架") ||
                 statuName.equals("出库中") || statuName.equals("下架中") || statuName.equals("审核不通过")
@@ -231,5 +233,30 @@ public class OrderDetailActivity extends BaseActivity {
     protected void onDestroy() {
         BirdApi.cancelAllRequest();
         super.onDestroy();
+    }
+
+    @OnClick({R.id.tv_id_check,R.id.tv_receiver_phone})
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.tv_id_check:
+                upLoadIDCard(OrderDetailActivity.this, orderDetailEntity.getData().getOrder_code(), orderDetailEntity.getData().getReceiver_id_card());
+                break;
+            case R.id.tv_receiver_phone:
+                dialPhoneNumber(tv_receiver_phone.getText().toString());
+                break;
+
+        }
+    }
+
+    /**
+     * 拨打电话
+     */
+    public void dialPhoneNumber(String phoneNumber) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + phoneNumber));
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 }

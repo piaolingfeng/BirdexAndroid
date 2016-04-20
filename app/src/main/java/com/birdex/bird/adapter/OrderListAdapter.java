@@ -20,6 +20,8 @@ import com.birdex.bird.util.ClipboardManagerUtil;
 import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
 
+import org.simple.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,10 +66,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
         holder.tv_created_time.setText(list.get(position).getCreated_time());
         holder.tv_order_oms_no.setText(list.get(position).getOrder_oms_no());
         holder.tv_status_name.setText(list.get(position).getStatus_name());
-        holder.tv_receiver_name.setText(list.get(position).getReceiver_name());
-        holder.tv_receiver_mobile.setText(list.get(position).getReceiver_mobile());
-        holder.tv_price.setText("¥ " + list.get(position).getPrice());
-        holder.tv_weight.setText(list.get(position).getWeight() + "kg");
+//        holder.tv_receiver_name.setText(list.get(position).getReceiver_name());
+//        holder.tv_receiver_mobile.setText(list.get(position).getReceiver_mobile());
+//        holder.tv_price.setText("¥ " + list.get(position).getPrice());
+//        holder.tv_weight.setText(list.get(position).getWeight() + "kg");
         holder.rcy_productlist.setLayoutManager(new LinearLayoutManager(mContext));
         OrderProductAdapter productAdapter = new OrderProductAdapter(mContext, list.get(position).getProducts());
         productAdapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
@@ -84,15 +86,20 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
                 || statuName.equals("身份证异常")) {
             holder.tv_change_address.setVisibility(View.VISIBLE);
             holder.tv_right_line.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             holder.tv_change_address.setVisibility(View.GONE);
             holder.tv_right_line.setVisibility(View.GONE);
         }
         if (!StringUtils.isEmpty(list.get(position).getVerify_fail_detail())) {
             holder.tv_id_error.setVisibility(View.VISIBLE);
             holder.tv_id_error.setText(list.get(position).getVerify_fail_detail());
-        }else {
+        } else {
             holder.tv_id_error.setVisibility(View.GONE);
+        }
+        if (position > 5) {
+            EventBus.getDefault().post(true,"order_visible");
+        }else{
+            EventBus.getDefault().post(false,"order_visible");
         }
     }
 
@@ -113,14 +120,14 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
         @Bind(R.id.tv_status_name)
         TextView tv_status_name;//状态名称
 
-        @Bind(R.id.tv_receiver_name)
-        TextView tv_receiver_name;//收件人
-        @Bind(R.id.tv_receiver_mobile)
-        TextView tv_receiver_mobile;//手机号码
-        @Bind(R.id.tv_price)
-        TextView tv_price;//费用
-        @Bind(R.id.tv_weight)
-        TextView tv_weight;//重量
+//        @Bind(R.id.tv_receiver_name)
+//        TextView tv_receiver_name;//收件人
+//        @Bind(R.id.tv_receiver_mobile)
+//        TextView tv_receiver_mobile;//手机号码
+//        @Bind(R.id.tv_price)
+//        TextView tv_price;//费用
+//        @Bind(R.id.tv_weight)
+//        TextView tv_weight;//重量
 
 
         @Bind(R.id.tv_logistics_tracking)
@@ -144,7 +151,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
             tv_order_oms_no.setOnClickListener(this);
-            tv_receiver_mobile.setOnClickListener(this);
+//            tv_receiver_mobile.setOnClickListener(this);
         }
 
         @OnClick({R.id.tv_logistics_tracking, R.id.tv_service_type, R.id.tv_change_address})
@@ -164,9 +171,9 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
                     ClipboardManagerUtil.copy(tv_order_oms_no.getText().toString(), mContext);
                     T.showShort(MyApplication.getInstans(), "已复制");
                     break;
-                case R.id.tv_receiver_mobile:
-                    dialPhoneNumber(tv_receiver_mobile.getText().toString());
-                    break;
+//                case R.id.tv_receiver_mobile:
+//                    dialPhoneNumber(tv_receiver_mobile.getText().toString());
+//                    break;
                 default:
                     if (onRecyclerViewItemClickListener != null)
                         onRecyclerViewItemClickListener.onItemClick(position);
@@ -195,15 +202,6 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Deta
             mContext.startActivity(intent);
         }
 
-        /**
-         * 拨打电话
-         */
-        public void dialPhoneNumber(String phoneNumber) {
-            Intent intent = new Intent(Intent.ACTION_DIAL);
-            intent.setData(Uri.parse("tel:" + phoneNumber));
-            if (intent.resolveActivity(mContext.getPackageManager()) != null) {
-                mContext.startActivity(intent);
-            }
-        }
+
     }
 }

@@ -341,6 +341,8 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
             case R.id.account_exception_ll:
 //                openMsgActivity(getString(R.string.msg_account_exception));
                 T.showLong(this, getString(R.string.please_wail));
+                openMsgActivity(getString(R.string.msg_account_exception));
+//                T.showLong(this,getString(R.string.please_wail));
                 break;
 
         }

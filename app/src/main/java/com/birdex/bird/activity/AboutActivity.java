@@ -20,7 +20,6 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void initializeContentViews() {
-        initSystemBar(R.color.blue_head_1);
         iv_back.setOnClickListener(this);
     }
 

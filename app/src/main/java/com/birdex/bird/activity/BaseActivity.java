@@ -140,4 +140,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         win.setAttributes(winParams);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //长时间不运行，推送服务会在部分手机被停止（视厂商修改系统的而定）
+        ((MyApplication)getApplication()).getUmengToken();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //长时间不运行，推送服务会在部分手机被停止（视厂商修改系统的而定）
+        ((MyApplication)getApplication()).getUmengToken();
+    }
 }

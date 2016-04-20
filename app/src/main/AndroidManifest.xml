@@ -126,11 +126,7 @@
         <service
             android:name=".service.NotificationService"
             android:process=":push"
-            android:enabled="true">
-            <intent-filter android:priority="1000">
-                <action android:name="com.dbjtech.myservice" />
-            </intent-filter>
-        </service>
+            android:enabled="true"/>
 
         <receiver android:name=".broadcast.NotificationBroadcast">
             <intent-filter>
@@ -159,7 +155,11 @@
         <activity android:name=".activity.MsgDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppCompat.style"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <intent-filter>
+                <action android:name="com.birdex.msgdetail"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".activity.SameOrderOtherActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppCompat.translucent"

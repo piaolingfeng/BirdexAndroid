@@ -22,4 +22,14 @@ public class Constant {
     public static final String MSG_STOCK_WARNING = "STOCK_WARNING";//库存预警
 
     public static final int[] time = {R.string.time_all, R.string.time_today, R.string.time_week, R.string.time_month, R.string.time_three_month, R.string.time_year};
+    //数据库名
+    public static final String DBName="BirdexData";
+    //notifi启动的action
+    public static final  String NotiAction1="com.birdex.msgdetail";
+    //app的包名
+    public static final String APPPackageName="com.birdex.bird";
+    //SP文件里的推送设置
+    public static final String SP_NAME = "MESSAGE_SETTING";
+    public static final String TONE_SETTING = "tone";
+    public static final String TIME_SETTING = "time";
 }

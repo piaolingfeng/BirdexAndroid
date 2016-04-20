@@ -13,6 +13,7 @@ import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.User;
+import com.birdex.bird.service.CacheService;
 import com.birdex.bird.util.update.UpdateManager;
 import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.JsonHelper;
@@ -65,6 +66,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void initializeContentViews() {
         HideSoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
 //        initSystemBar(R.color.transparent);
+        // 开启缓存 service
+//        Intent service = new Intent(this, CacheService.class);
+//        startService(service);
+
         initData();
     }
 

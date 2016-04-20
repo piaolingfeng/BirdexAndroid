@@ -861,28 +861,28 @@
         </LinearLayout>
     </ScrollView>
 
-    <com.zhy.android.percent.support.PercentLinearLayout
-        android:id="@+id/logout_ll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+    <!--<com.zhy.android.percent.support.PercentLinearLayout-->
+        <!--android:id="@+id/logout_ll"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_marginBottom="10dp">-->
 
-        <Button
-            android:id="@+id/out_account"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_widthPercent="50%"
-            app:layout_heightPercent="10%"
-            android:gravity="center"
-            android:text="@string/outaccount"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/out_selector"
-            android:textSize="20sp" />
+        <!--<Button-->
+            <!--android:id="@+id/out_account"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="0dp"-->
+            <!--app:layout_widthPercent="50%"-->
+            <!--app:layout_heightPercent="10%"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/outaccount"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:background="@drawable/out_selector"-->
+            <!--android:textSize="20sp" />-->
 
 
-    </com.zhy.android.percent.support.PercentLinearLayout>
+    <!--</com.zhy.android.percent.support.PercentLinearLayout>-->
 
 </com.zhy.android.percent.support.PercentLinearLayout>

@@ -125,7 +125,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if (!MyApplication.app_version.equals(versionServer)) {
                         UpdateManager.getInstance().setDownLoadPath(updateUrl);
                         // 如果不相等，执行更新操作
-                        UpdateManager.getInstance().set(LoginActivity.this);
+                        UpdateManager.getInstance().set(LoginActivity.this,description);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -150,7 +150,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 T.showShort(MyApplication.getInstans(), "获取更新信息失败");
             }
         };
-        handler.setTag(TAG);
         BirdApi.upDateMessage(MyApplication.getInstans(), null, handler);
     }
 

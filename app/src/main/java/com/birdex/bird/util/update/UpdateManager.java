@@ -27,8 +27,8 @@ public class UpdateManager {
         return updateManager;
     }
 
-    public void set(Context context) {
-        CheckUpdate.check(context);
+    public void set(Context context,String description) {
+        CheckUpdate.check(context,description);
     }
 
     public String getFilePath() {

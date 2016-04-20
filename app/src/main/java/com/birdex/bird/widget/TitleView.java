@@ -203,6 +203,14 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
         back_iv.setImageBitmap(bitmap);
     }
 
+    public void setBackIvVisble(boolean flag){
+        if (flag){
+            back_iv.setVisibility(View.VISIBLE);
+        }else {
+            back_iv.setVisibility(View.INVISIBLE);
+        }
+    }
+
     public void setMenu(Bitmap bitmap){
         menu.setImageBitmap(bitmap);
     }

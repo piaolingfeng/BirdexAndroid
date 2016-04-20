@@ -371,6 +371,7 @@
 
     <string name="confirm_success">确认成功</string>
 
+    <string name="msg_text_2_5w">2.5%w</string>
     <string name="msg_text_3w">3%w</string>
     <string name="msg_text_4w">4%w</string>
     <string name="msg_text_4_5w">4.5%w</string>
@@ -397,4 +398,5 @@
     <string name="sameorder_others_transstyle">(@)</string>
     <string name="sameorder_item_code">商品编码:</string>
     <string name="sameorder_item_num">数量：</string>
+    <string name="version_new">当前已经是最新版本</string>
 </resources>

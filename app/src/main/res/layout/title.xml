@@ -18,7 +18,7 @@
             android:layout_height="0dp"
             android:layout_centerVertical="true"
             android:layout_centerInParent="true"
-            android:src="@drawable/back_chevron"
+            android:src="@mipmap/back_chevron"
             app:layout_heightPercent="35%"
             app:layout_marginPercent="4%" />
     </com.zhy.android.percent.support.PercentRelativeLayout>
@@ -48,7 +48,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/menu"
+        android:src="@mipmap/menu"
         android:visibility="gone"
         app:layout_paddingPercent="4%" />
 </com.zhy.android.percent.support.PercentRelativeLayout>

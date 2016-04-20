@@ -22,10 +22,10 @@
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:src="@drawable/warning"
+            android:src="@mipmap/warning"
             app:layout_marginLeftPercent="6%" />
 
-        <LinearLayout
+        <com.zhy.android.percent.support.PercentLinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/msg_warning"
-                android:textSize="18sp" />
+                app:layout_textSizePercent="@string/msg_text_5_5w"/>
 
             <LinearLayout
                 android:id="@+id/warning_bv_ll"
@@ -55,7 +55,7 @@
                     />
             </LinearLayout>
 
-        </LinearLayout>
+        </com.zhy.android.percent.support.PercentLinearLayout>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -79,10 +79,11 @@
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:src="@drawable/exception"
+            android:src="@mipmap/exception"
+            android:scaleType="fitCenter"
             app:layout_marginLeftPercent="6%" />
 
-        <LinearLayout
+        <com.zhy.android.percent.support.PercentLinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -94,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/msg_idcard_exception"
-                android:textSize="18sp" />
+                app:layout_textSizePercent="@string/msg_text_5_5w" />
 
             <LinearLayout
                 android:id="@+id/idcard_exception_bv_ll"
@@ -112,7 +113,7 @@
                     />
             </LinearLayout>
 
-        </LinearLayout>
+        </com.zhy.android.percent.support.PercentLinearLayout>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -140,10 +141,10 @@
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:src="@drawable/repertory_exception"
+            android:src="@mipmap/repertory_exception"
             app:layout_marginLeftPercent="6%" />
 
-        <LinearLayout
+        <com.zhy.android.percent.support.PercentLinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -155,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/msg_repertory_exception"
-                android:textSize="18sp" />
+                app:layout_textSizePercent="@string/msg_text_5_5w" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -173,7 +174,7 @@
                     />
             </LinearLayout>
 
-        </LinearLayout>
+        </com.zhy.android.percent.support.PercentLinearLayout>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -201,10 +202,10 @@
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:src="@drawable/check_exception"
+            android:src="@mipmap/check_exception"
             app:layout_marginLeftPercent="6%" />
 
-        <LinearLayout
+        <com.zhy.android.percent.support.PercentLinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -216,7 +217,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/msg_check_exception"
-                android:textSize="18sp" />
+                app:layout_textSizePercent="@string/msg_text_5_5w" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -234,7 +235,7 @@
                     />
             </LinearLayout>
 
-        </LinearLayout>
+        </com.zhy.android.percent.support.PercentLinearLayout>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -259,10 +260,10 @@
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:src="@drawable/account_exception"
+            android:src="@mipmap/account_exception"
             app:layout_marginLeftPercent="6%" />
 
-        <LinearLayout
+        <com.zhy.android.percent.support.PercentLinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -274,7 +275,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/msg_account_exception"
-                android:textSize="18sp" />
+                app:layout_textSizePercent="@string/msg_text_5_5w" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -292,7 +293,7 @@
                     />
             </LinearLayout>
 
-        </LinearLayout>
+        </com.zhy.android.percent.support.PercentLinearLayout>
 
         <ImageView
             android:layout_width="wrap_content"

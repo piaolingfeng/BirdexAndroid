@@ -281,9 +281,10 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:background="@drawable/rect_blue"
+        android:background="@drawable/rect_fullbluew_selector"
         android:text="@string/recharge"
-        android:textColor="#039FFF"
+        android:textColor="@color/btn_blue_selector"
+
         android:textSize="20sp"
         app:layout_marginTopPercent="3%"
         app:layout_paddingBottomPercent="3%w"

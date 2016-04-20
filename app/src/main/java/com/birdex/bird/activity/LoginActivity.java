@@ -103,13 +103,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         remember.setChecked(ischecked);
 
         // 检查更新
-        checkUpdate();
+//        checkUpdate();
     }
 
     // 检查更新
     private void checkUpdate() {
         //如果是第一次打开，检查更新
-        BirdApi.upDateMessage(MyApplication.getInstans(), null, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 //					super.onSuccess(statusCode, headers, response);
@@ -122,7 +122,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if (!MyApplication.app_version.equals(versionServer)) {
                         UpdateManager.getInstance().setDownLoadPath(updateUrl);
                         // 如果不相等，执行更新操作
-                        UpdateManager.getInstance().set(LoginActivity.this);
+                        UpdateManager.getInstance().set(LoginActivity.this,description);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -134,7 +134,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //					super.onFailure(statusCode, headers, responseString, throwable);
                 T.showShort(MyApplication.getInstans(), "获取更新信息失败");
             }
-        });
+        };
+        handler.setTag("");
+        BirdApi.upDateMessage(MyApplication.getInstans(), null,handler );
     }
 
     // 存储返回的 user

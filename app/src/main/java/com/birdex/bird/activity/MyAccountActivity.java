@@ -42,6 +42,8 @@ import butterknife.OnClick;
  */
 public class MyAccountActivity extends BaseActivity implements View.OnClickListener {
 
+    private static final String TAG = "MyAccountActivity";
+
     // 顶部头像
     @Bind(R.id.head_icon)
     com.birdex.bird.widget.CircularImageView head;
@@ -105,7 +107,8 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
     private void getInterfactData() {
         showLoading();
         RequestParams params = new RequestParams();
-        BirdApi.getBalance(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -145,10 +148,11 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                 T.showShort(getApplication(), getString(R.string.tip_myaccount_getdatawrong));
             }
 
-        });
+        };
+        handler.setTag(TAG);
+        BirdApi.getBalance(MyApplication.getInstans(), params, handler);
 
-        // 获取头像跟 company name
-        BirdApi.getCompanyMes(MyApplication.getInstans(), new RequestParams(), new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler1 = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -187,7 +191,16 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 T.showShort(getApplication(), getString(R.string.tip_myaccount_getdatawrong));
             }
-        });
+        };
+        handler1.setTag(TAG);
+        // 获取头像跟 company name
+        BirdApi.getCompanyMes(MyApplication.getInstans(), new RequestParams(), handler1);
+    }
+
+    @Override
+    protected void onDestroy() {
+        BirdApi.cancelRequestWithTag(TAG);
+        super.onDestroy();
     }
 
     // 将接口数据设置上去

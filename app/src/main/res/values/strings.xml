@@ -316,6 +316,7 @@
     <string name="message">提示消息</string>
     <string name="system_tone">系统提示音</string>
     <string name="system_tone_no">不提示，只在消息中显示</string>
+    <string name="no_receive">休息时间免接收</string>
     <string name="message_time">消息接收时间</string>
     <string name="all_day">全天接收</string>
     <string name="all_day_no">休息时间免接收</string>

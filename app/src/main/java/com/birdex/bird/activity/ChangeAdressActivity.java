@@ -45,6 +45,8 @@ import de.greenrobot.dao.query.QueryBuilder;
  */
 public class ChangeAdressActivity extends BaseActivity implements View.OnClickListener {
 
+    private static final String TAG = "ChangeAdressActivity";
+
     // 省份
     @Bind(R.id.select_view)
     WheelView select_view;
@@ -226,7 +228,8 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
         RequestParams params = new RequestParams();
         params.put("order_code", orderNo);
 //        params.add("order_code","c708fecf8f8e3b39622c35ece3371772");
-        BirdApi.getOrderDetail(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -266,7 +269,15 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
                 T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
                 hideLoading();
             }
-        });
+        };
+        handler.setTag(TAG);
+        BirdApi.getOrderDetail(MyApplication.getInstans(), params, handler);
+    }
+
+    @Override
+    protected void onDestroy() {
+        BirdApi.cancelRequestWithTag(TAG);
+        super.onDestroy();
     }
 
     // 将传过来的 省市区 设置上 选择器上
@@ -433,7 +444,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
         params.put("receiver_area", contactDetail.getReceiver_area());
         params.put("receiver_address", contactDetail.getReceiver_address());
 
-        BirdApi.modOrder(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -471,7 +482,9 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
                 hideLoading();
                 T.showShort(MyApplication.getInstans(), getString(R.string.change_fail));
             }
-        });
+        };
+        handler.setTag(TAG);
+        BirdApi.modOrder(MyApplication.getInstans(), params, handler);
     }
 
     @Override

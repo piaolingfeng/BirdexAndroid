@@ -47,6 +47,8 @@ import butterknife.OnClick;
  */
 public class LogisticsActivity extends BaseActivity implements View.OnClickListener {
 
+    private static final String TAG = "LogisticsActivity";
+
     // 电话号码
     @Bind(R.id.phone)
     TextView phone;
@@ -179,7 +181,8 @@ public class LogisticsActivity extends BaseActivity implements View.OnClickListe
         // 获取接口数据
         RequestParams params = new RequestParams();
         params.add("order_code", orderNo);
-        BirdApi.getTracking(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -218,7 +221,15 @@ public class LogisticsActivity extends BaseActivity implements View.OnClickListe
                 hideLoading();
                 T.showShort(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
             }
-        });
+        };
+        handler.setTag(TAG);
+        BirdApi.getTracking(MyApplication.getInstans(), params, handler);
+    }
+
+    @Override
+    protected void onDestroy() {
+        BirdApi.cancelRequestWithTag(TAG);
+        super.onDestroy();
     }
 
     // 将 track 的值进行 set

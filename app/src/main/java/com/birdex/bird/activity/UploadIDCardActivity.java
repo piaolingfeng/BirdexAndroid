@@ -50,6 +50,8 @@ import butterknife.OnClick;
  */
 public class UploadIDCardActivity extends BaseActivity implements View.OnClickListener {
 
+    private static final String TAG = "UploadIDCardActivity";
+
     @Bind(R.id.title_1l)
     TitleView title_1l;
 
@@ -116,7 +118,8 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
         params.add("order_code", order_code);
 
         showLoading();
-        BirdApi.getOrderDetail(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -156,7 +159,9 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                 T.showShort(MyApplication.getInstans(), getString(R.string.get_idcard_fail));
             }
 
-        });
+        };
+        handler.setTag(TAG);
+        BirdApi.getOrderDetail(MyApplication.getInstans(), params, handler);
 
     }
 
@@ -401,7 +406,8 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
             try {
 
                 myparams.put("front", leftFile);
-                BirdApi.uploadIDCardPic(MyApplication.getInstans(), myparams, new JsonHttpResponseHandler() {
+
+                JsonHttpResponseHandler handler =  new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
@@ -419,7 +425,7 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                                     params1.add("receiver_id_card_img", frontPicPath);
                                     params1.add("receiver_id_card_img_back", backPicPath);
 
-                                    BirdApi.uploadIDCard(MyApplication.getInstans(), params1, new JsonHttpResponseHandler() {
+                                    JsonHttpResponseHandler handler1 = new JsonHttpResponseHandler() {
                                         @Override
                                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                             super.onSuccess(statusCode, headers, response);
@@ -456,7 +462,10 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                                             T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
                                             hideLoading();
                                         }
-                                    });
+                                    };
+                                    handler1.setTag(TAG);
+
+                                    BirdApi.uploadIDCard(MyApplication.getInstans(), params1, handler1);
                                 }
                             } else {
                                 T.showShort(MyApplication.getInstans(), response.getString("data"));
@@ -492,7 +501,9 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                         leftUploadSu = false;
                         hideLoading();
                     }
-                });
+                };
+                handler.setTag(TAG);
+                BirdApi.uploadIDCardPic(MyApplication.getInstans(), myparams,handler);
             } catch (Exception e) {
                 e.printStackTrace();
                 T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
@@ -508,7 +519,8 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
             try {
 
                 myparams.put("back", rightFile);
-                BirdApi.uploadIDCardPic(MyApplication.getInstans(), myparams, new JsonHttpResponseHandler() {
+
+                JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
@@ -527,7 +539,7 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                                     params1.add("receiver_id_card_img", frontPicPath);
                                     params1.add("receiver_id_card_img_back", backPicPath);
 
-                                    BirdApi.uploadIDCard(MyApplication.getInstans(), params1, new JsonHttpResponseHandler() {
+                                    JsonHttpResponseHandler handler1 = new JsonHttpResponseHandler() {
                                         @Override
                                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                             super.onSuccess(statusCode, headers, response);
@@ -564,7 +576,9 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                                             T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
                                             hideLoading();
                                         }
-                                    });
+                                    };
+                                    handler1.setTag(TAG);
+                                    BirdApi.uploadIDCard(MyApplication.getInstans(), params1, handler1);
                                 }
                             } else {
                                 T.showShort(MyApplication.getInstans(), response.getString("data"));
@@ -601,7 +615,9 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                         rightUploadSu = false;
                         hideLoading();
                     }
-                });
+                };
+                handler.setTag(TAG);
+                BirdApi.uploadIDCardPic(MyApplication.getInstans(), myparams, handler);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 T.showShort(MyApplication.getInstans(), getString(R.string.pic_notfound));
@@ -610,6 +626,12 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
             }
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        BirdApi.cancelRequestWithTag(TAG);
+        super.onDestroy();
     }
 
     class MyTask extends AsyncTask<Void,Void,Void>{

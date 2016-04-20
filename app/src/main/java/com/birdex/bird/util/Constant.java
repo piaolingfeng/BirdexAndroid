@@ -32,4 +32,6 @@ public class Constant {
     public static final String SP_NAME = "MESSAGE_SETTING";
     public static final String TONE_SETTING = "tone";
     public static final String TIME_SETTING = "time";
+
+    public static final String BIND_USER_ID = "bind_user_id";
 }

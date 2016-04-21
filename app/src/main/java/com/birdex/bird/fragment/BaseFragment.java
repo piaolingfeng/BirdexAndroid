@@ -102,7 +102,8 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
     }
 
     public void hideLoading() {
-        loadingDialog.dismiss();
+        if (loadingDialog != null)
+            loadingDialog.dismiss();
     }
 
 

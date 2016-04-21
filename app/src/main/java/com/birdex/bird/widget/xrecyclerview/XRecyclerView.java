@@ -130,6 +130,7 @@ public class XRecyclerView extends RecyclerView {
         if(!enabled) {
             if (mFootViews.size() > 0) {
                 mFootViews.get(0).setVisibility(GONE);
+                mFootViews.clear();
             }
         }
     }

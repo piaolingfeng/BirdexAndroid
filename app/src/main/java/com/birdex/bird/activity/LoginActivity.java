@@ -177,6 +177,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         String utoken = application.getUmengToken();
         if (TextUtils.isEmpty(utoken)) {
             T.showShort(MyApplication.getInstans(), getString(R.string.login_no_token));
+            hideLoading();
             return;
         } else {
             editor.putString(MyApplication.SP_Umeng,utoken);

@@ -215,9 +215,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         } else {
             tv_id_check.setTextColor(getResources().getColor(R.color.blue));
             tv_id_check.setClickable(false);
-            if (orderDetailEntity.getData().getVerify_id_card_result().equals("10")) {
-                tv_id_check.setText(getString(R.string.tv_id_wait_check));
-            } else {
+            if (orderDetailEntity.getData().getVerify_id_card_result().equals("20")) {
                 tv_id_check.setText(getString(R.string.tv_id_check));
                 Drawable drawable = getResources()
                         .getDrawable(R.drawable.right);
@@ -225,6 +223,9 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(),
                         drawable.getMinimumHeight());
                 tv_id_check.setCompoundDrawables(drawable, null, null, null);
+
+            } else {
+                tv_id_check.setText(getString(R.string.tv_id_wait_check));
             }
         }
     }

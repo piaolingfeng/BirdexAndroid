@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.activity.InventoryActivity;
-import com.birdex.bird.activity.MyAccountInfoActivity;
 import com.birdex.bird.activity.MyOrderListActivity;
 import com.birdex.bird.activity.TodayDataActivity;
 import com.birdex.bird.adapter.OrderManagerAdapter;
@@ -29,6 +28,9 @@ import com.birdex.bird.util.recycleviewhelper.OnStartDragListener;
 import com.birdex.bird.util.recycleviewhelper.SimpleItemTouchHelperCallback;
 import com.birdex.bird.widget.lunbo.CycleViewPager;
 import com.birdex.bird.widget.lunbo.DepthPageTransformer;
+import com.birdex.bird.widget.pullreflash.MyListener;
+import com.birdex.bird.widget.pullreflash.PullToRefreshLayout;
+import com.birdex.bird.widget.xrecyclerview.XRecyclerView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -52,17 +54,21 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 
     @Bind(R.id.rcv_order_manager)
     RecyclerView rcv_order_manager;
-
+    //
     @Bind(R.id.rcv_tool_manager)
     RecyclerView rcv_tool_manager;
-
+    //
     @Bind(R.id.edit1)
     ImageView edit1;
+
+    @Bind(R.id.refresh_view)
+    PullToRefreshLayout refreshLayout;
     private ItemTouchHelper mItemTouchHelper;
 
     public static boolean firstCome = false;
 
     public String tag = "IndexFragment";
+
     @Override
     public int getContentLayoutResId() {
         return R.layout.fragment_index_layout;
@@ -70,6 +76,14 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 
     @Override
     public void initializeContentViews() {
+        refreshLayout
+                .setOnRefreshListener(new MyListener() {
+                    @Override
+                    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+                        super.onRefresh(pullToRefreshLayout);
+                        bus.post("", "getTodayData");
+                    }
+                });
         if (PreferenceUtils.getPrefBoolean(getActivity(), "firstCome", true)) {//第一次进入应用时采用默认显示
             firstCome = true;
             PreferenceUtils.setPrefBoolean(getActivity(), "firstCome", false);
@@ -88,8 +102,8 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         cycleViewPager.getViewPager()
                 .setPageTransformer(true,
                         new DepthPageTransformer());
-        initToolManager();
         initOrderManager();
+        initToolManager();
         getTodayData("");
     }
 
@@ -108,7 +122,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
             @Override
             public void onClick(View v) {
                 bus.post(false, "LongClick");
-                bus.post("","getTodayData");
+                bus.post("", "getTodayData");
             }
         });
         rcv_order_manager.setLayoutManager(new FullyGridLayoutManager(getContext(), 3));
@@ -167,6 +181,8 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 //                super.onSuccess(statusCode, headers, response);
                 try {
+                    if (refreshLayout != null)
+                        refreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                     parseNetData(response);
                     EventBus.getDefault().post("", "getLocalData");
 //                    initOrderManager();
@@ -176,10 +192,17 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
             }
 
             @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 if (errorResponse != null)
                     T.showShort(MyApplication.getInstans(), errorResponse.toString());
+                if (refreshLayout != null)
+                    refreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
             }
         };
         httpResponseHandler.setTag(tag);
@@ -410,7 +433,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         if (state) {
             edit1.setVisibility(View.VISIBLE);
             edit1.setAnimation(AnimationUtils.getShowAlphaAnimation());
-        }else {
+        } else {
             edit1.setVisibility(View.GONE);
             edit1.setAnimation(AnimationUtils.getHiddenAlphaAnimation());
         }
@@ -481,4 +504,6 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         BirdApi.cancelRequestWithTag(tag);
         super.onDestroy();
     }
+
+
 }

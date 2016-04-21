@@ -285,7 +285,7 @@
 
 
             <Button
-                android:id="@+id/btn_re_confirm"
+                android:id="@+id/btn_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/btn_height"
                 android:layout_alignParentRight="true"
@@ -294,10 +294,10 @@
                 android:textColor="@color/btn_blue_selector"
                 android:layout_marginRight="@dimen/margin_left_width"
                 android:visibility="invisible"
-                android:text="@string/btn_re_confirm" />
+                android:text="@string/btn_confirm" />
 
             <Button
-                android:id="@+id/btn_confirm"
+                android:id="@+id/btn_re_confirm"
                 android:layout_width="wrap_content"
                 android:visibility="invisible"
                 android:layout_height="@dimen/btn_height"
@@ -305,10 +305,11 @@
                 android:layout_marginRight="@dimen/item_margin_top_height"
                 android:background="@drawable/rect_fullbluew_selector"
                 android:textColor="@color/btn_blue_selector"
-                android:layout_toLeftOf="@+id/btn_re_confirm"
-                android:text="@string/btn_confirm" />
+                android:layout_toLeftOf="@+id/btn_confirm"
+                android:text="@string/btn_re_confirm" />
 
         </RelativeLayout>
 
     </LinearLayout>
+
 </LinearLayout>

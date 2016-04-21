@@ -247,6 +247,15 @@
                     </RelativeLayout>
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/item_margin_top_height"
+                    android:visibility="gone"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/order_detail_size"/>
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView

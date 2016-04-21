@@ -380,7 +380,8 @@
     <string name="tv_function_addr">修改地址</string>
 
     <string name="confirm_success">确认成功</string>
-
+    <string name="confirm_re_success">复核确认成功</string>
+    <string name="margin_w">1%w</string>
     <string name="msg_text_2_5w">2.5%w</string>
     <string name="msg_text_3w">3%w</string>
     <string name="msg_text_4w">4%w</string>
@@ -409,6 +410,24 @@
     <string name="sameorder_item_code">商品编码:</string>
     <string name="sameorder_item_num">数量：</string>
     <string name="version_new">当前已经是最新版本</string>
+
+    <string name="head">这里是HeadView</string>
+    <string name="pull_to_refresh">下拉刷新</string>
+    <string name="release_to_refresh">释放立即刷新</string>
+    <string name="refreshing_now">正在刷新...</string>
+    <string name="refresh_succeed">刷新成功</string>
+    <string name="refresh_fail">刷新失败</string>
+    <string name="pullup_to_load">上拉加载更多</string>
+    <string name="release_to_load">释放立即加载</string>
+    <string name="loading">正在加载...</string>
+    <string name="load_succeed">加载成功</string>
+    <string name="load_fail">加载失败</string>
+
+    <string name="msg_1">STOCK_WARNING</string>
+    <string name="msg_2">ORDER_IDCARD_EXCEPTION</string>
+    <string name="msg_3">ORDER_STOCK_EXCEPTION</string>
+    <string name="msg_4">ORDER_VERIFY_FAIL</string>
+    <string name="msg_5">ACCOUNT_EXCEPTION</string>
     <!--仓库的商品详细信息-->
     <string name="stock_detail_item_batchncode">批次号：</string>
     <string name="stock_detail_item_num">数量：</string>

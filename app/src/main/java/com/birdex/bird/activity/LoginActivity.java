@@ -126,7 +126,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if (!MyApplication.app_version.equals(versionServer)) {
                         UpdateManager.getInstance().setDownLoadPath(updateUrl);
                         // 如果不相等，执行更新操作
-                        UpdateManager.getInstance().set(LoginActivity.this,description);
+                        UpdateManager.getInstance().set(LoginActivity.this, description);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -174,15 +174,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     // 执行登录操作
     private void login() {
         showLoading();
-        final MyApplication application = (MyApplication) getApplication();
+        MyApplication application = (MyApplication) getApplication();
         String utoken = application.getUmengToken();
         if (TextUtils.isEmpty(utoken)) {
-            T.showShort(MyApplication.getInstans(), getString(R.string.login_no_token));
-            return;
+            utoken = sp.getString(MyApplication.SP_Umeng, "");
+            if (TextUtils.isEmpty(utoken)) {
+                utoken = "none_device_token";
+                editor.putString(MyApplication.SP_Umeng, utoken);
+                editor.commit();
+            }
         } else {
-            editor.putString(MyApplication.SP_Umeng,utoken);
+            editor.putString(MyApplication.SP_Umeng, utoken);
             editor.commit();
         }
+
 
         MyApplication.ahc.addHeader("DEVICE-TOKEN", utoken);
 

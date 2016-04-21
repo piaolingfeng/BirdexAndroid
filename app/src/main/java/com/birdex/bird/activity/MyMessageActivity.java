@@ -329,25 +329,25 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
                 break;
             // 点击 库存预警消息
             case R.id.warning_ll:
-                openMsgActivity(getString(R.string.msg_warning));
+                openMsgActivity(getString(R.string.msg_1));
                 break;
             // 点击 身份证异常消息
             case R.id.exception_ll:
-                openMsgActivity(getString(R.string.msg_idcard_exception));
+                openMsgActivity(getString(R.string.msg_2));
                 break;
             // 点击 库存异常消息
             case R.id.repertory_exception_ll:
-                openMsgActivity(getString(R.string.msg_repertory_exception));
+                openMsgActivity(getString(R.string.msg_3));
                 break;
             // 点击 审核不通过消息
             case R.id.check_exception_ll:
-                openMsgActivity(getString(R.string.msg_check_exception));
+                openMsgActivity(getString(R.string.msg_4));
                 break;
             // 点击 账户异常
             case R.id.account_exception_ll:
 //                openMsgActivity(getString(R.string.msg_account_exception));
-                T.showLong(this, getString(R.string.please_wail));
-                openMsgActivity(getString(R.string.msg_account_exception));
+//                T.showLong(this, getString(R.string.please_wail));
+                openMsgActivity(getString(R.string.msg_5));
 //                T.showLong(this,getString(R.string.please_wail));
                 break;
 

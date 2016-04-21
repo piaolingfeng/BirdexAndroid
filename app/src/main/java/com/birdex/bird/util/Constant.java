@@ -39,5 +39,8 @@ public class Constant {
     //设置系统的别名类型
     public static final String Alias_Type="com.birdex.alias";
 
+
+    public static final String LOGIN = "login";
     public static final String BIND_USER_ID = "bind_user_id";
+    public static final String FIRST_ENTRY_APP = "first_entry_app";
 }

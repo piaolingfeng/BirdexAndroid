@@ -20,6 +20,7 @@ import com.birdex.bird.entity.ContactDetail;
 import com.birdex.bird.greendao.DaoUtils;
 import com.birdex.bird.greendao.city;
 import com.birdex.bird.greendao.cityDao;
+import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.T;
 import com.birdex.bird.widget.WheelView;
@@ -35,6 +36,7 @@ import org.simple.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -123,7 +125,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     private List<String> provincesStr;
 
     private void setData(City city) {
-        if(city != null) {
+        if (city != null) {
             provinces = city.getProvinces();
             cities = city.getCities();
             areas = city.getAreas();
@@ -207,6 +209,8 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     // 传递过来的 order_code
     private String orderNo;
 
+    private int MSG_position = 0;
+
     private void setOriginalData() {
         Intent intent = getIntent();
 //        contactDetail = (ContactDetail) intent.getExtras().get("ContactDetail");
@@ -219,6 +223,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
 //        }
 
         orderNo = intent.getExtras().getString("order_code");
+        MSG_position = intent.getIntExtra("MSG_position",0);
         // 通过订单号，拿到订单信息
         getOrderDetail();
     }
@@ -453,7 +458,12 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
                     if ("0".equals(response.getString("error"))) {
                         T.showShort(MyApplication.getInstans(), getString(R.string.change_suc));
                         String post = region.getText().toString() + detail_adress.getText().toString();
-                        EventBus.getDefault().post(post, "changeAddr");
+                        HashMap map = new HashMap<>();
+                        map.put("MSG_position",MSG_position);
+                        map.put("changeAddr",post);
+                        EventBus.getDefault().post(map, "changeAddr");
+
+                        finish();
                     } else {
                         T.showShort(MyApplication.getInstans(), response.getString("data"));
                     }

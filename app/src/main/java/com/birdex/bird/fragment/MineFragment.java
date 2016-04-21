@@ -28,6 +28,7 @@ import com.birdex.bird.widget.TitleView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -164,6 +165,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     // 检查更新
     private void checkUpdate() {
         //如果是第一次打开，检查更新
+        showLoading();
         JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -179,7 +181,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                         // 如果不相等，执行更新操作
                         UpdateManager.getInstance().set(getActivity(), description);
                     }else {
-                        T.showShort(getActivity(),getString(R.string.version_new));
+                        T.showShort(getActivity(), getString(R.string.version_new));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -188,8 +190,29 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                hideLoading();
 //					super.onFailure(statusCode, headers, responseString, throwable);
                 T.showShort(MyApplication.getInstans(), "获取更新信息失败");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                hideLoading();
+                T.showShort(MyApplication.getInstans(), "获取更新信息失败");
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                hideLoading();
+                T.showShort(MyApplication.getInstans(), "获取更新信息失败");
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFinish() {
+                hideLoading();
+                super.onFinish();
             }
         };
         handler.setTag(tag);

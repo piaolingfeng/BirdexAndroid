@@ -55,7 +55,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private SharedPreferences.Editor editor;
 
     public static String description;
-
+    private MyApplication application=null;
     @Override
     public int getContentLayoutResId() {
         return R.layout.activity_login;
@@ -63,6 +63,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void initializeContentViews() {
+        application=(MyApplication)getApplication();
         HideSoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
 //        initSystemBar(R.color.transparent);
         initData();
@@ -146,7 +147,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     // 执行登录操作
     private void login() {
         showLoading();
-        MyApplication application = (MyApplication) getApplication();
+        final MyApplication application = (MyApplication) getApplication();
         String utoken = application.getUmengToken();
         if (TextUtils.isEmpty(utoken)) {
             T.showShort(MyApplication.getInstans(), getString(R.string.login_no_token));
@@ -179,7 +180,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         String token = (String) ((JSONObject) response.get("data")).get("user_token");
                         // 将 token 添加进去
                         MyApplication.ahc.addHeader("USER-TOKEN", token);
-
+                        //设置别名
+//                        application.setAlias(user.get);
                         saveToken(token);
 
                         T.showShort(MyApplication.getInstans(), getString(R.string.loginsu));

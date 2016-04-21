@@ -244,4 +244,8 @@ public class BirdApi {
     public static void getMsgList(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
         post(context, "Message/all", params, jsonHttpResponseHandler);
     }
+    //支付宝加密接口
+    public static void getEncryptInfo(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
+        MyApplication.ahc.get(context,"http://payorder.testsite.com.cn/gotobank.aspx", params, jsonHttpResponseHandler);
+    }
 }

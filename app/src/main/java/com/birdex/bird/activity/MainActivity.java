@@ -1,5 +1,6 @@
 package com.birdex.bird.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.adapter.OrderManagerAdapter;
 import com.birdex.bird.fragment.BaseFragment;
@@ -16,6 +18,7 @@ import com.birdex.bird.fragment.HelpFragment;
 import com.birdex.bird.fragment.IndexFragment;
 import com.birdex.bird.fragment.MineFragment;
 import com.birdex.bird.interfaces.BackHandledInterface;
+import com.birdex.bird.service.NotificationService;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -61,6 +64,11 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
         if (customServiceFragment == null)
             customServiceFragment = new CustomServiceFragment();
         addFragment(indexFragment);
+        //防止在已经登录跳过的时候启动服务
+        Intent intent=new Intent(this, NotificationService.class);
+        startService(intent);
+        MyApplication application=(MyApplication)getApplication();
+        application.getUmengToken();
     }
 
     public void setSelectTV() {

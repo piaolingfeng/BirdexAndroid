@@ -239,7 +239,12 @@
     <string name="credit">信用/可用</string>
     <string name="freight">运费</string>
     <string name="tariff">关税</string>
-
+    <string name="recharge_tip1">请选择充值账户!</string>
+    <string name="recharge_tip2">请输入充值金额!</string>
+    <string name="recharge_tip3">金额输入有误!</string>
+    <string name="recharge_tip4">获取充值用户ID异常!</string>
+    <string name="recharge_tip5">获取充值加密数据失败!</string>
+    <string name="recharge_tip6">充值金额输入有误!</string>
 
     <string name="please_wail">敬请期待</string>
     <string name="time_all">不限时间</string>

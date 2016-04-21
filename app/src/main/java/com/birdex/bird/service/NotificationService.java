@@ -64,9 +64,10 @@ public class NotificationService extends UmengBaseIntentService {
     //设置声音的
 //    private Uri sounduri=null;
     //点击notification打开activity
-    private SharedPreferences sharedPreferences=null;
+    private SharedPreferences sharedPreferences = null;
     //
-    private PushAidlImpl pushAidl=null;
+    private PushAidlImpl pushAidl = null;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -84,7 +85,7 @@ public class NotificationService extends UmengBaseIntentService {
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.notifi_small);
 //        sounduri=Uri.parse("android.resource://" + getPackageName() + "/" +R.raw.fv);
         sharedPreferences = getSharedPreferences(Constant.SP_NAME, Activity.MODE_PRIVATE);
-        pushAidl=new PushAidlImpl(this);
+        pushAidl = new PushAidlImpl(this);
     }
 
     @Override
@@ -92,28 +93,15 @@ public class NotificationService extends UmengBaseIntentService {
         // 需要调用父类的函数，否则无法统计到消息送达
         super.onMessage(context, intent);
         try {
+            android.util.Log.e("android", "1-------------------------");
             //可以通过MESSAGE_BODY取得消息体
             String message = intent.getStringExtra(BaseConstants.MESSAGE_BODY);
             UMessage msg = new UMessage(new JSONObject(message));
-//            Log.e("android", "message=" + message);    //消息体
-//            Log.e("android", "custom=" + msg.custom);    //自定义消息的内容
-//            Log.e("android", "title=" + msg.title);    //通知标题
-//			Log.e(TAG, "text=" + msg.text);    //通知内容
-            // code  to handle message here
-            // ...
 
-//			NotificationCompat.BigPictureStyle pictureStyle = new NotificationCompat.BigPictureStyle();
-//			pictureStyle.setBigContentTitle("BigContentTitle")
-//					.setSummaryText("SummaryText").bigPicture(bitmap);
-//			builder.setSmallIcon(R.drawable.notifi_small)
-//					.setLargeIcon(bitmap)
-//					.setTicker(msg.ticker)
-//					.setContentTitle(msg.title)
-//					.setContentText(msg.text)
-//					.setDefaults(Notification.DEFAULT_ALL)
-//					.setStyle(pictureStyle)
-//					.setAutoCancel(true);
-//			notifiManager.notify(120, builder.build());
+//            Log.e("android", "1----------message=" + message);    //消息体
+//            Log.e("android", "1----------custom=" + msg.custom);    //自定义消息的内容
+//            Log.e("android", "1----------title=" + msg.title);    //通知标题
+//            Log.e("android", "1----------text=" + msg.text);    //通知内容
             if (msg.custom != null && !TextUtils.isEmpty(msg.custom)) {
                 notimsg = getMsgEntity(msg.custom);
                 notimsg.setMsgdate(format.format(new Date()));
@@ -127,7 +115,7 @@ public class NotificationService extends UmengBaseIntentService {
 //                }
                 //设置点击打开activity事件
                 Intent intent1 = new Intent(this, MsgDetailActivity.class);
-                intent1.putExtra("title", notimsg.getTitle());
+                intent1.putExtra("title", notimsg.getTypeid());
                 intent.setAction(Constant.NotiAction1);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 12, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -137,15 +125,15 @@ public class NotificationService extends UmengBaseIntentService {
                         .setContentIntent(pendingIntent)
                         .setDefaults(Notification.DEFAULT_LIGHTS)
                         .setAutoCancel(true);
-                boolean sound=sharedPreferences.getBoolean(Constant.TONE_SETTING,true);
-                boolean soundtime=sharedPreferences.getBoolean(Constant.TIME_SETTING, true);
-                if(sound){
-                    if(soundtime){
+                boolean sound = sharedPreferences.getBoolean(Constant.TONE_SETTING, true);
+                boolean soundtime = sharedPreferences.getBoolean(Constant.TIME_SETTING, true);
+                if (sound) {
+                    if (soundtime) {
                         builder.setDefaults(Notification.DEFAULT_SOUND);
-                    }else{
-                        Calendar calendar=Calendar.getInstance();
-                        int hour=calendar.get(Calendar.HOUR_OF_DAY);
-                        if(hour>=9&&hour<=21){
+                    } else {
+                        Calendar calendar = Calendar.getInstance();
+                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                        if (hour >= 9 && hour <= 21) {
                             builder.setDefaults(Notification.DEFAULT_SOUND);
                         }
                     }
@@ -153,8 +141,9 @@ public class NotificationService extends UmengBaseIntentService {
                 notifiManager.notify(120, builder.build());
                 msgDao.insert(notimsg);
             } else {
-                myNotificationView.setTextViewText(R.id.tv_message_title, msg.title);
-                myNotificationView.setTextViewText(R.id.tv_message_text, msg.text);
+                myNotificationView.setTextViewText(R.id.tv_message_title, msg.custom);
+                myNotificationView.setTextViewText(R.id.tv_message_text, msg.custom);
+
                 builder.setContent(myNotificationView)
                         .setSmallIcon(R.drawable.notifi_small)
                         .setTicker(msg.ticker)

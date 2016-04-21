@@ -1,6 +1,7 @@
 package com.birdex.bird.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -9,15 +10,19 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.adapter.OrderManagerAdapter;
+import com.birdex.bird.entity.User;
 import com.birdex.bird.fragment.BaseFragment;
 import com.birdex.bird.fragment.CustomServiceFragment;
 import com.birdex.bird.fragment.HelpFragment;
 import com.birdex.bird.fragment.IndexFragment;
 import com.birdex.bird.fragment.MineFragment;
 import com.birdex.bird.interfaces.BackHandledInterface;
+import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.T;
+import com.birdex.bird.service.NotificationService;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -41,7 +46,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
     TextView tv_custom_service;
     @Bind(R.id.tv_mine)
     TextView tv_mine;
-
+    private SharedPreferences userPreferences=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +59,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
 
     @Override
     public void initializeContentViews() {
+        userPreferences=getSharedPreferences(Constant.SP_UserInfo,MODE_PRIVATE);
         if (indexFragment == null)
             indexFragment = new IndexFragment();
         if (mineFragment == null)
@@ -63,6 +69,13 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
         if (customServiceFragment == null)
             customServiceFragment = new CustomServiceFragment();
         addFragment(indexFragment);
+        //防止在已经登录跳过的时候启动服务
+        Intent intent=new Intent(this, NotificationService.class);
+        startService(intent);
+        MyApplication application=(MyApplication)getApplication();
+        application.getUmengToken();
+        String usercode=userPreferences.getString(Constant.SP_UserInfo_usercode,"");
+        application.setAlias(usercode);
     }
 
     public void setSelectTV() {
@@ -147,7 +160,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
             case R.id.tv_custom_service:
                 tag = 2;
 //                addFragment(customServiceFragment);
-                T.showShort(MainActivity.this,getString(R.string.please_wail));
+                T.showShort(MainActivity.this, getString(R.string.please_wail));
                 break;
             case R.id.tv_help:
 //                tag = 3;

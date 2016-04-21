@@ -51,12 +51,7 @@
         android:paddingBottom="@dimen/inventory_item_row2_padding"
         android:paddingTop="@dimen/inventory_item_row2_padding">
 
-        <ImageView
-            android:id="@+id/iv_inventory_item_pic"
-            android:layout_width="@dimen/inventory_item_pic_width"
-            android:layout_height="@dimen/inventory_item_pic_height"
-            android:layout_marginLeft="@dimen/inventory_item_row2_marginlr"
-            android:scaleType="fitXY" />
+
 
         <LinearLayout
             android:layout_width="0dp"
@@ -73,9 +68,10 @@
                     android:id="@+id/tv_inventory_item_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/inventory_item_row2_marginlr"
                     android:layout_marginRight="@dimen/inventory_item_row2_marginlr"
                     android:layout_weight="1.0"
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     android:textAppearance="@style/inventory_item_black1" />
 
                 <LinearLayout
@@ -103,8 +99,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1.5px"
-                android:layout_marginLeft="@dimen/inventory_item_row2_marginlr"
-                android:layout_marginRight="@dimen/inventory_item_row2_marginlr"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/inventory_item_line" />
@@ -116,6 +110,11 @@
                 android:orientation="horizontal">
 
             </LinearLayout>
+            <TextView
+                android:id="@+id/tv_inventory_willin_inventoryinfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/inventory_item_text"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

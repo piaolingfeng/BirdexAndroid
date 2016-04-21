@@ -1,9 +1,13 @@
 package com.birdex.bird.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,20 +68,11 @@ public class InventoryWillInAdapter extends RecyclerView.Adapter<InventoryWillIn
             holder.tv_upc.setText(entity.getUpc());
             holder.tv_time.setText("");
             holder.tv_name.setText(entity.getName());
-//            if (RecyclerView.SCROLL_STATE_SETTLING != ((InventoryActivity) activity).rv_inventory.getScrollState()) {
-//                if (!"".equals(entity.getPic())) {
-//                    //非飞翔状态
-//                    Glide.with(activity).load(entity.getPic()).placeholder(R.drawable.goods_default).into(holder.iv_pic);
-//                } else {
-//                    //飞翔的时候
-//                    holder.iv_pic.setImageResource(R.drawable.goods_default);
+//            if(this.imglistener!=null){
+//                if(entity.getPic()!=null&&!"".equals(entity.getPic())){
+//                    this.imglistener.onLoadImage(entity.getPic(),holder.iv_pic);
 //                }
 //            }
-            if(this.imglistener!=null){
-                if(entity.getPic()!=null&&!"".equals(entity.getPic())){
-                    this.imglistener.onLoadImage(entity.getPic(),holder.iv_pic);
-                }
-            }
             if(position<=8&&toplistener!=null){
                 toplistener.onShowFloatAtionButton(false);
             }else if(position>8&&toplistener!=null){
@@ -85,19 +80,32 @@ public class InventoryWillInAdapter extends RecyclerView.Adapter<InventoryWillIn
             }
             int count=0;
             holder.arl_inventory.removeAllViews();
+            int start=0,end=0;
+            SpannableStringBuilder ss=new SpannableStringBuilder();
             for (InventoryActivityEntity.InventoryStockEntity entity1 : entity.getStock()) {
                 if(entity1.getDetail()!=null){
                     for (InventoryActivityEntity.InventoryStockEntity.InventoryDetailEntity entity2 : entity1.getDetail()) {
                         count+=Integer.parseInt(entity2.getStock());
-                        View view=inflater.inflate(R.layout.inventory_item_willinnum_layout,null,false);
-                        TextView tv_willin_name=(TextView)view.findViewById(R.id.tv_inventory_willin_name);
-                        TextView tv_willin_num=(TextView)view.findViewById(R.id.tv_inventory_willin_num);
-                        tv_willin_name.setText(entity1.getWarehouse_name()+":");
-                        tv_willin_num.setText(entity2.getStock());
-                        holder.arl_inventory.addView(view,params);
+                        String name=entity1.getWarehouse_name()+":";
+                        String value=entity2.getStock()+" ";
+                        ss.append(name);
+                        ss.append(value);
+                        //-------------
+                        end+=(name).length();
+                        ss.setSpan(new ForegroundColorSpan(activity.getResources().getColor(R.color.inventory_item_gray)),start,end,Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                        start+=name.length();
+                        end+=value.length();
+                        ss.setSpan(new ForegroundColorSpan(activity.getResources().getColor(R.color.inventory_item_blue)),start,end,Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                        start+=value.length();
                     }
                 }
             }
+//            View view=inflater.inflate(R.layout.inventory_item_willinnum_layout,null,false);
+//            TextView tv_willin_name=(TextView)view.findViewById(R.id.tv_inventory_willin_name);
+//            TextView tv_willin_num=(TextView)view.findViewById(R.id.tv_inventory_willin_num);
+//            tv_willin_name.setText(ss);
+//            holder.arl_inventory.addView(view,params);
+            holder.tv_inventoryinfo.setText(ss);
             holder.tv_willin_count.setText(String.valueOf(count));
         }
     }
@@ -113,21 +121,24 @@ public class InventoryWillInAdapter extends RecyclerView.Adapter<InventoryWillIn
         //时间
         TextView tv_time = null;
         //商品图片
-        ImageView iv_pic = null;
+//        ImageView iv_pic = null;
         //商品名称
         TextView tv_name = null;
         //待入库数
         TextView tv_willin_count = null;
         //
         LinearLayout arl_inventory=null;
+        //
+        TextView tv_inventoryinfo=null;
         public ViewHolder(View itemView) {
             super(itemView);
             tv_upc = (TextView) itemView.findViewById(R.id.tv_inventory_item_upc);
             tv_time = (TextView) itemView.findViewById(R.id.tv_inventory_item_time);
-            iv_pic = (ImageView) itemView.findViewById(R.id.iv_inventory_item_pic);
+//            iv_pic = (ImageView) itemView.findViewById(R.id.iv_inventory_item_pic);
             tv_name = (TextView) itemView.findViewById(R.id.tv_inventory_item_name);
             tv_willin_count = (TextView) itemView.findViewById(R.id.tv_inventory_willin_count);
             arl_inventory=(LinearLayout)itemView.findViewById(R.id.arl_inventory_number);
+            tv_inventoryinfo=(TextView)itemView.findViewById(R.id.tv_inventory_willin_inventoryinfo);
             itemView.setOnClickListener(this);
         }
         @Override

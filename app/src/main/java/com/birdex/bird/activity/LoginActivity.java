@@ -59,7 +59,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private SharedPreferences.Editor editor;
 
     public static String description;
-
+    private MyApplication application=null;
     @Override
     public int getContentLayoutResId() {
         return R.layout.activity_login;
@@ -67,6 +67,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void initializeContentViews() {
+        application=(MyApplication)getApplication();
         HideSoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
 //        initSystemBar(R.color.transparent);
         // 开启缓存 service
@@ -205,16 +206,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if ("0".equals(result)) {
                         hideLoading();
                         spEdit();
-                        editor.putString(Constant.BIND_USER_ID, ((JSONObject) response.get("data")).getString("bind_user_id") + "");
-                        editor.commit();
                         User user = JsonHelper.parseObject((JSONObject) response.get("data"), User.class);
+//                        editor.putString(Constant.BIND_USER_ID, ((JSONObject) response.get("data")).getString("bind_user_id") + "");
+                        editor.putString(Constant.BIND_USER_ID,user.getBind_user_id());
+                        editor.commit();
                         //将 user 信息存入到 sp
                         saveUser(user);
                         // user_token 登录后返回
                         String token = (String) ((JSONObject) response.get("data")).get("user_token");
                         // 将 token 添加进去
                         MyApplication.ahc.addHeader("USER-TOKEN", token);
-
                         saveToken(token);
 
                         T.showShort(MyApplication.getInstans(), getString(R.string.loginsu));

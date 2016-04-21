@@ -21,6 +21,7 @@ import com.birdex.bird.service.NotificationService;
 import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.CrashHandler;
 import com.loopj.android.http.AsyncHttpClient;
+import com.umeng.message.ALIAS_TYPE;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.MsgConstant;
 import com.umeng.message.PushAgent;
@@ -128,8 +129,8 @@ public class MyApplication extends Application {
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.setPushIntentServiceClass(NotificationService.class);
         mPushAgent.setDebugMode(true);
+        //获取设备token
         getUmengToken();
-
         initAsyncHttpClient();
     }
 
@@ -192,5 +193,16 @@ public class MyApplication extends Application {
         ahc.addHeader("DEVICE-TOKEN", device_token);
         ahc.addHeader("APP-VERSION", app_version);
     }
-
+    public void setAlias(String alias){
+        if(mPushAgent!=null){
+            if(!TextUtils.isEmpty(alias)){
+                try {
+                    mPushAgent.deleteAlias(alias,Constant.Alias_Type);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mPushAgent.setAlias(alias,Constant.Alias_Type);
+            }
+        }
+    }
 }

@@ -179,7 +179,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             utoken = sp.getString(MyApplication.SP_Umeng, "");
             if (TextUtils.isEmpty(utoken)) {
                 utoken = "none_device_token";
-                T.showShort(MyApplication.getInstans(), "自己设置的 token");
                 editor.putString(MyApplication.SP_Umeng, utoken);
                 editor.commit();
             }

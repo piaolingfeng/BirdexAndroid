@@ -33,5 +33,8 @@ public class Constant {
     public static final String TONE_SETTING = "tone";
     public static final String TIME_SETTING = "time";
 
+
+    public static final String LOGIN = "login";
     public static final String BIND_USER_ID = "bind_user_id";
+    public static final String FIRST_ENTRY_APP = "first_entry_app";
 }

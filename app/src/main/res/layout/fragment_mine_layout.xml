@@ -2,18 +2,62 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
     android:background="@color/background"
-    android:layout_height="match_parent">
-    <com.birdex.bird.widget.HeaderView
+    android:orientation="vertical">
+
+    <!--<com.birdex.bird.widget.HeaderView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:bgcolor="@color/blue_head_1"-->
+        <!--app:hasstatubar="false"-->
+        <!--app:headtitle="@string/mine_index_title" />-->
+    <com.birdex.bird.widget.TitleView
+        android:id="@+id/titleview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:headtitle="@string/mine_index_title"
-        app:hasstatubar="false"
-        app:bgcolor="@color/blue_head_1"/>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_mine_list"
+        android:layout_height="@dimen/title_height">
+    </com.birdex.bird.widget.TitleView>
+
+    <com.birdex.bird.widget.MyScrollview
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"/>
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_mine_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never" />
+
+            <com.zhy.android.percent.support.PercentLinearLayout
+                android:id="@+id/logout_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/out_account"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/out_selector"
+                    android:gravity="center"
+                    android:text="@string/outaccount"
+                    android:textColor="#FFFFFF"
+                    app:layout_textSizePercent="@string/size_5w"
+                    app:layout_paddingPercent="@string/msg_text_2_5w"
+                    app:layout_widthPercent="65%w"/>
+
+
+            </com.zhy.android.percent.support.PercentLinearLayout>
+
+        </LinearLayout>
+
+    </com.birdex.bird.widget.MyScrollview>
 </LinearLayout>

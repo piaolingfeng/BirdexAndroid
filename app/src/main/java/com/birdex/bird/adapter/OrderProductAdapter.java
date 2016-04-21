@@ -49,7 +49,7 @@ public class OrderProductAdapter extends RecyclerView.Adapter<OrderProductAdapte
     @Override
     public void onBindViewHolder(ProductHold holder, int position) {
         holder.position = position;
-        GlideUtils.setImageToLocalPath(holder.img_pic, productList.get(position).getPic());
+//        GlideUtils.setImageToLocalPath(holder.img_pic, productList.get(position).getPic());
         holder.tv_nums.setText("x" + productList.get(position).getNums());
         holder.tv_name.setText(productList.get(position).getName());
         holder.tv_external_no.setText(productList.get(position).getExternal_no());
@@ -66,8 +66,8 @@ public class OrderProductAdapter extends RecyclerView.Adapter<OrderProductAdapte
 
     public class ProductHold extends RecyclerView.ViewHolder implements View.OnClickListener {
         //产品
-        @Bind(R.id.img_pic)
-        ImageView img_pic;//商品图片
+//        @Bind(R.id.img_pic)
+//        ImageView img_pic;//商品图片
         @Bind(R.id.tv_nums)
         TextView tv_nums;//数量
         @Bind(R.id.tv_name)

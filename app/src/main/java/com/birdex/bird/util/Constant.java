@@ -37,4 +37,6 @@ public class Constant {
     public static final String SP_UserInfo_Bind="bind_user_id";
     //设置系统的别名类型
     public static final String Alias_Type="com.birdex.alias";
+
+    public static final String BIND_USER_ID = "bind_user_id";
 }

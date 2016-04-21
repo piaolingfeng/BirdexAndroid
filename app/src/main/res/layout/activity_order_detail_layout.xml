@@ -335,17 +335,17 @@
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingBottom="@dimen/item_margin_top_height"
-                                android:paddingTop="@dimen/item_margin_top_height">
+                                >
 
                                 <TextView
                                     android:id="@+id/tv_receiver_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:gravity="left|center"
-                                    android:text="123"
                                     android:textColor="@color/order_detail_text_color"
-                                    android:textSize="@dimen/order_detail_size" />
+                                    android:textSize="@dimen/order_detail_size"
+                                    android:paddingBottom="@dimen/item_margin_top_height"
+                                    android:paddingTop="@dimen/item_margin_top_height"/>
 
                                 <TextView
                                     android:id="@+id/tv_receiver_phone"
@@ -354,9 +354,12 @@
                                     android:layout_marginLeft="5dp"
                                     android:layout_toRightOf="@+id/tv_receiver_name"
                                     android:gravity="left|center"
-                                    android:text="34dsfd"
+                                    android:drawableRight="@drawable/phone"
+                                    android:drawablePadding="@dimen/item_margin_top_height"
                                     android:textColor="@color/order_detail_text_color"
-                                    android:textSize="@dimen/order_detail_size" />
+                                    android:textSize="@dimen/order_detail_size"
+                                    android:paddingBottom="@dimen/item_margin_top_height"
+                                    android:paddingTop="@dimen/item_margin_top_height"/>
 
 
                             </RelativeLayout>

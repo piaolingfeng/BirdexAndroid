@@ -19,7 +19,7 @@ public class CheckUpdate {
 
     private static String vercode;
     private static Context context;
-
+    private static String description;
 
     /**
      * 从服务器端获得版本号与版本名称
@@ -35,8 +35,9 @@ public class CheckUpdate {
         }
     }
 
-    public static void check(Context con) {
+    public static void check(Context con,String description) {
         context = con;
+        CheckUpdate.description= description;
         getServerVer();
     }
 
@@ -50,7 +51,7 @@ public class CheckUpdate {
         TextView bt_cancle = (TextView) view.findViewById(R.id.bt_cancle);
         TextView content = (TextView) view.findViewById(R.id.cet_content);
         StringBuffer sb = new StringBuffer();
-        sb.append(LoginActivity.description);
+        sb.append(CheckUpdate.description);
         if (!TextUtils.isEmpty(vercode)) {
             sb.append("：" + vercode);
         }

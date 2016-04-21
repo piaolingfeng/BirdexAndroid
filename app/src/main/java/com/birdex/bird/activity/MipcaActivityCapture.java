@@ -25,6 +25,8 @@ import com.birdex.bird.widget.ViewfinderView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
+import org.simple.eventbus.EventBus;
+
 import java.io.IOException;
 import java.util.Vector;
 
@@ -128,17 +130,21 @@ public class MipcaActivityCapture extends BaseActivity implements Callback {
         inactivityTimer.onActivity();
         playBeepSoundAndVibrate();
         String resultString = result.getText();
-        if (resultString.equals("")) {
-            Toast.makeText(MipcaActivityCapture.this, "Scan failed!", Toast.LENGTH_SHORT).show();
-        } else {
-            Intent resultIntent = new Intent();
-            Bundle bundle = new Bundle();
-            bundle.putString("result", resultString);
-            bundle.putParcelable("bitmap", barcode);
-            resultIntent.putExtras(bundle);
-            this.setResult(RESULT_OK, resultIntent);
+        try {
+            if (resultString.equals("")) {
+                Toast.makeText(MipcaActivityCapture.this, "Scan failed!", Toast.LENGTH_SHORT).show();
+            } else {
+                Intent resultIntent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putString("result", resultString);
+//                bundle.putParcelable("bitmap", barcode);
+                resultIntent.putExtras(bundle);
+                this.setResult(RESULT_OK, resultIntent);
+            }
+            MipcaActivityCapture.this.finish();
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        MipcaActivityCapture.this.finish();
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {

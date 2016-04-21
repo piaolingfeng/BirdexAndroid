@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
@@ -10,40 +11,33 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height" />
 
-    <LinearLayout
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_left_width"
-        android:layout_marginRight="@dimen/margin_left_width"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/title_height">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/tv_msg_30_day"
+            android:textColor="@color/order_detail_text_color"
+            app:layout_paddingPercent="@string/msg_text_3w"
+            app:layout_textSizePercent="@string/msg_text_4_5w" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/tv_msg_30_day"
-                android:textColor="@color/order_detail_text_color"
-                android:textSize="@dimen/msg_detail_title" />
+        <TextView
+            android:id="@+id/tv_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="@string/tv_clear"
+            android:textColor="@color/blue"
+            app:layout_paddingPercent="@string/msg_text_3w"
+            app:layout_textSizePercent="@string/msg_text_4_5w" />
+    </com.zhy.android.percent.support.PercentRelativeLayout>
 
-            <TextView
-                android:id="@+id/tv_clear"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:paddingLeft="@dimen/item_margin_top_height"
-                android:paddingRight="@dimen/item_margin_top_height"
-                android:text="@string/tv_clear"
-                android:textSize="@dimen/msg_detail_title"
-                android:textColor="@color/blue" />
-        </RelativeLayout>
-
-    </LinearLayout>
 
     <com.birdex.bird.widget.xrecyclerview.XRecyclerView
         android:id="@+id/rcy"

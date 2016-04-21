@@ -13,6 +13,8 @@ import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.User;
+import com.birdex.bird.service.CacheService;
+import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.update.UpdateManager;
 import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.JsonHelper;
@@ -32,6 +34,8 @@ import butterknife.OnClick;
  * Created by hyj on 2016/3/25.
  */
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
+
+    private static final String TAG = "LoginActivity";
 
     // 用户名
     @Bind(R.id.username_edit)
@@ -66,6 +70,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         application=(MyApplication)getApplication();
         HideSoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
 //        initSystemBar(R.color.transparent);
+        // 开启缓存 service
+//        Intent service = new Intent(this, CacheService.class);
+//        startService(service);
+
         initData();
     }
 
@@ -99,13 +107,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         remember.setChecked(ischecked);
 
         // 检查更新
-        checkUpdate();
+//        checkUpdate();
     }
 
     // 检查更新
     private void checkUpdate() {
         //如果是第一次打开，检查更新
-        BirdApi.upDateMessage(MyApplication.getInstans(), null, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 //					super.onSuccess(statusCode, headers, response);
@@ -118,7 +126,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if (!MyApplication.app_version.equals(versionServer)) {
                         UpdateManager.getInstance().setDownLoadPath(updateUrl);
                         // 如果不相等，执行更新操作
-                        UpdateManager.getInstance().set(LoginActivity.this);
+                        UpdateManager.getInstance().set(LoginActivity.this,description);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -130,7 +138,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //					super.onFailure(statusCode, headers, responseString, throwable);
                 T.showShort(MyApplication.getInstans(), "获取更新信息失败");
             }
-        });
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                T.showShort(MyApplication.getInstans(), "获取更新信息失败");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                T.showShort(MyApplication.getInstans(), "获取更新信息失败");
+            }
+        };
+        BirdApi.upDateMessage(MyApplication.getInstans(), null, handler);
+    }
+
+    @Override
+    protected void onDestroy() {
+        BirdApi.cancelRequestWithTag(TAG);
+        super.onDestroy();
     }
 
     // 存储返回的 user
@@ -164,7 +191,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         params.put("device_type", MyApplication.device_type);
         params.put("account", username.getText().toString());
         params.put("password", password.getText().toString());
-        BirdApi.login(MyApplication.getInstans(), params, new JsonHttpResponseHandler() {
+
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -174,14 +202,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         hideLoading();
                         spEdit();
                         User user = JsonHelper.parseObject((JSONObject) response.get("data"), User.class);
+//                        editor.putString(Constant.BIND_USER_ID, ((JSONObject) response.get("data")).getString("bind_user_id") + "");
+                        editor.putString(Constant.BIND_USER_ID,user.getBind_user_id());
+                        editor.commit();
                         //将 user 信息存入到 sp
                         saveUser(user);
                         // user_token 登录后返回
                         String token = (String) ((JSONObject) response.get("data")).get("user_token");
                         // 将 token 添加进去
                         MyApplication.ahc.addHeader("USER-TOKEN", token);
-                        //设置别名
-//                        application.setAlias(user.get);
                         saveToken(token);
 
                         T.showShort(MyApplication.getInstans(), getString(R.string.loginsu));
@@ -248,7 +277,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 hideLoading();
                 T.showShort(MyApplication.getInstans(), getString(R.string.loginfa));
             }
-        });
+        };
+        handler.setTag(TAG);
+        BirdApi.login(MyApplication.getInstans(), params, handler);
     }
 
 

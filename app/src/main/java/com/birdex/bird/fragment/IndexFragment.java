@@ -226,6 +226,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
      */
     @Subscriber(tag = "getLocalData")
     public void getDatabaseData(String string) {
+        indexOrderLocalDataList = new ArrayList<>();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -353,7 +354,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     private void initToolManager() {
         rcv_tool_manager.setLayoutManager(new FullyGridLayoutManager(getContext(), 3));
         final List<OrderManagerEntity> list = new ArrayList<OrderManagerEntity>();
-        int[] data = {R.drawable.tool1, R.drawable.tool2, R.drawable.tool3, R.drawable.tool5, R.drawable.tool6};
+        int[] data = {R.mipmap.tool1, R.mipmap.tool2, R.mipmap.tool3, R.mipmap.tool5, R.mipmap.tool6};
         for (int i = 0; i < data.length; i++) {
             OrderManagerEntity entity = new OrderManagerEntity();
             entity.setCount(data[i]);
@@ -459,7 +460,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 //                        Intent intent = new Intent(getActivity(), MainActivity.class);
 //                        intent.putExtra("position", position);
 //                        startActivity(intent);
-                        T.showLong(MyApplication.getInstans(), "跳转到产品引导" + position);
+//                        T.showLong(MyApplication.getInstans(), "跳转到产品引导" + position);
                     }
                 });
             }

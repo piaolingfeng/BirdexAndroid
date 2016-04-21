@@ -40,6 +40,7 @@
     <string name="custom_service">客服</string>
     <string name="mine">我的</string>
     <string name="help">帮助</string>
+    <string name="msg">消息</string>
     <string name="allofthem">全部</string>
     <string name="tool1">订单管理</string>
     <string name="tool2">预报管理</string>
@@ -320,6 +321,7 @@
     <string name="message">提示消息</string>
     <string name="system_tone">系统提示音</string>
     <string name="system_tone_no">不提示，只在消息中显示</string>
+    <string name="no_receive">休息时间免接收</string>
     <string name="message_time">消息接收时间</string>
     <string name="all_day">全天接收</string>
     <string name="all_day_no">休息时间免接收</string>
@@ -374,6 +376,7 @@
 
     <string name="confirm_success">确认成功</string>
 
+    <string name="msg_text_2_5w">2.5%w</string>
     <string name="msg_text_3w">3%w</string>
     <string name="msg_text_4w">4%w</string>
     <string name="msg_text_4_5w">4.5%w</string>
@@ -389,6 +392,8 @@
     <string name="msg_count_4">元运费,您的账户余额为</string>
     <string name="msg_count_5">,可能造成部分订单无法正常扣取费用，为避免影响订单配送时效，请尽快充值!</string>
     <string name="msg_count_recharge">马上充值</string>
+    <string name="margin_left_5w">5%w</string>
+    <string name="margin_top_3w">3%w</string>
     <!--同单号其他商品-->
     <string name="sameorder_others_title">同单号其它商品</string>
     <string name="sameorder_others_inventorycode">入库单号:</string>
@@ -398,4 +403,5 @@
     <string name="sameorder_others_transstyle">(@)</string>
     <string name="sameorder_item_code">商品编码:</string>
     <string name="sameorder_item_num">数量：</string>
+    <string name="version_new">当前已经是最新版本</string>
 </resources>

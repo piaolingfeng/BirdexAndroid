@@ -2,12 +2,13 @@
 <resources>
     <string-array name="mine_item_title">
         <item name="mine_item_myaccount">我的账户</item>
-        <item name="mine_item_mymessage">我的订阅消息</item>
-        <item name="mine_item_mysetting">我的设置</item>
+        <item name="mine_item_mymessage">我的消息</item>
+        <!--<item name="mine_item_mysetting">我的设置</item>-->
         <item name="mine_item_manage">账户管理</item>
         <item name="mine_item_mydata">我的数据</item>
-        <item name="mine_item_mycustomer">我的客户经理</item>
+        <!--<item name="mine_item_mycustomer">我的客户经理</item>-->
         <item name="mine_item_about">关于</item>
+        <item name="mine_item_check">检查更新</item>
     </string-array>
     <string-array name="inventory_all_status">
         <item>在库商品</item>

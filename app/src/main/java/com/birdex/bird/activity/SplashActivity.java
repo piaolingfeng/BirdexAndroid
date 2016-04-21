@@ -19,6 +19,7 @@ import com.birdex.bird.adapter.WelcomePagerAdapter;
 import com.birdex.bird.fragment.BaseFragment;
 import com.birdex.bird.fragment.ImageFragment;
 import com.birdex.bird.interfaces.BackHandledInterface;
+import com.birdex.bird.service.CacheService;
 
 import java.util.ArrayList;
 import java.util.logging.LogRecord;
@@ -53,8 +54,17 @@ public class SplashActivity extends BaseActivity implements BaseFragment.OnFragm
         return R.layout.activity_splash;
     }
 
+    private void startMyService(){
+        // 开启缓存 service
+        Intent service = new Intent(this, CacheService.class);
+        startService(service);
+    }
+
     @Override
     public void initializeContentViews() {
+        // 先获取公用配置当前版本  判断是否要开启缓存service
+        startMyService();
+
         initSystemBar(R.color.transparent);
         ll_welcome.setOnClickListener(this);
         fraglist = new ArrayList<>();

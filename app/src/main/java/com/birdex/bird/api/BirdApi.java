@@ -94,7 +94,8 @@ public class BirdApi {
 
     // 获取更新信息
     public static void upDateMessage(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
-        MyApplication.ahc.get(context, "http://192.168.1.201:8099/sanfangcang.html", params, jsonHttpResponseHandler);
+//        MyApplication.ahc.get(context, "http://192.168.1.201:8099/sanfangcang.html", params, jsonHttpResponseHandler);
+        MyApplication.ahc.get(context, "http://app.birdex.cn/sanfangcang.html", params, jsonHttpResponseHandler);
     }
 
     // 获取公司信息
@@ -240,6 +241,16 @@ public class BirdApi {
     }
     public static void getProductDetail(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
         post(context, "Product/get", params, jsonHttpResponseHandler);
+    }
+
+    // 未读消息统计
+    public static void getMessageStat(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        get(context, "Message/stat", params, jsonHttpResponseHandler);
+    }
+
+    // 获取公用配置当前版本
+    public static void getConfigVersion(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        get(context, "Public/getConfigVersion", params, jsonHttpResponseHandler);
     }
     public static void getMsgList(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
         post(context, "Message/all", params, jsonHttpResponseHandler);

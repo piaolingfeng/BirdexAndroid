@@ -8,13 +8,13 @@
 
     <com.zhy.android.percent.support.PercentRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="38dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/img_read_status"
             android:layout_width="wrap_content"
             android:src="@drawable/read_status"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:visibility="gone"/>
 
         <TextView
@@ -36,7 +36,6 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/item_margin_top_height"
-            android:text="dfadfasd"
             android:textColor="@color/order_detail_text_color"
             app:layout_textSizePercent="@string/msg_text_4w"/>
 
@@ -92,7 +91,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/item_margin_top_height"
-            android:layout_marginBottom="@dimen/item_margin_top_height"
             android:layout_marginTop="@dimen/item_margin_top_height"
             android:gravity="top|right"
             android:text="@string/tv_recevice_addr"
@@ -105,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/item_margin_top_height"
-            android:layout_marginBottom="@dimen/item_margin_top_height"
+
             android:layout_marginTop="@dimen/item_margin_top_height"
             android:layout_toRightOf="@+id/tv_recevice_addr_t"
             android:text="dfadfasd"
@@ -125,7 +123,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/item_margin_top_height"
-            android:layout_marginTop="@dimen/item_margin_top_height"
+            android:paddingTop="@dimen/item_margin_top_height"
+            android:paddingBottom="@dimen/item_margin_top_height"
             android:layout_toLeftOf="@+id/tv_function"
             android:gravity="left"
             android:text="@string/tv_recevice_addr"
@@ -138,7 +137,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/item_margin_top_height"
+            android:paddingTop="@dimen/item_margin_top_height"
+            android:paddingBottom="@dimen/item_margin_top_height"
             android:gravity="center"
             android:paddingLeft="@dimen/item_margin_top_height"
             android:text="@string/tv_function_id"
@@ -154,7 +154,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/item_margin_top_height"
-        android:layout_marginTop="@dimen/item_margin_top_height"
         android:text="@string/msg_inv_err"
         android:textColor="@color/order_detail_text_color"
         android:visibility="gone"

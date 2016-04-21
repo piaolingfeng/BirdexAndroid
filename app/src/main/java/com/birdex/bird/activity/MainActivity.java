@@ -1,6 +1,7 @@
 package com.birdex.bird.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -18,6 +19,8 @@ import com.birdex.bird.fragment.HelpFragment;
 import com.birdex.bird.fragment.IndexFragment;
 import com.birdex.bird.fragment.MineFragment;
 import com.birdex.bird.interfaces.BackHandledInterface;
+import com.birdex.bird.util.Constant;
+import com.birdex.bird.util.T;
 import com.birdex.bird.service.NotificationService;
 
 import butterknife.Bind;
@@ -42,7 +45,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
     TextView tv_custom_service;
     @Bind(R.id.tv_mine)
     TextView tv_mine;
-
+    private SharedPreferences userPreferences=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +58,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
 
     @Override
     public void initializeContentViews() {
+        userPreferences=getSharedPreferences(Constant.SP_UserInfo,MODE_PRIVATE);
         if (indexFragment == null)
             indexFragment = new IndexFragment();
         if (mineFragment == null)
@@ -69,6 +73,8 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
         startService(intent);
         MyApplication application=(MyApplication)getApplication();
         application.getUmengToken();
+        String bindID=userPreferences.getString(Constant.SP_UserInfo_Bind,"");
+        application.setAlias(bindID);
     }
 
     public void setSelectTV() {
@@ -152,11 +158,15 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
                 break;
             case R.id.tv_custom_service:
                 tag = 2;
-                addFragment(customServiceFragment);
+//                addFragment(customServiceFragment);
+                T.showShort(MainActivity.this, getString(R.string.please_wail));
                 break;
             case R.id.tv_help:
-                tag = 3;
-                addFragment(helpFragment);
+//                tag = 3;
+//                addFragment(helpFragment);
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, MyMessageActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_mine:
                 tag = 4;

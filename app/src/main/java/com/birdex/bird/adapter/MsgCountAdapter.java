@@ -2,6 +2,7 @@ package com.birdex.bird.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.birdex.bird.R;
+import com.birdex.bird.activity.MyOrderListActivity;
 import com.birdex.bird.entity.MsgListEntity;
+import com.birdex.bird.util.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +75,7 @@ public class MsgCountAdapter extends RecyclerView.Adapter<MsgCountAdapter.MsgCou
         return size;
     }
 
-    public class MsgCountHolder extends RecyclerView.ViewHolder {
+    public class MsgCountHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @Bind(R.id.img_read_status)
         ImageView img_read_status;
@@ -87,6 +90,15 @@ public class MsgCountAdapter extends RecyclerView.Adapter<MsgCountAdapter.MsgCou
         public MsgCountHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            btn_confirm.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent();
+            intent.setClass(mContext, MyOrderListActivity.class);
+            intent.putExtra("name",mContext.getString(Constant.name[Constant.name.length-1]));
+            mContext.startActivity(intent);
         }
     }
 }

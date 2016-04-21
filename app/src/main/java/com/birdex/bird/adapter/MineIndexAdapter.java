@@ -15,12 +15,21 @@ import android.widget.TextView;
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.activity.AboutActivity;
+import com.birdex.bird.activity.LoginActivity;
 import com.birdex.bird.activity.MyAccountActivity;
 import com.birdex.bird.activity.MyAccountInfoActivity;
 import com.birdex.bird.activity.MyMessageActivity;
 import com.birdex.bird.activity.TodayDataActivity;
+import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.MineEntity;
+import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.T;
+import com.birdex.bird.util.update.UpdateManager;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -32,6 +41,17 @@ public class MineIndexAdapter extends RecyclerView.Adapter<MineIndexAdapter.Mine
     private LayoutInflater inflater=null;
     private MineEntity entity=null;
     private Activity activity=null;
+
+    OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
+
+    public OnRecyclerViewItemClickListener getOnRecyclerViewItemClickListener() {
+        return onRecyclerViewItemClickListener;
+    }
+
+    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
+        this.onRecyclerViewItemClickListener = onRecyclerViewItemClickListener;
+    }
+
     public MineIndexAdapter(Activity activity,ArrayList<MineEntity> list){
         if(list==null){
             this.list=new ArrayList<>();
@@ -79,25 +99,22 @@ public class MineIndexAdapter extends RecyclerView.Adapter<MineIndexAdapter.Mine
         }
         switch (position){
             case 0:
-                holder.iv_icon.setImageResource(R.drawable.myaccount);
+                holder.iv_icon.setImageResource(R.mipmap.myaccount);
                 break;
             case 1:
-                holder.iv_icon.setImageResource(R.drawable.message);
+                holder.iv_icon.setImageResource(R.mipmap.message);
                 break;
             case 2:
-                holder.iv_icon.setImageResource(R.drawable.mysetting);
+                holder.iv_icon.setImageResource(R.mipmap.managaccount);
                 break;
             case 3:
-                holder.iv_icon.setImageResource(R.drawable.managaccount);
+                holder.iv_icon.setImageResource(R.mipmap.mydata);
                 break;
             case 4:
-                holder.iv_icon.setImageResource(R.drawable.mydata);
+                holder.iv_icon.setImageResource(R.mipmap.about);
                 break;
             case 5:
-                holder.iv_icon.setImageResource(R.drawable.mycustomer);
-                break;
-            case 6:
-                holder.iv_icon.setImageResource(R.drawable.about);
+                holder.iv_icon.setImageResource(R.mipmap.check);
                 break;
             default:
 
@@ -124,47 +141,8 @@ public class MineIndexAdapter extends RecyclerView.Adapter<MineIndexAdapter.Mine
         @Override
         public void onClick(View v) {
             int position=(int)v.getTag();
-            Intent intent=null;
-            switch (position){
-                case 0:
-                    // 点击了 我的账户
-                    intent = new Intent(MineIndexAdapter.this.activity, MyAccountActivity.class);
-                    MineIndexAdapter.this.activity.startActivity(intent);
-                    break;
-                case 1:
-                    //我的订阅消息
-                    intent = new Intent(MineIndexAdapter.this.activity, MyMessageActivity.class);
-                    MineIndexAdapter.this.activity.startActivity(intent);
-                    break;
-                case 2:
-                    //我的设置
-                    T.showShort(activity,activity.getString(R.string.please_wail));
-                    break;
-                case 3:
-                    //账户管理
-                    intent=new Intent(MineIndexAdapter.this.activity, MyAccountInfoActivity.class);
-                    //显示第三个页面
-                    intent.putExtra("enterindex",2);
-                    MineIndexAdapter.this.activity.startActivity(intent);
-                    break;
-                case 4:
-                    //我的数据
-                    intent = new Intent(activity, TodayDataActivity.class);
-                    activity.startActivity(intent);
-                    break;
-                case 5:
-                    //我的客户经理
-                    T.showShort(activity,activity.getString(R.string.please_wail));
-                    break;
-                case 6:
-                    //关于
-                    intent=new Intent(MineIndexAdapter.this.activity, AboutActivity.class);
-                    MineIndexAdapter.this.activity.startActivity(intent);
-                    break;
-                default:
-
-                    break;
-            }
+            if (onRecyclerViewItemClickListener!=null)
+                onRecyclerViewItemClickListener.onItemClick(position);
         }
     }
 }

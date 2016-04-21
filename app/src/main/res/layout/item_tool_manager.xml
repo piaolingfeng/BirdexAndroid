@@ -22,7 +22,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:gravity="center"
-                android:src="@drawable/tool1"
                 android:textColor="@color/red"
                 app:layout_heightPercent="65%"
                 app:layout_textSizePercent="@string/item_context_size_2" />

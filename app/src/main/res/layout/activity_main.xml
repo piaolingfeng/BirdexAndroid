@@ -51,7 +51,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/help"
+                android:text="@string/msg"
                 android:textColor="@color/menu_item_color_selector"
                 app:layout_textSizePercent="@string/first_index_text_5_1w" />
 

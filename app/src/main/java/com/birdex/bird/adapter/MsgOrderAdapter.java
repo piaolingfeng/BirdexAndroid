@@ -16,6 +16,10 @@ import com.birdex.bird.entity.MsgListEntity;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.util.decoration.FullyLinearLayoutManager;
 
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
+
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -69,7 +73,7 @@ public class MsgOrderAdapter extends RecyclerView.Adapter<MsgOrderAdapter.MsgOrd
             @Override
             public void onClick(View v) {
                 if (currentName.contains(mContext.getString(R.string.msg_check_exception)))
-                    startChangeAddrActivity(list.get(position).getMsg_content().getOrder_code());
+                    startChangeAddrActivity(list.get(position).getMsg_content().getOrder_code(), position);
                 else
                     upLoadIDCard(mContext, list.get(position).getMsg_content().getOrder_code(), "");//订单列表没有身份证id,只能穿order_code
             }
@@ -113,9 +117,10 @@ public class MsgOrderAdapter extends RecyclerView.Adapter<MsgOrderAdapter.MsgOrd
     /**
      * 修改地址
      */
-    public void startChangeAddrActivity(String order_code) {
+    public void startChangeAddrActivity(String order_code, int position) {
         Intent intent = new Intent(mContext, ChangeAdressActivity.class);
         intent.putExtra("order_code", order_code);
+        intent.putExtra("MSG_position", position);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
     }
@@ -156,11 +161,19 @@ public class MsgOrderAdapter extends RecyclerView.Adapter<MsgOrderAdapter.MsgOrd
         public MsgOrderHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            EventBus.getDefault().register(this);
         }
 
         @Override
         public void onClick(View v) {
 
+        }
+
+        @Subscriber(tag = "changeAddr")
+        public void changeAddr(HashMap map) {
+            if (map != null && position == map.get("MSG_position")) {
+                tv_recevice_addr.setText(map.get("changeAddr") + "");
+            }
         }
     }
 }

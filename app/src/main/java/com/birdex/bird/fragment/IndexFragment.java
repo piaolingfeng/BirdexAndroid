@@ -190,7 +190,11 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
      * 解析网络请求返回的今日数据
      */
     public void parseNetData(final JSONObject response) throws JSONException {
-        JSONObject object = response.getJSONObject("data");
+        JSONObject object = response.get("data") instanceof JSONObject ? (JSONObject) response.get("data") : null;
+        if (object==null){
+            T.showShort(getActivity(),response.get("data").toString());
+            return;
+        }
         OrderManagerEntity entity;
         boolean state;
         indexOrderNetDatatList = new ArrayList<>();

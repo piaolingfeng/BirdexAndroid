@@ -89,6 +89,16 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
         rcy.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL_LIST));
         msg_list_name = getResources().getStringArray(R.array.msg_list_name);
+        if (msg_list_name[0].equals(title)) {
+            rcy.setAdapter(inventoryAdapter);
+        } else {
+            if (msg_list_name[4].equals(title)) {
+                rcy.setAdapter(countAdapter);
+            } else {
+                rcy.setAdapter(orderAdapter);
+            }
+        }
+
 //        if (msg_list_name.length >= 5) {
 //            if (msg_list_name[0].equals(title)) {
 //                rcy.setAdapter(inventoryAdapter);
@@ -231,12 +241,13 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 if (response != null) {
-                    MsgListEntity entity = GsonHelper.getPerson(response.toString(), MsgListEntity.class);
-                    if (entity != null) {
-                        if (entity.getData().getPage_num() != 20 && inventoryPage_no > 1) {
+                    listEntity = GsonHelper.getPerson(response.toString(), MsgListEntity.class);
+                    if (listEntity != null) {
+                        if (listEntity.getData().getPage_num() != 20 && inventoryPage_no > 1) {
                             T.showShort(MyApplication.getInstans(), "已经是最后一页");
                         } else {
-                            listEntity.getData().getMessages().addAll(entity.getData().getMessages());
+//                            listEntity.getData().getMessages().addAll(listEntity.getData().getMessages());
+//                            orderAdapte/.notifyDataSetChanged();
 //                            inventoryAdapter.getList().addAll(InvenEntity.getProducts());
 //                            inventoryAdapter.notifyDataSetChanged();
                             bus.post(title, "msg_list_update");
@@ -321,17 +332,17 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
     @Subscriber(tag = "msg_list_update")
     public void listUpdate(String text) {
         if (msg_list_name[0].equals(title)) {
-            inventoryAdapter.setList(listEntity.getData().getMessages());
-            rcy.setAdapter(inventoryAdapter);
+            inventoryAdapter.getList().addAll(listEntity.getData().getMessages());
+//            rcy.setAdapter(inventoryAdapter);
             inventoryAdapter.notifyDataSetChanged();
         } else {
             if (msg_list_name[4].equals(title)) {
-                countAdapter.setList(listEntity.getData().getMessages());
-                rcy.setAdapter(countAdapter);
+                countAdapter.getList().addAll(listEntity.getData().getMessages());
+//                rcy.setAdapter(countAdapter);
                 countAdapter.notifyDataSetChanged();
             } else {
-                orderAdapter.setList(listEntity.getData().getMessages());
-                rcy.setAdapter(orderAdapter);
+                orderAdapter.getList().addAll(listEntity.getData().getMessages());
+//                rcy.setAdapter(orderAdapter);
                 orderAdapter.notifyDataSetChanged();
             }
         }

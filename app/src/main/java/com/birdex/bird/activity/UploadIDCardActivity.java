@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -36,6 +37,7 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.simple.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -393,11 +395,15 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
             case RESULT_REQUEST_CODE:
                 try {
                     if (flag) {
-                        GlideUtils.setImageToLocalPath(left, uritempFileLeft.toString());
                         frontPic = new File(new URI(uritempFileLeft.toString()));
+//                        GlideUtils.setImageToLocalPath(left, frontPic.getAbsolutePath());
+                        left.setImageBitmap(BitmapFactory.decodeFile(frontPic.getAbsolutePath()));
+//                        System.out.print(1);
                     } else {
-                        GlideUtils.setImageToLocalPath(right, uritempFileRight.toString());
                         backPic = new File(new URI(uritempFileRight.toString()));
+//                        GlideUtils.setImageToLocalPath(right, backPic.getAbsolutePath());
+                        right.setImageBitmap(BitmapFactory.decodeFile(backPic.getAbsolutePath()));
+//                        System.out.print(2);
                     }
                 } catch (URISyntaxException e){
                     e.printStackTrace();
@@ -465,7 +471,9 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
     // 压缩的右边图片
     private File rightFile;
 
+
     private void doUpload(){
+
         if (frontPic != null) {
             // 上传左边
             RequestParams myparams = new RequestParams();
@@ -497,7 +505,9 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                                             super.onSuccess(statusCode, headers, response);
                                             try {
                                                 if ("0".equals(response.getString("error"))) {
+                                                    EventBus.getDefault().post(true,"checkIDCard");
                                                     T.showShort(MyApplication.getInstans(), getString(R.string.upload_suc));
+                                                    finish();
                                                 } else {
                                                     T.showShort(MyApplication.getInstans(), response.getString("data"));
                                                 }
@@ -611,7 +621,9 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                                             super.onSuccess(statusCode, headers, response);
                                             try {
                                                 if ("0".equals(response.getString("error"))) {
+                                                    EventBus.getDefault().post(true,"checkIDCard");
                                                     T.showShort(MyApplication.getInstans(), getString(R.string.upload_suc));
+                                                    finish();
                                                 } else {
                                                     T.showShort(MyApplication.getInstans(), response.getString("data"));
                                                 }
@@ -692,6 +704,7 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
             }
 
         }
+
     }
 
     @Override

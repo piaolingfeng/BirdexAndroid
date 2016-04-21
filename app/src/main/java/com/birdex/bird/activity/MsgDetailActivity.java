@@ -75,10 +75,6 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
 //        InvenEntity = new InventorySimpleEntity();
 //        orderListEntities = new OrderListEntity();
         listEntity = new MsgListEntity();
-        inventoryAdapter = new MsgInventoryAdapter(MsgDetailActivity.this, listEntity.getData().getMessages());
-        orderAdapter = new MsgOrderAdapter(this, listEntity.getData().getMessages(), title);
-        countAdapter = new MsgCountAdapter(this, listEntity.getData().getMessages());
-
         rcy.setLayoutManager(new FullyLinearLayoutManager(this));
         rcy.setLoadingListener(this);
 //        rcy.setPullRefreshEnabled(false);
@@ -95,6 +91,9 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
             }
         }
         title_view.setInventoryDetail(title, R.color.gray1);
+        inventoryAdapter = new MsgInventoryAdapter(MsgDetailActivity.this, listEntity.getData().getMessages());
+        orderAdapter = new MsgOrderAdapter(this, listEntity.getData().getMessages(), title);
+        countAdapter = new MsgCountAdapter(this, listEntity.getData().getMessages());
         if (msg_list_name_id[0].equals(title)) {
             rcy.setAdapter(inventoryAdapter);
         } else {

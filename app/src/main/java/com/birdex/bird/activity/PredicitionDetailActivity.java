@@ -54,6 +54,8 @@ public class PredicitionDetailActivity extends BaseActivity {
     TextView tv_update_time;
     @Bind(R.id.tv_create_time)
     TextView tv_create_time;
+    @Bind(R.id.tv_error)
+    TextView tv_error;
     @Bind(R.id.rcy)
     RecyclerView rcy;
 
@@ -141,6 +143,10 @@ public class PredicitionDetailActivity extends BaseActivity {
         tv_remarks.setText(entity.getData().getRemark());
         tv_update_time.setText(entity.getData().getUpdated_time());
         tv_create_time.setText(entity.getData().getCreated_time());
+        if (!StringUtils.isEmpty(entity.getData().getVerify_fail_detail())) {
+            tv_error.setText(entity.getData().getVerify_fail_detail());
+            tv_error.setVisibility(View.VISIBLE);
+        }
         adapter = new PredicitionDetailAdapter(this, entity.getData().getProducts());
         rcy.setAdapter(adapter);
         adapter.setOnRecyclerViewInsClickListener(new OnRecyclerViewInsClickListener() {
@@ -215,7 +221,7 @@ public class PredicitionDetailActivity extends BaseActivity {
                         if (error == 0) {
                             if (success != null && success.equals("success")) {
                                 bus.post(position, "confirm");//刷新当前页面
-                                bus.post("","getTodayData");//刷新今日看板数据
+                                bus.post("", "getTodayData");//刷新今日看板数据
                                 if (position == -1) {//-1为刷新全部状态
                                     bus.post(fragment_position, "confirm_fragment_adapter");//刷新fragment页面
                                 }

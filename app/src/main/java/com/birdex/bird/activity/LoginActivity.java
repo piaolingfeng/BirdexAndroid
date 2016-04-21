@@ -125,7 +125,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if (!MyApplication.app_version.equals(versionServer)) {
                         UpdateManager.getInstance().setDownLoadPath(updateUrl);
                         // 如果不相等，执行更新操作
-                        UpdateManager.getInstance().set(LoginActivity.this,description);
+                        UpdateManager.getInstance().set(LoginActivity.this, description);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -174,19 +174,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void login() {
         showLoading();
         MyApplication application = (MyApplication) getApplication();
-        String utoken=sp.getString(MyApplication.SP_Umeng, "");
-        if(TextUtils.isEmpty(utoken)){
-            utoken = application.getUmengToken();
+        String utoken = application.getUmengToken();
+        if (TextUtils.isEmpty(utoken)) {
+            utoken = sp.getString(MyApplication.SP_Umeng, "");
             if (TextUtils.isEmpty(utoken)) {
-//            T.showShort(MyApplication.getInstans(), getString(R.string.login_no_token));
-//            hideLoading();
-//            return;
-                utoken="none_device_token";
-            } else {
-                editor.putString(MyApplication.SP_Umeng,utoken);
+                utoken = "none_device_token";
+                editor.putString(MyApplication.SP_Umeng, utoken);
                 editor.commit();
             }
+        } else {
+            editor.putString(MyApplication.SP_Umeng, utoken);
+            editor.commit();
         }
+
+
         MyApplication.ahc.addHeader("DEVICE-TOKEN", utoken);
 
         RequestParams params = new RequestParams();
@@ -204,7 +205,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if ("0".equals(result)) {
                         hideLoading();
                         spEdit();
-                        editor.putString(Constant.BIND_USER_ID, ((JSONObject) response.get("data")).getString("bind_user_id")+"");
+                        editor.putString(Constant.BIND_USER_ID, ((JSONObject) response.get("data")).getString("bind_user_id") + "");
                         editor.commit();
                         User user = JsonHelper.parseObject((JSONObject) response.get("data"), User.class);
                         //将 user 信息存入到 sp

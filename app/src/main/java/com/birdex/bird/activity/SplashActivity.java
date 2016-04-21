@@ -1,6 +1,8 @@
 package com.birdex.bird.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +22,7 @@ import com.birdex.bird.fragment.BaseFragment;
 import com.birdex.bird.fragment.ImageFragment;
 import com.birdex.bird.interfaces.BackHandledInterface;
 import com.birdex.bird.service.CacheService;
+import com.birdex.bird.util.Constant;
 
 import java.util.ArrayList;
 import java.util.logging.LogRecord;
@@ -54,7 +57,7 @@ public class SplashActivity extends BaseActivity implements BaseFragment.OnFragm
         return R.layout.activity_splash;
     }
 
-    private void startMyService(){
+    private void startMyService() {
         // 开启缓存 service
         Intent service = new Intent(this, CacheService.class);
         startService(service);
@@ -126,7 +129,17 @@ public class SplashActivity extends BaseActivity implements BaseFragment.OnFragm
                 imgThread.notify();
             }
         }
-        startActivity(new Intent("com.bird.app.splashy.CLEARSPLASH"));
+        // 先判断是否是第一次打开app， 如果是第一次 需要加载 功能介绍页， 否则直接跳转登录页
+        SharedPreferences sp = getSharedPreferences(Constant.LOGIN, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        if (sp.getBoolean(Constant.FIRST_ENTRY_APP, true)) {
+            startActivity(new Intent("com.bird.app.splashy.CLEARSPLASH"));
+            editor.putBoolean(Constant.FIRST_ENTRY_APP, false);
+            editor.commit();
+        } else {
+            // 直接跳转到登录页
+            startActivity(new Intent(this, LoginActivity.class));
+        }
         finish();
     }
 

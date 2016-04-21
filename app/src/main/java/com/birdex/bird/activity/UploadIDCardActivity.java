@@ -732,7 +732,7 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                     e.printStackTrace();
                 }
             }
-            ImageUtils.saveBitmapFile(ImageUtils.comp(frontPic.getAbsolutePath(), 2000), leftFile.getAbsolutePath());
+            ImageUtils.saveBitmapFile(ImageUtils.comp(frontPic.getAbsolutePath(), 1900), leftFile.getAbsolutePath());
 
             // 压缩右边图片
             // 先将照片进行压缩并保存

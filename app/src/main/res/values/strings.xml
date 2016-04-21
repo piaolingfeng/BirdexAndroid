@@ -197,9 +197,13 @@
     <string name="inventory_tip_1">获取库存数据失败!</string>
     <string name="inventory_tip_2">库存数据解析失败!</string>
     <string name="inventory_tip_3">数据已经加载完毕!</string>
+    <string name="inventory_item_none">无</string>
     <string name="inventory_item_code">商品编码:</string>
+    <string name="inventory_item_detail">查看详情</string>
     <string name="inventory_item_available">可用</string>
     <string name="inventory_item_occupancy">占用</string>
+    <string name="inventory_item_actual">实际</string>
+    <string name="inventory_item_inventory">所在仓</string>
     <string name="inventory_willin_item_num">待入库数</string>
     <!-- 修改地址 -->
     <string name="consignee">收货人：</string>
@@ -260,6 +264,7 @@
     <string name="title_activity_inventory_inner_detail">InventoryInnerDetailActivity</string>
     <!--仓库详细内容-->
     <string name="inventory_inner_detail_title">商品详情</string>
+    <string name="inventory_willin_detail_title">待入库商品详情</string>
     <string name="tv_detail_inner_available">可用库存：</string>
     <string name="tv_detail_inner_occupancy">订单占用：</string>
     <string name="tv_detail_inner_in">总入库量：</string>
@@ -404,4 +409,10 @@
     <string name="sameorder_item_code">商品编码:</string>
     <string name="sameorder_item_num">数量：</string>
     <string name="version_new">当前已经是最新版本</string>
+    <!--仓库的商品详细信息-->
+    <string name="stock_detail_item_batchncode">批次号：</string>
+    <string name="stock_detail_item_num">数量：</string>
+    <string name="stock_detail_item_expire">有效期：</string>
+    <string name="stock_detail_item_none">无</string>
+    <string name="stock_detail_item_tip1">没有可用数据显示!</string>
 </resources>

@@ -169,6 +169,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppCompat.translucent"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".activity.StockDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompat.translucent"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
     </application>
 
 </manifest>

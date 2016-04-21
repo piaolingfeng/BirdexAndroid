@@ -35,6 +35,7 @@ public class Constant {
     //SP个人信息
     public static final String SP_UserInfo="login";
     public static final String SP_UserInfo_Bind="bind_user_id";
+    public static final String SP_UserInfo_usercode="user_code";
     //设置系统的别名类型
     public static final String Alias_Type="com.birdex.alias";
 

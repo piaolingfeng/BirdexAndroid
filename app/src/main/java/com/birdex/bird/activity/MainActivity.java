@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.adapter.OrderManagerAdapter;
+import com.birdex.bird.entity.User;
 import com.birdex.bird.fragment.BaseFragment;
 import com.birdex.bird.fragment.CustomServiceFragment;
 import com.birdex.bird.fragment.HelpFragment;
@@ -73,8 +74,8 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
         startService(intent);
         MyApplication application=(MyApplication)getApplication();
         application.getUmengToken();
-        String bindID=userPreferences.getString(Constant.SP_UserInfo_Bind,"");
-        application.setAlias(bindID);
+        String usercode=userPreferences.getString(Constant.SP_UserInfo_usercode,"");
+        application.setAlias(usercode);
     }
 
     public void setSelectTV() {

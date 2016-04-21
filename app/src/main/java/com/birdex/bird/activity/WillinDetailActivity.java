@@ -57,7 +57,7 @@ public class WillinDetailActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void initializeContentViews() {
         inflater = LayoutInflater.from(this);
-        tiv_head.setInventoryDetail(getString(R.string.inventory_inner_detail_title), R.color.gray1);
+        tiv_head.setInventoryDetail(getString(R.string.inventory_willin_detail_title), R.color.gray1);
         elv_detail.setOnGroupClickListener(this);
         params = new RequestParams();
         bundle = getIntent().getExtras();

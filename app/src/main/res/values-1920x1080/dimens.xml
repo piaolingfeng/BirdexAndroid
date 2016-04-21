@@ -56,4 +56,10 @@
     <dimen name="same_order_head_paddtb">8dp</dimen>
     <dimen name="same_order_list_paddtop">8dp</dimen>
     <dimen name="same_order_list_paddbottom">15dp</dimen>
+    <!--stockdetail-->
+    <dimen name="stock_detail_marginlr">10dp</dimen>
+    <dimen name="stock_detail_paddlr">5dp</dimen>
+    <dimen name="stock_detail_context_paddlr">5dp</dimen>
+    <dimen name="stock_detail_item_paddtb">5dp</dimen>
+    <dimen name="stock_detail_item_paddlr">5dp</dimen>
 </resources>

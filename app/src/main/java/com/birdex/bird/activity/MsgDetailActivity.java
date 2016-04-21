@@ -94,10 +94,10 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
         inventoryAdapter = new MsgInventoryAdapter(MsgDetailActivity.this, listEntity.getData().getMessages());
         orderAdapter = new MsgOrderAdapter(this, listEntity.getData().getMessages(), title);
         countAdapter = new MsgCountAdapter(this, listEntity.getData().getMessages());
-        if (msg_list_name_id[0].equals(title)) {
+        if (msg_list_name[0].equals(title)) {
             rcy.setAdapter(inventoryAdapter);
         } else {
-            if (msg_list_name_id[4].equals(title)) {
+            if (msg_list_name[4].equals(title)) {
                 rcy.setAdapter(countAdapter);
             } else {
                 rcy.setAdapter(orderAdapter);
@@ -212,15 +212,15 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
         params.add("page_no", inventoryPage_no + "");
         params.add("start_date", TimeUtil.getMonthDelayData());//默认30天内的
         params.add("end_date", TimeUtil.getCurrentData());
-        if (msg_list_name_id[0].equals(title))
+        if (msg_list_name[0].equals(title))
             params.add("msg_type", Constant.MSG_STOCK_WARNING);
-        if (msg_list_name_id[1].equals(title))
+        if (msg_list_name[1].equals(title))
             params.add("msg_type", Constant.MSG_ORDER_IDCARD_EXCEPTION);
-        if (msg_list_name_id[2].equals(title))
+        if (msg_list_name[2].equals(title))
             params.add("msg_type", Constant.MSG_ORDER_STOCK_EXCEPTION);
-        if (msg_list_name_id[3].equals(title))
+        if (msg_list_name[3].equals(title))
             params.add("msg_type", Constant.MSG_ORDER_VERIFY_FAIL);
-        if (msg_list_name_id[4].equals(title))
+        if (msg_list_name[4].equals(title))
             params.add("msg_type", Constant.MSG_ACCOUNT_EXCEPTION);
         JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
@@ -228,7 +228,7 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
                 if (response != null) {
                     listEntity = GsonHelper.getPerson(response.toString(), MsgListEntity.class);
                     if (listEntity != null) {
-                        if (listEntity.getData().getPage_num() != 20 && inventoryPage_no > 1) {
+                        if (listEntity.getData().getMessages().size() != 20 && inventoryPage_no > 1) {
                             T.showShort(MyApplication.getInstans(), "已经是最后一页");
                         } else {
 //                            listEntity.getData().getMessages().addAll(listEntity.getData().getMessages());

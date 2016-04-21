@@ -89,12 +89,12 @@
     <!--我的库存item中的蓝色字体-->
     <style name="inventory_item_blue1" parent="android:TextAppearance.Widget.TextView">
         <item name="android:textColor">@color/inventory_item_blue</item>
-        <item name="android:textSize">@dimen/inventory_item_number</item>
+        <item name="android:textSize">@dimen/inventory_item_code</item>
     </style>
 
     <style name="inventory_item_black1" parent="android:TextAppearance.Widget.TextView">
         <item name="android:textColor">@color/inventory_item_black</item>
-        <item name="android:textSize">@dimen/inventory_item_number</item>
+        <item name="android:textSize">@dimen/inventory_item_code</item>
     </style>
 
     <style name="inventory_item_gray1" parent="android:TextAppearance.Widget.TextView">

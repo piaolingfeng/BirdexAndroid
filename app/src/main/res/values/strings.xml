@@ -411,4 +411,10 @@
     <string name="loading">正在加载...</string>
     <string name="load_succeed">加载成功</string>
     <string name="load_fail">加载失败</string>
+
+    <string name="msg_1">STOCK_WARNING</string>
+    <string name="msg_2">ORDER_IDCARD_EXCEPTION</string>
+    <string name="msg_3">ORDER_STOCK_EXCEPTION</string>
+    <string name="msg_4">ORDER_VERIFY_FAIL</string>
+    <string name="msg_5">ACCOUNT_EXCEPTION</string>
 </resources>

@@ -174,16 +174,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void login() {
         showLoading();
         MyApplication application = (MyApplication) getApplication();
-        String utoken = application.getUmengToken();
-        if (TextUtils.isEmpty(utoken)) {
-            T.showShort(MyApplication.getInstans(), getString(R.string.login_no_token));
-            hideLoading();
-            return;
-        } else {
-            editor.putString(MyApplication.SP_Umeng,utoken);
-            editor.commit();
+        String utoken=sp.getString(MyApplication.SP_Umeng, "");
+        if(TextUtils.isEmpty(utoken)){
+            utoken = application.getUmengToken();
+            if (TextUtils.isEmpty(utoken)) {
+//            T.showShort(MyApplication.getInstans(), getString(R.string.login_no_token));
+//            hideLoading();
+//            return;
+                utoken="none_device_token";
+            } else {
+                editor.putString(MyApplication.SP_Umeng,utoken);
+                editor.commit();
+            }
         }
-
         MyApplication.ahc.addHeader("DEVICE-TOKEN", utoken);
 
         RequestParams params = new RequestParams();

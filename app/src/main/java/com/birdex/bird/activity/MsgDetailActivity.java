@@ -11,8 +11,6 @@ import com.birdex.bird.adapter.MsgOrderAdapter;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.InventorySimpleEntity;
 import com.birdex.bird.entity.MsgListEntity;
-import com.birdex.bird.entity.OrderListEntity;
-import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.T;
@@ -45,8 +43,8 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
     @Bind(R.id.tv_clear)
     TextView tv_clear;
     String title = "";
+    public String[] msg_list_name_id = null;
     public String[] msg_list_name = null;
-
     MsgInventoryAdapter inventoryAdapter;
     MsgOrderAdapter orderAdapter;
     MsgCountAdapter countAdapter;
@@ -79,8 +77,8 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
         listEntity = new MsgListEntity();
         inventoryAdapter = new MsgInventoryAdapter(MsgDetailActivity.this, listEntity.getData().getMessages());
         orderAdapter = new MsgOrderAdapter(this, listEntity.getData().getMessages(), title);
-        countAdapter = new MsgCountAdapter(this,listEntity.getData().getMessages());
-        title_view.setInventoryDetail(title, R.color.gray1);
+        countAdapter = new MsgCountAdapter(this, listEntity.getData().getMessages());
+
         rcy.setLayoutManager(new FullyLinearLayoutManager(this));
         rcy.setLoadingListener(this);
 //        rcy.setPullRefreshEnabled(false);
@@ -88,28 +86,26 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
         rcy.setPullRefreshEnabled(false);
         rcy.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL_LIST));
+        msg_list_name_id = getResources().getStringArray(R.array.msg_list_name_id);
         msg_list_name = getResources().getStringArray(R.array.msg_list_name);
-//        if (msg_list_name.length >= 5) {
-//            if (msg_list_name[0].equals(title)) {
-//                rcy.setAdapter(inventoryAdapter);
-////                getInvenList();
-//            } else if (msg_list_name[4].equals(title)) {
-//                T.showLong(this, getString(R.string.please_wail));
-//            } else {
-//                if (msg_list_name[1].equals(title)) {
-////                    requestEntity.setStatus("3");
-//                }
-//                if (msg_list_name[2].equals(title)) {
-////                    requestEntity.setStatus("4");
-//                }
-//                if (msg_list_name[3].equals(title)) {
-////                    requestEntity.setStatus("30");//审核不通过
-//                }
-////                getOrderList("");
+        for (int i = 0; i < msg_list_name_id.length; i++) {//解析msg_id
+            if (title.equals(msg_list_name_id[i])) {
+                title = msg_list_name[i];
+                break;
+            }
+        }
+        title_view.setInventoryDetail(title, R.color.gray1);
+        if (msg_list_name_id[0].equals(title)) {
+            rcy.setAdapter(inventoryAdapter);
+        } else {
+            if (msg_list_name_id[4].equals(title)) {
+                rcy.setAdapter(countAdapter);
+            } else {
+                rcy.setAdapter(orderAdapter);
+            }
+        }
+
         getMsgList("");
-//                rcy.setAdapter(orderAdapter);
-//            }
-//        }
     }
 
 
@@ -217,26 +213,27 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
         params.add("page_no", inventoryPage_no + "");
         params.add("start_date", TimeUtil.getMonthDelayData());//默认30天内的
         params.add("end_date", TimeUtil.getCurrentData());
-        if (msg_list_name[0].equals(title))
+        if (msg_list_name_id[0].equals(title))
             params.add("msg_type", Constant.MSG_STOCK_WARNING);
-        if (msg_list_name[1].equals(title))
+        if (msg_list_name_id[1].equals(title))
             params.add("msg_type", Constant.MSG_ORDER_IDCARD_EXCEPTION);
-        if (msg_list_name[2].equals(title))
+        if (msg_list_name_id[2].equals(title))
             params.add("msg_type", Constant.MSG_ORDER_STOCK_EXCEPTION);
-        if (msg_list_name[3].equals(title))
+        if (msg_list_name_id[3].equals(title))
             params.add("msg_type", Constant.MSG_ORDER_VERIFY_FAIL);
-        if (msg_list_name[4].equals(title))
+        if (msg_list_name_id[4].equals(title))
             params.add("msg_type", Constant.MSG_ACCOUNT_EXCEPTION);
         JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 if (response != null) {
-                    MsgListEntity entity = GsonHelper.getPerson(response.toString(), MsgListEntity.class);
-                    if (entity != null) {
-                        if (entity.getData().getPage_num() != 20 && inventoryPage_no > 1) {
+                    listEntity = GsonHelper.getPerson(response.toString(), MsgListEntity.class);
+                    if (listEntity != null) {
+                        if (listEntity.getData().getPage_num() != 20 && inventoryPage_no > 1) {
                             T.showShort(MyApplication.getInstans(), "已经是最后一页");
                         } else {
-                            listEntity.getData().getMessages().addAll(entity.getData().getMessages());
+//                            listEntity.getData().getMessages().addAll(listEntity.getData().getMessages());
+//                            orderAdapte/.notifyDataSetChanged();
 //                            inventoryAdapter.getList().addAll(InvenEntity.getProducts());
 //                            inventoryAdapter.notifyDataSetChanged();
                             bus.post(title, "msg_list_update");
@@ -286,16 +283,8 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
 
     @Override
     public void onLoadMore() {
-//        entity.setPage_no(entity.getPage_no() + 1);
-//        bus.post(entity, "requestOrderList");
-//        requestEntity.se
-//        if (msg_list_name[0].equals(title)) {
         inventoryPage_no++;
-//            getInvenList();
-//        } else {
-//            requestEntity.setPage_no(requestEntity.getPage_no() + 1);
         bus.post("", "MsgOrderLoadMore");
-//        }
     }
 
     /*
@@ -320,18 +309,18 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
 
     @Subscriber(tag = "msg_list_update")
     public void listUpdate(String text) {
-        if (msg_list_name[0].equals(title)) {
-            inventoryAdapter.setList(listEntity.getData().getMessages());
-            rcy.setAdapter(inventoryAdapter);
+        if (msg_list_name_id[0].equals(title)) {
+            inventoryAdapter.getList().addAll(listEntity.getData().getMessages());
+//            rcy.setAdapter(inventoryAdapter);
             inventoryAdapter.notifyDataSetChanged();
         } else {
-            if (msg_list_name[4].equals(title)) {
-                countAdapter.setList(listEntity.getData().getMessages());
-                rcy.setAdapter(countAdapter);
+            if (msg_list_name_id[4].equals(title)) {
+                countAdapter.getList().addAll(listEntity.getData().getMessages());
+//                rcy.setAdapter(countAdapter);
                 countAdapter.notifyDataSetChanged();
             } else {
-                orderAdapter.setList(listEntity.getData().getMessages());
-                rcy.setAdapter(orderAdapter);
+                orderAdapter.getList().addAll(listEntity.getData().getMessages());
+//                rcy.setAdapter(orderAdapter);
                 orderAdapter.notifyDataSetChanged();
             }
         }

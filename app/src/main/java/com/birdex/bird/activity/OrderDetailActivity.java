@@ -28,13 +28,15 @@ import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
+import java.util.HashMap;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 
 /**
  * Created by chuming.zhuang on 2016/4/12.
  */
-public class OrderDetailActivity extends BaseActivity implements View.OnClickListener{
+public class OrderDetailActivity extends BaseActivity implements View.OnClickListener {
 
     @Bind(R.id.title_view)
     TitleView title_view;
@@ -196,8 +198,10 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     @Subscriber(tag = "changeAddr")
-    public void changeAddr(String string) {
-        tv_addr.setText(string);
+    public void changeAddr(HashMap map) {
+        if (map != null) {
+            tv_addr.setText(map.get("changeAddr") + "");
+        }
     }
 
     @Subscriber(tag = "checkIDCard")
@@ -223,9 +227,14 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(),
                         drawable.getMinimumHeight());
                 tv_id_check.setCompoundDrawables(drawable, null, null, null);
-
             } else {
                 tv_id_check.setText(getString(R.string.tv_id_wait_check));
+                Drawable drawable = getResources()
+                        .getDrawable(R.drawable.error);
+/// 这一步必须要做,否则不会显示.
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(),
+                        drawable.getMinimumHeight());
+                tv_id_check.setCompoundDrawables(null, null, null, null);
             }
         }
     }
@@ -236,10 +245,10 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         super.onDestroy();
     }
 
-    @OnClick({R.id.tv_id_check,R.id.tv_receiver_phone})
+    @OnClick({R.id.tv_id_check, R.id.tv_receiver_phone})
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tv_id_check:
                 upLoadIDCard(OrderDetailActivity.this, orderDetailEntity.getData().getOrder_code(), orderDetailEntity.getData().getReceiver_id_card());
                 break;

@@ -16,6 +16,10 @@ import com.birdex.bird.entity.MsgListEntity;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.util.decoration.FullyLinearLayoutManager;
 
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
+
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -56,8 +60,8 @@ public class MsgOrderAdapter extends RecyclerView.Adapter<MsgOrderAdapter.MsgOrd
         holder.tv_text_title.setText(currentName);
         holder.tv_create_time.setText(list.get(position).getCreated_date());
         holder.tv_order_num.setText(list.get(position).getMsg_content().getOrder_oms_no());
-        holder.tv_recevice_addr.setText(list.get(position).getMsg_content().getReceiver_name() + "," + list.get(position).getMsg_content().getReceiver_mobile()
-                + list.get(position).getMsg_content().getReceiver_province() + list.get(position).getMsg_content().getReceiver_city()
+        holder.tv_recevice_addr.setText(list.get(position).getMsg_content().getReceiver_name() + " ," + list.get(position).getMsg_content().getReceiver_mobile()
+                + " ," + list.get(position).getMsg_content().getReceiver_province() + list.get(position).getMsg_content().getReceiver_city()
                 + list.get(position).getMsg_content().getReceiver_area() + list.get(position).getMsg_content().getReceiver_address());//缺了收件人地址
         holder.tv_error.setText(list.get(position).getMsg_content().getVerify_fail_detail());
         if (currentName.contains(mContext.getString(R.string.msg_idcard_exception))) {
@@ -69,7 +73,7 @@ public class MsgOrderAdapter extends RecyclerView.Adapter<MsgOrderAdapter.MsgOrd
             @Override
             public void onClick(View v) {
                 if (currentName.contains(mContext.getString(R.string.msg_check_exception)))
-                    startChangeAddrActivity(list.get(position).getMsg_content().getOrder_code());
+                    startChangeAddrActivity(list.get(position).getMsg_content().getOrder_code(), position);
                 else
                     upLoadIDCard(mContext, list.get(position).getMsg_content().getOrder_code(), "");//订单列表没有身份证id,只能穿order_code
             }
@@ -113,9 +117,10 @@ public class MsgOrderAdapter extends RecyclerView.Adapter<MsgOrderAdapter.MsgOrd
     /**
      * 修改地址
      */
-    public void startChangeAddrActivity(String order_code) {
+    public void startChangeAddrActivity(String order_code, int position) {
         Intent intent = new Intent(mContext, ChangeAdressActivity.class);
         intent.putExtra("order_code", order_code);
+        intent.putExtra("MSG_position", position);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
     }
@@ -156,11 +161,19 @@ public class MsgOrderAdapter extends RecyclerView.Adapter<MsgOrderAdapter.MsgOrd
         public MsgOrderHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            EventBus.getDefault().register(this);
         }
 
         @Override
         public void onClick(View v) {
 
+        }
+
+        @Subscriber(tag = "changeAddr")
+        public void changeAddr(HashMap map) {
+            if (map != null && position == map.get("MSG_position")) {
+                tv_recevice_addr.setText(map.get("changeAddr") + "");
+            }
         }
     }
 }

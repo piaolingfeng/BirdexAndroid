@@ -59,4 +59,12 @@
         <item >@string/msg_check_exception</item>
         <item >@string/msg_account_exception</item>
     </string-array>
+
+    <string-array name="msg_list_name_id">
+        <item >@string/msg_1</item>
+        <item >@string/msg_2</item>
+        <item >@string/msg_3</item>
+        <item >@string/msg_4</item>
+        <item >@string/msg_5</item>
+    </string-array>
 </resources>

@@ -89,7 +89,7 @@ public class NotificationService extends UmengBaseIntentService {
 //        sounduri=Uri.parse("android.resource://" + getPackageName() + "/" +R.raw.fv);
         sharedPreferences = getSharedPreferences(Constant.SP_NAME, Activity.MODE_PRIVATE);
         pushAidl = new PushAidlImpl(this);
-        time1=(new Date()).getTime();
+//        time1=(new Date()).getTime();
     }
 
     @Override

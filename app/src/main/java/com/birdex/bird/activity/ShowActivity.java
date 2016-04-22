@@ -38,17 +38,17 @@ public class ShowActivity extends Activity {
 		dots.add(findViewById(R.id.dot_1));
 		dots.add(findViewById(R.id.dot_2));
 		dots.add(findViewById(R.id.dot_3));
-		dots.add(findViewById(R.id.dot_4));
+//		dots.add(findViewById(R.id.dot_4));
 		// 得到viewPager的布局
 		LayoutInflater lf = LayoutInflater.from(ShowActivity.this);
 		view1 = lf.inflate(R.layout.viewpager_item1, null);
 		view2 = lf.inflate(R.layout.viewpager_item2, null);
 		view3 = lf.inflate(R.layout.viewpager_item3, null);
-		view4 = lf.inflate(R.layout.viewpager_item4, null);
+//		view4 = lf.inflate(R.layout.viewpager_item4, null);
 		viewList.add(view1);
 		viewList.add(view2);
 		viewList.add(view3);
-		viewList.add(view4);
+//		viewList.add(view4);
 		// 找到点击进入那个按钮
 		mViewPager = (ViewPager) findViewById(R.id.vp);
 
@@ -80,7 +80,7 @@ public class ShowActivity extends Activity {
 			}
 		});
 
-		entry = (ImageView) view4.findViewById(R.id.entry);
+		entry = (ImageView) view3.findViewById(R.id.entry);
 		entry.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

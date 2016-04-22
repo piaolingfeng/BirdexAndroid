@@ -17,6 +17,7 @@ import org.apache.http.Header;
 public class BirdApi {
 
     public static String SERVER_ADDRESS = "192.168.1.207";
+//    public static String SERVER_ADDRESS = "api.beta1.b.birdex.cn";
     public static String PORT = "8089";//8002
     public static String BASE_URL = "http://" + SERVER_ADDRESS + ":" + PORT;//
 
@@ -94,8 +95,8 @@ public class BirdApi {
 
     // 获取更新信息
     public static void upDateMessage(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
-//        MyApplication.ahc.get(context, "http://192.168.1.201:8099/sanfangcang.html", params, jsonHttpResponseHandler);
-        MyApplication.ahc.get(context, "http://app.birdex.cn/sanfangcang.html", params, jsonHttpResponseHandler);
+        MyApplication.ahc.get(context, "http://192.168.1.201:8099/sanfangcang.html", params, jsonHttpResponseHandler);
+//        MyApplication.ahc.get(context, "http://app.birdex.cn/sanfangcang.html", params, jsonHttpResponseHandler);
     }
 
     // 获取公司信息
@@ -173,6 +174,7 @@ public class BirdApi {
 
     // 上传公司 logo
     public static void upLoadLogo(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+//        MyApplication.ahc.post("http://file.beta1.b.birdex.cn/upload/companyLogo", params, jsonHttpResponseHandler);
         MyApplication.ahc.post("http://192.168.1.207:8090/upload/companyLogo", params, jsonHttpResponseHandler);
     }
 
@@ -222,7 +224,8 @@ public class BirdApi {
 
     // 上传身份证图片
     public static void uploadIDCardPic(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
-        MyApplication.ahc.post("http://192.168.1.207:8090/upload/IDCard", params, jsonHttpResponseHandler);
+//        MyApplication.ahc.post("http://192.168.1.207:8090/upload/IDCard", params, jsonHttpResponseHandler);
+        MyApplication.ahc.post("http://file.beta1.b.birdex.cn/upload/IDCard", params, jsonHttpResponseHandler);
     }
 
     // 删除身份证， 需要调用 修改订单 接口

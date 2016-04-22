@@ -28,6 +28,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
@@ -64,9 +65,10 @@ public class PredicitionDetailActivity extends BaseActivity {
     String storage_code;
     EventBus bus;
     PredicitionDetailAdapter adapter;
-    public  static int fragment_position = 0;
+    public static int fragment_position = 0;
 
     String tag = "PredicitionDetailActivity";
+
     @Override
     public int getContentLayoutResId() {
         return R.layout.activity_predicition_layout;
@@ -97,7 +99,7 @@ public class PredicitionDetailActivity extends BaseActivity {
         showLoading();
         RequestParams params = new RequestParams();
         params.add("storage_code", storage_code);
-        BirdApi.getStorageDetail(this, params, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onFinish() {
                 hideLoading();
@@ -106,28 +108,46 @@ public class PredicitionDetailActivity extends BaseActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                entity = GsonHelper.getPerson(response.toString(), PredicitionDetailEntity.class);
-                if (entity != null)
-                    bus.post("", "predicitiondetail");
-                else {
-                    try {
-                        if (response.get("data") != null)
-                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
-                        else
-                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                try {
+                    if (response == null) {
+                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
+                        return;
                     }
+                    if (0 == response.get("error")) {
+                        entity = GsonHelper.getPerson(response.toString(), PredicitionDetailEntity.class);
+                        if (entity != null)
+                            bus.post("", "predicitiondetail");
+                        else {
+                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
+                        }
+                    } else {
+                        T.showLong(MyApplication.getInstans(), response.get("data") + "");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
             @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                if (errorResponse != null)
-                    T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
-        });
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        };
+        handler.setTag(tag);
+        BirdApi.getStorageDetail(this, params, handler);
     }
 
     @Subscriber(tag = "predicitiondetail")
@@ -216,25 +236,27 @@ public class PredicitionDetailActivity extends BaseActivity {
         JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                if (response != null) {
-                    try {
-                        String success = (String) response.get("data");
-                        int error = (int) response.get("error");
-                        if (error == 0) {
-                            if (success != null && success.equals("success")) {
-                                bus.post(position, "confirm");//刷新当前页面
-                                bus.post("", "getTodayData");//刷新今日看板数据
-                                if (position == -1) {//-1为刷新全部状态
-                                    bus.post(fragment_position, "confirm_fragment_adapter");//刷新fragment页面
-                                }
-                                T.showLong(PredicitionDetailActivity.this, getString(R.string.confirm_success));
-                            }
-                        } else {
-                            T.showLong(PredicitionDetailActivity.this, success);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                try {
+                    if (response == null) {
+                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
+                        return;
                     }
+                    String success = (String) response.get("data");
+                    int error = (int) response.get("error");
+                    if (error == 0) {
+                        if (success != null && success.equals("success")) {
+                            bus.post(position, "confirm");//刷新当前页面
+                            bus.post("", "getTodayData");//刷新今日看板数据
+                            if (position == -1) {//-1为刷新全部状态
+                                bus.post(fragment_position, "confirm_fragment_adapter");//刷新fragment页面
+                            }
+                            T.showLong(PredicitionDetailActivity.this, getString(R.string.confirm_success));
+                        }
+                    } else {
+                        T.showLong(PredicitionDetailActivity.this, success);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -245,8 +267,20 @@ public class PredicitionDetailActivity extends BaseActivity {
             }
 
             @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                T.showLong(PredicitionDetailActivity.this, errorResponse.toString());
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         };
@@ -267,21 +301,23 @@ public class PredicitionDetailActivity extends BaseActivity {
         params.add("storage_code", storage_code);
         params.add("product_code", product_code);
         params.add("remark", remark);
-        JsonHttpResponseHandler handler =  new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                if (response != null) {
-                    try {
-                        String success = (String) response.get("data");
-                        int error = (int) response.get("error");
-                        if (success != null && error == 0) {
-                            bus.post(position, "re_confirm");//刷新当前页面
-                            T.showLong(PredicitionDetailActivity.this, getString(R.string.confirm_re_success));
-                        } else
-                            T.showLong(PredicitionDetailActivity.this, success);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                try {
+                    if (response == null) {
+                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
+                        return;
                     }
+                    String success = (String) response.get("data");
+                    int error = (int) response.get("error");
+                    if (success != null && error == 0) {
+                        bus.post(position, "re_confirm");//刷新当前页面
+                        T.showLong(PredicitionDetailActivity.this, getString(R.string.confirm_re_success));
+                    } else
+                        T.showLong(PredicitionDetailActivity.this, success);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -292,13 +328,25 @@ public class PredicitionDetailActivity extends BaseActivity {
             }
 
             @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                T.showLong(PredicitionDetailActivity.this, errorResponse.toString());
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         };
         handler.setTag(tag);
-        BirdApi.setReviewStorage(this, params,handler);
+        BirdApi.setReviewStorage(this, params, handler);
     }
 
     @Override

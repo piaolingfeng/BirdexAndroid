@@ -24,6 +24,8 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
@@ -37,7 +39,7 @@ import butterknife.OnClick;
  * Created by chuming.zhuang on 2016/4/12.
  */
 public class OrderDetailActivity extends BaseActivity implements View.OnClickListener {
-
+    String tag = "OrderDetailActivity";
     @Bind(R.id.title_view)
     TitleView title_view;
     @Bind(R.id.tv_order_num)
@@ -103,22 +105,47 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         showLoading();
         RequestParams params = new RequestParams();
         params.add("order_code", order_code);
-        BirdApi.getOrder(this, params, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                if (errorResponse != null)
-                    T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
 
             @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+
+            @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                orderDetailEntity = GsonHelper.getPerson(response.toString(), OrderDetailEntity.class);
-                if (orderDetailEntity != null) {
-                    bus.post(orderDetailEntity, "detail");
-                } else {
-                    T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
+//                    T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
+                try {
+                    if (response == null) {
+                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
+                        return;
+                    }
+                    if (0 == response.get("error")) {
+                        orderDetailEntity = GsonHelper.getPerson(response.toString(), OrderDetailEntity.class);
+                        if (orderDetailEntity != null) {
+                            bus.post(orderDetailEntity, "detail");
+                        }else {
+                            T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
+                        }
+                    } else {
+                        T.showLong(MyApplication.getInstans(), response.get("data") + "");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -127,7 +154,9 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                 hideLoading();
                 super.onFinish();
             }
-        });
+        };
+        handler.setTag(tag);
+        BirdApi.getOrder(this, params, handler);
     }
 
     @Subscriber(tag = "detail")
@@ -241,7 +270,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void onDestroy() {
-        BirdApi.cancelAllRequest();
+        BirdApi.cancelRequestWithTag(tag);
         super.onDestroy();
     }
 

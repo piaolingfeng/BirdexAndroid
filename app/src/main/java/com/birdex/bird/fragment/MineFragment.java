@@ -171,17 +171,21 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 //					super.onSuccess(statusCode, headers, response);
                 try {
-                    JSONObject jsonObject = (JSONObject) response.get("android");
-                    String updateUrl = (String) jsonObject.get("url");
-                    String description = (String) jsonObject.get("description");
-                    String versionServer = (String) jsonObject.get("version");
-                    // 检查更新
-                    if (!MyApplication.app_version.equals(versionServer)) {
-                        UpdateManager.getInstance().setDownLoadPath(updateUrl);
-                        // 如果不相等，执行更新操作
-                        UpdateManager.getInstance().set(getActivity(), description);
+                    if (response!=null) {
+                        JSONObject jsonObject = (JSONObject) response.get("android");
+                        String updateUrl = (String) jsonObject.get("url");
+                        String description = (String) jsonObject.get("description");
+                        String versionServer = (String) jsonObject.get("version");
+                        // 检查更新
+                        if (!MyApplication.app_version.equals(versionServer)) {
+                            UpdateManager.getInstance().setDownLoadPath(updateUrl);
+                            // 如果不相等，执行更新操作
+                            UpdateManager.getInstance().set(getActivity(), description);
+                        } else {
+                            T.showShort(getActivity(), getString(R.string.version_new));
+                        }
                     }else {
-                        T.showShort(getActivity(), getString(R.string.version_new));
+                        T.showShort(getActivity(), getString(R.string.request_error));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -190,21 +194,18 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                hideLoading();
 //					super.onFailure(statusCode, headers, responseString, throwable);
                 T.showShort(MyApplication.getInstans(), "获取更新信息失败");
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                hideLoading();
                 T.showShort(MyApplication.getInstans(), "获取更新信息失败");
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                hideLoading();
                 T.showShort(MyApplication.getInstans(), "获取更新信息失败");
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }

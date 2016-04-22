@@ -11,7 +11,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -22,23 +21,21 @@ import com.birdex.bird.R;
 import com.birdex.bird.activity.MipcaActivityCapture;
 import com.birdex.bird.activity.MyOrderListActivity;
 import com.birdex.bird.activity.OrderDetailActivity;
-import com.birdex.bird.adapter.CommonSimpleAdapter;
 import com.birdex.bird.adapter.OrderListAdapter;
 import com.birdex.bird.adapter.OrderStatusAdapter;
 import com.birdex.bird.adapter.OrderTimeAdapter;
 import com.birdex.bird.adapter.OrderWareHouseAdapter;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.entity.OrderStatus;
-import com.birdex.bird.entity.WarehouseEntity;
-import com.birdex.bird.util.Constant;
-import com.birdex.bird.util.StringUtils;
-import com.birdex.bird.util.decoration.DividerItemDecoration;
-import com.birdex.bird.util.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.entity.OrderRequestEntity;
+import com.birdex.bird.entity.OrderStatus;
+import com.birdex.bird.entity.WarehouseEntity;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.GsonHelper;
+import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
+import com.birdex.bird.util.decoration.DividerItemDecoration;
+import com.birdex.bird.util.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.widget.ClearEditText;
 import com.birdex.bird.widget.xrecyclerview.XRecyclerView;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -131,37 +128,48 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
-                if (orderListEntities != null) {
-                    if (entity.getPage_no() > 1)
-                        if (orderListEntities.getData().getOrders().size() == 0 && entity.getPage_no() > 1) {
-                            T.showShort(MyApplication.getInstans(), "已经是最后一页");
-                        } else {
-                            OrderAdapter.getList().addAll(orderListEntities.getData().getOrders());
-                            orderListEntities.getData().setOrders(OrderAdapter.getList());
+                try {
+                    if (0 == response.get("error")) {
+                        orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
+                        if (orderListEntities != null) {
+                            if (entity.getPage_no() > 1)
+                                if (orderListEntities.getData().getOrders().size() == 0 && entity.getPage_no() > 1) {
+                                    T.showShort(MyApplication.getInstans(), "已经是最后一页");
+                                } else {
+                                    OrderAdapter.getList().addAll(orderListEntities.getData().getOrders());
+                                    orderListEntities.getData().setOrders(OrderAdapter.getList());
+                                }
+                            else {
+                                OrderAdapter.setList(orderListEntities.getData().getOrders());
+                            }
+                            bus.post(orderListEntities.getData().getCount(), "Order_frame_layout");//刷新个数及界面
+                            OrderAdapter.notifyDataSetChanged();
+                        }else {
+                            T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
                         }
-                    else {
-                        OrderAdapter.setList(orderListEntities.getData().getOrders());
+                    } else {
+                        T.showLong(MyApplication.getInstans(), response.get("data") + "");
                     }
-                    bus.post(orderListEntities.getData().getCount(), "Order_frame_layout");//刷新个数及界面
-                    OrderAdapter.notifyDataSetChanged();
-                } else {
-                    try {
-                        if (response.get("data") != null)
-                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
-                        else
-                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
             @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                stopHttpAnim();
-                if (errorResponse != null)
-                    T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
 
@@ -215,7 +223,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
 
     public void initView() {
         orderListEntities = new OrderListEntity();
-        if (bundle!=null) {
+        if (bundle != null) {
             entity = (OrderRequestEntity) bundle.getSerializable("entity");
         }
         if (entity == null) {
@@ -267,14 +275,16 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
 //        SearchOrderList(entity);
         getOrderList();
     }
+
     @Subscriber(tag = "order_visible")
-    public void FloatActionVisble(boolean flag){
-        if (flag){
+    public void FloatActionVisble(boolean flag) {
+        if (flag) {
             fab_inventory_gotop.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             fab_inventory_gotop.setVisibility(View.GONE);
         }
     }
+
     /**
      * 滚动到顶部
      */

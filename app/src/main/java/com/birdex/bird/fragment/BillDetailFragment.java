@@ -43,16 +43,18 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
     public Button btn_datepick;
     @Bind(R.id.tv_person_timeshow)
     public TextView tv_timeshow;
+    @Bind(R.id.tv_personal_detail_nodata)
+    public TextView tv_nodata;
     //popwin的开始日期
     private DatePicker dp_start;
     //popwin的结束日期
     private DatePicker dp_end;
     //取消按钮
-    private Button btn_pickdate_cancel=null;
+    private Button btn_pickdate_cancel = null;
     //清除按钮
-    private Button btn_pickdate_clear=null;
+    private Button btn_pickdate_clear = null;
     //确定按钮
-    private Button btn_pickdate_sure=null;
+    private Button btn_pickdate_sure = null;
     //设置参数
     private RequestParams params = null;
     private ArrayList<TransactionEntity> list = null;
@@ -68,9 +70,9 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
     private boolean isLastPage = false;
     private Calendar today = Calendar.getInstance();
     //当前页面 从1开始
-    private int currentPage=1;
+    private int currentPage = 1;
 
-//    private void init(){
+    //    private void init(){
 //        //初始化解析的类
 //        maBiz = new MyAccountBiz();
 //        //初始化请求参数
@@ -106,7 +108,7 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
 //        //开始数据请求
 //        startHttpRequest(http_Request_Refresh);
 //    }
-        @Override
+    @Override
     public int getContentLayoutResId() {
         return R.layout.fragment_personal_details_list;
     }
@@ -148,10 +150,11 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
         //开始数据请求
         startHttpRequest(http_Request_Refresh);
     }
+
     /**
-     *初始化弹出窗的里面控件
+     * 初始化弹出窗的里面控件
      */
-    private void initPopWin(View contentView){
+    private void initPopWin(View contentView) {
         //初始化开始日期
         dp_start = (DatePicker) contentView.findViewById(R.id.dp_date_startpicker);
         //初始化日期
@@ -162,15 +165,16 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
         dp_end.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH), this);
         //三个按钮事件
         //取消
-        btn_pickdate_cancel=(Button)contentView.findViewById(R.id.btn_pick_date_cancel);
+        btn_pickdate_cancel = (Button) contentView.findViewById(R.id.btn_pick_date_cancel);
         btn_pickdate_cancel.setOnClickListener(this);
         //取消
-        btn_pickdate_clear=(Button)contentView.findViewById(R.id.btn_pick_date_clear);
+        btn_pickdate_clear = (Button) contentView.findViewById(R.id.btn_pick_date_clear);
         btn_pickdate_clear.setOnClickListener(this);
         //取消
-        btn_pickdate_sure=(Button)contentView.findViewById(R.id.btn_pick_date_sure);
+        btn_pickdate_sure = (Button) contentView.findViewById(R.id.btn_pick_date_sure);
         btn_pickdate_sure.setOnClickListener(this);
     }
+
     @Override
     protected void lazyLoad() {
 
@@ -190,7 +194,7 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
     public void onLoadMore() {
         //底部加载
         if (!isLastPage) {
-            params.put("page_no",currentPage+1);
+            params.put("page_no", currentPage + 1);
             //清空之前的请求，防止快速滑动产生过多的请求
             BirdApi.cancelRequestWithTag(http_Request_Load);
             BirdApi.cancelRequestWithTag(http_Request_Refresh);
@@ -230,33 +234,33 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
                 }
             }
             //清除时间限制条件
-            params.put("start_date","");
+            params.put("start_date", "");
             params.put("end_date", "");
             tv_timeshow.setText("");
 //            startHttpRequest(http_Request_Refresh);
         } else if (R.id.btn_pick_date_sure == v.getId()) {
             //时间逻辑判断
             //开始时间
-            Calendar calendar1=Calendar.getInstance();
-            calendar1.set(dp_start.getYear(),dp_start.getMonth(),dp_start.getDayOfMonth());
+            Calendar calendar1 = Calendar.getInstance();
+            calendar1.set(dp_start.getYear(), dp_start.getMonth(), dp_start.getDayOfMonth());
             //结束时间
-            Calendar calendar2=Calendar.getInstance();
-            calendar2.set(dp_end.getYear(),dp_end.getMonth(),dp_end.getDayOfMonth());
+            Calendar calendar2 = Calendar.getInstance();
+            calendar2.set(dp_end.getYear(), dp_end.getMonth(), dp_end.getDayOfMonth());
             //今天
-            today=Calendar.getInstance();
-            if(calendar1.after(calendar2)){
+            today = Calendar.getInstance();
+            if (calendar1.after(calendar2)) {
                 //开始时间晚于结束时间
-                T.showShort(getActivity(),R.string.tip_pick_date1);
+                T.showShort(getActivity(), R.string.tip_pick_date1);
                 return;
             }
-            if(calendar1.after(today)){
+            if (calendar1.after(today)) {
                 //开始时间晚于现在时间
-                T.showShort(getActivity(),R.string.tip_pick_date2);
+                T.showShort(getActivity(), R.string.tip_pick_date2);
                 return;
             }
-            if(calendar2.after(today)){
+            if (calendar2.after(today)) {
                 //结束时间晚于现在时间
-                T.showShort(getActivity(),R.string.tip_pick_date3);
+                T.showShort(getActivity(), R.string.tip_pick_date3);
                 return;
             }
             //确定
@@ -266,19 +270,19 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
                 }
             }
             //设置时间限制条件
-            String start=TimeUtil.calendar2String(calendar1);
-            String end=TimeUtil.calendar2String(calendar2);
-            params.put("start_date",start);
+            String start = TimeUtil.calendar2String(calendar1);
+            String end = TimeUtil.calendar2String(calendar2);
+            params.put("start_date", start);
             params.put("end_date", end);
             tv_timeshow.setText(TimeUtil.calendar2SimpleString(calendar1) + "至" + TimeUtil.calendar2SimpleString(calendar2));
 //            startHttpRequest(http_Request_Refresh);
-        } else if(v.getId() == R.id.btn_details_pick_date){
-            currentPage=1;
-            isLastPage=false;
-            params.put("page_no",currentPage);
+        } else if (v.getId() == R.id.btn_details_pick_date) {
+            currentPage = 1;
+            isLastPage = false;
+            params.put("page_no", currentPage);
             //开始数据请求
             startHttpRequest(http_Request_Refresh);
-        }else{
+        } else {
 
         }
     }
@@ -308,7 +312,7 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
         Calendar calendar2 = Calendar.getInstance();
         calendar2.set(dp_end.getYear(), dp_end.getMonth(), dp_end.getDayOfMonth());
         //今天
-        today= Calendar.getInstance();
+        today = Calendar.getInstance();
         if (calendar1.after(calendar2)) {
             //开始时间晚于结束时间
             T.showShort(getActivity(), R.string.tip_pick_date1);
@@ -350,7 +354,7 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
                             //总页数
                             int countpage = response.getJSONObject("data").getInt("page_num");
                             //当前页数
-                            currentPage= response.getJSONObject("data").getInt("page_no");
+                            currentPage = response.getJSONObject("data").getInt("page_no");
                             //判断是否为最后一页
                             if (countpage == currentPage) {
                                 isLastPage = true;
@@ -378,11 +382,13 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
                 } else {
                     T.showShort(getActivity(), R.string.tip_myaccount_getdatawrong);
                 }
+                showData();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 T.showShort(getActivity(), "获取数据失败!");
+                showData();
             }
 
             @Override
@@ -400,9 +406,9 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        currentPage=1;
-        isLastPage=false;
-        params.put("page_no",currentPage);
+        currentPage = 1;
+        isLastPage = false;
+        params.put("page_no", currentPage);
         //全部-0，运费支出-1，仓租-2，关税-3，在线充值-4，其它-5
         params.put("transaction_type", tab.getPosition());
         //显示加载动画
@@ -417,6 +423,15 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
+    private void showData() {
+        if (adapter.getItemCount() > 0) {
+            tv_nodata.setVisibility(View.GONE);
+        } else {
+            tv_nodata.setVisibility(View.VISIBLE);
+        }
 
     }
 }

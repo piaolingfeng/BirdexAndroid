@@ -112,6 +112,11 @@ public class InventoryActivity extends BaseActivity implements BaseFragment.OnFr
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(menuPop!=null){
+            if (menuPop.isShowing()) {
+                menuPop.dismiss();
+            }
+        }
     }
 
     /**

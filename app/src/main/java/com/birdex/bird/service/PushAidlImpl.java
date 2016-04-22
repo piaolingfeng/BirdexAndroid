@@ -40,4 +40,10 @@ public class PushAidlImpl extends IPushAidlInterface.Stub{
         editor.putBoolean(Constant.TIME_SETTING,flag);
         editor.commit();
     }
+
+    @Override
+    public void stopPushService() throws RemoteException {
+        //停止推送服务
+
+    }
 }

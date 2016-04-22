@@ -16,5 +16,7 @@
         android:id="@+id/xrv_detail_inner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:overScrollMode="never" />
 </LinearLayout>

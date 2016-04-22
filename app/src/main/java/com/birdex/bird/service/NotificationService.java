@@ -27,6 +27,7 @@ import com.birdex.bird.greendao.NotifiMsgDao;
 import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.HelperUtil;
+import com.birdex.bird.util.StringUtils;
 import com.ta.utdid2.android.utils.SystemUtils;
 import com.umeng.common.message.Log;
 import com.umeng.message.UTrack;
@@ -67,12 +68,13 @@ public class NotificationService extends UmengBaseIntentService {
     private SharedPreferences sharedPreferences = null;
     //
     private PushAidlImpl pushAidl = null;
-
+    //记录上次的获取时间
+    private static long time1=0;
     @Override
     public void onCreate() {
         super.onCreate();
 //        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "Bird", null);
-//        android.util.Log.e("android", "友盟服务器启动");
+        android.util.Log.e("android","---------------start service");
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, Constant.DBName, null);
         db = helper.getWritableDatabase();
         daoMaster = new DaoMaster(db);
@@ -87,6 +89,7 @@ public class NotificationService extends UmengBaseIntentService {
 //        sounduri=Uri.parse("android.resource://" + getPackageName() + "/" +R.raw.fv);
         sharedPreferences = getSharedPreferences(Constant.SP_NAME, Activity.MODE_PRIVATE);
         pushAidl = new PushAidlImpl(this);
+        time1=(new Date()).getTime();
     }
 
     @Override
@@ -99,15 +102,15 @@ public class NotificationService extends UmengBaseIntentService {
             String message = intent.getStringExtra(BaseConstants.MESSAGE_BODY);
             UMessage msg = new UMessage(new JSONObject(message));
 
-//            Log.e("android", "1----------message=" + message);    //消息体
-//            Log.e("android", "1----------custom=" + msg.custom);    //自定义消息的内容
-//            Log.e("android", "1----------title=" + msg.title);    //通知标题
-//            Log.e("android", "1----------text=" + msg.text);    //通知内容
+            Log.e("android", "1----------message=" + message);    //消息体
+            Log.e("android", "1----------custom=" + msg.custom);    //自定义消息的内容
+            Log.e("android", "1----------title=" + msg.title);    //通知标题
+            Log.e("android", "1----------text=" + msg.text);    //通知内容
             if (msg.custom != null && !TextUtils.isEmpty(msg.custom)) {
                 notimsg = getMsgEntity(msg.custom);
                 notimsg.setMsgdate(format.format(new Date()));
-                myNotificationView.setTextViewText(R.id.tv_message_title, notimsg.getTitle());
-                myNotificationView.setTextViewText(R.id.tv_message_text, notimsg.getMsgtext());
+                myNotificationView.setTextViewText(R.id.tv_message_title, StringUtils.ToDBC(notimsg.getTitle()));
+                myNotificationView.setTextViewText(R.id.tv_message_text,StringUtils.ToDBC(notimsg.getTitle()));
                 //判断是否app进程是否在运行
 //                if(com.birdex.bird.util.SystemUtils.isAppAlive(context,Constant.APPPackageName)){
 //
@@ -128,28 +131,63 @@ public class NotificationService extends UmengBaseIntentService {
                         .setAutoCancel(true);
                 boolean sound = sharedPreferences.getBoolean(Constant.TONE_SETTING, true);
                 boolean soundtime = sharedPreferences.getBoolean(Constant.TIME_SETTING, true);
-                if (sound) {
-                    if (soundtime) {
-                        builder.setDefaults(Notification.DEFAULT_SOUND);
-                    } else {
-                        Calendar calendar = Calendar.getInstance();
-                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                        if (hour >= 9 && hour <= 21) {
+
+                long time2=new Date().getTime();
+                if(((time2-time1)/1000/60)>3){
+                    if (sound) {
+                        if (soundtime) {
                             builder.setDefaults(Notification.DEFAULT_SOUND);
+                        } else {
+                            Calendar calendar = Calendar.getInstance();
+                            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                            if (hour >= 9 && hour <= 21) {
+                                builder.setDefaults(Notification.DEFAULT_SOUND);
+                            }
                         }
                     }
                 }
-                notifiManager.notify(120, builder.build());
+                time1=time2;
+//                if (sound) {
+//                    if (soundtime) {
+//                        builder.setDefaults(Notification.DEFAULT_SOUND);
+//                    } else {
+//                        Calendar calendar = Calendar.getInstance();
+//                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//                        if (hour >= 9 && hour <= 21) {
+//                            builder.setDefaults(Notification.DEFAULT_SOUND);
+//                        }
+//                    }
+//                }
+                notifiManager.notify(0, builder.build());
                 msgDao.insert(notimsg);
             } else {
-                myNotificationView.setTextViewText(R.id.tv_message_title, msg.custom);
-                myNotificationView.setTextViewText(R.id.tv_message_text, msg.custom);
+                myNotificationView.setTextViewText(R.id.tv_message_title, StringUtils.ToDBC(msg.title));
+                myNotificationView.setTextViewText(R.id.tv_message_text, StringUtils.ToDBC(msg.text));
 
                 builder.setContent(myNotificationView)
                         .setSmallIcon(R.drawable.notifi_small)
                         .setTicker(msg.ticker)
                         .setAutoCancel(true);
-                notifiManager.notify(120, builder.build());
+
+                boolean sound = sharedPreferences.getBoolean(Constant.TONE_SETTING, true);
+                boolean soundtime = sharedPreferences.getBoolean(Constant.TIME_SETTING, true);
+
+                long time2=new Date().getTime();
+                if(((time2-time1)/1000/60)>3){
+                    if (sound) {
+                        if (soundtime) {
+                            builder.setDefaults(Notification.DEFAULT_SOUND);
+                        } else {
+                            Calendar calendar = Calendar.getInstance();
+                            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                            if (hour >= 9 && hour <= 21) {
+                                builder.setDefaults(Notification.DEFAULT_SOUND);
+                            }
+                        }
+                    }
+                }
+                time1=time2;
+                notifiManager.notify(0, builder.build());
             }
 //			myNotificationView.setTextViewText(R.id.tv_message_title, msg.title);
 //			myNotificationView.setTextViewText(R.id.tv_message_text, msg.custom);
@@ -218,5 +256,11 @@ public class NotificationService extends UmengBaseIntentService {
     @Override
     public IBinder onBind(Intent intent) {
         return pushAidl;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        android.util.Log.e("android","---------------stop service");
     }
 }

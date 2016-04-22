@@ -15,4 +15,6 @@ interface IPushAidlInterface {
     boolean getTimeVoiceStatus();
     void setVoiceStatus(boolean flag);
     void setTimeVoiceStatus(boolean flag);
+    //停止推送服务
+    void stopPushService();
 }

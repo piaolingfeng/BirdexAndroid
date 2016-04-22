@@ -68,6 +68,8 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     public ClearEditText et_search;
     @Bind(R.id.tv_inventory_alltxt)
     public TextView tv_count;
+    @Bind(R.id.tv_inventory_nodata)
+    public TextView tv_nodata;
     //跳顶按钮
     @Bind(R.id.fab_inventory_gotop)
     public FloatingActionButton fab_gotop;
@@ -166,7 +168,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
 
     @Override
     public void initializeContentViews() {
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
         initStatus();
         countTxt=getString(R.string.inventory_all_data);
         //初始化解析业务
@@ -182,14 +184,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         //40表示发往仓库，1表示在库，10表示正常，20表示库存紧张，30表示断货
         String enterKey= getActivity().getIntent().getStringExtra("indexOrder");
         String key= IndexFragment.nameText[IndexFragment.nameText.length-2];
-        if(key.equals(enterKey)){
-            //默认进入为“待入库”
-            params.put("stock_status", 20);
-            tl_items.getTabAt(2).select();
-        }else{
-            //默认进入为“待入库”
-            params.put("stock_status", 1);
-        }
+
 //        rv_inventory = (XRecyclerView)getActivity().findViewById(R.id.rv_inventory);
         rv_inventory.setLoadingMoreEnabled(true);
         rv_inventory.setPullRefreshEnabled(false);
@@ -212,10 +207,26 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         initSearch();
         //初始化弹框
         initPopWindow();
+
+        //tl_items.getTabAt(2).select();与网络加载造成冲突
+        if(key.equals(enterKey)){
+            type = Type.OutofWarning;
+            //默认进入为“待入库”
+            params.put("stock_status", 20);
+            tl_items.getTabAt(2).select();
+        }else{
+            //默认进入为“待入库”
+            params.put("stock_status", 1);
+//            tl_items.getTabAt(0).select();
+//            显示加载动画
+            showBar();
+//            请求正式数据
+            startRequest();
+        }
         //显示加载动画
-        showBar();
+//        showBar();
         //请求正式数据
-        startRequest();
+//        startRequest();
 
         //设置至顶按钮
         fab_gotop.setOnClickListener(this);
@@ -267,6 +278,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 //结束动画
                 stopHttpAnim();
+                showData();
             }
 
             @Override
@@ -340,12 +352,33 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 }
                 //结束动画
                 stopHttpAnim();
+                showData();
             }
         };
         responeHandler.setTag(tag);
         BirdApi.getInventory(getActivity(), params, responeHandler);
     }
-
+    private void showData(){
+        if (type == Type.Inner) {
+            if(adapter.getItemCount()>0){
+                tv_nodata.setVisibility(View.GONE);
+            }else{
+                tv_nodata.setVisibility(View.VISIBLE);
+            }
+        } else if (type == Type.Willin) {
+            if(willInAdapter.getItemCount()>0){
+                tv_nodata.setVisibility(View.GONE);
+            }else{
+                tv_nodata.setVisibility(View.VISIBLE);
+            }
+        }else if(type==Type.OutofWarning){
+            if(adapter.getItemCount()>0){
+                tv_nodata.setVisibility(View.GONE);
+            }else{
+                tv_nodata.setVisibility(View.VISIBLE);
+            }
+        }
+    }
     /*
      *停止动画
      */
@@ -378,6 +411,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        hideBar();
         //取消当前activity的所有请求
         BirdApi.cancelRequestWithTag(tag);
     }

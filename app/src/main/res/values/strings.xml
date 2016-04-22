@@ -267,6 +267,8 @@
     <string name="inventory_willin_detail_title">待入库商品详情</string>
     <string name="tv_detail_inner_available">可用库存：</string>
     <string name="tv_detail_inner_occupancy">订单占用：</string>
+    <string name="tv_detail_inner_available1">可用：</string>
+    <string name="tv_detail_inner_occupancy1">占用：</string>
     <string name="tv_detail_inner_in">总入库量：</string>
     <string name="tv_detail_inner_out">总出库量：</string>
     <string name="tv_detail_inner_allowout">允许超售量：</string>
@@ -434,4 +436,5 @@
     <string name="stock_detail_item_expire">有效期：</string>
     <string name="stock_detail_item_none">无</string>
     <string name="stock_detail_item_tip1">没有可用数据显示!</string>
+    <string name="list_no_data">暂无数据显示!</string>
 </resources>

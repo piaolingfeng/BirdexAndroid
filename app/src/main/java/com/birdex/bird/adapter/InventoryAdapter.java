@@ -61,8 +61,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         entity = list.get(position);
         //设置点击事件的tag
-//        holder.itemView.setTag(position);
-        holder.tv_detail.setTag(position);
+        holder.itemView.setTag(position);
         if (entity != null) {
             holder.tv_upc.setText(entity.getUpc());
             holder.tv_name.setText(entity.getName());
@@ -217,7 +216,6 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 //        ImageView iv_pic = null;
         //商品名称
         TextView tv_name = null;
-        TextView tv_detail=null;
 //        //可用
 //        TextView tv_available = null;
 //        //占用
@@ -232,9 +230,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             ll_contain = (LinearLayout) itemView.findViewById(R.id.ll_inventory_item_contain);
 //            tv_available = (TextView) itemView.findViewById(R.id.tv_inventory_item_available);
 //            tv_occupancy = (TextView) itemView.findViewById(R.id.tv_inventory_item_occupancy);
-//            itemView.setOnClickListener(this);
-            tv_detail=(TextView)itemView.findViewById(R.id.tv_inventory_item_detail);
-            tv_detail.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override

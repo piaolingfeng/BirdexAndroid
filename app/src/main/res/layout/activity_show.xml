@@ -50,13 +50,13 @@
                     android:layout_marginRight="2dip"
                     android:background="@drawable/dot_normal" />
 
-                <View
-                    android:id="@+id/dot_4"
-                    android:layout_width="10dip"
-                    android:layout_height="10dip"
-                    android:layout_marginLeft="2dip"
-                    android:layout_marginRight="2dip"
-                    android:background="@drawable/dot_normal" />
+                <!--<View-->
+                    <!--android:id="@+id/dot_4"-->
+                    <!--android:layout_width="10dip"-->
+                    <!--android:layout_height="10dip"-->
+                    <!--android:layout_marginLeft="2dip"-->
+                    <!--android:layout_marginRight="2dip"-->
+                    <!--android:background="@drawable/dot_normal" />-->
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>

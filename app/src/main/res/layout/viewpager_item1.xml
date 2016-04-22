@@ -5,12 +5,11 @@
     android:background="#0000ff"
     tools:context=".MainActivity" >
 
-    <TextView
+    <ImageView
+        android:id="@+id/entry"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="第一页"
-        android:textColor="#ffffff"
-        android:textSize="50dp" />
+        android:scaleType="fitXY"
+        android:src="@drawable/introduce01"/>
 
 </RelativeLayout>

@@ -1,8 +1,10 @@
 package com.birdex.bird.fragment;
 
 import android.content.Intent;
+import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,19 +18,21 @@ import com.birdex.bird.activity.TodayDataActivity;
 import com.birdex.bird.adapter.OrderManagerAdapter;
 import com.birdex.bird.adapter.ToolManagerAdapter;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.entity.OrderManagerEntity;
-import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
-import com.birdex.bird.interfaces.OnRecyclerViewItemLongClickListener;
 import com.birdex.bird.util.AnimationUtils;
-import com.birdex.bird.util.Constant;
-import com.birdex.bird.util.PreferenceUtils;
-import com.birdex.bird.util.T;
 import com.birdex.bird.util.decoration.FullyGridLayoutManager;
+import com.birdex.bird.entity.OrderManagerEntity;
 import com.birdex.bird.util.glide.GlideUtils;
 import com.birdex.bird.util.recycleviewhelper.OnStartDragListener;
 import com.birdex.bird.util.recycleviewhelper.SimpleItemTouchHelperCallback;
+import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
+import com.birdex.bird.interfaces.OnRecyclerViewItemLongClickListener;
 import com.birdex.bird.widget.lunbo.CycleViewPager;
 import com.birdex.bird.widget.lunbo.DepthPageTransformer;
+import com.birdex.bird.util.Constant;
+import com.birdex.bird.util.PreferenceUtils;
+import com.birdex.bird.util.T;
+import com.birdex.bird.widget.pullreflash.MyListener;
+import com.birdex.bird.widget.pullreflash.PullToRefreshLayout;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -58,11 +62,14 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 
     @Bind(R.id.edit1)
     ImageView edit1;
+
     private ItemTouchHelper mItemTouchHelper;
 
     public static boolean firstCome = false;
 
-    public String tag = "IndexFragment";
+    @Bind(R.id.refresh_view)
+    PullToRefreshLayout refreshLayout;
+
     @Override
     public int getContentLayoutResId() {
         return R.layout.fragment_index_layout;
@@ -70,6 +77,22 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 
     @Override
     public void initializeContentViews() {
+        refreshLayout
+                .setOnRefreshListener(new MyListener() {
+                    @Override
+                    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+//                        super.onRefresh(pullToRefreshLayout);
+//                        bus.post("", "getTodayData");
+                        getTodayData("");
+                    }
+                });
+        edit1.setOnClickListener(new View.OnClickListener() {//返回
+            @Override
+            public void onClick(View v) {
+                bus.post(false, "LongClick");
+                bus.post("", "getTodayData");
+            }
+        });
         if (PreferenceUtils.getPrefBoolean(getActivity(), "firstCome", true)) {//第一次进入应用时采用默认显示
             firstCome = true;
             PreferenceUtils.setPrefBoolean(getActivity(), "firstCome", false);
@@ -102,15 +125,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
      * 数据看板初始化
      */
     private void initOrderManager() {
-//        edit1.setInAnimation(AnimationUtils.loadAnimatio(showProductByStore.this,android.R.anim.slide_in_left));
-//        ims.setOutAnimation(AnimationUtils.loadAnimatio(showProductByStore.this,android.R.anim.slide_out_right));
-        edit1.setOnClickListener(new View.OnClickListener() {//返回
-            @Override
-            public void onClick(View v) {
-                bus.post(false, "LongClick");
-                bus.post("","getTodayData");
-            }
-        });
+
         rcv_order_manager.setLayoutManager(new FullyGridLayoutManager(getContext(), 3));
         if (indexOrderLocalDataList != null)
             indexOrderLocalDataList.add(null);//首页最后一个为进入数据更多
@@ -159,16 +174,19 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 //    public final String[] name = getResources().getStringArray(R.array.todaybash);
 //    public final String[] nameText = res.getStringArray(R.array.todaybash_name);
     @Subscriber(tag = "getTodayData")
-    public void getTodayData(String text) {
+    public void getTodayData(String string) {
         RequestParams params = new RequestParams();
         params.put("all", 1);
         JsonHttpResponseHandler httpResponseHandler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 //                super.onSuccess(statusCode, headers, response);
+                count_i++;
                 try {
+                    if (refreshLayout != null)
+                        refreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                     parseNetData(response);
-                    EventBus.getDefault().post("", "getLocalData");
+                    EventBus.getDefault().post("getLocalData", "getLocalData");
 //                    initOrderManager();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -180,21 +198,18 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 if (errorResponse != null)
                     T.showShort(MyApplication.getInstans(), errorResponse.toString());
+                if (refreshLayout != null)
+                    refreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
             }
         };
-        httpResponseHandler.setTag(tag);
         BirdApi.getTodayData(MyApplication.getInstans(), params, httpResponseHandler);
     }
 
     /**
      * 解析网络请求返回的今日数据
      */
-    public void parseNetData(final JSONObject response) throws JSONException {
-        JSONObject object = response.get("data") instanceof JSONObject ? (JSONObject) response.get("data") : null;
-        if (object==null){
-            T.showShort(getActivity(),response.get("data").toString());
-            return;
-        }
+    public static void parseNetData(final JSONObject response) throws JSONException {
+        JSONObject object = response.getJSONObject("data");
         OrderManagerEntity entity;
         boolean state;
         indexOrderNetDatatList = new ArrayList<>();
@@ -228,13 +243,16 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     /**
      * 获取保存在数据库中的list顺序
      */
-    @Subscriber(tag = "getLocalData")
-    public void getDatabaseData(String string) {
-        indexOrderLocalDataList = new ArrayList<>();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+    public static int count_i = 0;
+
+    public class LocalDataThread implements Runnable {
+        @Override
+        public void run() {
+            synchronized (this) {
                 if (firstCome) {
+                    firstCome = false;
+                    indexOrderLocalDataList.clear();
+                    indexOrderLocalDataList.add(null);
                     for (int i = 0; i < name.length / 2; i++) {
                         indexOrderLocalDataList.add(indexOrderLocalDataList.size() - 1, indexOrderNetDatatList.get(i));
                         bus.post("", "save");
@@ -243,7 +261,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 //                    while (indexOrderLocalDataList.get(0) != null) {
 //                        indexOrderLocalDataList.remove(0);
 //                    }
-                    indexOrderLocalDataList = new ArrayList<OrderManagerEntity>();
+                    indexOrderLocalDataList.clear();
                     indexOrderLocalDataList.add(null);
                     localArrayString = PreferenceUtils.getPrefString(MyApplication.getInstans(), "getSortData", "");
                     List<String> parseList = parseString(localArrayString);
@@ -258,7 +276,14 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                     bus.post("", "adapterReflash");
                 }
             }
-        }).start();
+        }
+    }
+
+    LocalDataThread localDataThread = new LocalDataThread();
+
+    @Subscriber(tag = "getLocalData")
+    public void getDatabaseData(String string) {
+        localDataThread.run();
     }
 
     @Subscriber(tag = "adapterReflash")
@@ -267,15 +292,11 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         orderManagerAdapter.notifyDataSetChanged();
     }
 
-    /**
-     * 保存今日数据的顺序
-     */
-    @Subscriber(tag = "save")
-    public synchronized void saveDatabaseData(String string) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+    public class SaveThread implements Runnable {
 
+        @Override
+        public void run() {
+            synchronized (this) {
                 localArrayString = "";
                 List<String> arrayList = new ArrayList<String>();
                 for (OrderManagerEntity entity : indexOrderLocalDataList) {
@@ -287,7 +308,17 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                 PreferenceUtils.setPrefString(MyApplication.getInstans(), "getSortData", localArrayString);
                 bus.post("", "adapterReflash");
             }
-        }).start();
+        }
+    }
+
+    SaveThread SaveThread = new SaveThread();
+
+    /**
+     * 保存今日数据的顺序
+     */
+    @Subscriber(tag = "save")
+    public synchronized void saveDatabaseData(String string) {
+        SaveThread.run();
     }
 
     /**
@@ -372,26 +403,26 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
             public void onItemClick(int position) {
 //                T.showShort(MyApplication.getInstans(), list.get(position).getName());
                 Intent intent = null;
-//                if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool6))) {
-//                    //我的充值
-//                    intent = new Intent(getActivity(), MyAccountInfoActivity.class);
-//                    //显示第一个页面
-//                    intent.putExtra("enterindex", 0);
-//                    getActivity().startActivity(intent);
-//                    return;
-//                } else if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool5))) {
-//                    //我的支出记录
-//                    intent = new Intent(getActivity(), MyAccountInfoActivity.class);
-//                    //显示第二个页面
-//                    intent.putExtra("enterindex", 1);
-//                    getActivity().startActivity(intent);
-//                    return;
-//                } else if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool3))) {
-//                    //我的库存
-//                    intent = new Intent(getActivity(), InventoryActivity.class);
-//                    startActivity(intent);
-//                    return;
-//                }
+                if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool6))) {
+                    //我的充值
+                    intent = new Intent(getActivity(), MyAccountInfoActivity.class);
+                    //显示第一个页面
+                    intent.putExtra("enterindex", 0);
+                    getActivity().startActivity(intent);
+                    return;
+                } else if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool5))) {
+                    //我的支出记录
+                    intent = new Intent(getActivity(), MyAccountInfoActivity.class);
+                    //显示第二个页面
+                    intent.putExtra("enterindex", 1);
+                    getActivity().startActivity(intent);
+                    return;
+                } else if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool3))) {
+                    //我的库存
+                    intent = new Intent(getActivity(), InventoryActivity.class);
+                    startActivity(intent);
+                    return;
+                }
                 intent = new Intent(getActivity(), MyOrderListActivity.class);
                 intent.putExtra("name", getString(Constant.name[position]));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -414,10 +445,11 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         if (state) {
             edit1.setVisibility(View.VISIBLE);
             edit1.setAnimation(AnimationUtils.getShowAlphaAnimation());
-        }else {
+        } else {
             edit1.setVisibility(View.GONE);
             edit1.setAnimation(AnimationUtils.getHiddenAlphaAnimation());
         }
+
         for (int i = 0; i < orderManagerAdapter.getOrderList().size(); i++) {
             if (orderManagerAdapter.getOrderList().get(i) != null) {
                 orderManagerAdapter.getOrderList().get(i).setDel_state(state);
@@ -464,7 +496,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 //                        Intent intent = new Intent(getActivity(), MainActivity.class);
 //                        intent.putExtra("position", position);
 //                        startActivity(intent);
-//                        T.showLong(MyApplication.getInstans(), "跳转到产品引导" + position);
+                        T.showLong(MyApplication.getInstans(), "跳转到产品引导" + position);
                     }
                 });
             }
@@ -480,9 +512,4 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         mItemTouchHelper.startDrag(viewHolder);
     }
 
-    @Override
-    public void onDestroy() {
-        BirdApi.cancelRequestWithTag(tag);
-        super.onDestroy();
-    }
 }

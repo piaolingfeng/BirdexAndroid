@@ -3,6 +3,7 @@ package com.birdex.bird.activity;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.nfc.Tag;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -54,6 +55,8 @@ public class PredicitionDetailActivity extends BaseActivity {
     TextView tv_update_time;
     @Bind(R.id.tv_create_time)
     TextView tv_create_time;
+    @Bind(R.id.tv_error)
+    TextView tv_error;
     @Bind(R.id.rcy)
     RecyclerView rcy;
 
@@ -61,8 +64,9 @@ public class PredicitionDetailActivity extends BaseActivity {
     String storage_code;
     EventBus bus;
     PredicitionDetailAdapter adapter;
-    int fragment_position = 0;
+    public  static int fragment_position = 0;
 
+    String tag = "PredicitionDetailActivity";
     @Override
     public int getContentLayoutResId() {
         return R.layout.activity_predicition_layout;
@@ -141,6 +145,10 @@ public class PredicitionDetailActivity extends BaseActivity {
         tv_remarks.setText(entity.getData().getRemark());
         tv_update_time.setText(entity.getData().getUpdated_time());
         tv_create_time.setText(entity.getData().getCreated_time());
+        if (!StringUtils.isEmpty(entity.getData().getVerify_fail_detail())) {
+            tv_error.setText(entity.getData().getVerify_fail_detail());
+            tv_error.setVisibility(View.VISIBLE);
+        }
         adapter = new PredicitionDetailAdapter(this, entity.getData().getProducts());
         rcy.setAdapter(adapter);
         adapter.setOnRecyclerViewInsClickListener(new OnRecyclerViewInsClickListener() {
@@ -186,7 +194,7 @@ public class PredicitionDetailActivity extends BaseActivity {
             public void onClick(View v) {
                 String remarkText = remark.getText().toString();
                 if (!StringUtils.isEmpty(remarkText)) {
-                    setReviewStorage(entity.getData().getStorage_code(), entity.getData().getProducts().get(position).getProduct_code(), remarkText);
+                    setReviewStorage(entity.getData().getStorage_code(), entity.getData().getProducts().get(position).getProduct_code(), remarkText, position);
                     myDialog.dismiss();
                 } else {
                     T.showLong(PredicitionDetailActivity.this, getString(R.string.tv_review_Storage_reason));
@@ -205,7 +213,7 @@ public class PredicitionDetailActivity extends BaseActivity {
         params.add("storage_code", storage_code);
         if (!StringUtils.isEmpty(product_code))
             params.add("product_code", product_code);
-        BirdApi.setConfirmStorage(this, params, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 if (response != null) {
@@ -215,7 +223,7 @@ public class PredicitionDetailActivity extends BaseActivity {
                         if (error == 0) {
                             if (success != null && success.equals("success")) {
                                 bus.post(position, "confirm");//刷新当前页面
-                                bus.post("","getTodayData");//刷新今日看板数据
+                                bus.post("", "getTodayData");//刷新今日看板数据
                                 if (position == -1) {//-1为刷新全部状态
                                     bus.post(fragment_position, "confirm_fragment_adapter");//刷新fragment页面
                                 }
@@ -241,7 +249,9 @@ public class PredicitionDetailActivity extends BaseActivity {
                 T.showLong(PredicitionDetailActivity.this, errorResponse.toString());
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
-        });
+        };
+        handler.setTag(tag);
+        BirdApi.setConfirmStorage(this, params, handler);
     }
 
     /**
@@ -251,20 +261,24 @@ public class PredicitionDetailActivity extends BaseActivity {
      * @param product_code 发起复核的商品code
      * @param remark       发起复核的原因
      */
-    public void setReviewStorage(String storage_code, String product_code, String remark) {
+    public void setReviewStorage(String storage_code, String product_code, String remark, final int position) {
         showLoading();
         RequestParams params = new RequestParams();
         params.add("storage_code", storage_code);
         params.add("product_code", product_code);
         params.add("remark", remark);
-        BirdApi.setReviewStorage(this, params, new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler =  new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 if (response != null) {
                     try {
                         String success = (String) response.get("data");
                         int error = (int) response.get("error");
-                        T.showLong(PredicitionDetailActivity.this, success);
+                        if (success != null && error == 0) {
+                            bus.post(position, "re_confirm");//刷新当前页面
+                            T.showLong(PredicitionDetailActivity.this, getString(R.string.confirm_re_success));
+                        } else
+                            T.showLong(PredicitionDetailActivity.this, success);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -282,6 +296,14 @@ public class PredicitionDetailActivity extends BaseActivity {
                 T.showLong(PredicitionDetailActivity.this, errorResponse.toString());
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
-        });
+        };
+        handler.setTag(tag);
+        BirdApi.setReviewStorage(this, params,handler);
+    }
+
+    @Override
+    protected void onDestroy() {
+        BirdApi.cancelRequestWithTag(tag);
+        super.onDestroy();
     }
 }

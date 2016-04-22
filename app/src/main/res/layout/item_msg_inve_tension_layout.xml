@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/detail_background"
     android:orientation="vertical">
 
     <com.zhy.android.percent.support.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageView
             android:id="@+id/img_read_status"
             android:layout_width="wrap_content"
-            android:src="@drawable/read_status"
             android:layout_height="match_parent"
-            android:visibility="gone"/>
+            android:src="@drawable/read_status"
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/item_margin_top_height"
-            android:layout_toRightOf="@+id/img_read_status"
             android:layout_marginLeft="@dimen/item_margin_top_height"
+            android:layout_toRightOf="@+id/img_read_status"
             android:text="@string/msg_warning"
             android:textColor="@color/order_detail_text_color"
             app:layout_textSizePercent="@string/msg_text_4w" />
@@ -54,23 +55,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_margin="@dimen/item_margin_top_height"
             android:layout_marginLeft="@dimen/item_margin_top_height"
             android:text="@string/tv_product_code"
             android:textColor="@color/msg_context_color"
-            app:layout_textSizePercent="@string/msg_text_4_5w" />
+            app:layout_marginBottomPercent="@string/margin_w"
+            app:layout_marginTopPercent="@string/margin_w"
+            app:layout_textSizePercent="@string/msg_text_4w" />
 
         <TextView
             android:id="@+id/tv_product_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/tv_product_code_t"
             android:layout_toLeftOf="@+id/tv_copy"
-            android:text="dfadfasd"
+            android:layout_toRightOf="@+id/tv_product_code_t"
             android:singleLine="true"
+            android:text="dfadfasd"
             android:textColor="@color/msg_context_color"
-            app:layout_textSizePercent="@string/msg_text_4_5w"/>
+            app:layout_textSizePercent="@string/msg_text_4w" />
 
 
         <ImageView
@@ -87,27 +89,26 @@
         android:id="@+id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/msg_context_color"
         android:layout_marginLeft="@dimen/item_margin_top_height"
-        android:textSize="@dimen/msg_detail_context"
         android:maxLines="2"
-        app:layout_textSizePercent="@string/msg_text_4_5w"/>
+        android:textColor="@color/msg_context_color"
+        app:layout_textSizePercent="@string/msg_text_4w" />
 
     <TextView
         android:id="@+id/tv_error"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/red"
         android:layout_marginLeft="@dimen/item_margin_top_height"
-        android:layout_marginTop="@dimen/item_margin_top_height"
-        android:textSize="@dimen/msg_detail_context"
-        app:layout_textSizePercent="@string/msg_text_4_5w"/>
+        android:textColor="@color/red"
+        app:layout_marginTopPercent="@string/margin_w"
+        app:layout_textSizePercent="@string/msg_text_4w" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/order_detail_text_color"
         android:layout_marginLeft="@dimen/item_margin_top_height"
-        android:layout_marginTop="@dimen/item_margin_top_height"
-        app:layout_textSizePercent="@string/msg_text_3w"
-        android:text="@string/msg_inv_err"/>
+        android:text="@string/msg_inv_err"
+        android:textColor="@color/order_detail_text_color"
+        app:layout_marginTopPercent="@string/margin_w"
+        app:layout_textSizePercent="@string/msg_text_3w" />
 </com.zhy.android.percent.support.PercentLinearLayout>

@@ -49,7 +49,7 @@
     <dimen name="inventory_item_code">16sp</dimen>
     <dimen name="inventory_item_time">14sp</dimen>
     <dimen name="inventory_item_text">14sp</dimen>
-    <dimen name="inventory_item_number">16sp</dimen>
+    <dimen name="inventory_item_number">18sp</dimen>
     <dimen name="inventory_item_pic_width">60dp</dimen>
     <dimen name="inventory_item_pic_height">60dp</dimen>
     <dimen name="inventory_item_row1_padding">10dp</dimen>
@@ -105,4 +105,12 @@
     <dimen name="same_order_head_paddtb">8dp</dimen>
     <dimen name="same_order_list_paddtop">8dp</dimen>
     <dimen name="same_order_list_paddbottom">15dp</dimen>
+    <!--stockdetail-->
+    <dimen name="stock_detail_marginlr">10dp</dimen>
+    <dimen name="stock_detail_paddlr">5dp</dimen>
+    <dimen name="stock_detail_context_paddlr">5dp</dimen>
+    <dimen name="stock_detail_item_paddtb">5dp</dimen>
+    <dimen name="stock_detail_item_paddlr">5dp</dimen>
+    <!--待入库商品详情的间距-->
+    <dimen name="willin_detail_padding_tb">15dp</dimen>
 </resources>

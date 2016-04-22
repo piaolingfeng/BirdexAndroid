@@ -29,7 +29,6 @@ public class NotifiMsgDao extends AbstractDao<NotifiMsg, Long> {
         public final static Property Isread = new Property(3, Boolean.class, "isread", false, "ISREAD");
         public final static Property Msgdate = new Property(4, String.class, "msgdate", false, "MSGDATE");
         public final static Property Typeid = new Property(5, String.class, "typeid", false, "TYPEID");
-        public final static Property Params = new Property(6, String.class, "params", false, "PARAMS");
     };
 
 
@@ -47,11 +46,10 @@ public class NotifiMsgDao extends AbstractDao<NotifiMsg, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"NOTIFI_MSG\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"TITLE\" TEXT NOT NULL ," + // 1: title
-                "\"MSGTEXT\" TEXT default ‘’," + // 2: msgtext
-                "\"ISREAD\" INTEGER default 0," + // 3: isread
-                "\"MSGDATE\" TEXT default ‘’," + // 4: msgdate
-                "\"TYPEID\" TEXT default‘’," + // 5: typeid
-                "\"PARAMS\" TEXT default‘’);"); // 6: params
+                "\"MSGTEXT\" TEXT," + // 2: msgtext
+                "\"ISREAD\" INTEGER," + // 3: isread
+                "\"MSGDATE\" TEXT," + // 4: msgdate
+                "\"TYPEID\" TEXT);"); // 5: typeid
     }
 
     /** Drops the underlying database table. */
@@ -90,11 +88,6 @@ public class NotifiMsgDao extends AbstractDao<NotifiMsg, Long> {
         if (typeid != null) {
             stmt.bindString(6, typeid);
         }
- 
-        String params = entity.getParams();
-        if (params != null) {
-            stmt.bindString(7, params);
-        }
     }
 
     /** @inheritdoc */
@@ -112,8 +105,7 @@ public class NotifiMsgDao extends AbstractDao<NotifiMsg, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // msgtext
             cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0, // isread
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // msgdate
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // typeid
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // params
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // typeid
         );
         return entity;
     }
@@ -127,7 +119,6 @@ public class NotifiMsgDao extends AbstractDao<NotifiMsg, Long> {
         entity.setIsread(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0);
         entity.setMsgdate(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setTypeid(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setParams(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
      }
     
     /** @inheritdoc */

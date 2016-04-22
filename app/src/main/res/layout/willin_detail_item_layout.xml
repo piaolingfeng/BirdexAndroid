@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/gray_9"
     android:orientation="vertical">
 
     <LinearLayout
@@ -11,7 +12,7 @@
         android:layout_marginRight="@dimen/detail_willin_item_marginlr"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/detail_willin_item_paddingtb"
-        android:paddingTop="@dimen/detail_willin_item_paddingtb">
+        android:paddingTop="@dimen/willin_detail_padding_tb">
 
         <TextView
             style="@style/detail_willin_left"
@@ -120,10 +121,11 @@
         android:textColor="@color/blue_5"
         android:layout_gravity="right"
         android:layout_marginRight="@dimen/detail_willin_item_marginlr"
-        android:paddingBottom="12dp"
+        android:layout_marginBottom="@dimen/willin_detail_padding_tb"
         android:textSize="@dimen/detail_willin_viewother"
         android:text="@string/willin_view_others"/>
     <View
+        android:id="@+id/detail_willin_line"
         android:layout_width="match_parent"
         android:layout_marginLeft="@dimen/detail_willin_item_marginlr"
         android:layout_marginRight="@dimen/detail_willin_item_marginlr"

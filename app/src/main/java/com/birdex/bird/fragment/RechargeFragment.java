@@ -1,9 +1,11 @@
 package com.birdex.bird.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,12 +20,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.birdex.bird.AliPay.PayResult;
 import com.birdex.bird.AliPay.SignUtils;
 import com.birdex.bird.R;
+import com.birdex.bird.util.Constant;
+import com.birdex.bird.util.T;
+import com.loopj.android.http.RequestParams;
 import com.rey.material.widget.RadioButton;
 import com.rey.material.widget.Switch;
 
@@ -46,6 +52,9 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
     public RadioButton rb_tax;
     @Bind(R.id.btn_pay_recharge)
     public Button btn_pay;
+    //输入金额
+    @Bind(R.id.et_recharge_inputmoney)
+    public EditText et_money;
     // 商户PID
     public static final String PARTNER = "";
     // 商户收款账号
@@ -55,6 +64,11 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
     // 支付宝公钥
     public static final String RSA_PUBLIC = "";
     private static final int SDK_PAY_FLAG = 1;
+    //获取服务器端的加密信息
+    private RequestParams params=null;
+    private final  String tag="RechargeFragment";
+    //获取信息
+    private SharedPreferences sharedPreferences=null;
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @SuppressWarnings("unused")
@@ -104,11 +118,18 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
 
     @Override
     public void initializeContentViews() {
+        sharedPreferences=getActivity().getSharedPreferences(Constant.SP_UserInfo, Activity.MODE_PRIVATE);
         rb_tran.setOnCheckedChangeListener(this);
         rb_tax.setOnCheckedChangeListener(this);
         rb_tran.setOnClickListener(this);
         rb_tax.setOnClickListener(this);
         btn_pay.setOnClickListener(this);
+        //设置接口的参数
+        params=new RequestParams();
+        //http://payorder.testsite.com.cn/gotobank.aspx?a=in&WalletType=default&ud=2（用户ID）&p=6&m=0.01（金额）&islink=1
+        params.put("a","in");
+        params.put("WalletType","default");
+        params.put("islink","1");
     }
 
     @Override
@@ -134,7 +155,34 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
                 rb_tax.setChecked(true);
                 break;
             case R.id.btn_pay_recharge:
-                pay(v);
+//                pay(v);
+                if(!rb_tran.isChecked()&&!rb_tax.isChecked()){
+                    T.showShort(getActivity(),R.string.recharge_tip1);
+                    return;
+                }
+                String money=et_money.getText().toString().trim();
+                if(TextUtils.isEmpty(money)){
+                    T.showShort(getActivity(),R.string.recharge_tip2);
+                    return;
+                }
+                float moneyNum=0.00f;
+                try {
+                    moneyNum=Float.parseFloat(money);
+                }catch (Exception ex){
+                    T.showShort(getActivity(),R.string.recharge_tip2);
+                    return;
+                }
+                if(moneyNum==0){
+//                    T.showShort();
+                    return;
+                }
+                moneyNum=Float.parseFloat(money);
+                String bindID=sharedPreferences.getString(Constant.SP_UserInfo_Bind, "").trim();
+                if(TextUtils.isEmpty(bindID)){
+                    T.showShort(getActivity(),R.string.recharge_tip4);
+                    return;
+                }
+
                 break;
             default:
                 break;
@@ -316,6 +364,8 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
         return "sign_type=\"RSA\"";
     }
 
+    public void getEncryptInfo(){
 
+    }
 
 }

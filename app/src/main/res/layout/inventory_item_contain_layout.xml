@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_inner_item_contain_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5.5"
+            android:textColor="@color/inventory_item_gray" />
+        <TextView
+            android:id="@+id/tv_inner_item_contain_available"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:gravity="center_horizontal"
+            android:textColor="@color/inventory_item_gray"/>
+        <TextView
+            android:id="@+id/tv_inner_item_contain_occu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:gravity="center_horizontal"
+            android:textColor="@color/inventory_item_gray"/>
+        <TextView
+            android:id="@+id/tv_inner_item_contain_actual"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:gravity="center_horizontal"
+            android:textColor="@color/inventory_item_blue"/>
+    </LinearLayout>
+   <!--<ImageView-->
+       <!--android:id="@+id/iv_stockdetail_line"-->
+       <!--android:layout_width="match_parent"-->
+       <!--android:layout_height="5dp"-->
+       <!--android:background="@drawable/dott_line_bg"/>-->
+    <View
+        android:id="@+id/iv_stockdetail_line"
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:visibility="gone"
+        android:background="@drawable/inventory_item_line" />
+</LinearLayout>

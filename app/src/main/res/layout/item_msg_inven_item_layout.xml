@@ -17,15 +17,15 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/item_margin_top_height"
-            android:layout_marginTop="@dimen/item_margin_top_height"
             android:text="dfadfasd"
             android:textColor="@color/order_detail_text_color"
-            app:layout_textSizePercent="@string/msg_text_4_5w" />
+            app:layout_textSizePercent="@string/msg_text_4w"
+            app:layout_marginTopPercent="@string/margin_w"/>
 
         <com.zhy.android.percent.support.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/item_margin_top_height">
+            app:layout_marginTopPercent="@string/margin_w">
 
             <TextView
                 android:id="@+id/tv_product_code_t"
@@ -36,7 +36,7 @@
                 android:layout_marginLeft="@dimen/item_margin_top_height"
                 android:text="@string/tv_product_code"
                 android:textColor="@color/msg_context_color"
-                app:layout_textSizePercent="@string/msg_text_4_5w" />
+                app:layout_textSizePercent="@string/msg_text_4w" />
 
             <TextView
                 android:id="@+id/tv_product_code"
@@ -48,7 +48,7 @@
                 android:layout_toRightOf="@+id/tv_product_code_t"
                 android:text="dfadfasd"
                 android:textColor="@color/msg_context_color"
-                app:layout_textSizePercent="@string/msg_text_4_5w" />
+                app:layout_textSizePercent="@string/msg_text_4w" />
 
             <TextView
                 android:id="@+id/tv_count"
@@ -59,7 +59,7 @@
                 android:layout_marginRight="@dimen/item_margin_top_height"
                 android:text="x1"
                 android:textColor="@color/msg_context_color"
-                app:layout_textSizePercent="@string/msg_text_4_5w" />
+                app:layout_textSizePercent="@string/msg_text_4w" />
         </com.zhy.android.percent.support.PercentRelativeLayout>
 
         <TextView
@@ -69,10 +69,11 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/item_margin_top_height"
-            android:layout_marginTop="@dimen/item_margin_top_height"
             android:text="dfadfasd"
             android:textColor="@color/red"
-            app:layout_textSizePercent="@string/msg_text_4_5w"/>
+            app:layout_textSizePercent="@string/msg_text_4w"
+            app:layout_marginTopPercent="@string/margin_w"
+            app:layout_marginBottomPercent="@string/margin_w"/>
     </com.zhy.android.percent.support.PercentLinearLayout>
 
 </RelativeLayout>

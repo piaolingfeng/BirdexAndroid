@@ -23,6 +23,8 @@
     <color name="gray_5">#4a4a4a</color>
     <color name="gray_6">#6d6d6d</color>
     <color name="gray_7">#8d8c8e</color>
+    <color name="gray_8">#e5e5e5</color>
+    <color name="gray_9">#88e5e5e5</color>
     <color name="red">#ff4444</color>
     <color name="black">#000000</color>
     <color name="black_1">#ff4A4A4A</color>
@@ -35,6 +37,7 @@
     <color name="blue_3">#00A5E0</color>
     <color name="blue_4">#dcf5ff</color>
     <color name="blue_5">#ff039FFF</color>
+    <color name="blue_6">#0076ff</color>
     <color name="blue_head_1">#13A7DF</color>
     <color name="selected">#039FFF</color>
 
@@ -74,4 +77,7 @@
     <color name="result_view">#b0000000</color>
     <color name="viewfinder_mask">#60000000</color>
     <color name="possible_result_points">#c0ffff00</color>
+
+    //下拉背景颜色
+    <color name="light_blue">#b0000000</color>
 </resources>

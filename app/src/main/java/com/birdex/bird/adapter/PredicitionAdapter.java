@@ -98,8 +98,8 @@ public class PredicitionAdapter extends RecyclerView.Adapter<PredicitionAdapter.
         public void confirmPredicition(int position) {
             if (this.position == position) {
 //                tv_status.setText("已入库");
-//                predicitionDetailList.get(position).setStatus_name("已入库");
-                predicitionDetailList.remove(position);
+                predicitionDetailList.get(position).setStatus_name("已入库");
+//                predicitionDetailList.remove(position);
                 notifyDataSetChanged();
             }
         }

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <fragment
+        android:id="@+id/cycle_viewpage"
+        android:name="com.birdex.bird.widget.lunbo.CycleViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#000000"
+        app:layout_heightPercent="25%" />
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/transparent"
+        app:layout_heightPercent="8%">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:text="@string/data"
+            android:textColor="@color/title_2"
+            app:layout_paddingBottomPercent="@string/common_padding_top"
+            app:layout_paddingLeftPercent="@string/common_padding_left"
+            app:layout_paddingRightPercent="@string/common_padding_top"
+            app:layout_paddingTopPercent="@string/common_padding_top"
+            app:layout_textSizePercent="@string/msg_text_4_5w" />
+
+        <ImageView
+            android:id="@+id/edit1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            app:layout_marginRightPercent="@string/msg_text_3w"
+            app:layout_heightPercent="70%"
+            android:visibility="gone"
+            app:layout_paddingLeftPercent="@string/msg_text_3w"
+            app:layout_paddingRightPercent="@string/msg_text_3w"
+            android:gravity="center"
+            android:src="@drawable/reflash"/>
+
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <com.birdex.bird.widget.xrecyclerview.XRecyclerView
+            android:id="@+id/rcv_order_manager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.zhy.android.percent.support.PercentLinearLayout>
+
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/transparent"
+        app:layout_heightPercent="8%">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:text="@string/tools"
+            android:textColor="@color/title_2"
+            app:layout_paddingBottomPercent="@string/common_padding_top"
+            app:layout_paddingLeftPercent="@string/common_padding_left"
+            app:layout_paddingRightPercent="@string/common_padding_top"
+            app:layout_paddingTopPercent="@string/common_padding_top"
+            app:layout_textSizePercent="@string/msg_text_4_5w" />
+
+        <TextView
+            android:id="@+id/edit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:text="@string/edit"
+            android:visibility="gone"
+            app:layout_paddingBottomPercent="@string/common_padding_top"
+            app:layout_paddingLeftPercent="@string/common_padding_top"
+            app:layout_paddingRightPercent="@string/common_padding_top"
+            app:layout_paddingTopPercent="@string/common_padding_top"
+            app:layout_textSizePercent="@string/first_index_text_5_1w" />
+
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcv_tool_manager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.zhy.android.percent.support.PercentLinearLayout>
+
+</com.zhy.android.percent.support.PercentLinearLayout>

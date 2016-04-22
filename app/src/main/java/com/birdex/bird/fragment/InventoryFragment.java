@@ -184,11 +184,11 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         String key= IndexFragment.nameText[IndexFragment.nameText.length-2];
         if(key.equals(enterKey)){
             //默认进入为“待入库”
-            params.put("stock_status", 1);
+            params.put("stock_status", 20);
             tl_items.getTabAt(2).select();
         }else{
             //默认进入为“待入库”
-            params.put("stock_status", 20);
+            params.put("stock_status", 1);
         }
 //        rv_inventory = (XRecyclerView)getActivity().findViewById(R.id.rv_inventory);
         rv_inventory.setLoadingMoreEnabled(true);

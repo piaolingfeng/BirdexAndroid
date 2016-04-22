@@ -10,6 +10,15 @@ public class User {
     private String company_short_name;
     private String user_code;
 
+    public String getBind_user_id() {
+        return bind_user_id;
+    }
+
+    public void setBind_user_id(String bind_user_id) {
+        this.bind_user_id = bind_user_id;
+    }
+
+    private String bind_user_id;
     public String getCompany_code() {
         return company_code;
     }

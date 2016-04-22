@@ -38,6 +38,8 @@ import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
 import com.birdex.bird.widget.ClearEditText;
+import com.birdex.bird.widget.pullreflash.MyListener;
+import com.birdex.bird.widget.pullreflash.PullToRefreshLayout;
 import com.birdex.bird.widget.xrecyclerview.XRecyclerView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -248,6 +250,24 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
                 }
             }
         }
+//        refresh_layout
+//                .setOnRefreshListener(new MyListener() {
+//                    @Override
+//                    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+////                        super.onRefresh(pullToRefreshLayout);
+////                        bus.post("", "getTodayData");
+//                        entity.setPage_no(1);
+//                        bus.post(entity, "requestPredictList");
+//                    }
+//
+//                    @Override
+//                    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+//                        super.onLoadMore(pullToRefreshLayout);
+//                        entity.setPage_no(entity.getPage_no() + 1);
+//                        bus.post(entity, "requestPredictList");
+//                    }
+//                });
+
         bus.register(this);
         rcy_orderlist.setLoadingListener(this);
         rcy_orderlist.setPullRefreshEnabled(false);

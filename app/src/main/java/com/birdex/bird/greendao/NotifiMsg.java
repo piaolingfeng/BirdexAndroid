@@ -13,7 +13,6 @@ public class NotifiMsg {
     private Boolean isread;
     private String msgdate;
     private String typeid;
-    private String params;
 
     public NotifiMsg() {
     }
@@ -22,14 +21,13 @@ public class NotifiMsg {
         this.id = id;
     }
 
-    public NotifiMsg(Long id, String title, String msgtext, Boolean isread, String msgdate, String typeid, String params) {
+    public NotifiMsg(Long id, String title, String msgtext, Boolean isread, String msgdate, String typeid) {
         this.id = id;
         this.title = title;
         this.msgtext = msgtext;
         this.isread = isread;
         this.msgdate = msgdate;
         this.typeid = typeid;
-        this.params = params;
     }
 
     public Long getId() {
@@ -80,14 +78,6 @@ public class NotifiMsg {
 
     public void setTypeid(String typeid) {
         this.typeid = typeid;
-    }
-
-    public String getParams() {
-        return params;
-    }
-
-    public void setParams(String params) {
-        this.params = params;
     }
 
 }

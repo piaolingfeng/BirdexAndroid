@@ -6,7 +6,7 @@
     android:layout_marginRight="@dimen/detail_willin_item_marginlr"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/detail_willin_item_paddingtb"
-    android:background="@color/gray_4"
+    android:background="@color/gray_8"
     android:paddingTop="@dimen/detail_willin_item_paddingtb">
 
     <TextView
@@ -35,7 +35,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black_1"
-
                 android:text="@string/willin_num"
                 android:textSize="@dimen/detail_inner_font1" />
             <TextView

@@ -60,8 +60,8 @@ public class MsgOrderAdapter extends RecyclerView.Adapter<MsgOrderAdapter.MsgOrd
         holder.tv_text_title.setText(currentName);
         holder.tv_create_time.setText(list.get(position).getCreated_date());
         holder.tv_order_num.setText(list.get(position).getMsg_content().getOrder_oms_no());
-        holder.tv_recevice_addr.setText(list.get(position).getMsg_content().getReceiver_name() + "," + list.get(position).getMsg_content().getReceiver_mobile()
-                + list.get(position).getMsg_content().getReceiver_province() + list.get(position).getMsg_content().getReceiver_city()
+        holder.tv_recevice_addr.setText(list.get(position).getMsg_content().getReceiver_name() + " ," + list.get(position).getMsg_content().getReceiver_mobile()
+                + " ," + list.get(position).getMsg_content().getReceiver_province() + list.get(position).getMsg_content().getReceiver_city()
                 + list.get(position).getMsg_content().getReceiver_area() + list.get(position).getMsg_content().getReceiver_address());//缺了收件人地址
         holder.tv_error.setText(list.get(position).getMsg_content().getVerify_fail_detail());
         if (currentName.contains(mContext.getString(R.string.msg_idcard_exception))) {

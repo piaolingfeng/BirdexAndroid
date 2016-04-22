@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.birdex.bird.R;
+import com.birdex.bird.activity.PredicitionDetailActivity;
 import com.birdex.bird.entity.PredicitionDetailEntity;
 import com.birdex.bird.interfaces.OnRecyclerViewInsClickListener;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
@@ -30,6 +31,7 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
     Context mContext;
     List<PredicitionDetailEntity.PredicitionData.PredicitionDetailProduct> productList;
     OnRecyclerViewInsClickListener onRecyclerViewInsClickListener;
+    public int count = 0;//入库个数统计
 
     public OnRecyclerViewInsClickListener getOnRecyclerViewInsClickListener() {
         return onRecyclerViewInsClickListener;
@@ -52,6 +54,9 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
     @Override
     public void onBindViewHolder(PredicitionDetailHolder holder, int position) {
         holder.position = position;
+        if (position == 0) {
+            count = 0;
+        }
         holder.tv_product_code.setText(productList.get(position).getExternal_no());
         holder.tv_upc.setText(productList.get(position).getUpc());
         holder.tv_product_name.setText(productList.get(position).getName());
@@ -60,9 +65,24 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
         holder.tv_remarks.setText(productList.get(position).getRemark().getMsg());
         holder.tv_status.setText(productList.get(position).getStatus_name());
         holder.tv_valid_date.setText(productList.get(position).getExpired_date());
-        if (holder.tv_status.getText().toString().contains("待确认")) {
-            holder.btn_confirm.setVisibility(View.VISIBLE);
-            holder.btn_re_confirm.setVisibility(View.VISIBLE);
+        if (holder.tv_status.getText().toString().contains("待确认") || holder.tv_status.getText().toString().contains("待复核")
+                || holder.tv_status.getText().toString().contains("已复核")) {
+            if (holder.tv_status.getText().toString().contains("待复核")) {
+                holder.btn_confirm.setVisibility(View.VISIBLE);
+                holder.btn_re_confirm.setVisibility(View.INVISIBLE);
+            } else {
+                holder.btn_confirm.setVisibility(View.VISIBLE);
+                holder.btn_re_confirm.setVisibility(View.VISIBLE);
+            }
+        }else {
+            holder.btn_confirm.setVisibility(View.INVISIBLE);
+            holder.btn_re_confirm.setVisibility(View.INVISIBLE);
+        }
+        if (productList.get(position).getStatus_name().equals("已入库")) {
+            count++;
+            if (count == productList.size()) {
+                EventBus.getDefault().post(PredicitionDetailActivity.fragment_position, "confirm_fragment_adapter");//刷新fragment页面
+            }
         }
     }
 
@@ -124,10 +144,20 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
         @Subscriber(tag = "confirm")
         public void setBtn_confirm(int position) {
             if (this.position == position || position == -1) {//-1为刷新全部状态
-                btn_confirm.setVisibility(View.INVISIBLE);
-                btn_re_confirm.setVisibility(View.INVISIBLE);
+                productList.get(position).setStatus_name("已入库");
+                notifyDataSetChanged();
+
             }
         }
+
+        @Subscriber(tag = "re_confirm")
+        public void setBtn_re_confirm(int position) {
+            if (this.position == position || position == -1) {//-1为刷新全部状态
+                productList.get(position).setStatus_name("待复核");
+                notifyDataSetChanged();
+            }
+        }
+
 
     }
 }

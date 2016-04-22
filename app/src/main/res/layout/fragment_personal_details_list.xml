@@ -83,12 +83,26 @@
             android:textSize="16sp" />
     </LinearLayout>
     <!--</android.support.design.widget.AppBarLayout>-->
-    <com.birdex.bird.widget.xrecyclerview.XRecyclerView
-        android:id="@+id/xrv_personal_detail_list"
-        android:background="@color/white"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.0"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_weight="1.0">
+        <TextView
+            android:id="@+id/tv_personal_detail_nodata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:textColor="@color/gray_2"
+            android:text="@string/list_no_data"/>
+        <com.birdex.bird.widget.xrecyclerview.XRecyclerView
+            android:id="@+id/xrv_personal_detail_list"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+    </RelativeLayout>
+
 </LinearLayout>

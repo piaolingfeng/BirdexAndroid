@@ -217,6 +217,7 @@
     <string name="adress_empty">详细地址不能为空</string>
     <string name="change_fail">修改失败！</string>
     <string name="change_suc">修改成功！</string>
+    <string name="par_error">参数错误，请重新输入！</string>
 
     <!-- 物流跟踪 -->
     <string name="order_number">订单号：</string>

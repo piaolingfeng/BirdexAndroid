@@ -5,14 +5,12 @@
 	   android:background="#0000ff"
 	tools:context=".MainActivity" >
 
-	 <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="50dp"
-        android:gravity="center"
-        android:textColor="#ffffff"
-        android:text="第二页"
-         />
+        <ImageView
+            android:id="@+id/entry"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/introduce02"/>
 
 
 </RelativeLayout>

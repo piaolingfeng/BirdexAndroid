@@ -483,7 +483,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
 
                         finish();
                     } else {
-                        T.showShort(MyApplication.getInstans(), response.getString("data"));
+                        T.showShort(MyApplication.getInstans(), getString(R.string.par_error));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

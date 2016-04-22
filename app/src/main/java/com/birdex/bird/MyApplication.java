@@ -128,7 +128,8 @@ public class MyApplication extends Application {
 
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.setPushIntentServiceClass(NotificationService.class);
-        mPushAgent.setDebugMode(true);
+        mPushAgent.setDisplayNotificationNumber(3);
+//        mPushAgent.setDebugMode(true);
         //获取设备token
         getUmengToken();
         initAsyncHttpClient();

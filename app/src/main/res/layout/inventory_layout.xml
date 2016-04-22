@@ -119,14 +119,14 @@
                         android:textSize="@dimen/inventory_count_data" />
                 </LinearLayout>
             </android.support.design.widget.AppBarLayout>
+                <com.birdex.bird.widget.xrecyclerview.XRecyclerView
+                    android:id="@+id/rv_inventory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fillViewport="true"
+                    android:overScrollMode="never"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-            <com.birdex.bird.widget.xrecyclerview.XRecyclerView
-                android:id="@+id/rv_inventory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:overScrollMode="never"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
         </android.support.design.widget.CoordinatorLayout>
 
     </LinearLayout>
@@ -144,4 +144,13 @@
         android:visibility="gone"
         app:pressedTranslationZ="12dp"
         app:rippleColor="#33728dff" />
+    <TextView
+        android:id="@+id/tv_inventory_nodata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:textColor="@color/gray_2"
+        android:text="@string/list_no_data"/>
 </RelativeLayout>

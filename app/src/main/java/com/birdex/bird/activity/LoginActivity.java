@@ -221,35 +221,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         T.showShort(MyApplication.getInstans(), getString(R.string.loginsu));
                         Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
 
-//                        Bundle b = new Bundle();
-//                        b.putString("order_code","f4635a3bb08f55c9d22d3f6fcc170306");
-//                        b.putString("idcard","360111111111111");
-//                        intent.putExtras(b);
-
-//                        ContactDetail contactDetail = new ContactDetail();
-//                        contactDetail.setReceiver_name("胡芦娃");
-//                        contactDetail.setReceiver_mobile("1383838388");
-//                        contactDetail.setReceiver_province_id("4628");
-//                        contactDetail.setReceiver_province("河北省");
-//                        contactDetail.setReceiver_city_id("4696");
-//                        contactDetail.setReceiver_city("邢台市");
-//                        contactDetail.setReceiver_area_id("4700");
-//                        contactDetail.setReceiver_area("临城县");
-//                        contactDetail.setReceiver_address("什么三峡搬迁罗里吧嗦一大堆");
-
-//                        Bundle b = new Bundle();
-////                        b.putSerializable("ContactDetail",contactDetail);
-//                        b.putString("order_code","c708fecf8f8e3b39622c35ece3371772");
-//                        intent.putExtras(b);
-
-                        // 测试
-//                        BirdApi.testHeader(MyApplication.getInstans(),null,new JsonHttpResponseHandler(){
-//                            @Override
-//                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                                super.onSuccess(statusCode, headers, response);
-//                            }
-//                        });
-
                         startActivity(intent);
                         finish();
                     } else {

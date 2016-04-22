@@ -21,6 +21,7 @@ import com.birdex.bird.adapter.MineIndexAdapter;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.MineEntity;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
+import com.birdex.bird.service.NotificationService;
 import com.birdex.bird.util.T;
 import com.birdex.bird.util.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.util.update.UpdateManager;
@@ -49,6 +50,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     private MineIndexAdapter adapter = null;
 
     String tag = "MineFragment";
+    //
     @Override
     protected void key(int keyCode, KeyEvent event) {
 
@@ -144,6 +146,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.out_account:
+                Intent serviceintent=new Intent(getActivity(), NotificationService.class);
+                getActivity().stopService(serviceintent);
                 // 清除掉登录的相关信息
                 SharedPreferences sp = getActivity().getSharedPreferences("login", Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();

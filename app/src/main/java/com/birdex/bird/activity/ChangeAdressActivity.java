@@ -299,9 +299,11 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
 
     // 通过id 查找所在的位置，并设置到 选择器上
     private void findAndSetAdress(List<city> list, String id, int index) {
+        boolean have = false;
         for (int i = 0; i < list.size(); i++) {
             city area = list.get(i);
             if (area.getAreaID().equals(id)) {
+                have = true;
                 switch (index) {
                     // 省份
                     case 1:
@@ -317,6 +319,22 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
                         break;
                 }
                 break;
+            }
+        }
+        if(!have){
+            switch (index) {
+                // 省份
+                case 1:
+                    select_view.setSeletion(0);
+                    break;
+                // 城市
+                case 2:
+                    select_view2.setSeletion(0);
+                    break;
+                // 地区
+                case 3:
+                    select_view3.setSeletion(0);
+                    break;
             }
         }
     }
@@ -465,7 +483,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
 
                         finish();
                     } else {
-                        T.showShort(MyApplication.getInstans(), response.getString("data"));
+                        T.showShort(MyApplication.getInstans(), getString(R.string.par_error));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -108,6 +108,7 @@ public class WillinDetailAdapter extends BaseExpandableListAdapter implements Vi
             cholder.tv_transstyle=(TextView)convertView.findViewById(R.id.tv_willin_detail_transstayle);
             cholder.tv_num=(TextView)convertView.findViewById(R.id.tv_willin_detail_num);
             cholder.tv_other=(TextView)convertView.findViewById(R.id.detail_willin_viewother);
+            cholder.v_line=convertView.findViewById(R.id.detail_willin_line);
             convertView.setTag(cholder);
         }
         SimpleWillinEntity.InventoryTransInfo transInfo=list.get(groupPosition).getTranlist().get(childPosition);
@@ -119,6 +120,11 @@ public class WillinDetailAdapter extends BaseExpandableListAdapter implements Vi
         //点击查看其他商品
         cholder.tv_other.setTag(groupPosition+"-"+childPosition);
         cholder.tv_other.setOnClickListener(this);
+        if(childPosition!=getChildrenCount(groupPosition)-1){
+            cholder.v_line.setVisibility(View.VISIBLE);
+        }else {
+            cholder.v_line.setVisibility(View.GONE);
+        }
         return convertView;
     }
 
@@ -161,5 +167,6 @@ public class WillinDetailAdapter extends BaseExpandableListAdapter implements Vi
         TextView tv_transstyle;
         TextView tv_num;
         TextView tv_other;
+        View v_line;
     }
 }

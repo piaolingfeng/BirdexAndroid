@@ -7,9 +7,10 @@
 
     <TextView
         android:id="@+id/tv_willin_detail_name"
+        android:layout_marginTop="@dimen/willin_detail_padding_tb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="@dimen/detail_willin_item_marginlr"
         android:layout_marginRight="@dimen/detail_willin_item_marginlr"
         android:paddingBottom="@dimen/detail_willin_item_paddingtb"
         android:paddingTop="@dimen/detail_willin_item_paddingtb"
@@ -19,11 +20,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/willin_detail_padding_tb"
         android:layout_marginLeft="@dimen/detail_willin_item_marginlr"
         android:layout_marginRight="@dimen/detail_willin_item_marginlr"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/detail_willin_item_paddingtb"
-        android:paddingTop="@dimen/detail_willin_item_paddingtb">
+        android:paddingBottom="@dimen/detail_willin_item_paddingtb">
 
         <TextView
             style="@style/detail_willin_left"

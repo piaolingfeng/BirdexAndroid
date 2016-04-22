@@ -15,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/inventory_inner_paddingtb"
-        android:paddingBottom="@dimen/inventory_inner_paddingtb"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -44,13 +43,6 @@
             android:textAppearance="@style/inventory_item_gray1"
             android:maxLines="2"
             android:ellipsize="end"/>
-        <TextView
-            android:id="@+id/tv_inventory_item_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/inventory_item_detail"
-            android:textColor="@color/inventory_item_black"
-            android:textSize="@dimen/inventory_item_text"/>
     </LinearLayout>
     <View
         android:layout_width="match_parent"

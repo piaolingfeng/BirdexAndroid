@@ -163,11 +163,6 @@ public class BirdApi {
         get(context, "Order/getTracking", params, jsonHttpResponseHandler);
     }
 
-    // 获取预报列表
-    public static void getForecast(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
-        post(context, "Storage/all", params, jsonHttpResponseHandler);
-    }
-
     // 获取账户余额
     public static void getBalance(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
 //        params.add("app_debug", 1 + "");

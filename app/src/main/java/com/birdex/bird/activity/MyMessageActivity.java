@@ -1,7 +1,6 @@
 package com.birdex.bird.activity;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.view.View;
@@ -11,13 +10,7 @@ import android.widget.TextView;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
-import com.birdex.bird.greendao.DaoMaster;
-import com.birdex.bird.greendao.DaoSession;
-import com.birdex.bird.greendao.NotifiMsg;
-import com.birdex.bird.greendao.NotifiMsgDao;
-import com.birdex.bird.util.T;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.util.T;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -27,11 +20,10 @@ import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
-import java.util.List;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
-import de.greenrobot.dao.query.QueryBuilder;
 
 /**
  * Created by hyj on 2016/4/13.
@@ -104,21 +96,36 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Subscriber(tag = "msg_list_update")
-    public void clearUnread(String title){
-        if(getString(R.string.msg_warning).equals(title)){
-            setWarning(0);
-        }
-        if(getString(R.string.msg_idcard_exception).equals(title)){
-            setIdcard(0);
-        }
-        if(getString(R.string.msg_repertory_exception).equals(title)){
-            setOrderStock(0);
-        }
-        if(getString(R.string.msg_check_exception).equals(title)){
-            setOrderVerify(0);
-        }
-        if(getString(R.string.msg_account_exception).equals(title)){
-            setAccountException(0);
+    public void clearUnread(HashMap map) {
+        try {
+            int size = 0;
+            String title = "";
+            if (map != null) {
+                size = (int) map.get("size");
+                title = (String) map.get("msg_list_update");
+            }
+            if (getString(R.string.msg_warning).equals(title)) {
+                stockCount = (Integer.parseInt(stockCount) - size) + "";
+                setWarning(Integer.parseInt(stockCount));
+            }
+            if (getString(R.string.msg_idcard_exception).equals(title)) {
+                orderIdcardCount = (Integer.parseInt(orderIdcardCount) - size) + "";
+                setIdcard(Integer.parseInt(orderIdcardCount));
+            }
+            if (getString(R.string.msg_repertory_exception).equals(title)) {
+                orderStockCount = (Integer.parseInt(orderStockCount) - size) + "";
+                setOrderStock(Integer.parseInt(orderStockCount));
+            }
+            if (getString(R.string.msg_check_exception).equals(title)) {
+                orderVerifyCount = (Integer.parseInt(orderVerifyCount) - size) + "";
+                setOrderVerify(Integer.parseInt(orderVerifyCount));
+            }
+            if (getString(R.string.msg_account_exception).equals(title)) {
+                accountCount = (Integer.parseInt(accountCount) - size) + "";
+                setAccountException(Integer.parseInt(accountCount));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -217,7 +224,7 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
 
     private void getUnreadData() {
         showLoading();
-        JsonHttpResponseHandler handler =  new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -226,23 +233,23 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
                         JSONArray array = (JSONArray) response.get("data");
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject jb = (JSONObject) array.get(i);
-                            if(ORDER_STOCK_EXCEPTION.equals(jb.getString("msg_type"))){
+                            if (ORDER_STOCK_EXCEPTION.equals(jb.getString("msg_type"))) {
                                 // 订单库存异常
                                 orderStockCount = jb.getString("count");
                             }
-                            if(ORDER_VERIFY_FAIL.equals(jb.getString("msg_type"))){
+                            if (ORDER_VERIFY_FAIL.equals(jb.getString("msg_type"))) {
                                 // 订单审核不通过
                                 orderVerifyCount = jb.getString("count");
                             }
-                            if(ORDER_IDCARD_EXCEPTION.equals(jb.getString("msg_type"))){
+                            if (ORDER_IDCARD_EXCEPTION.equals(jb.getString("msg_type"))) {
                                 // 订单身份证异常
                                 orderIdcardCount = jb.getString("count");
                             }
-                            if(ACCOUNT_EXCEPTION.equals(jb.getString("msg_type"))){
+                            if (ACCOUNT_EXCEPTION.equals(jb.getString("msg_type"))) {
                                 // 账号异常
                                 accountCount = jb.getString("count");
                             }
-                            if(STOCK_WARNING.equals(jb.getString("msg_type"))){
+                            if (STOCK_WARNING.equals(jb.getString("msg_type"))) {
                                 // 库存告警
                                 stockCount = jb.getString("count");
                             }
@@ -275,38 +282,38 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
             }
         };
         handler.setTag(tag);
-        BirdApi.getMessageStat(MyApplication.getInstans(), null,handler);
+        BirdApi.getMessageStat(MyApplication.getInstans(), null, handler);
     }
 
-    private void setUnreadData(){
+    private void setUnreadData() {
         try {
             int stockCountInt = Integer.parseInt(stockCount);
             setWarning(stockCountInt);
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
         try {
             int count = Integer.parseInt(orderIdcardCount);
             setIdcard(count);
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
         try {
             int count = Integer.parseInt(orderStockCount);
             setOrderStock(count);
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
         try {
             int count = Integer.parseInt(orderVerifyCount);
             setOrderVerify(count);
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
         try {
             int count = Integer.parseInt(accountCount);
             setAccountException(count);
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
 

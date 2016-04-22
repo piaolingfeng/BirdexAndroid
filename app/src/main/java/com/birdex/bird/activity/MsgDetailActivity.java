@@ -28,6 +28,8 @@ import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
+import java.util.HashMap;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 
@@ -235,7 +237,16 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
 //                            orderAdapte/.notifyDataSetChanged();
 //                            inventoryAdapter.getList().addAll(InvenEntity.getProducts());
 //                            inventoryAdapter.notifyDataSetChanged();
-                            bus.post(title, "msg_list_update");
+                            HashMap map = new HashMap();
+                            map.put("msg_list_update",title);
+                            int size = 0;
+                            for (int i =0; i <listEntity.getData().getMessages().size();i++){//0表示未读，1表示已读
+                                if (listEntity.getData().getMessages().get(i).getRead_status().equals("0")){
+                                    size++;
+                                }
+                            }
+                            map.put("size",size);
+                            bus.post(map, "msg_list_update");
                         }
                     } else {
                         try {
@@ -307,7 +318,7 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
     }
 
     @Subscriber(tag = "msg_list_update")
-    public void listUpdate(String text) {
+    public void listUpdate(HashMap text) {
         if (msg_list_name_id[0].equals(title)) {
             inventoryAdapter.getList().addAll(listEntity.getData().getMessages());
 //            rcy.setAdapter(inventoryAdapter);

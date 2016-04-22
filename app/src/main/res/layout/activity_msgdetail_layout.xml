@@ -33,6 +33,7 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             android:text="@string/tv_clear"
+            android:visibility="invisible"
             android:textColor="@color/blue"
             app:layout_paddingPercent="@string/msg_text_3w"
             app:layout_textSizePercent="@string/msg_text_4_5w" />

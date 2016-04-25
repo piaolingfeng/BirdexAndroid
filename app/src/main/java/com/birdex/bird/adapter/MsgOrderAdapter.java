@@ -73,10 +73,10 @@ public class MsgOrderAdapter extends RecyclerView.Adapter<MsgOrderAdapter.MsgOrd
         holder.tv_function.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentName.contains(mContext.getString(R.string.msg_check_exception)))
+//                if (currentName.contains(mContext.getString(R.string.msg_check_exception)))
                     startChangeAddrActivity(list.get(position).getMsg_content().getOrder_code(), position);
-                else
-                    upLoadIDCard(mContext, list.get(position).getMsg_content().getOrder_code(), "");//订单列表没有身份证id,只能穿order_code
+//                else
+//                    upLoadIDCard(mContext, list.get(position).getMsg_content().getOrder_code(), "");//订单列表没有身份证id,只能穿order_code
             }
         });
         if (currentName.contains(mContext.getString(R.string.msg_repertory_exception))) {//库存异常显示

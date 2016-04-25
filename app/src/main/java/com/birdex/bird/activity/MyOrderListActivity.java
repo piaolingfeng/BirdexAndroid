@@ -20,6 +20,7 @@ import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.entity.OrderStatus;
 import com.birdex.bird.entity.TimeSelectEntity;
+import com.birdex.bird.entity.Warehouse;
 import com.birdex.bird.entity.WarehouseEntity;
 import com.birdex.bird.fragment.BaseFragment;
 import com.birdex.bird.fragment.BillDetailFragment;
@@ -27,6 +28,8 @@ import com.birdex.bird.fragment.InventoryFragment;
 import com.birdex.bird.fragment.OrderListManagerFragment;
 import com.birdex.bird.fragment.PredictionManagerFragment;
 import com.birdex.bird.fragment.RechargeFragment;
+import com.birdex.bird.greendao.DaoUtils;
+import com.birdex.bird.greendao.warehouse;
 import com.birdex.bird.interfaces.BackHandledInterface;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.Constant;
@@ -82,6 +85,9 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void initializeContentViews() {
+        orderStatus = new OrderStatus();
+        predicitionStatus = new OrderStatus();
+        warehouseEntity = new WarehouseEntity();
         if (orderListManagerFragment == null)
             orderListManagerFragment = new OrderListManagerFragment();
         if (predictionManagerFragment == null)
@@ -105,7 +111,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         getAllOrderStatus();//获取订单所有状态
         getAllPredicitionStatus();//获取预报所有状态
         getAllCompanyWarehouse();//获取所有仓库
-//        setData();
+        setData();
     }
 
 
@@ -271,8 +277,8 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                                 OrderStatus.Status status = new OrderStatus().new Status();
                                 status.setStatus_name("全部状态");
                                 orderStatus.getData().add(0, status);
-                                requestStateCount++;
-                                getNetStatusCount();
+//                                requestStateCount++;
+//                                getNetStatusCount();
                             } else {
                                 T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
                             }
@@ -319,7 +325,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 
     /**
      * 获取全部的网络状态后
-     */
+    */
     public synchronized void getNetStatusCount() {
         if (requestStateCount == 2) {
             requestStateCount = 0;
@@ -347,8 +353,8 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                                 OrderStatus.Status status = new OrderStatus().new Status();
                                 status.setStatus_name("全部状态");
                                 predicitionStatus.getData().add(0, status);
-                                requestStateCount++;
-                                getNetStatusCount();
+//                                requestStateCount++;
+//                                getNetStatusCount();
                             } else {
                                 T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
                             }
@@ -460,6 +466,9 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, handler);
     }
 
+    private void getLocalCompanyWarehouse(){
+       List<warehouse>  WarehouseList = DaoUtils.getAllWarehouse();
+    }
 
     PopupWindow mPopupWindow;
 

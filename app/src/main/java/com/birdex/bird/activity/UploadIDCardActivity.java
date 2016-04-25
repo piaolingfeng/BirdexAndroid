@@ -331,7 +331,7 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
         Intent intentFromGallery = new Intent();
         intentFromGallery.setType("image/*"); // 设置文件类型
         intentFromGallery
-                .setAction(Intent.ACTION_GET_CONTENT);
+                .setAction(Intent.ACTION_PICK);
         startActivityForResult(intentFromGallery,
                 REQUEST_CODE_PICK_IMAGE);
     }

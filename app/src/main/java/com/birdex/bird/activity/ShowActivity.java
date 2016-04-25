@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.birdex.bird.R;
+import com.birdex.bird.util.glide.GlideUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,15 @@ public class ShowActivity extends Activity {
 		view1 = lf.inflate(R.layout.viewpager_item1, null);
 		view2 = lf.inflate(R.layout.viewpager_item2, null);
 		view3 = lf.inflate(R.layout.viewpager_item3, null);
+
+		ImageView iv1 = (ImageView) view1.findViewById(R.id.entry);
+		ImageView iv2 = (ImageView) view2.findViewById(R.id.entry);
+		ImageView iv3 = (ImageView) view3.findViewById(R.id.entry);
+
+		GlideUtils.setImageToLocal(iv1,R.drawable.introduce01);
+		GlideUtils.setImageToLocal(iv2,R.drawable.introduce02);
+		GlideUtils.setImageToLocal(iv3,R.drawable.introduce03);
+
 //		view4 = lf.inflate(R.layout.viewpager_item4, null);
 		viewList.add(view1);
 		viewList.add(view2);

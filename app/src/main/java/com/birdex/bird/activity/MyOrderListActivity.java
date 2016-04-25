@@ -20,6 +20,7 @@ import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.entity.OrderStatus;
 import com.birdex.bird.entity.TimeSelectEntity;
+import com.birdex.bird.entity.Warehouse;
 import com.birdex.bird.entity.WarehouseEntity;
 import com.birdex.bird.fragment.BaseFragment;
 import com.birdex.bird.fragment.BillDetailFragment;
@@ -27,6 +28,8 @@ import com.birdex.bird.fragment.InventoryFragment;
 import com.birdex.bird.fragment.OrderListManagerFragment;
 import com.birdex.bird.fragment.PredictionManagerFragment;
 import com.birdex.bird.fragment.RechargeFragment;
+import com.birdex.bird.greendao.DaoUtils;
+import com.birdex.bird.greendao.warehouse;
 import com.birdex.bird.interfaces.BackHandledInterface;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.Constant;
@@ -460,6 +463,9 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, handler);
     }
 
+    private void getLocalCompanyWarehouse(){
+       List<warehouse>  WarehouseList = DaoUtils.getAllWarehouse();
+    }
 
     PopupWindow mPopupWindow;
 

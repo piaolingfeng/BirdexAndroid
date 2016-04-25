@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.birdex.bird.R;
 import com.birdex.bird.activity.ChangeAdressActivity;
+import com.birdex.bird.activity.OrderDetailActivity;
 import com.birdex.bird.activity.UploadIDCardActivity;
 import com.birdex.bird.entity.MsgListEntity;
 import com.birdex.bird.entity.OrderListEntity;
@@ -118,9 +119,10 @@ public class MsgOrderAdapter extends RecyclerView.Adapter<MsgOrderAdapter.MsgOrd
      * 修改地址
      */
     public void startChangeAddrActivity(String order_code, int position) {
-        Intent intent = new Intent(mContext, ChangeAdressActivity.class);
+//        Intent intent = new Intent(mContext, ChangeAdressActivity.class);
+        Intent intent = new Intent(mContext, OrderDetailActivity.class);
         intent.putExtra("order_code", order_code);
-        intent.putExtra("MSG_position", position);
+//        intent.putExtra("MSG_position", position);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
     }
@@ -169,11 +171,11 @@ public class MsgOrderAdapter extends RecyclerView.Adapter<MsgOrderAdapter.MsgOrd
 
         }
 
-        @Subscriber(tag = "changeAddr")
-        public void changeAddr(HashMap map) {
-            if (map != null && position == map.get("MSG_position")) {
-                tv_recevice_addr.setText(map.get("changeAddr") + "");
-            }
-        }
+//        @Subscriber(tag = "changeAddr")
+//        public void changeAddr(HashMap map) {
+//            if (map != null && position == map.get("MSG_position")) {
+//                tv_recevice_addr.setText(map.get("changeAddr") + "");
+//            }
+//        }
     }
 }

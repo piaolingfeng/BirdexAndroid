@@ -15,7 +15,7 @@ import org.apache.http.Header;
  * 请求接口
  */
 public class BirdApi {
-
+//    public static String SERVER_ADDRESS = "api.beta1.b.birdex.cn";
     public static String SERVER_ADDRESS = "192.168.1.207";
     public static String PORT = "8089";//8002
     public static String BASE_URL = "http://" + SERVER_ADDRESS + ":" + PORT;//
@@ -163,11 +163,6 @@ public class BirdApi {
         get(context, "Order/getTracking", params, jsonHttpResponseHandler);
     }
 
-    // 获取预报列表
-    public static void getForecast(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
-        post(context, "Storage/all", params, jsonHttpResponseHandler);
-    }
-
     // 获取账户余额
     public static void getBalance(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
 //        params.add("app_debug", 1 + "");
@@ -178,6 +173,7 @@ public class BirdApi {
 
     // 上传公司 logo
     public static void upLoadLogo(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+//        MyApplication.ahc.post("http://file.beta1.b.birdex.cn/upload/companyLogo", params, jsonHttpResponseHandler);
         MyApplication.ahc.post("http://192.168.1.207:8090/upload/companyLogo", params, jsonHttpResponseHandler);
     }
 
@@ -228,6 +224,7 @@ public class BirdApi {
     // 上传身份证图片
     public static void uploadIDCardPic(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler){
         MyApplication.ahc.post("http://192.168.1.207:8090/upload/IDCard", params, jsonHttpResponseHandler);
+//        MyApplication.ahc.post("http://file.beta1.b.birdex.cn/upload/IDCard", params, jsonHttpResponseHandler);
     }
 
     // 删除身份证， 需要调用 修改订单 接口

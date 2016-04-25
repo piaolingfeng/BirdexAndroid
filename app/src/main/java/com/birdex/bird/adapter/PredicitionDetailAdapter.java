@@ -80,7 +80,7 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
         }
         if (productList.get(position).getStatus_name().equals("已入库")) {
             count++;
-            if (count == productList.size()) {
+            if (count == productList.size()) {//统计已入库数量,来做fragment页面的UI刷新
                 EventBus.getDefault().post(PredicitionDetailActivity.fragment_position, "confirm_fragment_adapter");//刷新fragment页面
             }
         }

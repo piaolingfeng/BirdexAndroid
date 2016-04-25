@@ -1,10 +1,8 @@
 package com.birdex.bird.fragment;
 
 import android.content.Intent;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,31 +10,32 @@ import android.widget.ImageView;
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.activity.InventoryActivity;
-import com.birdex.bird.activity.MyAccountInfoActivity;
 import com.birdex.bird.activity.MyOrderListActivity;
 import com.birdex.bird.activity.TodayDataActivity;
 import com.birdex.bird.adapter.OrderManagerAdapter;
 import com.birdex.bird.adapter.ToolManagerAdapter;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.util.AnimationUtils;
-import com.birdex.bird.util.decoration.FullyGridLayoutManager;
 import com.birdex.bird.entity.OrderManagerEntity;
-import com.birdex.bird.util.glide.GlideUtils;
-import com.birdex.bird.util.recycleviewhelper.OnStartDragListener;
-import com.birdex.bird.util.recycleviewhelper.SimpleItemTouchHelperCallback;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.interfaces.OnRecyclerViewItemLongClickListener;
-import com.birdex.bird.widget.lunbo.CycleViewPager;
-import com.birdex.bird.widget.lunbo.DepthPageTransformer;
+import com.birdex.bird.util.AnimationUtils;
 import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.PreferenceUtils;
 import com.birdex.bird.util.T;
+import com.birdex.bird.util.decoration.FullyGridLayoutManager;
+import com.birdex.bird.util.glide.GlideUtils;
+import com.birdex.bird.util.recycleviewhelper.OnStartDragListener;
+import com.birdex.bird.util.recycleviewhelper.SimpleItemTouchHelperCallback;
+import com.birdex.bird.widget.lunbo.CycleViewPager;
+import com.birdex.bird.widget.lunbo.DepthPageTransformer;
 import com.birdex.bird.widget.pullreflash.MyListener;
 import com.birdex.bird.widget.pullreflash.PullToRefreshLayout;
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
@@ -52,6 +51,7 @@ import butterknife.Bind;
  * Created by chuming.zhuang on 2016/3/21.
  */
 public class IndexFragment extends BaseFragment implements OnStartDragListener {
+    String tag = "IndexFragment";
     CycleViewPager cycleViewPager;
 
     @Bind(R.id.rcv_order_manager)
@@ -180,13 +180,19 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         JsonHttpResponseHandler httpResponseHandler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                super.onSuccess(statusCode, headers, response);
-                count_i++;
                 try {
                     if (refreshLayout != null)
                         refreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
-                    parseNetData(response);
-                    EventBus.getDefault().post("getLocalData", "getLocalData");
+                    if (response == null) {
+                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
+                        return;
+                    }
+                    if (0 == response.get("error")) {
+                        parseNetData(response);
+                        EventBus.getDefault().post("getLocalData", "getLocalData");
+                    } else {
+                        T.showLong(MyApplication.getInstans(), response.get("data") + "");
+                    }
 //                    initOrderManager();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -194,14 +200,30 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                if (errorResponse != null)
-                    T.showShort(MyApplication.getInstans(), errorResponse.toString());
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 if (refreshLayout != null)
                     refreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                if (refreshLayout != null)
+                    refreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                if (refreshLayout != null)
+                    refreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong));
+                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         };
+        httpResponseHandler.setTag(tag);
         BirdApi.getTodayData(MyApplication.getInstans(), params, httpResponseHandler);
     }
 
@@ -403,26 +425,26 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
             public void onItemClick(int position) {
 //                T.showShort(MyApplication.getInstans(), list.get(position).getName());
                 Intent intent = null;
-                if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool6))) {
-                    //我的充值
-                    intent = new Intent(getActivity(), MyAccountInfoActivity.class);
-                    //显示第一个页面
-                    intent.putExtra("enterindex", 0);
-                    getActivity().startActivity(intent);
-                    return;
-                } else if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool5))) {
-                    //我的支出记录
-                    intent = new Intent(getActivity(), MyAccountInfoActivity.class);
-                    //显示第二个页面
-                    intent.putExtra("enterindex", 1);
-                    getActivity().startActivity(intent);
-                    return;
-                } else if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool3))) {
-                    //我的库存
-                    intent = new Intent(getActivity(), InventoryActivity.class);
-                    startActivity(intent);
-                    return;
-                }
+//                if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool6))) {
+//                    //我的充值
+//                    intent = new Intent(getActivity(), MyAccountInfoActivity.class);
+//                    //显示第一个页面
+//                    intent.putExtra("enterindex", 0);
+//                    getActivity().startActivity(intent);
+//                    return;
+//                } else if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool5))) {
+//                    //我的支出记录
+//                    intent = new Intent(getActivity(), MyAccountInfoActivity.class);
+//                    //显示第二个页面
+//                    intent.putExtra("enterindex", 1);
+//                    getActivity().startActivity(intent);
+//                    return;
+//                } else if (list.get(position).getName() != null && list.get(position).getName().equals(getString(R.string.tool3))) {
+//                    //我的库存
+//                    intent = new Intent(getActivity(), InventoryActivity.class);
+//                    startActivity(intent);
+//                    return;
+//                }
                 intent = new Intent(getActivity(), MyOrderListActivity.class);
                 intent.putExtra("name", getString(Constant.name[position]));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -470,11 +492,16 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
      */
     private List<View> initCarouselData() {
 
-        String url[] = {"file:///android_asset/lunbo1.png"
-                , "file:///android_asset/lunbo2.png"
-                , "file:///android_asset/lunbo3.png"
-                , "file:///android_asset/lunbo4.jpg"};
-        List<String> localPathList = new ArrayList<>();
+//        String url[] = {"file:///android_asset/lunbo1.png"
+//                , "file:///android_asset/lunbo2.png"
+//                , "file:///android_asset/lunbo3.png"
+//                , "file:///android_asset/lunbo4.jpg"};
+        int url[] = {
+                R.drawable.recycle_1,
+                R.drawable.recycle_2,
+                R.drawable.recycle_3
+        };
+        List<Integer> localPathList = new ArrayList<>();
         for (int i = 0; i < url.length; i++) {
             localPathList.add(url[i]);
         }
@@ -485,7 +512,8 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
             ImageView imageView = new ImageView(getActivity());
 //                imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            GlideUtils.Barnner(imageView, localPathList.get(i));
+//            GlideUtils.Barnner(imageView, localPathList.get(i));
+            GlideUtils.setImageToLocal(imageView, localPathList.get(i));
             mImageViews.add(imageView);
             if (i != 0 && i != localPathList.size() - 1) {
                 final int position = i - 1;
@@ -496,7 +524,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 //                        Intent intent = new Intent(getActivity(), MainActivity.class);
 //                        intent.putExtra("position", position);
 //                        startActivity(intent);
-                        T.showLong(MyApplication.getInstans(), "跳转到产品引导" + position);
+//                        T.showLong(MyApplication.getInstans(), "跳转到产品引导" + position);
                     }
                 });
             }
@@ -512,4 +540,9 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         mItemTouchHelper.startDrag(viewHolder);
     }
 
+    @Override
+    public void onDestroy() {
+        BirdApi.cancelRequestWithTag(tag);
+        super.onDestroy();
+    }
 }

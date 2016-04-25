@@ -39,6 +39,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
@@ -58,7 +59,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 
     @Bind(R.id.titleview)
     TitleView titleview;
-//    @Bind(R.id.tool_viewpager)
+    //    @Bind(R.id.tool_viewpager)
     ViewPager tool_viewpager;
     List<String> menuList;//menu菜单list
     public String currentName;
@@ -104,6 +105,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         getAllOrderStatus();//获取订单所有状态
         getAllPredicitionStatus();//获取预报所有状态
         getAllCompanyWarehouse();//获取所有仓库
+//        setData();
     }
 
 
@@ -209,6 +211,46 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     }
 
     /**
+     * 简化订单列表状态
+     */
+    private void dealOrderStatus() {
+        OrderStatus status = new OrderStatus();
+        String statusName[] = {"待审核", "等待出库", "已出库", "运输中", "已签收", "身份证异常", "库存异常", "审核不通过"};
+        if (orderStatus != null) {
+            for (int size = 0; size < statusName.length; size++) {
+                for (int i = 0; i < orderStatus.getData().size(); i++) {
+                    String name = orderStatus.getData().get(i).getStatus_name();
+                    if (statusName[size].equals(name)) {
+                        status.getData().add(orderStatus.getData().get(i));
+                        break;
+                    }
+                }
+            }
+        }
+        orderStatus = status;
+    }
+
+    /**
+     * 简化预报列表状态
+     */
+    private void dealPredictionStatus() {
+        OrderStatus status = new OrderStatus();
+        String statusName[] = {"待审核", "待入库", "待确认", "已入库", "审核不通过"};
+        if (predicitionStatus != null) {
+            for (int size = 0; size < statusName.length; size++) {
+                for (int i = 0; i < predicitionStatus.getData().size(); i++) {
+                    String name = predicitionStatus.getData().get(i).getStatus_name();
+                    if (statusName[size].equals(name)) {
+                        status.getData().add(predicitionStatus.getData().get(i));
+                        break;
+                    }
+                }
+            }
+        }
+        predicitionStatus = status;
+    }
+
+    /**
      * 获取订单所有状态
      */
     private void getAllOrderStatus() {
@@ -220,30 +262,47 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 //                    orderStatus = (OrderStatus) JsonHelper.parseLIst(response.getJSONArray("data"), OrderStatus.class);
                 hideLoading();
-                orderStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
-                if (orderStatus != null) {
-                    OrderStatus.Status status = new OrderStatus().new Status();
-                    status.setStatus_name("全部状态");
-                    orderStatus.getData().add(0, status);
-                    requestStateCount++;
-                    getNetStatusCount();
-                } else {
-                    try {
-                        if (response.get("data") != null)
-                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
-                        else
-                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                try {
+                    if (response != null) {
+                        if (0 == response.get("error")) {
+                            orderStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
+                            dealOrderStatus();
+                            if (orderStatus != null) {
+                                OrderStatus.Status status = new OrderStatus().new Status();
+                                status.setStatus_name("全部状态");
+                                orderStatus.getData().add(0, status);
+                                requestStateCount++;
+                                getNetStatusCount();
+                            } else {
+                                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
+                            }
+                        } else {
+                            T.showLong(MyApplication.getInstans(), response.get("data") + "");
+                        }
+                    } else {
+                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                hideLoading();
-                T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
                 super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
 
             @Override
@@ -279,31 +338,49 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 //                    orderStatus = (OrderStatus) JsonHelper.parseLIst(response.getJSONArray("data"), OrderStatus.class);
-                predicitionStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
-                if (predicitionStatus != null) {
-                    OrderStatus.Status status = new OrderStatus().new Status();
-                    status.setStatus_name("全部状态");
-                    predicitionStatus.getData().add(0, status);
-                    requestStateCount++;
-                    getNetStatusCount();
-                } else {
-                    try {
-                        if (response.get("data") != null)
-                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
-                        else
-                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                try {
+                    if (response != null) {
+                        if (0 == response.get("error")) {
+                            predicitionStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
+                            dealPredictionStatus();
+                            if (predicitionStatus != null) {
+                                OrderStatus.Status status = new OrderStatus().new Status();
+                                status.setStatus_name("全部状态");
+                                predicitionStatus.getData().add(0, status);
+                                requestStateCount++;
+                                getNetStatusCount();
+                            } else {
+                                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
+                            }
+                        } else {
+                            T.showLong(MyApplication.getInstans(), response.get("data") + "");
+                        }
+                    } else {
+                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-//                bus.post(status, "changeState");
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
 
             @Override
             public void onFinish() {
@@ -324,34 +401,54 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
-                if (warehouseEntity != null) {
-                    if (warehouseEntity.getError().equals("0")) {
-                        WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
-                        detail.setName("全部仓库");
+                try {
+                    if (response == null) {
+                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
+                        return;
+                    }
+                    if (0 == response.get("error")) {
+                        warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
+                        if (warehouseEntity != null) {
+                            if (warehouseEntity.getError().equals("0")) {
+                                WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
+                                detail.setName("全部仓库");
 //                nowSelectedWarehouse = detail;//默认选中全部
-                        warehouseEntity.getData().add(0, detail);
-                        bus.post(detail, "changeWarehouse");
-                    } else {
-                        T.showLong(MyApplication.getInstans(), warehouseEntity.getError());
-                    }
-                } else {
-                    try {
-                        if (response.get("data") != null)
-                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
-                        else
+                                warehouseEntity.getData().add(0, detail);
+                                bus.post(detail, "changeWarehouse");
+                            } else {
+                                T.showLong(MyApplication.getInstans(), warehouseEntity.getError());
+                            }
+                        } else {
                             T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        }
+                    } else {
+                        T.showLong(MyApplication.getInstans(), response.get("data") + "");
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+
+
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
 
             @Override
             public void onFinish() {

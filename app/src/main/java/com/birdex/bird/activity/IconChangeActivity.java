@@ -158,6 +158,8 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
                             if("0".equals(response.getString("error"))){
                                 IconChangeActivity.this.setResult(RESULT_OK);
                                 IconChangeActivity.this.finish();
+                            } else {
+                                T.showLong(MyApplication.getInstans(),response.getString("data"));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

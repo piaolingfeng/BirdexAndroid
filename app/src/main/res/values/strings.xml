@@ -183,7 +183,7 @@
 
     <string name="logistics_tracking">物流跟踪</string>
     <string name="service_type">联系客服</string>
-    <string name="change_address">改派</string>
+    <string name="change_address">修改地址</string>
     <string name="commodity_code">商品编码:</string>
     <!--我的库存-->
     <string name="inventory_title">我的库存</string>

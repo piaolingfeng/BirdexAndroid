@@ -23,10 +23,13 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -108,102 +111,6 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
     }
 
 
-//    @Subscriber(tag = "MsgOrderLoadMore")
-//    public void getOrderList(String text) {
-//        showLoading();
-//        RequestParams params = new RequestParams();
-//        params.add("status", requestEntity.getStatus());
-//        params.add("start_date", TimeUtil.getMonthDelayData());//默认30天内的
-//        params.add("end_date", TimeUtil.getCurrentData());
-//        params.add("page_no", requestEntity.getPage_no() + "");
-//        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
-//                if (orderListEntities != null) {
-//                    if (requestEntity.getPage_no() > 1)
-//                        if (orderListEntities.getData().getOrders().size() == 0 && requestEntity.getPage_no() > 1) {
-//                            T.showShort(MyApplication.getInstans(), "已经是最后一页");
-//                        } else {
-//                            orderAdapter.getList().addAll(orderListEntities.getData().getOrders());
-//                            orderListEntities.getData().setOrders(orderAdapter.getList());
-//                        }
-//                    else {
-//                        orderAdapter.setList(orderListEntities.getData().getOrders());
-//                    }
-//                    orderAdapter.notifyDataSetChanged();
-//                } else {
-//                    try {
-//                        if (response.get("data") != null)
-//                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + " 请重新登录");
-//                        else
-//                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                super.onFailure(statusCode, headers, throwable, errorResponse);
-//
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                stopHttpAnim();
-//                super.onFinish();
-//            }
-//        };
-//        handler.setTag(tag);
-//        BirdApi.getOrderList(this, params, handler);
-//    }
-
-//    public void getInvenList() {
-//        showLoading();
-//        RequestParams params = new RequestParams();
-//        params.add("stock_status", "20");
-//        params.add("page_no", inventoryPage_no + "");
-//        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                InvenEntity = GsonHelper.getPerson(response.toString(), InventorySimpleEntity.class);
-//                if (InvenEntity != null) {
-//                    if (InvenEntity.getProducts().size() == 0 && inventoryPage_no > 1) {
-//                        T.showShort(MyApplication.getInstans(), "已经是最后一页");
-//                    } else {
-//                        inventoryAdapter.getList().addAll(InvenEntity.getProducts());
-//                        inventoryAdapter.notifyDataSetChanged();
-//                    }
-//                } else {
-//                    try {
-//                        if (response.get("data") != null)
-//                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + " 请重新登录");
-//                        else
-//                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                if (errorResponse != null)
-//                    T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
-//                super.onFailure(statusCode, headers, throwable, errorResponse);
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                stopHttpAnim();
-//                super.onFinish();
-//            }
-//        };
-//        handler.setTag(tag);
-//        BirdApi.getInventory(this, params, handler);
-//    }
 
     @Subscriber(tag = "MsgOrderLoadMore")
     public void getMsgList(String text) {
@@ -225,37 +132,52 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
         JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                if (response != null) {
-                    listEntity = GsonHelper.getPerson(response.toString(), MsgListEntity.class);
-                    if (listEntity != null) {
-                        if (listEntity.getData().getMessages().size() != 20 && inventoryPage_no > 1) {
-                            T.showShort(MyApplication.getInstans(), "已经是最后一页");
+                try {
+                    if (response!=null) {
+                        if (0 == response.get("error")) {
+                            listEntity = GsonHelper.getPerson(response.toString(), MsgListEntity.class);
+                            if (listEntity != null) {
+                                if (listEntity.getData().getMessages().size() != 20 && inventoryPage_no > 1) {
+                                    T.showShort(MyApplication.getInstans(), "已经是最后一页");
+                                } else {
+                                    HashMap map = new HashMap();
+                                    map.put("msg_list_update",title);
+                                    int size = 0;
+                                    for (int i =0; i <listEntity.getData().getMessages().size();i++){//0表示未读，1表示已读
+                                        if (listEntity.getData().getMessages().get(i).getRead_status().equals("0")){
+                                            size++;
+                                        }
+                                    }
+                                    map.put("size",size);
+                                    bus.post(map, "msg_list_update");
+                                }
+                            } else {
+                                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
+                            }
                         } else {
-//                            listEntity.getData().getMessages().addAll(listEntity.getData().getMessages());
-//                            orderAdapte/.notifyDataSetChanged();
-//                            inventoryAdapter.getList().addAll(InvenEntity.getProducts());
-//                            inventoryAdapter.notifyDataSetChanged();
-                            bus.post(title, "msg_list_update");
-                        }
-                    } else {
-                        try {
-                            if (response.get("data") != null)
-                                T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
-                            else
-                                T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            T.showLong(MyApplication.getInstans(), response.get("data") + "");
                         }
                     }
-                } else {
-                    T.showLong(MsgDetailActivity.this, getString(R.string.request_err));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
             @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                if (errorResponse != null)
-                    T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
 
@@ -307,7 +229,7 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
     }
 
     @Subscriber(tag = "msg_list_update")
-    public void listUpdate(String text) {
+    public void listUpdate(HashMap text) {
         if (msg_list_name_id[0].equals(title)) {
             inventoryAdapter.getList().addAll(listEntity.getData().getMessages());
 //            rcy.setAdapter(inventoryAdapter);

@@ -3,7 +3,6 @@ package com.birdex.bird.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +11,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -33,18 +31,16 @@ import com.birdex.bird.entity.OrderStatus;
 import com.birdex.bird.entity.PredicitionEntity;
 import com.birdex.bird.entity.WarehouseEntity;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
-import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
 import com.birdex.bird.widget.ClearEditText;
-import com.birdex.bird.widget.pullreflash.MyListener;
-import com.birdex.bird.widget.pullreflash.PullToRefreshLayout;
 import com.birdex.bird.widget.xrecyclerview.XRecyclerView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.Subscriber;
@@ -122,39 +118,51 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                predicitionEntity = GsonHelper.getPerson(response.toString(), PredicitionEntity.class);
-//                orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
-                if (predicitionEntity != null) {
-                    if (entity.getPage_no() > 1) {
-                        if (predicitionEntity.getData().getStorages().size() == 0 && entity.getPage_no() > 1) {
-                            T.showShort(MyApplication.getInstans(), "已经是最后一页");
-                        } else {
-                            predicitionAdapter.getPredicitionDetailList().addAll(predicitionEntity.getData().getStorages());
-                            predicitionEntity.getData().setStorages(predicitionAdapter.getPredicitionDetailList());
+                try {
+                    if (0 == response.get("error")) {
+                        predicitionEntity = GsonHelper.getPerson(response.toString(), PredicitionEntity.class);
+                        if (predicitionEntity != null) {
+                            if (entity.getPage_no() > 1) {
+                                if (predicitionEntity.getData().getStorages().size() == 0 && entity.getPage_no() > 1) {
+                                    T.showShort(MyApplication.getInstans(), "已经是最后一页");
+                                } else {
+                                    predicitionAdapter.getPredicitionDetailList().addAll(predicitionEntity.getData().getStorages());
+                                    predicitionEntity.getData().setStorages(predicitionAdapter.getPredicitionDetailList());
+                                }
+                            } else {
+                                predicitionAdapter.setPredicitionDetailList(predicitionEntity.getData().getStorages());
+                            }
+                            bus.post(predicitionEntity.getData().getCount(), "Pre_frame_layout");//刷新个数及界面
+                            predicitionAdapter.notifyDataSetChanged();
+                        }else {
+                            T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
                         }
                     } else {
-                        predicitionAdapter.setPredicitionDetailList(predicitionEntity.getData().getStorages());
+                        T.showLong(MyApplication.getInstans(), response.get("data") + "");
                     }
-                    bus.post(predicitionEntity.getData().getCount(), "Pre_frame_layout");//刷新个数及界面
-                    predicitionAdapter.notifyDataSetChanged();
-                } else {
-                    try {
-                        if (response.get("data") != null)
-                            T.showLong(MyApplication.getInstans(), response.get("data").toString() + "请重新登录");
-                        else
-                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
             @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                if (errorResponse != null)
-                    T.showLong(MyApplication.getInstans(), "error:" + errorResponse.toString());
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
 
             @Override
             public void onFinish() {
@@ -542,4 +550,5 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
                 break;
         }
     }
+
 }

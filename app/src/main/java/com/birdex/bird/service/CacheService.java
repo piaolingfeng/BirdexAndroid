@@ -260,7 +260,8 @@ public class CacheService extends Service {
             editor.putString("warehousesVersion", warehousesVersion);
         }
 
-        editor.commit();
+        // 先不进行 commit 操作， 等所有数据插入完毕再 commit；
+//        editor.commit();
 
         // 执行访问接口，数据库插入操作
         saveData();
@@ -284,10 +285,15 @@ public class CacheService extends Service {
         insertTapes();
         insertTickets();
         insertService();
+
+        // 如果所有数据都已经正确插入， 进行保存
+        editor.commit();
     }
 
     private void insertService() {
         servicetypeDao = daoSession.getServicetypeDao();
+        // 先清空所有数据
+        servicetypeDao.deleteAll();
         if (serviceTypesList.size() > 0) {
             for (ServiceTypes s : serviceTypesList) {
                 List<ServiceType> list = s.getServiceTypeList();
@@ -305,6 +311,8 @@ public class CacheService extends Service {
 
     private void insertTickets() {
         ticketDao = daoSession.getTicketDao();
+        // 先清空所有数据
+        ticketDao.deleteAll();
         if (ticketList.size() > 0) {
             for (ticket t : ticketList) {
                 ticketDao.insert(t);
@@ -314,6 +322,8 @@ public class CacheService extends Service {
 
     private void insertTapes() {
         tapeDao = daoSession.getTapeDao();
+        // 先清空所有数据
+        tapeDao.deleteAll();
         if (tapeList.size() > 0) {
             for (tape t : tapeList) {
                 tapeDao.insert(t);
@@ -323,6 +333,8 @@ public class CacheService extends Service {
 
     private void insertBox() {
         boxDao = daoSession.getBoxDao();
+        // 先清空所有数据
+        boxDao.deleteAll();
         if (boxList.size() > 0) {
             for (box b : boxList) {
                 boxDao.insert(b);
@@ -337,7 +349,8 @@ public class CacheService extends Service {
 
     private void insertPrice() {
         priceUnitDao = daoSession.getPriceUnitDao();
-
+        // 先清空所有数据
+        priceUnitDao.deleteAll();
         if (priceUnitList.size() > 0) {
             for (priceUnit p : priceUnitList) {
                 priceUnitDao.insert(p);
@@ -347,7 +360,8 @@ public class CacheService extends Service {
 
     private void insertArea() {
         cityDao = daoSession.getCityDao();
-
+        // 先清空所有数据
+        cityDao.deleteAll();
         if (cityList != null) {
             List<city> provinces = cityList.getProvinces();
             for (city p : provinces) {
@@ -381,7 +395,8 @@ public class CacheService extends Service {
 
     private void insertWarehouses() {
         warehouseDao = daoSession.getWarehouseDao();
-
+        // 先清空所有数据
+        warehouseDao.deleteAll();
         if (warehouseList.size() > 0) {
             for (warehouse w : warehouseList) {
                 warehouseDao.insert(w);
@@ -391,7 +406,8 @@ public class CacheService extends Service {
 
     private void insertQgModel() {
         qgmodelDao = daoSession.getQgmodelDao();
-
+        // 先清空所有数据
+        qgmodelDao.deleteAll();
         if (qgModels.size() > 0) {
             for (qgmodel q : qgModels) {
                 qgmodelDao.insert(q);
@@ -401,7 +417,8 @@ public class CacheService extends Service {
 
     private void insertBusinessModel() {
         businessmodelDao = daoSession.getBusinessmodelDao();
-
+        // 先清空所有数据
+        businessmodelDao.deleteAll();
         if (businessModelList.size() > 0) {
             for (businessmodel b : businessModelList) {
                 businessmodelDao.insert(b);
@@ -412,7 +429,8 @@ public class CacheService extends Service {
 
     private void insertMarket() {
         marketDao = daoSession.getMarketDao();
-
+        // 先清空所有数据
+        marketDao.deleteAll();
         if (marketList.size() > 0) {
             for (market mar : marketList) {
                 marketDao.insert(mar);

@@ -20,7 +20,6 @@ import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.entity.OrderStatus;
 import com.birdex.bird.entity.TimeSelectEntity;
-import com.birdex.bird.entity.Warehouse;
 import com.birdex.bird.entity.WarehouseEntity;
 import com.birdex.bird.fragment.BaseFragment;
 import com.birdex.bird.fragment.BillDetailFragment;

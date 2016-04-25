@@ -1,30 +1,19 @@
 package com.birdex.bird.fragment;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
-import com.birdex.bird.activity.LoginActivity;
 import com.birdex.bird.api.BirdApi;
-import com.birdex.bird.entity.Area;
-import com.birdex.bird.entity.BusinessModel;
 import com.birdex.bird.entity.City;
 import com.birdex.bird.entity.CompanyInformation;
 import com.birdex.bird.entity.Contact;
-import com.birdex.bird.entity.Market;
-import com.birdex.bird.entity.Markets;
-import com.birdex.bird.entity.QgModel;
 import com.birdex.bird.greendao.DaoUtils;
 import com.birdex.bird.greendao.businessmodel;
 import com.birdex.bird.greendao.city;
@@ -42,7 +31,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import butterknife.Bind;

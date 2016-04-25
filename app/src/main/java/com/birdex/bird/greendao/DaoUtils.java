@@ -9,6 +9,7 @@ import com.birdex.bird.util.Constant;
 
 import java.util.List;
 
+import de.greenrobot.dao.DbUtils;
 import de.greenrobot.dao.query.QueryBuilder;
 
 /**
@@ -21,11 +22,6 @@ public class DaoUtils {
     private static DaoMaster daoMaster=null;
     private static DaoSession daoSession=null;
 
-    private static cityDao cityDao;
-    private static marketDao marketDao;
-    private static businessmodelDao businessmodelDao;
-    private static qgmodelDao qgmodelDao;
-
     public static DaoSession getDaoSession(){
         if(daoSession == null) {
             DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(MyApplication.getInstans(), Constant.DBName, null);
@@ -37,7 +33,7 @@ public class DaoUtils {
     }
 
     public static City getcity(){
-        cityDao = DaoUtils.getDaoSession().getCityDao();
+        cityDao cityDao = DaoUtils.getDaoSession().getCityDao();
         // 取得省
         QueryBuilder<city> queryBuilder = cityDao.queryBuilder().where(com.birdex.bird.greendao.cityDao.Properties.Area.eq("1"));
         List<city> p = queryBuilder.list();
@@ -56,7 +52,7 @@ public class DaoUtils {
     }
 
     public static List<market> getmarkest(){
-        marketDao = DaoUtils.getDaoSession().getMarketDao();
+        marketDao marketDao = DaoUtils.getDaoSession().getMarketDao();
 
         // 取得所有的 market
         QueryBuilder<market> queryBuilder = marketDao.queryBuilder();
@@ -64,16 +60,22 @@ public class DaoUtils {
     }
 
     public static List<businessmodel> getbusinessmodel(){
-        businessmodelDao = DaoUtils.getDaoSession().getBusinessmodelDao();
+        businessmodelDao businessmodelDao = DaoUtils.getDaoSession().getBusinessmodelDao();
 
         QueryBuilder<businessmodel> queryBuilder = businessmodelDao.queryBuilder();
         return queryBuilder.list();
     }
 
     public static List<qgmodel> getqgmodel() {
-        qgmodelDao = DaoUtils.getDaoSession().getQgmodelDao();
+        qgmodelDao qgmodelDao = DaoUtils.getDaoSession().getQgmodelDao();
 
         QueryBuilder<qgmodel> qgmodelQueryBuilder = qgmodelDao.queryBuilder();
         return qgmodelQueryBuilder.list();
+    }
+
+    public static List<warehouse> getAllWarehouse(){
+        warehouseDao qgmodelDao = DaoUtils.getDaoSession().getWarehouseDao();
+        QueryBuilder<warehouse> builder = qgmodelDao.queryBuilder();
+        return  builder.list();
     }
 }

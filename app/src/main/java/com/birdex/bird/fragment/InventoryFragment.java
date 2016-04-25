@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -20,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.activity.MipcaActivityCapture;
 import com.birdex.bird.adapter.InventoryAdapter;
@@ -29,13 +29,13 @@ import com.birdex.bird.adapter.OrderWareHouseAdapter;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.biz.InventoryBiz;
 import com.birdex.bird.entity.InventoryActivityEntity;
-import com.birdex.bird.entity.WarehouseEntity;
-import com.birdex.bird.util.recycleviewhelper.OnLoadingImgListener;
-import com.birdex.bird.util.recycleviewhelper.OnShowGoTopListener;
+import com.birdex.bird.greendao.DaoUtils;
+import com.birdex.bird.greendao.warehouse;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
-import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.StringUtils;
 import com.birdex.bird.util.T;
+import com.birdex.bird.util.recycleviewhelper.OnLoadingImgListener;
+import com.birdex.bird.util.recycleviewhelper.OnShowGoTopListener;
 import com.birdex.bird.widget.ClearEditText;
 import com.birdex.bird.widget.xrecyclerview.XRecyclerView;
 import com.bumptech.glide.Glide;
@@ -46,16 +46,16 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.simple.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 
 /**
  * Created by chuming.zhuang on 2016/4/11.
  */
-public class InventoryFragment extends BaseFragment implements XRecyclerView.LoadingListener , View.OnClickListener, TabLayout.OnTabSelectedListener,OnShowGoTopListener,OnLoadingImgListener,CompoundButton.OnCheckedChangeListener{
+public class InventoryFragment extends BaseFragment implements XRecyclerView.LoadingListener, View.OnClickListener, TabLayout.OnTabSelectedListener, OnShowGoTopListener, OnLoadingImgListener, CompoundButton.OnCheckedChangeListener {
     private RequestParams params = null;
     //当前页数，首页为1
     private int currentPage = 1;
@@ -85,39 +85,41 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     private InventoryBiz biz = null;
     //数据集合
     private ArrayList<InventoryActivityEntity> list = null;
-    private final  int SCANNIN_GREQUEST_CODE = 13;
+    private final int SCANNIN_GREQUEST_CODE = 13;
+
     @Override
     public void onShowFloatAtionButton(boolean isShow) {
-        if(fab_gotop.getVisibility()== View.GONE&&isShow){
+        if (fab_gotop.getVisibility() == View.GONE && isShow) {
             fab_gotop.setVisibility(View.VISIBLE);
-        }else if(fab_gotop.getVisibility()==View.VISIBLE&&!isShow){
+        } else if (fab_gotop.getVisibility() == View.VISIBLE && !isShow) {
             fab_gotop.setVisibility(View.GONE);
         }
     }
+
     /*
      *列表加载图片
      */
     @Override
     public void onLoadImage(String url, ImageView iv_image) {
-                    if (RecyclerView.SCROLL_STATE_SETTLING != rv_inventory.getScrollState()) {
-                if (!"".equals(url)) {
-                    //非飞翔状态
-                    Glide.with(getActivity()).load(url).placeholder(R.drawable.goods_default).into(iv_image);
-                } else {
-                    //飞翔的时候
-                    iv_image.setImageResource(R.drawable.goods_default);
-                }
+        if (RecyclerView.SCROLL_STATE_SETTLING != rv_inventory.getScrollState()) {
+            if (!"".equals(url)) {
+                //非飞翔状态
+                Glide.with(getActivity()).load(url).placeholder(R.drawable.goods_default).into(iv_image);
+            } else {
+                //飞翔的时候
+                iv_image.setImageResource(R.drawable.goods_default);
             }
+        }
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()){
+        switch (buttonView.getId()) {
             case R.id.cb_inventory_sort_available:
-                if(isChecked){
-                    params.put("order_by","available_stock_asc");
-                }else {
-                    params.put("order_by","available_stock_desc");
+                if (isChecked) {
+                    params.put("order_by", "available_stock_asc");
+                } else {
+                    params.put("order_by", "available_stock_desc");
                 }
                 fab_gotop.setVisibility(View.GONE);
 //                //显示数量
@@ -134,16 +136,17 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     //设置显示的类型
     public enum Type {
         //在库，待入库
-        Inner, Willin,OutofWarning
+        Inner, Willin, OutofWarning
     }
 
     private Type type = Type.Inner;
     //设置请求的tag
     private String tag = "InventoryActivity";
-    private WarehouseEntity warehouseEntity = null;//所有仓库列表
+    //    private WarehouseEntity warehouseEntity = null;//所有仓库列表
+    private List<warehouse> warehouseList;
     //弹出框
     private PopupWindow mPopupWindow = null;
-    private PopupWindow menuPop=null;
+    private PopupWindow menuPop = null;
     //popwindow的adapter
     private OrderWareHouseAdapter wareAdapter = null;
     @Bind(R.id.tv_inventory_all)
@@ -154,23 +157,24 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     public CheckBox cb_sorttime;
     //获取屏幕宽度
 //    private int width = 0;
-    private String countTxt="";
+    private String countTxt = "";
+
     @Override
     public int getContentLayoutResId() {
         return R.layout.inventory_layout;
     }
+
     @Override
     protected void key(int keyCode, KeyEvent event) {
 
     }
 
 
-
     @Override
     public void initializeContentViews() {
 //        EventBus.getDefault().register(this);
         initStatus();
-        countTxt=getString(R.string.inventory_all_data);
+        countTxt = getString(R.string.inventory_all_data);
         //初始化解析业务
         biz = new InventoryBiz();
         tv_allInventory.setOnClickListener(this);
@@ -182,8 +186,8 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         //商品类型，20表示物料，默认10表示商品
         params.put("product_type", 10);
         //40表示发往仓库，1表示在库，10表示正常，20表示库存紧张，30表示断货
-        String enterKey= getActivity().getIntent().getStringExtra("indexOrder");
-        String key= IndexFragment.nameText[IndexFragment.nameText.length-2];
+        String enterKey = getActivity().getIntent().getStringExtra("indexOrder");
+        String key = IndexFragment.nameText[IndexFragment.nameText.length - 2];
 
 //        rv_inventory = (XRecyclerView)getActivity().findViewById(R.id.rv_inventory);
         rv_inventory.setLoadingMoreEnabled(true);
@@ -209,12 +213,12 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         initPopWindow();
 
         //tl_items.getTabAt(2).select();与网络加载造成冲突
-        if(key.equals(enterKey)){
+        if (key.equals(enterKey)) {
             type = Type.OutofWarning;
             //默认进入为“待入库”
             params.put("stock_status", 20);
             tl_items.getTabAt(2).select();
-        }else{
+        } else {
             //默认进入为“待入库”
             params.put("stock_status", 1);
 //            tl_items.getTabAt(0).select();
@@ -243,26 +247,27 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     /*
     *初始化状态
     */
-    private void initStatus(){
-        String [] status=getResources().getStringArray(R.array.inventory_all_status);
-        LayoutInflater inflater=LayoutInflater.from(getActivity());
-        String str="";
-        for(int i=0;i<status.length;i++){
-            str=status[i];
-            View view=inflater.inflate(R.layout.status_layout,null,false);
+    private void initStatus() {
+        String[] status = getResources().getStringArray(R.array.inventory_all_status);
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        String str = "";
+        for (int i = 0; i < status.length; i++) {
+            str = status[i];
+            View view = inflater.inflate(R.layout.status_layout, null, false);
             tl_items.addTab(tl_items.newTab().setCustomView(view));
-            TextView tv_name=(TextView)view.findViewById(R.id.tv_inventory_status_name);
-            TextView tv_num=(TextView)view.findViewById(R.id.tv_inventory_status_num);
+            TextView tv_name = (TextView) view.findViewById(R.id.tv_inventory_status_name);
+            TextView tv_num = (TextView) view.findViewById(R.id.tv_inventory_status_num);
             tv_name.setText(str);
-            if(i==0||i==1){
+            if (i == 0 || i == 1) {
                 tv_num.setVisibility(View.GONE);
-            }else{
+            } else {
                 tv_num.setText("0");
                 tv_num.setVisibility(View.GONE);
             }
         }
         tl_items.setOnTabSelectedListener(this);
     }
+
     private void startRequest() {
         params.put("page_no", currentPage);
         JsonHttpResponseHandler responeHandler = new JsonHttpResponseHandler() {
@@ -297,31 +302,31 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                             jobj = response.getJSONObject("data");
                             countNum = jobj.getInt("count");
 //                            countPage = jobj.getInt("page_num");
-                            Object proObj=jobj.get("products");
-                            if((proObj instanceof JSONArray)&&currentPage==1){
+                            Object proObj = jobj.get("products");
+                            if ((proObj instanceof JSONArray) && currentPage == 1) {
                                 JSONArray jroot = jobj.getJSONArray("products");
                                 //搜索或者限制条件导致没有数据
                                 if (type == Type.Inner) {
                                     adapter.clearDataSource();
                                 } else if (type == Type.Willin) {
                                     willInAdapter.clearDataSource();
-                                }else if(type==Type.OutofWarning){
+                                } else if (type == Type.OutofWarning) {
                                     adapter.clearDataSource();
                                 }
-                            }else if(proObj instanceof JSONObject){
+                            } else if (proObj instanceof JSONObject) {
 //                                JSONObject jroot = jobj.getJSONObject("products");
 //                                list = biz.parseJson2List(jroot);
                                 list = biz.gson2list(jobj.getString("products"));
                                 if (list != null && list.size() > 0) {
                                     if (currentPage == 1) {
                                         //显示数量
-                                        tv_count.setText(countTxt.replace("@",countNum+""));
+                                        tv_count.setText(countTxt.replace("@", countNum + ""));
                                         //首页为重新加载
                                         if (type == Type.Inner) {
                                             adapter.setDataSource(list);
                                         } else if (type == Type.Willin) {
                                             willInAdapter.setDataSource(list);
-                                        }else if(type==Type.OutofWarning){
+                                        } else if (type == Type.OutofWarning) {
                                             adapter.setDataSource(list);
                                         }
                                     } else {
@@ -330,14 +335,14 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                                             adapter.addDataSource(list);
                                         } else if (type == Type.Willin) {
                                             willInAdapter.addDataSource(list);
-                                        }else if(type==Type.OutofWarning){
+                                        } else if (type == Type.OutofWarning) {
                                             adapter.addDataSource(list);
                                         }
 
                                     }
                                     //下次页数加1
                                     currentPage++;
-                                }else{
+                                } else {
                                     T.showShort(getActivity(), R.string.inventory_tip_3);
                                 }
                             }
@@ -358,27 +363,29 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         responeHandler.setTag(tag);
         BirdApi.getInventory(getActivity(), params, responeHandler);
     }
-    private void showData(){
+
+    private void showData() {
         if (type == Type.Inner) {
-            if(adapter.getItemCount()>0){
+            if (adapter.getItemCount() > 0) {
                 tv_nodata.setVisibility(View.GONE);
-            }else{
+            } else {
                 tv_nodata.setVisibility(View.VISIBLE);
             }
         } else if (type == Type.Willin) {
-            if(willInAdapter.getItemCount()>0){
+            if (willInAdapter.getItemCount() > 0) {
                 tv_nodata.setVisibility(View.GONE);
-            }else{
+            } else {
                 tv_nodata.setVisibility(View.VISIBLE);
             }
-        }else if(type==Type.OutofWarning){
-            if(adapter.getItemCount()>0){
+        } else if (type == Type.OutofWarning) {
+            if (adapter.getItemCount() > 0) {
                 tv_nodata.setVisibility(View.GONE);
-            }else{
+            } else {
                 tv_nodata.setVisibility(View.VISIBLE);
             }
         }
     }
+
     /*
      *停止动画
      */
@@ -419,31 +426,40 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     /**
      * 获取所有的仓库
      */
-    private void getAllCompanyWarehouse() {
-        RequestParams wareParams = new RequestParams();
-        BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
-                WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
-                detail.setName("全部仓库");
-//                nowSelectedWarehouse = detail;//默认选中全部
-                warehouseEntity.getData().add(0, detail);
-                //显示弹框
-                wareAdapter.setDataSource(warehouseEntity.getData());
-                mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
-                super.onFailure(statusCode, headers, responseString, throwable);
-            }
-        });
+//    private void getAllCompanyWarehouse() {
+//        RequestParams wareParams = new RequestParams();
+//        BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
+//                WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
+//                detail.setName("全部仓库");
+////                nowSelectedWarehouse = detail;//默认选中全部
+//                warehouseEntity.getData().add(0, detail);
+//                //显示弹框
+//                wareAdapter.setDataSource(warehouseEntity.getData());
+//                mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+//                T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
+//                super.onFailure(statusCode, headers, responseString, throwable);
+//            }
+//        });
+//    }
+    private void getLocalCompanyWarehouse() {
+        List<warehouse> WarehouseList = DaoUtils.getAllWarehouse();
+        warehouse house = new warehouse();
+        house.setName("全部仓库");
+        WarehouseList.add(0, house);
+        warehouseList = WarehouseList;
+        wareAdapter.setDataSource(warehouseList);
     }
 
     private void initPopWindow() {
         final View popWindow = LayoutInflater.from(getActivity()).inflate(R.layout.common_recycleview_layout, null);
+        popWindow.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         RecyclerView rcy = (RecyclerView) popWindow.findViewById(R.id.rcy);
         rcy.setLayoutManager(new LinearLayoutManager(getActivity()));
         wareAdapter = new OrderWareHouseAdapter(getActivity(), null);
@@ -454,53 +470,56 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                     mPopupWindow.dismiss();
                 }
                 //点击时获取点击的仓库码
-                String wareCode = warehouseEntity.getData().get(position).getWarehouse_code();
+                String wareCode = warehouseList.get(position).getId();
                 //防止为空
                 wareCode = StringUtils.getString(wareCode);
                 params.put("warehouse_code", wareCode);
-                String name = warehouseEntity.getData().get(position).getName();
+                String name = warehouseList.get(position).getName();
                 if (name == null || "".equals(name.trim())) {
-                    tv_allInventory.setText(warehouseEntity.getData().get(0).getName());
+                    tv_allInventory.setText(warehouseList.get(0).getName());
                 } else {
                     tv_allInventory.setText(name);
                 }
                 //开始请求网络
                 //显示加载动画
-                tv_count.setText(countTxt.replace("@","0"));
+                tv_count.setText(countTxt.replace("@", "0"));
                 showBar();
                 currentPage = 1;
                 startRequest();
             }
         });
         rcy.setAdapter(wareAdapter);
-        mPopupWindow = new PopupWindow(popWindow, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        WindowManager wm = getActivity().getWindowManager();
+
+        int width = wm.getDefaultDisplay().getWidth();
+        int height = wm.getDefaultDisplay().getHeight();
+        mPopupWindow = new PopupWindow(popWindow, width / 3, LinearLayout.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setFocusable(true);
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
         mPopupWindow.update();
 //        mPopupWindow.showAsDropDown(view, width / 2, 0);
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_inventory_all:
-                if (warehouseEntity != null) {
-                    if (warehouseEntity.getData() != null) {
-                        if (mPopupWindow != null) {
-                            if (!mPopupWindow.isShowing()) {
-                                //显示弹框
-                                mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
-                            }
-                        } else {
-                            initPopWindow();
-                            //显示弹框
-                            mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
-                        }
-                        return;
+                if (mPopupWindow != null) {
+                    if (!mPopupWindow.isShowing()) {
+                        //显示弹框
+                        mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
                     }
+                } else {
+                    initPopWindow();
+                    //显示弹框
+                    mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
                 }
-                //请求所有仓库
-                getAllCompanyWarehouse();
+                if (warehouseList == null || warehouseList.size() == 0) {
+                    //请求所有仓库
+//                getAllCompanyWarehouse();
+                    getLocalCompanyWarehouse();
+                }
                 break;
             case R.id.tv_inventory_sort_available:
 
@@ -513,7 +532,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                     rv_inventory.smoothScrollToPosition(1);
                 } else if (type == Type.Willin) {
                     rv_inventory.smoothScrollToPosition(1);
-                }else if(type==Type.OutofWarning) {
+                } else if (type == Type.OutofWarning) {
                     rv_inventory.smoothScrollToPosition(1);
                 }
                 break;
@@ -635,11 +654,10 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     }
 
 
-
     private void reStartHttp() {
         fab_gotop.setVisibility(View.GONE);
         //显示数量
-        tv_count.setText(countTxt.replace("@","0"));
+        tv_count.setText(countTxt.replace("@", "0"));
         //显示加载动画
         showBar();
         currentPage = 1;
@@ -654,8 +672,8 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle bundle = data.getExtras();
                     String result = bundle.getString("result");
-                    if(result!=null){
-                        if(!TextUtils.isEmpty(result.trim())){
+                    if (result != null) {
+                        if (!TextUtils.isEmpty(result.trim())) {
                             et_search.setText(result);
                             params.put("keyword", result.trim());
                             reStartHttp();

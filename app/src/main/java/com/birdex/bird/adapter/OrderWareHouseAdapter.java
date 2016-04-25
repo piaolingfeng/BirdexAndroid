@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.birdex.bird.R;
 import com.birdex.bird.entity.WarehouseEntity;
+import com.birdex.bird.greendao.warehouse;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 
 import java.util.List;
@@ -21,21 +22,21 @@ import butterknife.ButterKnife;
  */
 public class OrderWareHouseAdapter extends RecyclerView.Adapter<OrderWareHouseAdapter.WareHouseViewHolder> {
     Context mContext;
-    List<WarehouseEntity.WarehouseDetail> warehouseList;
+    List<warehouse> WarehouseList;
     OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
 
 
-    public void setList(List<WarehouseEntity.WarehouseDetail> statusList) {
-        this.warehouseList = statusList;
+    public void setList(List<warehouse> WarehouseList) {
+        this.WarehouseList = WarehouseList;
     }
 
     public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
         this.onRecyclerViewItemClickListener = onRecyclerViewItemClickListener;
     }
 
-    public OrderWareHouseAdapter(Context mContext, List<WarehouseEntity.WarehouseDetail> warehouseList) {
+    public OrderWareHouseAdapter(Context mContext, List<warehouse> WarehouseList) {
         this.mContext = mContext;
-        this.warehouseList = warehouseList;
+        this.WarehouseList = WarehouseList;
     }
 
     @Override
@@ -46,14 +47,14 @@ public class OrderWareHouseAdapter extends RecyclerView.Adapter<OrderWareHouseAd
     @Override
     public void onBindViewHolder(WareHouseViewHolder holder, int position) {
         holder.position = position;
-        holder.tv_context.setText(warehouseList.get(position).getName());
+        holder.tv_context.setText(WarehouseList.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
         int size = 0;
-        if (warehouseList!=null){
-            size = warehouseList.size();
+        if (WarehouseList != null) {
+            size = WarehouseList.size();
         }
         return size;
     }
@@ -77,12 +78,13 @@ public class OrderWareHouseAdapter extends RecyclerView.Adapter<OrderWareHouseAd
             }
         }
     }
+
     /*
     *修改数据源
     */
-    public void setDataSource(List<WarehouseEntity.WarehouseDetail> list){
-        if(list!=null){
-            this.warehouseList=list;
+    public void setDataSource(List<warehouse> WarehouseList) {
+        if (WarehouseList != null) {
+            this.WarehouseList = WarehouseList;
             notifyDataSetChanged();
         }
     }

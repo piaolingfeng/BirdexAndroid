@@ -331,7 +331,7 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
         Intent intentFromGallery = new Intent();
         intentFromGallery.setType("image/*"); // 设置文件类型
         intentFromGallery
-                .setAction(Intent.ACTION_GET_CONTENT);
+                .setAction(Intent.ACTION_PICK);
         startActivityForResult(intentFromGallery,
                 REQUEST_CODE_PICK_IMAGE);
     }
@@ -498,6 +498,7 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                                     params1.add("receiver_id_card", idcardNo.getText().toString());
                                     params1.add("receiver_id_card_img", frontPicPath);
                                     params1.add("receiver_id_card_img_back", backPicPath);
+                                    params1.add("need_verify_id_card", "0");
 
                                     JsonHttpResponseHandler handler1 = new JsonHttpResponseHandler() {
                                         @Override
@@ -614,6 +615,7 @@ public class UploadIDCardActivity extends BaseActivity implements View.OnClickLi
                                     params1.add("receiver_id_card", idcardNo.getText().toString());
                                     params1.add("receiver_id_card_img", frontPicPath);
                                     params1.add("receiver_id_card_img_back", backPicPath);
+                                    params1.add("need_verify_id_card", "0");
 
                                     JsonHttpResponseHandler handler1 = new JsonHttpResponseHandler() {
                                         @Override

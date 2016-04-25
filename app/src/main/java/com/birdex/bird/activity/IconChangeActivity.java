@@ -328,7 +328,7 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
         //intent.putExtra("return-data", true);
 
         //uritempFile为Uri类变量，实例化uritempFile
-        uritempFile = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
+        uritempFile = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "small.jpg");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uritempFile);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
 

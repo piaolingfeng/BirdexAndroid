@@ -105,7 +105,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         getAllOrderStatus();//获取订单所有状态
         getAllPredicitionStatus();//获取预报所有状态
         getAllCompanyWarehouse();//获取所有仓库
-        setData();
+//        setData();
     }
 
 
@@ -211,6 +211,46 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     }
 
     /**
+     * 简化订单列表状态
+     */
+    private void dealOrderStatus() {
+        OrderStatus status = new OrderStatus();
+        String statusName[] = {"待审核", "等待出库", "已出库", "运输中", "已签收", "身份证异常", "库存异常", "审核不通过"};
+        if (orderStatus != null) {
+            for (int size = 0; size < statusName.length; size++) {
+                for (int i = 0; i < orderStatus.getData().size(); i++) {
+                    String name = orderStatus.getData().get(i).getStatus_name();
+                    if (statusName[size].equals(name)) {
+                        status.getData().add(orderStatus.getData().get(i));
+                        break;
+                    }
+                }
+            }
+        }
+        orderStatus = status;
+    }
+
+    /**
+     * 简化预报列表状态
+     */
+    private void dealPredictionStatus() {
+        OrderStatus status = new OrderStatus();
+        String statusName[] = {"待审核", "待入库", "待确认", "已入库", "审核不通过"};
+        if (predicitionStatus != null) {
+            for (int size = 0; size < statusName.length; size++) {
+                for (int i = 0; i < predicitionStatus.getData().size(); i++) {
+                    String name = predicitionStatus.getData().get(i).getStatus_name();
+                    if (statusName[size].equals(name)) {
+                        status.getData().add(predicitionStatus.getData().get(i));
+                        break;
+                    }
+                }
+            }
+        }
+        predicitionStatus = status;
+    }
+
+    /**
      * 获取订单所有状态
      */
     private void getAllOrderStatus() {
@@ -226,6 +266,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                     if (response != null) {
                         if (0 == response.get("error")) {
                             orderStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
+                            dealOrderStatus();
                             if (orderStatus != null) {
                                 OrderStatus.Status status = new OrderStatus().new Status();
                                 status.setStatus_name("全部状态");
@@ -301,6 +342,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                     if (response != null) {
                         if (0 == response.get("error")) {
                             predicitionStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
+                            dealPredictionStatus();
                             if (predicitionStatus != null) {
                                 OrderStatus.Status status = new OrderStatus().new Status();
                                 status.setStatus_name("全部状态");

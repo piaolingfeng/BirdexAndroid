@@ -30,6 +30,7 @@ import com.birdex.bird.widget.lunbo.CycleViewPager;
 import com.birdex.bird.widget.lunbo.DepthPageTransformer;
 import com.birdex.bird.widget.pullreflash.MyListener;
 import com.birdex.bird.widget.pullreflash.PullToRefreshLayout;
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -491,11 +492,16 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
      */
     private List<View> initCarouselData() {
 
-        String url[] = {"file:///android_asset/lunbo1.png"
-                , "file:///android_asset/lunbo2.png"
-                , "file:///android_asset/lunbo3.png"
-                , "file:///android_asset/lunbo4.jpg"};
-        List<String> localPathList = new ArrayList<>();
+//        String url[] = {"file:///android_asset/lunbo1.png"
+//                , "file:///android_asset/lunbo2.png"
+//                , "file:///android_asset/lunbo3.png"
+//                , "file:///android_asset/lunbo4.jpg"};
+        int url[] = {
+                R.drawable.recycle_1,
+                R.drawable.recycle_2,
+                R.drawable.recycle_3
+        };
+        List<Integer> localPathList = new ArrayList<>();
         for (int i = 0; i < url.length; i++) {
             localPathList.add(url[i]);
         }
@@ -506,7 +512,8 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
             ImageView imageView = new ImageView(getActivity());
 //                imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            GlideUtils.Barnner(imageView, localPathList.get(i));
+//            GlideUtils.Barnner(imageView, localPathList.get(i));
+            GlideUtils.setImageToLocal(imageView, localPathList.get(i));
             mImageViews.add(imageView);
             if (i != 0 && i != localPathList.size() - 1) {
                 final int position = i - 1;

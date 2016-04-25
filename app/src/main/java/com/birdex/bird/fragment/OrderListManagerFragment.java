@@ -29,7 +29,7 @@ import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.entity.OrderStatus;
-import com.birdex.bird.entity.WarehouseEntity;
+import com.birdex.bird.greendao.warehouse;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.StringUtils;
@@ -362,9 +362,9 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
     }
 
     @Subscriber(tag = "Order_changeWarehouse")
-    public void changeWarehouse(WarehouseEntity.WarehouseDetail detail) {
+    public void changeWarehouse(warehouse house) {
 //        nowSelectedWarehouse = detail;
-        state_Warehouse.setText(detail.getName());
+        state_Warehouse.setText(house.getName());
     }
 
     @Subscriber(tag = "Order_changeState")
@@ -448,7 +448,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
      * Warehouse
      */
     public void showWarehouseWindow(View viewID, int w) {
-        OrderWareHouseAdapter adapter = new OrderWareHouseAdapter(getActivity(), MyOrderListActivity.warehouseEntity.getData());
+        OrderWareHouseAdapter adapter = new OrderWareHouseAdapter(getActivity(), MyOrderListActivity.warehouseList);
         adapter.setOnRecyclerViewItemClickListener(
                 new OnRecyclerViewItemClickListener() {
                     @Override
@@ -493,9 +493,9 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
      * 设置仓库条件
      */
     private void setWarehouse(int position) {
-        entity.setWarehouse_code(MyOrderListActivity.warehouseEntity.getData().get(position).getWarehouse_code());
+        entity.setWarehouse_code(MyOrderListActivity.warehouseList.get(position).getId());
         entity.setPage_noReset();
-        bus.post(MyOrderListActivity.warehouseEntity.getData().get(position), "Order_changeWarehouse");
+        bus.post(MyOrderListActivity.warehouseList.get(position), "Order_changeWarehouse");
         bus.post(entity, "requestOrderList");
     }
 

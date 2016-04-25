@@ -29,7 +29,7 @@ import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.entity.OrderStatus;
 import com.birdex.bird.entity.PredicitionEntity;
-import com.birdex.bird.entity.WarehouseEntity;
+import com.birdex.bird.greendao.warehouse;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.StringUtils;
@@ -385,10 +385,10 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
     }
 
     @Subscriber(tag = "Pre_changeWarehouse")
-    public void changeWarehouse(WarehouseEntity.WarehouseDetail detail) {
+    public void changeWarehouse(warehouse house) {
 //        nowSelectedWarehouse = detail;
         if (state_Warehouse != null)
-            state_Warehouse.setText(detail.getName());
+            state_Warehouse.setText(house.getName());
     }
 
     @Subscriber(tag = "Pre_changeState")
@@ -474,7 +474,7 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
      * Warehouse
      */
     public void showWarehouseWindow(View viewID, int w) {
-        OrderWareHouseAdapter adapter = new OrderWareHouseAdapter(getActivity(), MyOrderListActivity.warehouseEntity.getData());
+        OrderWareHouseAdapter adapter = new OrderWareHouseAdapter(getActivity(), MyOrderListActivity.warehouseList);
         adapter.setOnRecyclerViewItemClickListener(
                 new OnRecyclerViewItemClickListener() {
                     @Override
@@ -519,9 +519,9 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
      * 设置仓库条件
      */
     private void setWarehouse(int position) {
-        entity.setWarehouse_code(MyOrderListActivity.warehouseEntity.getData().get(position).getWarehouse_code());
+        entity.setWarehouse_code(MyOrderListActivity.warehouseList.get(position).getId());
         entity.setPage_noReset();
-        bus.post(MyOrderListActivity.warehouseEntity.getData().get(position), "Pre_changeWarehouse");
+        bus.post(MyOrderListActivity.warehouseList.get(position), "Pre_changeWarehouse");
         bus.post(entity, "requestPredictList");
     }
 

@@ -268,7 +268,7 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
         Intent intentFromGallery = new Intent();
         intentFromGallery.setType("image/*"); // 设置文件类型
         intentFromGallery
-                .setAction(Intent.ACTION_GET_CONTENT);
+                .setAction(Intent.ACTION_PICK);
         startActivityForResult(intentFromGallery,
                 REQUEST_CODE_PICK_IMAGE);
     }
@@ -326,7 +326,15 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
         //intent.putExtra("return-data", true);
 
         //uritempFile为Uri类变量，实例化uritempFile
-        uritempFile = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
+        uritempFile = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "small.jpg");
+        try {
+            File file = new File(new URI(uritempFile.toString()));
+            if(file.exists()){
+                file.delete();
+            }
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uritempFile);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
 
@@ -417,58 +425,61 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
                     // 将图片上传到服务器
                     try {
                         File file = new File(new URI(uritempFile.toString()));
-                        saveBitmapFile(comp(file.getAbsolutePath()), file.getAbsolutePath());
-                        RequestParams params = new RequestParams();
-                        params.put("logo", file);
-                        showLoading();
+                        if(file.exists()) {
+                            saveBitmapFile(comp(file.getAbsolutePath()), file.getAbsolutePath());
+                            RequestParams params = new RequestParams();
+                            params.put("logo", file);
+                            showLoading();
 
-                        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                super.onSuccess(statusCode, headers, response);
-                                hideLoading();
-                                T.showShort(MyApplication.getInstans(), "上传图片成功");
-                                try {
-                                    if("0".equals(response.getString("error"))) {
-                                        try {
-                                            String savepath = ((JSONObject)response.get("data")).getString("savepath");
-                                            String thumb = ((JSONObject)response.get("data")).getString("thumb");
-                                            path = savepath + thumb;
-                                            resultBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uritempFile));
-                                            icon.setImageBitmap(resultBitmap);
-                                        } catch (FileNotFoundException e) {
-                                            e.printStackTrace();
-                                            hideLoading();
+                            JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
+                                @Override
+                                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                    super.onSuccess(statusCode, headers, response);
+                                    hideLoading();
+                                    T.showShort(MyApplication.getInstans(), "上传图片成功");
+                                    try {
+                                        if ("0".equals(response.getString("error"))) {
+                                            try {
+                                                String savepath = ((JSONObject) response.get("data")).getString("savepath");
+                                                String thumb = ((JSONObject) response.get("data")).getString("thumb");
+                                                path = savepath + thumb;
+                                                resultBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uritempFile));
+                                                icon.setImageBitmap(resultBitmap);
+                                            } catch (FileNotFoundException e) {
+                                                e.printStackTrace();
+                                                hideLoading();
+                                            }
                                         }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                super.onFailure(statusCode, headers, responseString, throwable);
-                                hideLoading();
-                                T.showShort(MyApplication.getInstans(),getString(R.string.upload_fail));
-                            }
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                    super.onFailure(statusCode, headers, responseString, throwable);
+                                    hideLoading();
+                                    T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                                }
 
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                super.onFailure(statusCode, headers, throwable, errorResponse);
-                                hideLoading();
-                                T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
-                            }
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                                    hideLoading();
+                                    T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                                }
 
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                                super.onFailure(statusCode, headers, throwable, errorResponse);
-                                hideLoading();
-                                T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
-                            }
-                        };
-                        handler.setTag(TAG);
-                        BirdApi.upLoadLogo(MyApplication.getInstans(), params, handler);
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                                    hideLoading();
+                                    T.showShort(MyApplication.getInstans(), getString(R.string.upload_fail));
+                                }
+                            };
+
+                            handler.setTag(TAG);
+                            BirdApi.upLoadLogo(MyApplication.getInstans(), params, handler);
+                        }
                     } catch (URISyntaxException e) {
                         e.printStackTrace();
                     }

@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.entity.City;
 import com.birdex.bird.entity.Contact;
-import com.birdex.bird.entity.Warehouse;
 import com.birdex.bird.util.Constant;
 
 import java.util.List;

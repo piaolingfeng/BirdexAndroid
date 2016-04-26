@@ -7,9 +7,9 @@
     <!--我的首页-->
     <dimen name="mine_item_size">20sp</dimen>
     <!--收支明细-->
-    <dimen name="personal_details_item_orderid_size">18sp</dimen>
-    <dimen name="personal_details_item_ordernum_size">18sp</dimen>
-    <dimen name="personal_details_item_ordercontent_size">16sp</dimen>
+    <dimen name="personal_details_item_orderid_size">16sp</dimen>
+    <dimen name="personal_details_item_ordernum_size">16sp</dimen>
+    <dimen name="personal_details_item_ordercontent_size">14sp</dimen>
     <!--库存item-->
     <dimen name="inventory_item_margin_top">10dp</dimen>
     <dimen name="inventory_item_paddinglr">12dp</dimen>

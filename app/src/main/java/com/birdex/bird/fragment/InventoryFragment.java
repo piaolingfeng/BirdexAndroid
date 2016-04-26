@@ -343,17 +343,17 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                                     //下次页数加1
                                     currentPage++;
                                 } else {
-                                    T.showShort(getActivity(), R.string.inventory_tip_3);
+                                    T.showShortByID(getActivity(), R.string.inventory_tip_3);
                                 }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     } else {
-                        T.showShort(getActivity(), R.string.inventory_tip_2);
+                        T.showShortByID(getActivity(), R.string.inventory_tip_2);
                     }
                 } else {
-                    T.showShort(getActivity(), R.string.inventory_tip_1);
+                    T.showShortByID(getActivity(), R.string.inventory_tip_1);
                 }
                 //结束动画
                 stopHttpAnim();

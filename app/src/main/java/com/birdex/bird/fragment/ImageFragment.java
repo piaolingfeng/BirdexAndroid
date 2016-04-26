@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.birdex.bird.R;
+import com.birdex.bird.util.glide.GlideUtils;
 
 import butterknife.Bind;
 
@@ -47,7 +48,8 @@ public class ImageFragment extends BaseFragment {
     @Override
     public void initializeContentViews() {
         if (imgID != 0) {
-            iv_welcome.setImageResource(imgID);
+//            iv_welcome.setImageResource(imgID);
+            GlideUtils.setImageToLocal(iv_welcome,imgID);
         }
     }
 

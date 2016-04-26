@@ -13,7 +13,9 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +29,19 @@ import com.alipay.sdk.app.PayTask;
 import com.birdex.bird.AliPay.PayResult;
 import com.birdex.bird.AliPay.SignUtils;
 import com.birdex.bird.R;
+import com.birdex.bird.api.BirdApi;
+import com.birdex.bird.entity.EncryptEntity;
 import com.birdex.bird.util.Constant;
+import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.T;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.rey.material.widget.RadioButton;
 import com.rey.material.widget.Switch;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -45,7 +55,7 @@ import butterknife.Bind;
 /**
  * 充值
  */
-public class RechargeFragment extends BaseFragment implements CompoundButton.OnCheckedChangeListener,View.OnClickListener{
+public class RechargeFragment extends BaseFragment implements CompoundButton.OnCheckedChangeListener,View.OnClickListener,TextWatcher{
     @Bind(R.id.rb_recharge_tran)
     public RadioButton rb_tran;
     @Bind(R.id.rb_recharge_tax)
@@ -118,6 +128,7 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
 
     @Override
     public void initializeContentViews() {
+        et_money.addTextChangedListener(this);
         sharedPreferences=getActivity().getSharedPreferences(Constant.SP_UserInfo, Activity.MODE_PRIVATE);
         rb_tran.setOnCheckedChangeListener(this);
         rb_tax.setOnCheckedChangeListener(this);
@@ -126,10 +137,11 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
         btn_pay.setOnClickListener(this);
         //设置接口的参数
         params=new RequestParams();
+        //params.put("WalletType","default");
         //http://payorder.testsite.com.cn/gotobank.aspx?a=in&WalletType=default&ud=2（用户ID）&p=6&m=0.01（金额）&islink=1
         params.put("a","in");
-        params.put("WalletType","default");
         params.put("islink","1");
+        params.put("p","6");
     }
 
     @Override
@@ -173,7 +185,7 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
                     return;
                 }
                 if(moneyNum==0){
-//                    T.showShort();
+                    T.showShort(getActivity(),R.string.recharge_tip7);
                     return;
                 }
                 moneyNum=Float.parseFloat(money);
@@ -182,67 +194,21 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
                     T.showShort(getActivity(),R.string.recharge_tip4);
                     return;
                 }
+                //添加用户的绑定id
+                params.put("ud",bindID);
+                //设置充值账号
+                if(rb_tran.isChecked()){
+                    params.put("WalletType","default");
+                }else if(rb_tax.isChecked()){
+                    params.put("WalletType","tax");
+                }
+                params.put("m",money);
 
+                getEncryptInfo();
                 break;
             default:
                 break;
         }
-    }
-    /*****************************支付宝******************************************/
-    /**
-     * call alipay sdk pay. 调用SDK支付
-     *
-     */
-    public void pay(View v) {
-//        if (TextUtils.isEmpty(PARTNER) || TextUtils.isEmpty(RSA_PRIVATE) || TextUtils.isEmpty(SELLER)) {
-//            new AlertDialog.Builder(getActivity()).setTitle("警告").setMessage("需要配置PARTNER | RSA_PRIVATE| SELLER")
-//                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialoginterface, int i) {
-//                            //
-////                            finish();
-//                        }
-//                    }).show();
-//            return;
-//        }
-//        String orderInfo = getOrderInfo("测试的商品", "该测试商品的详细描述", "0.01");
-//
-//        /**
-//         * 特别注意，这里的签名逻辑需要放在服务端，切勿将私钥泄露在代码中！
-//         */
-//        String sign = sign(orderInfo);
-//        try {
-//            /**
-//             * 仅需对sign 做URL编码
-//             */
-//            sign = URLEncoder.encode(sign, "UTF-8");
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-
-        /**
-         * 完整的符合支付宝参数规范的订单信息
-         */
-//        final String payInfo = orderInfo + "&sign=\"" + sign + "\"&" + getSignType();
-        final String  payInfo="_input_charset=utf-8&body=2&notify_url=http://birdex.f3322.net:8013/bs-product/alipay&out_trade_no=20160412180238&partner=2088311639604764&payment_type=1&seller_id=zhifubao@birdex.cn&service=mobile.securitypay.pay&sign_type=0001&subject=1&total_fee=3&sign=cyFQRjmiDGoAanDpJFpDKTM1ZmcNBlJhZfDPg+AofVyyXdv6ddPlGvXXKVPSKQlVNSHDVTlVT+2Btn1T5+rky//SVLDa9E5nNsCaDCe046oViiQSNZubFc7jZoZYttIirbdwvjfePnHq6P7+0i3jau78qzQFw/xtXLH0hssAiWQ=";
-        Runnable payRunnable = new Runnable() {
-
-            @Override
-            public void run() {
-                // 构造PayTask 对象
-                PayTask alipay = new PayTask(getActivity());
-                // 调用支付接口，获取支付结果
-                String result = alipay.pay(payInfo, true);
-
-                Message msg = new Message();
-                msg.what = SDK_PAY_FLAG;
-                msg.obj = result;
-                mHandler.sendMessage(msg);
-            }
-        };
-
-        // 必须异步调用
-        Thread payThread = new Thread(payRunnable);
-        payThread.start();
     }
 
     /**
@@ -365,7 +331,84 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
     }
 
     public void getEncryptInfo(){
+        showLoading();
+        JsonHttpResponseHandler handler=new JsonHttpResponseHandler(){
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                hideLoading();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                T.showShort(getActivity(),R.string.recharge_tip5);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                EncryptEntity encryptEntity= GsonHelper.getPerson(response.toString(),EncryptEntity.class);
+                if(encryptEntity!=null){
+                    if("SUCCESS".equalsIgnoreCase(encryptEntity.getCode())){
+                        //加密成功
+                        startPay(encryptEntity.getMessage());
+                    }else {
+                        T.showShort(getActivity(),R.string.recharge_tip5);
+                    }
+                }else{
+                    T.showShort(getActivity(),R.string.recharge_tip5);
+                }
+            }
+
+        };
+
+        handler.setTag(tag);
+        BirdApi.getEncryptInfo(getActivity(),params,handler);
+    }
+    private void startPay(final String payInfo){
+        Runnable payRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                // 构造PayTask 对象
+                PayTask alipay = new PayTask(getActivity());
+                // 调用支付接口，获取支付结果
+                String result = alipay.pay(payInfo, true);
+
+                Message msg = new Message();
+                msg.what = SDK_PAY_FLAG;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        };
+
+        // 必须异步调用
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
+    }
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
     }
 
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        String money=s.toString();
+        if (money.contains(".")) {
+            int position=money.indexOf(".");
+            int lenght=money.length();
+            if (lenght-(position+1)>2) {
+                s = money.subSequence(0, position+ 3);
+                et_money.setText(s);
+                et_money.setSelection(s.length());
+            }
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
 }

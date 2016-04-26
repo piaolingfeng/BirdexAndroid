@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -458,6 +459,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
 
     private void initPopWindow() {
         final View popWindow = LayoutInflater.from(getActivity()).inflate(R.layout.common_recycleview_layout, null);
+        popWindow.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         RecyclerView rcy = (RecyclerView) popWindow.findViewById(R.id.rcy);
         rcy.setLayoutManager(new LinearLayoutManager(getActivity()));
         wareAdapter = new OrderWareHouseAdapter(getActivity(), null);
@@ -487,7 +489,11 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
             }
         });
         rcy.setAdapter(wareAdapter);
-        mPopupWindow = new PopupWindow(popWindow, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        WindowManager wm = getActivity().getWindowManager();
+
+        int width = wm.getDefaultDisplay().getWidth();
+        int height = wm.getDefaultDisplay().getHeight();
+        mPopupWindow = new PopupWindow(popWindow, width / 3, LinearLayout.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setFocusable(true);
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
@@ -499,22 +505,21 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_inventory_all:
-                if (warehouseList != null && warehouseList.size() > 0) {
-                    if (mPopupWindow != null) {
-                        if (!mPopupWindow.isShowing()) {
-                            //显示弹框
-                            mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
-                        }
-                    } else {
-                        initPopWindow();
+                if (mPopupWindow != null) {
+                    if (!mPopupWindow.isShowing()) {
                         //显示弹框
                         mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
                     }
-                    return;
-                } else
+                } else {
+                    initPopWindow();
+                    //显示弹框
+                    mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
+                }
+                if (warehouseList == null || warehouseList.size() == 0) {
                     //请求所有仓库
 //                getAllCompanyWarehouse();
                     getLocalCompanyWarehouse();
+                }
                 break;
             case R.id.tv_inventory_sort_available:
 

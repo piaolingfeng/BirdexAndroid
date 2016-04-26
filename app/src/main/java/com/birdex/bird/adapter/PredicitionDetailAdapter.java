@@ -74,7 +74,7 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
                 holder.btn_confirm.setVisibility(View.VISIBLE);
                 holder.btn_re_confirm.setVisibility(View.VISIBLE);
             }
-        }else {
+        } else {
             holder.btn_confirm.setVisibility(View.INVISIBLE);
             holder.btn_re_confirm.setVisibility(View.INVISIBLE);
         }
@@ -144,9 +144,8 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
         @Subscriber(tag = "confirm")
         public void setBtn_confirm(int position) {
             if (this.position == position || position == -1) {//-1为刷新全部状态
-                productList.get(position).setStatus_name("已入库");
+                productList.get(this.position).setStatus_name("已入库");
                 notifyDataSetChanged();
-
             }
         }
 

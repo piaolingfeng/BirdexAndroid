@@ -448,7 +448,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
      * Warehouse
      */
     public void showWarehouseWindow(View viewID, int w) {
-        OrderWareHouseAdapter adapter = new OrderWareHouseAdapter(getActivity(), MyOrderListActivity.warehouseList);
+        OrderWareHouseAdapter adapter = new OrderWareHouseAdapter(getActivity(), MyOrderListActivity.warehouseEntity.getData());
         adapter.setOnRecyclerViewItemClickListener(
                 new OnRecyclerViewItemClickListener() {
                     @Override
@@ -493,9 +493,9 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
      * 设置仓库条件
      */
     private void setWarehouse(int position) {
-        entity.setWarehouse_code(MyOrderListActivity.warehouseList.get(position).getId());
+        entity.setWarehouse_code(MyOrderListActivity.warehouseEntity.getData().get(position).getWarehouse_code());
         entity.setPage_noReset();
-        bus.post(MyOrderListActivity.warehouseList.get(position), "Order_changeWarehouse");
+        bus.post(MyOrderListActivity.warehouseEntity.getData().get(position), "Order_changeWarehouse");
         bus.post(entity, "requestOrderList");
     }
 

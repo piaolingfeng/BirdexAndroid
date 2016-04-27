@@ -55,11 +55,11 @@ public class NotificationService extends UmengBaseIntentService {
 
     //设置
     private NotifiMsg notimsg = null;
-    //设置数据库的操作
-    private SQLiteDatabase db = null;
-    private DaoMaster daoMaster = null;
-    private DaoSession daoSession = null;
-    private NotifiMsgDao msgDao = null;
+//    //设置数据库的操作
+//    private SQLiteDatabase db = null;
+//    private DaoMaster daoMaster = null;
+//    private DaoSession daoSession = null;
+//    private NotifiMsgDao msgDao = null;
     private SimpleDateFormat format = null;
 
     //设置声音的
@@ -70,16 +70,14 @@ public class NotificationService extends UmengBaseIntentService {
     private PushAidlImpl pushAidl = null;
     //记录上次的获取时间
     private static long time1=0;
+    private DaoMaster.DevOpenHelper helper =null;
     @Override
     public void onCreate() {
         super.onCreate();
 //        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "Bird", null);
         android.util.Log.e("android","---------------start service");
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, Constant.DBName, null);
-        db = helper.getWritableDatabase();
-        daoMaster = new DaoMaster(db);
-        daoSession = daoMaster.newSession();
-        msgDao = daoSession.getNotifiMsgDao();
+        helper = new DaoMaster.DevOpenHelper(this, Constant.DBName, null);
+
         //设置时间的格式
         format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         builder = new NotificationCompat.Builder(this);
@@ -101,13 +99,17 @@ public class NotificationService extends UmengBaseIntentService {
             //可以通过MESSAGE_BODY取得消息体
             String message = intent.getStringExtra(BaseConstants.MESSAGE_BODY);
             UMessage msg = new UMessage(new JSONObject(message));
-
+//            db = helper.getWritableDatabase();
+//            daoMaster = new DaoMaster(db);
+//            daoSession = daoMaster.newSession();
+//            msgDao = daoSession.getNotifiMsgDao();
             Log.e("android", "1----------message=" + message);    //消息体
             Log.e("android", "1----------custom=" + msg.custom);    //自定义消息的内容
             Log.e("android", "1----------title=" + msg.title);    //通知标题
             Log.e("android", "1----------text=" + msg.text);    //通知内容
             if (msg.custom != null && !TextUtils.isEmpty(msg.custom)) {
                 notimsg = getMsgEntity(msg.custom);
+                notimsg.setIsread(false);
                 notimsg.setMsgdate(format.format(new Date()));
                 myNotificationView.setTextViewText(R.id.tv_message_title, StringUtils.ToDBC(notimsg.getTitle()));
                 myNotificationView.setTextViewText(R.id.tv_message_text,StringUtils.ToDBC(notimsg.getTitle()));
@@ -159,7 +161,8 @@ public class NotificationService extends UmengBaseIntentService {
 //                    }
 //                }
                 notifiManager.notify(0, builder.build());
-                msgDao.insert(notimsg);
+//                msgDao.insert(notimsg);
+//                db.close();
             } else {
                 myNotificationView.setTextViewText(R.id.tv_message_title, StringUtils.ToDBC(msg.title));
                 myNotificationView.setTextViewText(R.id.tv_message_text, StringUtils.ToDBC(msg.text));
@@ -188,6 +191,14 @@ public class NotificationService extends UmengBaseIntentService {
                 }
                 time1=time2;
                 notifiManager.notify(0, builder.build());
+                notimsg = new NotifiMsg();
+                notimsg.setIsread(false);
+                notimsg.setMsgtext(msg.text);
+                notimsg.setTitle(msg.title);
+                notimsg.setTypeid("self");
+                notimsg.setMsgdate(format.format(new Date()));
+//                msgDao.insert(notimsg);
+//                db.close();
             }
 //			myNotificationView.setTextViewText(R.id.tv_message_title, msg.title);
 //			myNotificationView.setTextViewText(R.id.tv_message_text, msg.custom);

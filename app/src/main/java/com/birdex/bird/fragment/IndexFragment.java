@@ -152,14 +152,14 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                 Intent intent = new Intent(getActivity(), MyOrderListActivity.class);
                 intent.putExtra("indexOrder", indexOrderLocalDataList.get(position).getName());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                if (indexOrderLocalDataList.get(position).getName().contains("库存")) {
-                    if (!indexOrderLocalDataList.get(position).getName().contains("订单")) {
-                        intent.setClass(getActivity(), InventoryActivity.class);
-                    }
+//                if (indexOrderLocalDataList.get(position).getName().contains("库存")) {
+//                    if (!indexOrderLocalDataList.get(position).getName().contains("订单")) {
+//                        intent.setClass(getActivity(), InventoryActivity.class);
+//                    }
+//                    startActivity(intent);
+//                } else {
                     startActivity(intent);
-                } else {
-                    startActivity(intent);
-                }
+//                }
             }
         });
         rcv_order_manager.setAdapter(orderManagerAdapter);

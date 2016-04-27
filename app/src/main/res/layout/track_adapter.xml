@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="#5B5B60"
-            android:text="sdfsdf"/>
+            />
 
         <TextView
             android:id="@+id/time"
@@ -47,7 +47,7 @@
             android:textSize="16sp"
             android:textColor="@color/context_1"
             android:layout_marginBottom="30dp"
-            android:text="sdfsdf"/>
+            />
 
     </LinearLayout>
 

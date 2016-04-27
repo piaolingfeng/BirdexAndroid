@@ -20,6 +20,7 @@ import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.entity.OrderStatus;
 import com.birdex.bird.entity.TimeSelectEntity;
+import com.birdex.bird.entity.WarehouseEntity;
 import com.birdex.bird.fragment.BaseFragment;
 import com.birdex.bird.fragment.BillDetailFragment;
 import com.birdex.bird.fragment.InventoryFragment;
@@ -67,8 +68,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 
     public static OrderStatus orderStatus;//订单状态列表
     public static OrderStatus predicitionStatus;//预报状态列表
-    //    public static WarehouseEntity warehouseEntity;//所有仓库列表
-    public static List<warehouse> warehouseList;
+    public static WarehouseEntity warehouseEntity;//所有仓库列表
     public static List<TimeSelectEntity> timeList;
 
     OrderRequestEntity entity;//请求数据保存的实体
@@ -86,7 +86,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     public void initializeContentViews() {
         orderStatus = new OrderStatus();
         predicitionStatus = new OrderStatus();
-        warehouseList = new ArrayList<>();
+        warehouseEntity = new WarehouseEntity();
 //        warehouseEntity = new WarehouseEntity();
         if (orderListManagerFragment == null)
             orderListManagerFragment = new OrderListManagerFragment();
@@ -108,10 +108,18 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         }
         requestStateCount = 0;//
         initTimeStatus();
-        getAllOrderStatus();//获取订单所有状态
-        getAllPredicitionStatus();//获取预报所有状态
-//        getAllCompanyWarehouse();//获取所有仓库
-        getLocalCompanyWarehouse();
+        currentName = getIntent().getStringExtra("name");//首页的工具进来时
+        if (StringUtils.isEmpty(currentName)){
+            currentName = getIntent().getStringExtra("indexOrder");
+        }
+        getAllCompanyWarehouse();
+        if (currentName.contains("订单")){
+            getAllOrderStatus();//获取订单所有状态
+        }
+        if (currentName.contains("预报")){
+            getAllPredicitionStatus();//获取预报所有状态
+        }
+        if (!currentName.contains("订单")&&!currentName.contains("预报"))
         setData();
     }
 
@@ -278,8 +286,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                                 OrderStatus.Status status = new OrderStatus().new Status();
                                 status.setStatus_name("全部状态");
                                 orderStatus.getData().add(0, status);
-//                                requestStateCount++;
-//                                getNetStatusCount();
+                                setData();
                             } else {
                                 T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
                             }
@@ -354,8 +361,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                                 OrderStatus.Status status = new OrderStatus().new Status();
                                 status.setStatus_name("全部状态");
                                 predicitionStatus.getData().add(0, status);
-//                                requestStateCount++;
-//                                getNetStatusCount();
+                                setData();
                             } else {
                                 T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
                             }
@@ -402,77 +408,69 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     /**
      * 获取所有的仓库
      */
-//    private void getAllCompanyWarehouse() {
-//        showLoading();
-//        RequestParams wareParams = new RequestParams();
-//        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                try {
-//                    if (response == null) {
-//                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
-//                        return;
-//                    }
-//                    if (0 == response.get("error")) {
-//                        warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
-//                        if (warehouseEntity != null) {
-//                            if (warehouseEntity.getError().equals("0")) {
-//                                WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
-//                                detail.setName("全部仓库");
-////                nowSelectedWarehouse = detail;//默认选中全部
-//                                warehouseEntity.getData().add(0, detail);
-//                                bus.post(detail, "changeWarehouse");
-//                            } else {
-//                                T.showLong(MyApplication.getInstans(), warehouseEntity.getError());
-//                            }
-//                        } else {
-//                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
-//                        }
-//                    } else {
-//                        T.showLong(MyApplication.getInstans(), response.get("data") + "");
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
-//                super.onFailure(statusCode, headers, responseString, throwable);
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
-//                super.onFailure(statusCode, headers, throwable, errorResponse);
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-//                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
-//                super.onFailure(statusCode, headers, throwable, errorResponse);
-//            }
-//
-//
-//            @Override
-//            public void onFinish() {
-//                hideLoading();
-//                super.onFinish();
-//            }
-//        };
-//        handler.setTag(tag);
-//        BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, handler);
-//    }
+    private void getAllCompanyWarehouse() {
+        showLoading();
+        RequestParams wareParams = new RequestParams();
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    if (response == null) {
+                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
+                        return;
+                    }
+                    if (0 == response.get("error")) {
+                        warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
+                        if (warehouseEntity != null) {
+                            if (warehouseEntity.getError().equals("0")) {
+                                WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
+                                detail.setName("全部仓库");
+//                nowSelectedWarehouse = detail;//默认选中全部
+                                warehouseEntity.getData().add(0, detail);
+                                bus.post(detail, "changeWarehouse");
+                            } else {
+                                T.showLong(MyApplication.getInstans(), warehouseEntity.getError());
+                            }
+                        } else {
+                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
+                        }
+                    } else {
+                        T.showLong(MyApplication.getInstans(), response.get("data") + "");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-    private void getLocalCompanyWarehouse() {
-        List<warehouse> WarehouseList = DaoUtils.getAllWarehouse();
-        warehouse house = new warehouse();
-        house.setName("全部仓库");
-        WarehouseList.add(0, house);
-        warehouseList = WarehouseList;
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+
+            @Override
+            public void onFinish() {
+                hideLoading();
+                super.onFinish();
+            }
+        };
+        handler.setTag(tag);
+        BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, handler);
     }
 
     PopupWindow mPopupWindow;

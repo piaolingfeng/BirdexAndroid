@@ -7,7 +7,7 @@
     <com.birdex.bird.widget.TitleView
         android:id="@+id/tiv_detail_willin_title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height" />
+        android:layout_height="wrap_content" />
     <ExpandableListView
         android:id="@+id/elv_willin_detail"
         android:layout_width="match_parent"

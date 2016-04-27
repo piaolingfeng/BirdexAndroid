@@ -1,18 +1,14 @@
 package com.birdex.bird.activity;
 
-import android.os.Bundle;
-import android.app.Activity;
-import android.view.View;
-import android.widget.ImageView;
-
 import com.birdex.bird.R;
+import com.birdex.bird.widget.TitleView;
 
 import butterknife.Bind;
 
-public class AboutActivity extends BaseActivity implements View.OnClickListener{
-    @Bind(R.id.iv_about_us_back)
-    public ImageView iv_back;
+public class AboutActivity extends BaseActivity{
 
+    @Bind(R.id.title_view)
+    TitleView title_view;
     @Override
     public int getContentLayoutResId() {
         return R.layout.about_layout;
@@ -20,15 +16,6 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void initializeContentViews() {
-        iv_back.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.iv_about_us_back:
-                finish();
-                break;
-        }
+        title_view.setTitle(getString(R.string.about_us_title));
     }
 }

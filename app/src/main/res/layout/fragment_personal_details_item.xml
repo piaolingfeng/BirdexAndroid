@@ -36,7 +36,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:singleLine="true"
         android:textColor="@color/gray"
         android:layout_marginBottom="6dp"
         android:textSize="@dimen/personal_details_item_ordercontent_size" />

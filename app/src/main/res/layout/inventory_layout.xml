@@ -82,6 +82,7 @@
                             android:layout_marginLeft="@dimen/inventory_limit_marginlr"
                             android:drawableRight="@drawable/laydown"
                             android:text="@string/inventory_all"
+                            android:drawablePadding="10dp"
                             android:textSize="@dimen/inventory_limit_txt" />
 
                         <CheckBox
@@ -95,6 +96,7 @@
                             android:layout_marginRight="@dimen/inventory_limit_marginlr"
                             android:drawableRight="@drawable/limit_sort_bg"
                             android:text="@string/inventory_sort_available"
+                            android:drawablePadding="10dp"
                             android:textSize="@dimen/inventory_limit_txt" />
 
                         <CheckBox

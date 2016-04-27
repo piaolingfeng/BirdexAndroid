@@ -10,7 +10,7 @@
     <com.birdex.bird.widget.TitleView
         android:id="@+id/tiv_detail_inner_title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height" />
+        android:layout_height="wrap_content" />
 
     <com.birdex.bird.widget.xrecyclerview.XRecyclerView
         android:id="@+id/xrv_detail_inner"

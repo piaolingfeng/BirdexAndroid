@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="@color/background"
     android:orientation="vertical">
     <com.birdex.bird.widget.TitleView
         android:id="@+id/tiv_myaccount_info"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height"/>
+        android:layout_height="wrap_content"/>
 
     <com.zhy.android.percent.support.PercentFrameLayout
         android:id="@+id/fragment_myaccount"
@@ -22,6 +21,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:visibility="gone"
         android:orientation="horizontal"
         app:layout_heightPercent="10%">
 

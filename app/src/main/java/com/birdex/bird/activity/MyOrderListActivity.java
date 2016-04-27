@@ -222,7 +222,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
      */
     private void dealOrderStatus() {
         OrderStatus status = new OrderStatus();
-        String statusName[] = {"待审核", "等待出库", "已出库", "运输中", "已签收", "身份证异常", "库存异常", "审核不通过"};
+        String statusName[] = {"待审核", "等待出库", "出库中","已出库", "运输中", "已签收", "身份证异常", "库存异常", "审核不通过","已取消订单"};
         if (orderStatus != null) {
             for (int size = 0; size < statusName.length; size++) {
                 for (int i = 0; i < orderStatus.getData().size(); i++) {

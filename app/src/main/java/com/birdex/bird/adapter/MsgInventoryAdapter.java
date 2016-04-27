@@ -94,7 +94,7 @@ public class MsgInventoryAdapter extends RecyclerView.Adapter<MsgInventoryAdapte
 
         @Override
         public void onClick(View v) {
-            ClipboardManagerUtil.copy(list.get(position).getMsg_content().getOrder_oms_no(), mContext);
+            ClipboardManagerUtil.copy(list.get(position).getMsg_content().getExternal_no(), mContext);
             T.showShort(mContext, mContext.getString(R.string.copy_tip));
         }
     }

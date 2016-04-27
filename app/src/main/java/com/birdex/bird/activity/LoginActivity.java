@@ -1,9 +1,16 @@
 package com.birdex.bird.activity;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -58,6 +65,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private SharedPreferences.Editor editor;
 
+    // 设备信息
+    public String device_info = "";
+
+
     public static String description;
     private MyApplication application=null;
     @Override
@@ -77,6 +88,34 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         initData();
     }
 
+
+    // 获取设备信息
+    private String getDevice_info() {
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nDeviceModel = " + android.os.Build.MODEL);
+        sb.append("\nDeviceVERSION_RELEASE = " + android.os.Build.VERSION.RELEASE);
+        sb.append("\nDeviceId(IMEI) = " + tm.getDeviceId());
+        sb.append("\nDeviceSoftwareVersion = " + tm.getDeviceSoftwareVersion());
+        sb.append("\nLine1Number = " + tm.getLine1Number());
+        sb.append("\nNetworkCountryIso = " + tm.getNetworkCountryIso());
+        sb.append("\nNetworkOperator = " + tm.getNetworkOperator());
+        sb.append("\nNetworkOperatorName = " + tm.getNetworkOperatorName());
+        sb.append("\nNetworkType = " + tm.getNetworkType());
+        sb.append("\nPhoneType = " + tm.getPhoneType());
+        sb.append("\nSimCountryIso = " + tm.getSimCountryIso());
+        sb.append("\nSimOperator = " + tm.getSimOperator());
+        sb.append("\nSimOperatorName = " + tm.getSimOperatorName());
+        sb.append("\nSimSerialNumber = " + tm.getSimSerialNumber());
+        sb.append("\nSimState = " + tm.getSimState());
+        sb.append("\nSubscriberId(IMSI) = " + tm.getSubscriberId());
+        sb.append("\nVoiceMailNumber = " + tm.getVoiceMailNumber());
+        Log.e("info", sb.toString());
+        return sb.toString();
+    }
+
+
+    public static final int CALL_PHONE_REQUEST_CODE = 1;
 
     private void initData() {
         sp = getSharedPreferences("login", Activity.MODE_PRIVATE);
@@ -106,8 +145,32 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
         remember.setChecked(ischecked);
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED) {
+            //申请CALL_PHONE权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},
+                    CALL_PHONE_REQUEST_CODE);
+        } else {
+            device_info = getDevice_info();
+        }
+
         // 检查更新
 //        checkUpdate();
+    }
+
+
+    // 6.0 权限控制
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CALL_PHONE_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission Granted 用户允许
+                device_info = getDevice_info();
+            } else {
+                // Permission Denied
+            }
+        }
     }
 
     // 检查更新
@@ -192,7 +255,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         MyApplication.ahc.addHeader("DEVICE-TOKEN", utoken);
 
         RequestParams params = new RequestParams();
-        params.put("device_info", MyApplication.device_info);
+        params.put("device_info", device_info);
         params.put("device_type", MyApplication.device_type);
         params.put("account", username.getText().toString());
         params.put("password", password.getText().toString());

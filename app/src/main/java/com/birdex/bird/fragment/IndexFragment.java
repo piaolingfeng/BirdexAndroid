@@ -253,12 +253,12 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         }
     }
 
-
-    public static String[] name = {"today_checkout_order_count", "today_wait_checkout_order_count", "transport_order_count",
+//, "transport_order_count" , "运输中"
+    public static String[] name = {"today_checkout_order_count", "today_wait_checkout_order_count",
             "today_sign_order_count", "stock_exception_order_count", "no_pass_order_count"
             , "today_confirm_storage_count", "wait_confirm_storage_count", "no_pass_storage_count", "warning_stock_count", "id_card_exception_order_count"};
-    public static String[] nameText = {"今日已出库", "今日等待出库", "运输中",
-            "今日已签收", "库存异常订单", "审核不通过的订单",
+    public static String[] nameText = {"今日已出库", "今日等待出库",
+            "今日已签收", "库存异常订单", "审核不通过订单",
             "今日已入库预报单", "待确认预报单", "审核不通过预报单", "库存预警", "身份证异常订单"};
 
 

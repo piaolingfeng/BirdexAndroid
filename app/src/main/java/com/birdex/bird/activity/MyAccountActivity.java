@@ -218,7 +218,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    @OnClick({R.id.head_icon, R.id.account_manager, R.id.back, R.id.recharge_bt, R.id.recharge_tv, R.id.account_detail})
+    @OnClick({R.id.head_icon, R.id.account_manager, R.id.back, R.id.recharge_bt, R.id.recharge_tv, R.id.account_detail, R.id.shouzhimingxi})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -270,6 +270,15 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                 intent = new Intent(this, MyAccountInfoActivity.class);
                 //显示第3个页面
                 intent.putExtra("enterindex", 2);
+                this.startActivity(intent);
+                break;
+
+            // 收支明细 textview
+            case R.id.shouzhimingxi:
+                //账户管理
+                intent = new Intent(this, MyAccountInfoActivity.class);
+                //显示第2个页面
+                intent.putExtra("enterindex", 1);
                 this.startActivity(intent);
                 break;
         }

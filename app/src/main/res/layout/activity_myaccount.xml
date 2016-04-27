@@ -208,21 +208,21 @@
     </com.zhy.android.percent.support.PercentLinearLayout>
 
 
-    <TextView
-        android:id="@+id/division_02"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/yunfei_ll"
-        android:background="#C7C7C7"
-        app:layout_marginLeftPercent="3%"
-        app:layout_marginRightPercent="3%"
-        app:layout_marginTopPercent="2%" />
+    <!--<TextView-->
+        <!--android:id="@+id/division_02"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_below="@+id/yunfei_ll"-->
+        <!--android:background="#C7C7C7"-->
+        <!--app:layout_marginLeftPercent="3%"-->
+        <!--app:layout_marginRightPercent="3%"-->
+        <!--app:layout_marginTopPercent="2%" />-->
 
     <com.zhy.android.percent.support.PercentLinearLayout
         android:id="@+id/guanshui_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/division_02"
+        android:layout_below="@+id/yunfei_ll"
         android:orientation="horizontal"
         app:layout_marginTopPercent="2%">
 
@@ -255,8 +255,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="---"
-                android:textColor="#13A7DF"/>
+                android:text="￥0"
+                android:textColor="#F5A623"/>
 
 
         </RelativeLayout>
@@ -293,7 +293,20 @@
         app:layout_paddingTopPercent="3%w" />
 
     <TextView
+        android:id="@+id/shouzhimingxi"
+        android:padding="5dp"
+        android:textSize="16sp"
+        android:textColor="#979797"
+        android:layout_below="@+id/recharge_bt"
+        app:layout_marginTopPercent="3%"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/myaccount_title_2"/>
+
+    <TextView
         android:id="@+id/recharge_tv"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -305,6 +318,7 @@
 
     <TextView
         android:id="@+id/account_detail"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -316,6 +330,7 @@
 
     <TextView
         android:id="@+id/account_manager"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

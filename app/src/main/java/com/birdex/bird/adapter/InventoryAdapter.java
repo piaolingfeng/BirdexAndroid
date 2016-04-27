@@ -160,7 +160,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
                         tv_actual.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                T.showShort(activity,R.string.stock_detail_item_tip1);
+                                T.showShortByID(activity,R.string.stock_detail_item_tip1);
                             }
                         });
                     }
@@ -179,7 +179,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
                 tv_actual.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        T.showShort(activity,R.string.stock_detail_item_tip1);
+                        T.showShortByID(activity,R.string.stock_detail_item_tip1);
                     }
                 });
 //                view.setPadding(0, 10, 0, 10);

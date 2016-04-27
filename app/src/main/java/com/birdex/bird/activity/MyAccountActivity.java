@@ -96,10 +96,10 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
     private void initData() {
         titleView.setTitle(getString(R.string.myaccount));
         titleView.setMenuVisble(true);
-        titleView.setBackground(Color.parseColor("#FFFFFF"));
-        titleView.setTitleTextcolor(Color.parseColor("#4A4A4A"));
-        titleView.setBackIv(BitmapFactory.decodeResource(getResources(), R.drawable.blue_back));
-        titleView.setMenu(BitmapFactory.decodeResource(getResources(), R.drawable.black_menu));
+//        titleView.setBackground(Color.parseColor("#FFFFFF"));
+//        titleView.setTitleTextcolor(Color.parseColor("#4A4A4A"));
+//        titleView.setBackIv(BitmapFactory.decodeResource(getResources(), R.drawable.blue_back));
+//        titleView.setMenu(R.drawable.black_menu);
         getInterfactData();
     }
 

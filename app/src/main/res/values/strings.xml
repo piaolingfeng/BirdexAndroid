@@ -173,7 +173,7 @@
     <string name="title_activity_about">AboutActivity</string>
     <!--关于-->
     <string name="about_us_title">关于我们</string>
-    <string name="about_us_content">\t\t\t\t笨鸟海淘是第三方转运物流服务商，成立于2014年1月，致力于为跨境电商提供优质物流仓储管理以及代理清关等服务。目前笨鸟海淘为中国最知名的海淘电商提供服务，并于2015年2月获得了贝塔斯曼集团亚洲基金（BAI）的500万美金规模的A轮投资。随着规模的不断扩大和融资的稳健进行，笨鸟海淘发展迅速，将为更多的电商提供更全面优质的服务。笨鸟海淘目前在全球一共开设6个仓库，分别是美国波特兰仓、美国LA仓、澳洲悉尼仓、香港仓、日本仓、韩国仓，2016年将陆续推出德国仓、英国仓、澳洲墨尔本、美国纽约、意大利等仓库。</string>
+    <string name="about_us_content">\t\t\t\t笨鸟海淘是第三方转运物流服务商，成立于2014年1月，致力于为跨境电商提供优质物流仓储管理以及代理清关等服务。笨鸟海淘目前在全球一共开设6个仓库，分别是美国波特兰仓、美国LA仓、澳洲悉尼仓、香港仓、日本仓、韩国仓，2016年将陆续推出德国仓、英国仓、澳洲墨尔本、美国纽约、意大利等仓库。</string>
     <string name="about_us_www">手机访问：www.birdex.cn</string>
     <string name="about_us_version">当前版本：B1.0.1 for Android</string>
 
@@ -193,6 +193,7 @@
     <string name="inventory_all">所有仓库</string>
     <string name="inventory_sort_time">时间排序</string>
     <string name="inventory_sort_available">可用数量</string>
+    <string name="inventory_sort_willin">待入数量</string>
     <string name="inventory_all_data">共@条数据</string>
     <string name="inventory_tip_1">获取库存数据失败!</string>
     <string name="inventory_tip_2">库存数据解析失败!</string>
@@ -393,6 +394,9 @@
     <string name="msg_text_4_5w">4.5%w</string>
     <string name="size_5w">5%w</string>
     <string name="msg_text_5_5w">5.5%w</string>
+
+    <string name="title_padding_percent">1.2%w</string>
+    <string name="title_menu_height_percent">7%w</string>
     <!--<string name="msg_text_per"></string>-->
     <string name="first_index_text_5_1w">4.9%w</string>
     <string name="request_err">服务器错误,请稍后重试</string>
@@ -440,4 +444,6 @@
     <string name="stock_detail_item_none">无</string>
     <string name="stock_detail_item_tip1">没有可用数据显示!</string>
     <string name="list_no_data">暂无数据显示!</string>
+
+    <string name="copy_to_clipboard">内容已经复制到粘贴板!</string>
 </resources>

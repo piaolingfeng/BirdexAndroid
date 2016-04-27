@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.activity.MipcaActivityCapture;
 import com.birdex.bird.adapter.InventoryAdapter;
@@ -29,13 +30,13 @@ import com.birdex.bird.adapter.OrderWareHouseAdapter;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.biz.InventoryBiz;
 import com.birdex.bird.entity.InventoryActivityEntity;
-import com.birdex.bird.greendao.DaoUtils;
-import com.birdex.bird.greendao.warehouse;
-import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
-import com.birdex.bird.util.StringUtils;
-import com.birdex.bird.util.T;
+import com.birdex.bird.entity.WarehouseEntity;
 import com.birdex.bird.util.recycleviewhelper.OnLoadingImgListener;
 import com.birdex.bird.util.recycleviewhelper.OnShowGoTopListener;
+import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
+import com.birdex.bird.util.GsonHelper;
+import com.birdex.bird.util.StringUtils;
+import com.birdex.bird.util.T;
 import com.birdex.bird.widget.ClearEditText;
 import com.birdex.bird.widget.xrecyclerview.XRecyclerView;
 import com.bumptech.glide.Glide;
@@ -48,7 +49,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 
@@ -125,7 +125,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
 //                //显示数量
 //                tv_count.setText(countTxt.replace("@","0"));
                 //显示加载动画
-                showBar();
+                showLoading();
                 currentPage = 1;
                 startRequest();
                 break;
@@ -142,8 +142,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     private Type type = Type.Inner;
     //设置请求的tag
     private String tag = "InventoryActivity";
-    //    private WarehouseEntity warehouseEntity = null;//所有仓库列表
-    private List<warehouse> warehouseList;
+    private WarehouseEntity warehouseEntity = null;//所有仓库列表
     //弹出框
     private PopupWindow mPopupWindow = null;
     private PopupWindow menuPop = null;
@@ -223,12 +222,12 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
             params.put("stock_status", 1);
 //            tl_items.getTabAt(0).select();
 //            显示加载动画
-            showBar();
+            showLoading();
 //            请求正式数据
             startRequest();
         }
         //显示加载动画
-//        showBar();
+//        ();
         //请求正式数据
 //        startRequest();
 
@@ -390,7 +389,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
      *停止动画
      */
     private void stopHttpAnim() {
-        hideBar();
+        hideLoading();
         rv_inventory.refreshComplete();
         rv_inventory.loadMoreComplete();
     }
@@ -418,7 +417,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        hideBar();
+        hideLoading();
         //取消当前activity的所有请求
         BirdApi.cancelRequestWithTag(tag);
     }
@@ -426,40 +425,40 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     /**
      * 获取所有的仓库
      */
-//    private void getAllCompanyWarehouse() {
-//        RequestParams wareParams = new RequestParams();
-//        BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
-//                WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
-//                detail.setName("全部仓库");
-////                nowSelectedWarehouse = detail;//默认选中全部
-//                warehouseEntity.getData().add(0, detail);
-//                //显示弹框
-//                wareAdapter.setDataSource(warehouseEntity.getData());
-//                mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
-//                super.onFailure(statusCode, headers, responseString, throwable);
-//            }
-//        });
-//    }
-    private void getLocalCompanyWarehouse() {
-        List<warehouse> WarehouseList = DaoUtils.getAllWarehouse();
-        warehouse house = new warehouse();
-        house.setName("全部仓库");
-        WarehouseList.add(0, house);
-        warehouseList = WarehouseList;
-        wareAdapter.setDataSource(warehouseList);
+    private void getAllCompanyWarehouse() {
+        showLoading();
+        RequestParams wareParams = new RequestParams();
+        JsonHttpResponseHandler handler=new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
+                WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
+                detail.setName("全部仓库");
+//                nowSelectedWarehouse = detail;//默认选中全部
+                warehouseEntity.getData().add(0, detail);
+                //显示弹框
+                wareAdapter.setDataSource(warehouseEntity.getData());
+                mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                T.showLong(MyApplication.getInstans(), "error:" + responseString.toString());
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                hideLoading();
+            }
+        };
+        handler.setTag(tag);
+        BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams,handler);
     }
 
     private void initPopWindow() {
         final View popWindow = LayoutInflater.from(getActivity()).inflate(R.layout.common_recycleview_layout, null);
-        popWindow.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         RecyclerView rcy = (RecyclerView) popWindow.findViewById(R.id.rcy);
         rcy.setLayoutManager(new LinearLayoutManager(getActivity()));
         wareAdapter = new OrderWareHouseAdapter(getActivity(), null);
@@ -470,20 +469,20 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                     mPopupWindow.dismiss();
                 }
                 //点击时获取点击的仓库码
-                String wareCode = warehouseList.get(position).getId();
+                String wareCode = warehouseEntity.getData().get(position).getWarehouse_code();
                 //防止为空
                 wareCode = StringUtils.getString(wareCode);
                 params.put("warehouse_code", wareCode);
-                String name = warehouseList.get(position).getName();
+                String name = warehouseEntity.getData().get(position).getName();
                 if (name == null || "".equals(name.trim())) {
-                    tv_allInventory.setText(warehouseList.get(0).getName());
+                    tv_allInventory.setText(warehouseEntity.getData().get(0).getName());
                 } else {
                     tv_allInventory.setText(name);
                 }
                 //开始请求网络
                 //显示加载动画
                 tv_count.setText(countTxt.replace("@", "0"));
-                showBar();
+                showLoading();
                 currentPage = 1;
                 startRequest();
             }
@@ -515,10 +514,9 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                     //显示弹框
                     mPopupWindow.showAsDropDown(tv_allInventory, 0, 0);
                 }
-                if (warehouseList == null || warehouseList.size() == 0) {
+                if (warehouseEntity == null || warehouseEntity.getData() == null) {
                     //请求所有仓库
-//                getAllCompanyWarehouse();
-                    getLocalCompanyWarehouse();
+                getAllCompanyWarehouse();
                 }
                 break;
             case R.id.tv_inventory_sort_available:
@@ -582,6 +580,8 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         switch (tab.getPosition()) {
             case 0:
                 type = Type.Inner;
+                //修改显示排序文字
+                cb_sortavailable.setText(R.string.inventory_sort_available);
                 tv_allInventory.setText(R.string.inventory_all);
                 adapter = new InventoryAdapter(getActivity(), null);
                 adapter.setOnLoadingImgListener(this);
@@ -599,6 +599,8 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 break;
             case 1:
                 type = Type.Willin;
+                //修改显示排序文字
+                cb_sortavailable.setText(R.string.inventory_sort_willin);
                 tv_allInventory.setText(R.string.inventory_all);
                 willInAdapter = new InventoryWillInAdapter(getActivity(), null);
                 willInAdapter.setOnGoTopListener(this);
@@ -614,6 +616,8 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 break;
             case 2:
                 type = Type.OutofWarning;
+                //修改显示排序文字
+                cb_sortavailable.setText(R.string.inventory_sort_available);
                 tv_allInventory.setText(R.string.inventory_all);
                 adapter = new InventoryAdapter(getActivity(), null);
                 adapter.setOnLoadingImgListener(this);
@@ -659,7 +663,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         //显示数量
         tv_count.setText(countTxt.replace("@", "0"));
         //显示加载动画
-        showBar();
+        showLoading();
         currentPage = 1;
         startRequest();
     }

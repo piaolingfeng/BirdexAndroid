@@ -112,7 +112,6 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-                hideLoading();
                 try {
                     if ("0".equals(response.getString("error"))) {
                         AccountDetail accountDetail = JsonHelper.parseObject((JSONObject) response.get("data"), AccountDetail.class);
@@ -121,6 +120,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                             setInterfaceData(accountDetail);
                         }
                     }
+                    hideLoading();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     hideLoading();

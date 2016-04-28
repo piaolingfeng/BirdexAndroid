@@ -364,6 +364,7 @@
     <string name="tv_now_status">当前状态:</string>
     <string name="tv_confirm_predicition">批量确认预报</string>
     <string name="tv_Destination_warehousee">目的仓库:</string>
+    <string name="tv_old_warehousee">所在仓库:</string>
     <string name="tv_Logistics_tracking">物流号:</string>
     <string name="tv_update_time">更新时间:</string>
     <string name="tv_create_time">创建时间:</string>

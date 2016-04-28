@@ -48,6 +48,8 @@ public class PredicitionDetailActivity extends BaseActivity {
     TextView tv_confirm_predicition;
     @Bind(R.id.tv_Destination_warehousee)
     TextView tv_Destination_warehousee;
+    @Bind(R.id.tv_old_warehousee)
+    TextView tv_old_warehousee;
     @Bind(R.id.tv_Logistics_tracking)
     TextView tv_Logistics_tracking;
     @Bind(R.id.tv_remarks)
@@ -154,6 +156,8 @@ public class PredicitionDetailActivity extends BaseActivity {
     public void setUI(String text) {
         tv_now_status.setText(entity.getData().getStatus_name());
         tv_Destination_warehousee.setText(entity.getData().getWarehouse_name());
+        tv_old_warehousee.setText(entity.getData().getOld_warehouse_name()
+        );
         tv_confirm_predicition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -206,6 +206,7 @@
     <string name="inventory_item_actual">实际</string>
     <string name="inventory_item_inventory">所在仓</string>
     <string name="inventory_willin_item_num">待入库数</string>
+    <string name="inventory_noname">仓库名缺失</string>
     <!-- 修改地址 -->
     <string name="consignee">收货人：</string>
     <string name="phone">联系电话：</string>

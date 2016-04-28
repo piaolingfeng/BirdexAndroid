@@ -158,7 +158,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 //                    }
 //                    startActivity(intent);
 //                } else {
-                    startActivity(intent);
+                startActivity(intent);
 //                }
             }
         });
@@ -236,30 +236,36 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         boolean state;
         indexOrderNetDatatList = new ArrayList<>();
         for (int i = 0; i < name.length; i++) {
-            entity = new OrderManagerEntity();
-            entity.setCount((Integer) object.get(name[i]));
-            state = PreferenceUtils.getPrefBoolean(MyApplication.getInstans(), nameText[i], false);
-            entity.setChoose_state(state);
-            entity.setName(nameText[i]);
-            if (firstCome && i < name.length / 2) {
-                entity.setChoose_state(firstCome);//第一次进入默认获取前5个显示在首页
-                PreferenceUtils.setPrefBoolean(MyApplication.getInstans(), nameText[i], true);
+            try {
+                entity = new OrderManagerEntity();
+                entity.setCount((Integer) object.get(name[i]));
+                state = PreferenceUtils.getPrefBoolean(MyApplication.getInstans(), nameText[i], false);
+                entity.setChoose_state(state);
+                entity.setName(nameText[i]);
+                if (firstCome && i < name.length / 2) {
+                    entity.setChoose_state(firstCome);//第一次进入默认获取前5个显示在首页
+                    PreferenceUtils.setPrefBoolean(MyApplication.getInstans(), nameText[i], true);
 //                indexOrderLocalDataList.add(indexOrderLocalDataList.size() - 1, entity);
-            }
+                }
 //            if (state && !firstCome) {
 //                indexOrderLocalDataList.add(indexOrderLocalDataList.size() - 1, entity);
 //            }
-            indexOrderNetDatatList.add(entity);
+                indexOrderNetDatatList.add(entity);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
-//, "transport_order_count" , "运输中"
+    //, "transport_order_count" , "运输中"
     public static String[] name = {"today_checkout_order_count", "today_wait_checkout_order_count",
             "today_sign_order_count", "stock_exception_order_count", "no_pass_order_count"
-            , "today_confirm_storage_count", "wait_confirm_storage_count", "no_pass_storage_count", "warning_stock_count", "id_card_exception_order_count"};
+            , "today_confirm_storage_count", "wait_confirm_storage_count", "no_pass_storage_count",
+            "warning_stock_count", "id_card_exception_order_count", "today_create_order_count", "today_cancel_order_count"};
     public static String[] nameText = {"今日已出库", "今日等待出库",
             "今日已签收", "库存异常订单", "审核不通过订单",
-            "今日已入库预报单", "待确认预报单", "审核不通过预报单", "库存预警", "身份证异常订单"};
+            "今日已入库预报单", "待确认预报单", "审核不通过预报单",
+            "库存预警", "身份证异常订单", "今日创建订单", "今日取消订单"};
 
 
     /**

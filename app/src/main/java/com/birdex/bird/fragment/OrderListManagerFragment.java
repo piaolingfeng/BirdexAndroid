@@ -118,8 +118,13 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
         listParams.add("page_size", entity.getPage_size());
         listParams.add("keyword", entity.getKeyword());
         listParams.add("warehouse_code", entity.getWarehouse_code());
-        listParams.add("start_date", entity.getStart_date());
-        listParams.add("end_date", entity.getEnd_date());
+        if (entity.getStatusName().contains("已出库")){
+            listParams.add("checkout_start_date", entity.getStart_date());
+            listParams.add("checkout_end_date", entity.getEnd_date());
+        }else {
+            listParams.add("start_date", entity.getStart_date());
+            listParams.add("end_date", entity.getEnd_date());
+        }
         listParams.add("status", entity.getStatus());
 //        listParams.add("count", entity.getCount());
         listParams.add("service_type", entity.getService_type());
@@ -433,6 +438,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
                         }
 //                        T.showShort(MyApplication.getInstans(), list.get(position).getStatus_name());
                         entity.setStatus(list.get(position).getStatus() + "");
+                        entity.setStatusName(list.get(position).getStatus_name()+"");
                         bus.post(list.get(position), "Order_changeState");
                         entity.setPage_noReset();
                         bus.post(entity, "requestOrderList");

@@ -186,7 +186,14 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
         params.put("product_type", 10);
         //40表示发往仓库，1表示在库，10表示正常，20表示库存紧张，30表示断货
         String enterKey = getActivity().getIntent().getStringExtra("indexOrder");
-        String key = IndexFragment.nameText[IndexFragment.nameText.length - 2];
+        String key = "";
+        for (int i = 0; i < IndexFragment.nameText.length; i++) {
+            if (IndexFragment.nameText[i].equals("库存预警")) {
+                key = IndexFragment.nameText[i];
+                break;
+            }
+        }
+//        String key = IndexFragment.nameText[IndexFragment.nameText.length - 4];
 
 //        rv_inventory = (XRecyclerView)getActivity().findViewById(R.id.rv_inventory);
         rv_inventory.setLoadingMoreEnabled(true);
@@ -428,7 +435,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     private void getAllCompanyWarehouse() {
         showLoading();
         RequestParams wareParams = new RequestParams();
-        JsonHttpResponseHandler handler=new JsonHttpResponseHandler() {
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
@@ -454,7 +461,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
             }
         };
         handler.setTag(tag);
-        BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams,handler);
+        BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, handler);
     }
 
     private void initPopWindow() {
@@ -516,7 +523,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 }
                 if (warehouseEntity == null || warehouseEntity.getData() == null) {
                     //请求所有仓库
-                getAllCompanyWarehouse();
+                    getAllCompanyWarehouse();
                 }
                 break;
             case R.id.tv_inventory_sort_available:

@@ -312,4 +312,13 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_reconfirm_reson"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        android:textSize="@dimen/order_detail_size"
+        android:paddingBottom="@dimen/item_margin_top_height"
+        android:paddingTop="@dimen/item_margin_top_height"/>
 </LinearLayout>

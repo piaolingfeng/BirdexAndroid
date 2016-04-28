@@ -111,16 +111,27 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         currentName = getIntent().getStringExtra("name");//首页的工具进来时
         if (StringUtils.isEmpty(currentName)){
             currentName = getIntent().getStringExtra("indexOrder");
+            if (currentName.contains("预报")){
+                getAllPredicitionStatus();//获取预报所有状态
+            }
+            if (!currentName.equals("库存预警")){
+                getAllOrderStatus();//获取订单所有状态
+            }else {
+                setData();
+            }
+        }else{
+            if (currentName.contains("订单")){
+                getAllOrderStatus();//获取订单所有状态
+            }
+            if (currentName.contains("预报")){
+                getAllPredicitionStatus();//获取预报所有状态
+            }
+            if (!currentName.contains("订单")&&!currentName.contains("预报"))
+                setData();
+            else {
+                getAllCompanyWarehouse();
+            }
         }
-        getAllCompanyWarehouse();
-        if (currentName.contains("订单")){
-            getAllOrderStatus();//获取订单所有状态
-        }
-        if (currentName.contains("预报")){
-            getAllPredicitionStatus();//获取预报所有状态
-        }
-        if (!currentName.contains("订单")&&!currentName.contains("预报"))
-        setData();
     }
 
 

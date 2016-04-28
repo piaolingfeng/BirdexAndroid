@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,7 +133,11 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
                     TextView tv_occu=(TextView)view.findViewById(R.id.tv_inner_item_contain_occu);
                     TextView tv_actual=(TextView)view.findViewById(R.id.tv_inner_item_contain_actual);
                     View tv_line=view.findViewById(R.id.iv_stockdetail_line);
-                    tv_name.setText(entity1.getWarehouse_name());
+                    if(entity1.getWarehouse_name()!=null&&!TextUtils.isEmpty(entity1.getWarehouse_name().trim())){
+                        tv_name.setText(entity1.getWarehouse_name());
+                    }else{
+                        tv_name.setText(R.string.inventory_noname);
+                    }
                     tv_avail.setText(String.valueOf(avail));
                     tv_occu.setText(String.valueOf(occupancy));
                     tv_actual.setText(String.valueOf(actual));

@@ -5,8 +5,7 @@
     android:id="@+id/prl_title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/blue_head_1"
-    android:fitsSystemWindows="true">
+    android:background="@color/blue_head_1">
 
     <com.zhy.android.percent.support.PercentRelativeLayout
         android:layout_width="match_parent"

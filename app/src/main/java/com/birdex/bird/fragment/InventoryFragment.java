@@ -49,6 +49,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import butterknife.Bind;
 
@@ -292,6 +294,8 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
 
     private void startRequest() {
         params.put("page_no", currentPage);
+        //根据数量排序
+        getNumListSort(cb_sortavailable.isChecked());
         JsonHttpResponseHandler responeHandler = new JsonHttpResponseHandler() {
             @Override
             public void onFinish() {
@@ -345,6 +349,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                                         tv_count.setText(countTxt.replace("@", countNum + ""));
                                         //首页为重新加载
                                         if (type == Type.Inner) {
+                                            Collections.sort(list,new SortByNumComparator());
                                             adapter.setDataSource(list);
                                         } else if (type == Type.Willin) {
                                             willInAdapter.setDataSource(list);
@@ -616,8 +621,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 //商品类型，20表示物料，默认10表示商品
                 params.put("product_type", 10);
                 params.put("stock_status", 1);
-                //根据数量排序
-                getNumListSort(cb_sortavailable.isChecked());
+
                 //显示加载动画
                 reStartHttp();
 
@@ -636,8 +640,6 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 //商品类型，20表示物料，默认10表示商品
                 params.put("product_type", 10);
                 params.put("stock_status", 40);
-                //根据数量排序
-                getNumListSort(cb_sortavailable.isChecked());
                 //显示加载动画
                 reStartHttp();
                 break;
@@ -656,8 +658,6 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 //商品类型，20表示物料，默认10表示商品
                 params.put("product_type", 10);
                 params.put("stock_status", 20);
-                //根据数量排序
-                getNumListSort(cb_sortavailable.isChecked());
                 //显示加载动画
                 reStartHttp();
                 break;
@@ -714,6 +714,76 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                     }
                 }
                 break;
+        }
+    }
+    class SortByNumComparator implements Comparator {
+        private  boolean asc;
+        public SortByNumComparator(){
+            this.asc=cb_sortavailable.isChecked();
+        }
+        @Override
+        public int compare(Object lhs, Object rhs) {
+            InventoryActivityEntity s1 = (InventoryActivityEntity) lhs;
+            InventoryActivityEntity s2 = (InventoryActivityEntity) rhs;
+            int left=0;
+            int right=0;
+            if(InventoryFragment.this.type==Type.Willin){
+                if(TextUtils.isEmpty(s1.getIning_stock())){
+                    left=0;
+                }else if("null".equalsIgnoreCase(s1.getIning_stock().trim())){
+                    left=0;
+                }else {
+                    try{
+                        left=Integer.parseInt(s1.getIning_stock());
+                    }catch (Exception ex){
+
+                    }
+                }
+                if(TextUtils.isEmpty(s2.getIning_stock())){
+                    right=0;
+                }else if("null".equalsIgnoreCase(s2.getIning_stock().trim())){
+                    right=0;
+                }else {
+                    try{
+                        right=Integer.parseInt(s2.getIning_stock());
+                    }catch (Exception ex){
+
+                    }
+                }
+                if(this.asc){
+                    return left-right;
+                }else {
+                    return right-left;
+                }
+            }else {
+                if(TextUtils.isEmpty(s1.getAvailable_stock())){
+                    left=0;
+                }else if("null".equalsIgnoreCase(s1.getAvailable_stock().trim())){
+                    left=0;
+                }else {
+                    try{
+                        left=Integer.parseInt(s1.getAvailable_stock());
+                    }catch (Exception ex){
+
+                    }
+                }
+                if(TextUtils.isEmpty(s2.getAvailable_stock())){
+                    right=0;
+                }else if("null".equalsIgnoreCase(s2.getAvailable_stock().trim())){
+                    right=0;
+                }else {
+                    try{
+                        right=Integer.parseInt(s2.getAvailable_stock());
+                    }catch (Exception ex){
+
+                    }
+                }
+                if(this.asc){
+                    return left-right;
+                }else {
+                    return right-left;
+                }
+            }
         }
     }
 }

@@ -151,8 +151,19 @@ public class InventoryActivityEntity implements Serializable {
     private String price_unit;
     //
     private String last_storage_time;
+    //总可用
+    private String available_stock="";
 
-    private String available_stock;
+    public String getIning_stock() {
+        return ining_stock;
+    }
+
+    public void setIning_stock(String ining_stock) {
+        this.ining_stock = ining_stock;
+    }
+
+    //总待入
+    private String ining_stock="";
     //
     private ArrayList<InventoryStockEntity> stock;
 

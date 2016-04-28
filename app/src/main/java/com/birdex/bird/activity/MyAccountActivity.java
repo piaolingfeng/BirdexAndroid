@@ -96,10 +96,10 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
     private void initData() {
         titleView.setTitle(getString(R.string.myaccount));
         titleView.setMenuVisble(true);
-//        titleView.setBackground(Color.parseColor("#FFFFFF"));
-//        titleView.setTitleTextcolor(Color.parseColor("#4A4A4A"));
-//        titleView.setBackIv(BitmapFactory.decodeResource(getResources(), R.drawable.blue_back));
-//        titleView.setMenu(R.drawable.black_menu);
+        titleView.setBackground(Color.parseColor("#FFFFFF"));
+        titleView.setTitleTextcolor(Color.parseColor("#4A4A4A"));
+        titleView.setBackIv(BitmapFactory.decodeResource(getResources(), R.drawable.blue_back));
+        titleView.setMenu(R.drawable.black_menu);
         getInterfactData();
     }
 
@@ -218,7 +218,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    @OnClick({R.id.head_icon, R.id.account_manager, R.id.back, R.id.recharge_bt, R.id.recharge_tv, R.id.account_detail, R.id.shouzhimingxi})
+    @OnClick({R.id.head_icon, R.id.account_manager, R.id.recharge_bt, R.id.recharge_tv, R.id.account_detail, R.id.shouzhimingxi})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -230,11 +230,6 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                 b.putString("company_code",companyCode);
                 intent.putExtras(b);
                 startActivityForResult(intent, Constant.ICON_CHANGE);
-                break;
-
-            // 点击左上角返回
-            case R.id.back:
-                finish();
                 break;
 
             // 充值按钮

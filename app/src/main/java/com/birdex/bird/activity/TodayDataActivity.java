@@ -19,7 +19,7 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/3/29.
  */
-public class TodayDataActivity extends BaseActivity implements View.OnClickListener {
+public class TodayDataActivity extends BaseActivity{
     @Bind(R.id.title_view)
     TitleView title_view;
     @Bind(R.id.rcy)
@@ -46,12 +46,4 @@ public class TodayDataActivity extends BaseActivity implements View.OnClickListe
         rcy.setAdapter(adapter);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.back:
-                this.finish();
-
-        }
-    }
 }

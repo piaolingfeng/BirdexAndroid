@@ -28,6 +28,7 @@ import com.birdex.bird.entity.Track;
 import com.birdex.bird.entity.Tracking;
 import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.T;
+import com.birdex.bird.widget.TitleView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -127,10 +128,9 @@ public class LogisticsActivity extends BaseActivity implements View.OnClickListe
     @Bind(R.id.out_storage)
     TextView out_storage;
 
-    // 右上角文字
-    @Bind(R.id.save)
-    TextView save;
 
+    @Bind(R.id.title_view)
+    TitleView title_view;
     @Override
     public int getContentLayoutResId() {
         return R.layout.activity_logistics;
@@ -143,13 +143,14 @@ public class LogisticsActivity extends BaseActivity implements View.OnClickListe
 
     // 初始化数据
     private void initData() {
-        save.setText(getString(R.string.track_after) + "\t\t");
-
+        title_view.setSaveText(getString(R.string.track_after) + "\t\t");
+//        save.setText(getString(R.string.track_after) + "\t\t");
+        title_view.setSaveListener(this);
         Drawable refresh = getResources().getDrawable(R.drawable.refresh);
         //调用setCompoundDrawables时，必须调用Drawable.setBounds()方法,否则图片不显示
         refresh.setBounds(0, 0, refresh.getMinimumWidth(), refresh.getMinimumHeight());
 
-        save.setCompoundDrawables(null, null, refresh, null);
+        title_view.setSaveCompoundDrawables(null, null, refresh, null);
 
         // 传过来的 order_code
         orderNo = getIntent().getExtras().getString("order_code");
@@ -338,7 +339,7 @@ public class LogisticsActivity extends BaseActivity implements View.OnClickListe
         startActivity(intent);
     }
 
-    @OnClick({R.id.phone, R.id.back, R.id.copy_logistics, R.id.save})
+    @OnClick({R.id.phone, R.id.copy_logistics})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -353,10 +354,6 @@ public class LogisticsActivity extends BaseActivity implements View.OnClickListe
                     callPhone();
                 }
 
-                break;
-            //左上角返回键
-            case R.id.back:
-                finish();
                 break;
 
             // 复制物流信息

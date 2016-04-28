@@ -532,8 +532,10 @@ public class StringUtils {
         List<String> list = new ArrayList<String>();
         for (int i = 0; i < strarr.length; i++) {
             String str2 = strarr[i];
-            String str2Re = str2.substring(1, str2.length() - 1);
-            list.add(str2Re);
+            if(str2.length()>0) {
+                String str2Re = str2.substring(1, str2.length() - 1);
+                list.add(str2Re);
+            }
         }
 
         return list;

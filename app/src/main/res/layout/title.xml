@@ -12,21 +12,16 @@
         android:layout_height="wrap_content"
         app:layout_paddingPercent="3%w">
 
-        <com.zhy.android.percent.support.PercentRelativeLayout
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true">
 
-            <ImageView
-                android:id="@+id/back_iv"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:src="@mipmap/back_chevron"
-                app:layout_paddingPercent="2%w"
-                app:layout_heightPercent="25%w"
-                app:layout_widthPercent="25%w"/>
-        </com.zhy.android.percent.support.PercentRelativeLayout>
+        <ImageView
+            android:id="@+id/back_iv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/back_chevron"
+            app:layout_widthPercent="@string/title_menu_height_percent"
+            app:layout_heightPercent="@string/title_menu_height_percent"
+            app:layout_paddingPercent="1.5%w"/>
 
         <TextView
             android:id="@+id/title"
@@ -51,11 +46,11 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/menu"
             android:visibility="invisible"
-            app:layout_paddingPercent="1%w"
             app:layout_heightPercent="@string/title_menu_height_percent"
+            app:layout_paddingPercent="1.5%w"
             app:layout_widthPercent="@string/title_menu_height_percent"/>
     </com.zhy.android.percent.support.PercentRelativeLayout>
 </com.zhy.android.percent.support.PercentRelativeLayout>

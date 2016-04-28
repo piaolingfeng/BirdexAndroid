@@ -104,7 +104,7 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
 //        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 //        tabLayout.setOnTabSelectedListener(this);
 //        //请求动画
-//        showBar();
+//        showLoading();
 //        //开始数据请求
 //        startHttpRequest(http_Request_Refresh);
 //    }
@@ -146,7 +146,7 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setOnTabSelectedListener(this);
         //请求动画
-        showBar();
+        showLoading();
         //开始数据请求
         startHttpRequest(http_Request_Refresh);
     }
@@ -334,7 +334,7 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
     //停止请求的动画
     private void stopHttpAnim() {
         //停止加载动画
-        hideBar();
+        hideLoading();
         recyclerView.refreshComplete();
         recyclerView.loadMoreComplete();
     }
@@ -412,7 +412,7 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
         //全部-0，运费支出-1，仓租-2，关税-3，在线充值-4，其它-5
         params.put("transaction_type", tab.getPosition());
         //显示加载动画
-        showBar();
+        showLoading();
         startHttpRequest(http_Request_Refresh);
     }
 

@@ -60,8 +60,8 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     @Bind(R.id.rcv_tool_manager)
     RecyclerView rcv_tool_manager;
 
-    @Bind(R.id.edit1)
-    ImageView edit1;
+//    @Bind(R.id.edit1)
+//    ImageView edit1;
 
     private ItemTouchHelper mItemTouchHelper;
 
@@ -86,13 +86,13 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                         getTodayData("");
                     }
                 });
-        edit1.setOnClickListener(new View.OnClickListener() {//返回
-            @Override
-            public void onClick(View v) {
-                bus.post(false, "LongClick");
-                bus.post("", "getTodayData");
-            }
-        });
+//        edit1.setOnClickListener(new View.OnClickListener() {//返回
+//            @Override
+//            public void onClick(View v) {
+//                bus.post(false, "LongClick");
+//                bus.post("", "getTodayData");
+//            }
+//        });
         if (PreferenceUtils.getPrefBoolean(getActivity(), "firstCome", true)) {//第一次进入应用时采用默认显示
             firstCome = true;
             PreferenceUtils.setPrefBoolean(getActivity(), "firstCome", false);
@@ -470,13 +470,13 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     @Subscriber(tag = "LongClick")
     public void changeLongClickState(boolean state) {
         orderManagerAdapter.setLongClickState(state);
-        if (state) {
-            edit1.setVisibility(View.VISIBLE);
-            edit1.setAnimation(AnimationUtils.getShowAlphaAnimation());
-        } else {
-            edit1.setVisibility(View.GONE);
-            edit1.setAnimation(AnimationUtils.getHiddenAlphaAnimation());
-        }
+//        if (state) {
+//            edit1.setVisibility(View.VISIBLE);
+//            edit1.setAnimation(AnimationUtils.getShowAlphaAnimation());
+//        } else {
+//            edit1.setVisibility(View.GONE);
+//            edit1.setAnimation(AnimationUtils.getHiddenAlphaAnimation());
+//        }
 
         for (int i = 0; i < orderManagerAdapter.getOrderList().size(); i++) {
             if (orderManagerAdapter.getOrderList().get(i) != null) {

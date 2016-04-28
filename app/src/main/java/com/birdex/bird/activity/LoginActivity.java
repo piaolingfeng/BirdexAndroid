@@ -205,7 +205,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     String result = response.getString("error");
                     if ("0".equals(result)) {
                         hideLoading();
-                        spEdit();
+                        spEdit01();
                         User user = JsonHelper.parseObject((JSONObject) response.get("data"), User.class);
 //                        editor.putString(Constant.BIND_USER_ID, ((JSONObject) response.get("data")).getString("bind_user_id") + "");
                         editor.putString(Constant.BIND_USER_ID,user.getBind_user_id());
@@ -263,6 +263,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (remember.isChecked()) {
             // 选中了， 执行保存操作
             editor.putString("username", username.getText().toString());
+//            editor.putString("password", password.getText().toString());
+            editor.putBoolean("remember", remember.isChecked());
+        } else {
+            // 如果是取消  就全部设置为空
+            editor.putString("username", "");
+            editor.putString("password", "");
+            editor.putBoolean("remember", false);
+        }
+        editor.commit();
+    }
+
+    private void spEdit01() {
+        if (remember.isChecked()) {
+            // 选中了， 执行保存操作
+            editor.putString("username", username.getText().toString());
             editor.putString("password", password.getText().toString());
             editor.putBoolean("remember", remember.isChecked());
         } else {
@@ -273,6 +288,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
         editor.commit();
     }
+
+
+
 
     // 保存接口发过来的 token
     private void saveToken(String token) {

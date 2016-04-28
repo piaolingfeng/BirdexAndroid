@@ -292,6 +292,8 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
 
     private void startRequest() {
         params.put("page_no", currentPage);
+        //根据数量排序
+        getNumListSort(cb_sortavailable.isChecked());
         JsonHttpResponseHandler responeHandler = new JsonHttpResponseHandler() {
             @Override
             public void onFinish() {
@@ -616,8 +618,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 //商品类型，20表示物料，默认10表示商品
                 params.put("product_type", 10);
                 params.put("stock_status", 1);
-                //根据数量排序
-                getNumListSort(cb_sortavailable.isChecked());
+
                 //显示加载动画
                 reStartHttp();
 
@@ -636,8 +637,6 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 //商品类型，20表示物料，默认10表示商品
                 params.put("product_type", 10);
                 params.put("stock_status", 40);
-                //根据数量排序
-                getNumListSort(cb_sortavailable.isChecked());
                 //显示加载动画
                 reStartHttp();
                 break;
@@ -656,8 +655,6 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 //商品类型，20表示物料，默认10表示商品
                 params.put("product_type", 10);
                 params.put("stock_status", 20);
-                //根据数量排序
-                getNumListSort(cb_sortavailable.isChecked());
                 //显示加载动画
                 reStartHttp();
                 break;

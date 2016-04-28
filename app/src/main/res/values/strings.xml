@@ -190,7 +190,7 @@
     <string name="inventory_item_1">在库商品</string>
     <string name="inventory_item_2">待入库商品</string>
     <string name="inventory_search_hint">输入商品编码或UPC或商品名</string>
-    <string name="inventory_all">所有仓库</string>
+    <string name="inventory_all">全部仓库</string>
     <string name="inventory_sort_time">时间排序</string>
     <string name="inventory_sort_available">可用数量</string>
     <string name="inventory_sort_willin">待入数量</string>

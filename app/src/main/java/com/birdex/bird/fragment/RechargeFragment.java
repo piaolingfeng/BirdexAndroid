@@ -388,6 +388,15 @@ public class RechargeFragment extends BaseFragment implements View.OnClickListen
                 et_money.setSelection(s.length());
             }
         }
+        if(!TextUtils.isEmpty(s)){
+            float inputmoney=Float.parseFloat(s.toString());
+            if(inputmoney>10000000){
+                s = money.subSequence(0,s.length()-1);
+                et_money.setText(s);
+                et_money.setSelection(s.length());
+                T.showShortByID(getActivity(),R.string.recharge_tip9);
+            }
+        }
     }
 
     @Override

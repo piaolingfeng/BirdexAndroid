@@ -116,11 +116,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.cb_inventory_sort_available:
-                if (isChecked) {
-                    params.put("order_by", "available_stock_asc");
-                } else {
-                    params.put("order_by", "available_stock_desc");
-                }
+                getNumListSort(isChecked);
                 fab_gotop.setVisibility(View.GONE);
 //                //显示数量
 //                tv_count.setText(countTxt.replace("@","0"));
@@ -131,7 +127,27 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 break;
         }
     }
-
+    private void getNumListSort(boolean flag){
+        if (type == Type.Inner) {
+            if (flag) {
+                params.put("order_by", "available_stock_asc");
+            } else {
+                params.put("order_by", "available_stock_desc");
+            }
+        } else if (type == Type.Willin) {
+            if (flag) {
+                params.put("order_by", "ining_stock_asc");
+            } else {
+                params.put("order_by", "ining_stock_desc");
+            }
+        } else if (type == Type.OutofWarning) {
+            if (flag) {
+                params.put("order_by", "available_stock_asc");
+            } else {
+                params.put("order_by", "available_stock_desc");
+            }
+        }
+    }
     //默认为在库库存
     //设置显示的类型
     public enum Type {
@@ -276,6 +292,8 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
 
     private void startRequest() {
         params.put("page_no", currentPage);
+        //根据数量排序
+        getNumListSort(cb_sortavailable.isChecked());
         JsonHttpResponseHandler responeHandler = new JsonHttpResponseHandler() {
             @Override
             public void onFinish() {
@@ -440,7 +458,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
                 WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
-                detail.setName("全部仓库");
+                detail.setName(getActivity().getString(R.string.inventory_all));
 //                nowSelectedWarehouse = detail;//默认选中全部
                 warehouseEntity.getData().add(0, detail);
                 //显示弹框
@@ -600,6 +618,7 @@ public class InventoryFragment extends BaseFragment implements XRecyclerView.Loa
                 //商品类型，20表示物料，默认10表示商品
                 params.put("product_type", 10);
                 params.put("stock_status", 1);
+
                 //显示加载动画
                 reStartHttp();
 

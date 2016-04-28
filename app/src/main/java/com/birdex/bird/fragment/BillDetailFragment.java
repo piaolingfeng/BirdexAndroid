@@ -270,8 +270,8 @@ public class BillDetailFragment extends BaseFragment implements XRecyclerView.Lo
                 }
             }
             //设置时间限制条件
-            String start = TimeUtil.calendar2String(calendar1);
-            String end = TimeUtil.calendar2String(calendar2);
+            String start = TimeUtil.calendar2SimpleString(calendar1);
+            String end = TimeUtil.calendar2SimpleString(calendar2);
             params.put("start_date", start);
             params.put("end_date", end);
             tv_timeshow.setText(TimeUtil.calendar2SimpleString(calendar1) + "至" + TimeUtil.calendar2SimpleString(calendar2));

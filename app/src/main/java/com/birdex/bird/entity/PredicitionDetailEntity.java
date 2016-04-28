@@ -360,6 +360,25 @@ public class PredicitionDetailEntity {
             String expired_date = "";//:null,
             String status_name = "";//:"已审核"
 
+            String review_time="";//: "发起复核的时间",
+            String review_remark="";//: "复核理由"
+
+            public String getReview_time() {
+                return review_time;
+            }
+
+            public void setReview_time(String review_time) {
+                this.review_time = review_time;
+            }
+
+            public String getReview_remark() {
+                return review_remark;
+            }
+
+            public void setReview_remark(String review_remark) {
+                this.review_remark = review_remark;
+            }
+
             public String getStorage_code() {
                 return storage_code;
             }

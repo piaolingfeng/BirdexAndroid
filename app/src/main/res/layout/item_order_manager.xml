@@ -51,7 +51,7 @@
             android:layout_alignParentTop="true"
             android:src="@drawable/delete_edt"
             android:text="132"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:layout_heightPercent="@string/del_size"
             app:layout_textSizePercent="@string/item_context_size_2"
             app:layout_widthPercent="@string/del_size" />

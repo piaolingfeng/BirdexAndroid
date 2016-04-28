@@ -29,6 +29,7 @@ import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.OrderListEntity;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.entity.OrderStatus;
+import com.birdex.bird.entity.WarehouseEntity;
 import com.birdex.bird.greendao.warehouse;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.GsonHelper;
@@ -80,6 +81,9 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
     @Bind(R.id.tv_list_count)
     TextView tv_list_count;
 
+    public OrderStatus orderStatus;//订单状态列表
+    public WarehouseEntity warehouseEntity;//所有仓库列表
+
     @Override
     protected void key(int keyCode, KeyEvent event) {
 
@@ -93,9 +97,12 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
 
     @Override
     public void initializeContentViews() {
-
         initView();
-
+        orderStatus = new OrderStatus();
+        warehouseEntity = new WarehouseEntity();
+        getAllCompanyWarehouse();
+        reInitTime();
+        getAllOrderStatus();
     }
 
     /**
@@ -107,7 +114,36 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
         getOrderList();
     }
 
+    @Subscriber(tag = "reInitStatus")
+    private void reInitStatus(String text){
+        String indexOrder = getActivity().getIntent().getStringExtra("indexOrder");
+        if (!StringUtils.isEmpty(indexOrder)) {
+            for (int position = 0; position < orderStatus.getData().size(); position++) {
+                if (indexOrder.contains(orderStatus.getData().get(position).getStatus_name().trim())) {//包含该模块的名字
+                    entity.setStatus(orderStatus.getData().get(position).getStatus() + "");
+                    bus.post(orderStatus.getData().get(position), "Order_changeState");
+                    break;
+                }
+            }
+        }
+        bus.post(entity, "requestOrderList");
+    }
 
+    private void reInitTime() {
+        String indexOrder = getActivity().getIntent().getStringExtra("indexOrder");
+        if (!StringUtils.isEmpty(indexOrder)) {
+//            getActivity().getIntent().removeExtra("indexOrder");
+            if (indexOrder.contains("今日")) {//初始化时间
+                entity.setStart_date(MyOrderListActivity.timeList.get(1).getStart_date());
+                entity.setEnd_date(MyOrderListActivity.timeList.get(1).getEnd_date());
+                bus.post(MyOrderListActivity.timeList.get(1).getName(), "Order_changeTime");//改变显示的时间
+            } else {
+                entity.setStart_date(MyOrderListActivity.timeList.get(0).getStart_date());
+                entity.setEnd_date(MyOrderListActivity.timeList.get(0).getEnd_date());
+                bus.post(MyOrderListActivity.timeList.get(0).getName(), "Order_changeTime");//改变显示的时间
+            }
+        }
+    }
     /**
      * 获取订单列表
      */
@@ -118,8 +154,13 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
         listParams.add("page_size", entity.getPage_size());
         listParams.add("keyword", entity.getKeyword());
         listParams.add("warehouse_code", entity.getWarehouse_code());
-        listParams.add("start_date", entity.getStart_date());
-        listParams.add("end_date", entity.getEnd_date());
+        if (entity.getStatusName().contains("已出库")){
+            listParams.add("checkout_start_date", entity.getStart_date());
+            listParams.add("checkout_end_date", entity.getEnd_date());
+        }else {
+            listParams.add("start_date", entity.getStart_date());
+            listParams.add("end_date", entity.getEnd_date());
+        }
         listParams.add("status", entity.getStatus());
 //        listParams.add("count", entity.getCount());
         listParams.add("service_type", entity.getService_type());
@@ -184,6 +225,160 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
         BirdApi.getOrderList(MyApplication.getInstans(), listParams, handler);
     }
 
+
+    /**
+     * 获取订单所有状态
+     */
+    private void getAllOrderStatus() {
+        showLoading();
+        RequestParams stateParams = new RequestParams();
+        stateParams.add("order_code", "");
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                    orderStatus = (OrderStatus) JsonHelper.parseLIst(response.getJSONArray("data"), OrderStatus.class);
+                hideLoading();
+                try {
+                    if (response != null) {
+                        if (0 == response.get("error")) {
+                            orderStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
+                            dealOrderStatus();
+                            if (orderStatus != null) {
+                                OrderStatus.Status status = new OrderStatus().new Status();
+                                status.setStatus_name("全部状态");
+                                orderStatus.getData().add(0, status);
+                                bus.post("","reInitStatus");
+                            } else {
+                                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
+                            }
+                        } else {
+                            T.showLong(MyApplication.getInstans(), response.get("data") + "");
+                        }
+                    } else {
+                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFinish() {
+                hideLoading();
+                super.onFinish();
+            }
+        };
+        handler.setTag(tag);
+        BirdApi.getOrderListState(MyApplication.getInstans(), stateParams, handler);
+    }
+
+    /**
+     * 获取所有的仓库
+     */
+    private void getAllCompanyWarehouse() {
+        showLoading();
+        RequestParams wareParams = new RequestParams();
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    if (response == null) {
+                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
+                        return;
+                    }
+                    if (0 == response.get("error")) {
+                        warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
+                        if (warehouseEntity != null) {
+                            if (warehouseEntity.getError().equals("0")) {
+                                WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
+                                detail.setName("全部仓库");
+//                nowSelectedWarehouse = detail;//默认选中全部
+                                warehouseEntity.getData().add(0, detail);
+                                bus.post(detail, "changeWarehouse");
+                            } else {
+                                T.showLong(MyApplication.getInstans(), warehouseEntity.getError());
+                            }
+                        } else {
+                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
+                        }
+                    } else {
+                        T.showLong(MyApplication.getInstans(), response.get("data") + "");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+
+            @Override
+            public void onFinish() {
+                hideLoading();
+                super.onFinish();
+            }
+        };
+        handler.setTag(tag);
+        BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, handler);
+    }
+
+
+    /**
+     * 简化订单列表状态
+     */
+    private void dealOrderStatus() {
+        OrderStatus status = new OrderStatus();
+        String statusName[] = {"待审核", "等待出库", "出库中","已出库", "运输中", "已签收", "身份证异常", "库存异常", "审核不通过","已取消订单"};
+        if (orderStatus != null) {
+            for (int size = 0; size < statusName.length; size++) {
+                for (int i = 0; i < orderStatus.getData().size(); i++) {
+                    String name = orderStatus.getData().get(i).getStatus_name();
+                    if (statusName[size].equals(name)) {
+                        status.getData().add(orderStatus.getData().get(i));
+                        break;
+                    }
+                }
+            }
+        }
+        orderStatus = status;
+    }
+
     @Override
     protected void lazyLoad() {
 //        if(!isPrepared || !isVisible) {
@@ -233,26 +428,6 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
         initFloatAction();
         initSearch();
         initscan_code();
-        String indexOrder = getActivity().getIntent().getStringExtra("indexOrder");
-        if (!StringUtils.isEmpty(indexOrder)) {
-//            getActivity().getIntent().removeExtra("indexOrder");
-            if (indexOrder.contains("今日")) {//初始化时间
-                entity.setStart_date(MyOrderListActivity.timeList.get(1).getStart_date());
-                entity.setEnd_date(MyOrderListActivity.timeList.get(1).getEnd_date());
-                bus.post(MyOrderListActivity.timeList.get(1).getName(), "Order_changeTime");//改变显示的时间
-            } else {
-                entity.setStart_date(MyOrderListActivity.timeList.get(0).getStart_date());
-                entity.setEnd_date(MyOrderListActivity.timeList.get(0).getEnd_date());
-                bus.post(MyOrderListActivity.timeList.get(0).getName(), "Order_changeTime");//改变显示的时间
-            }
-            for (int position = 0; position < MyOrderListActivity.orderStatus.getData().size(); position++) {
-                if (indexOrder.contains(MyOrderListActivity.orderStatus.getData().get(position).getStatus_name().trim())) {//包含该模块的名字
-                    entity.setStatus(MyOrderListActivity.orderStatus.getData().get(position).getStatus() + "");
-                    bus.post(MyOrderListActivity.orderStatus.getData().get(position), "Order_changeState");
-                    break;
-                }
-            }
-        }
         rcy_orderlist.setLoadingListener(this);
 //        rcy_orderlist.setPullRefreshEnabled(false);
         rcy_orderlist.setLoadingMoreEnabled(true);
@@ -273,7 +448,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
         });
         rcy_orderlist.setAdapter(OrderAdapter);
 //        SearchOrderList(entity);
-        getOrderList();
+//        getOrderList();
     }
 
     @Subscriber(tag = "order_visible")
@@ -433,6 +608,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
                         }
 //                        T.showShort(MyApplication.getInstans(), list.get(position).getStatus_name());
                         entity.setStatus(list.get(position).getStatus() + "");
+                        entity.setStatusName(list.get(position).getStatus_name()+"");
                         bus.post(list.get(position), "Order_changeState");
                         entity.setPage_noReset();
                         bus.post(entity, "requestOrderList");
@@ -448,7 +624,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
      * Warehouse
      */
     public void showWarehouseWindow(View viewID, int w) {
-        OrderWareHouseAdapter adapter = new OrderWareHouseAdapter(getActivity(), MyOrderListActivity.warehouseList);
+        OrderWareHouseAdapter adapter = new OrderWareHouseAdapter(getActivity(), warehouseEntity.getData());
         adapter.setOnRecyclerViewItemClickListener(
                 new OnRecyclerViewItemClickListener() {
                     @Override
@@ -493,9 +669,9 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
      * 设置仓库条件
      */
     private void setWarehouse(int position) {
-        entity.setWarehouse_code(MyOrderListActivity.warehouseList.get(position).getId());
+        entity.setWarehouse_code(warehouseEntity.getData().get(position).getWarehouse_code());
         entity.setPage_noReset();
-        bus.post(MyOrderListActivity.warehouseList.get(position), "Order_changeWarehouse");
+        bus.post(warehouseEntity.getData().get(position), "Order_changeWarehouse");
         bus.post(entity, "requestOrderList");
     }
 
@@ -514,7 +690,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.state_all:
-                showStateWindow((View) state_all.getParent(), MyOrderListActivity.orderStatus.getData(), 1);
+                showStateWindow((View) state_all.getParent(), orderStatus.getData(), 1);
                 break;
             case R.id.state_Warehouse://所有仓库
                 showWarehouseWindow((View) state_Warehouse.getParent(), 1);

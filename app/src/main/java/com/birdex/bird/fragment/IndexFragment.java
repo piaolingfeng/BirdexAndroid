@@ -60,8 +60,8 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     @Bind(R.id.rcv_tool_manager)
     RecyclerView rcv_tool_manager;
 
-    @Bind(R.id.edit1)
-    ImageView edit1;
+//    @Bind(R.id.edit1)
+//    ImageView edit1;
 
     private ItemTouchHelper mItemTouchHelper;
 
@@ -86,13 +86,13 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                         getTodayData("");
                     }
                 });
-        edit1.setOnClickListener(new View.OnClickListener() {//返回
-            @Override
-            public void onClick(View v) {
-                bus.post(false, "LongClick");
-                bus.post("", "getTodayData");
-            }
-        });
+//        edit1.setOnClickListener(new View.OnClickListener() {//返回
+//            @Override
+//            public void onClick(View v) {
+//                bus.post(false, "LongClick");
+//                bus.post("", "getTodayData");
+//            }
+//        });
         if (PreferenceUtils.getPrefBoolean(getActivity(), "firstCome", true)) {//第一次进入应用时采用默认显示
             firstCome = true;
             PreferenceUtils.setPrefBoolean(getActivity(), "firstCome", false);
@@ -152,14 +152,14 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
                 Intent intent = new Intent(getActivity(), MyOrderListActivity.class);
                 intent.putExtra("indexOrder", indexOrderLocalDataList.get(position).getName());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                if (indexOrderLocalDataList.get(position).getName().contains("库存")) {
-                    if (!indexOrderLocalDataList.get(position).getName().contains("订单")) {
-                        intent.setClass(getActivity(), InventoryActivity.class);
-                    }
-                    startActivity(intent);
-                } else {
-                    startActivity(intent);
-                }
+//                if (indexOrderLocalDataList.get(position).getName().contains("库存")) {
+//                    if (!indexOrderLocalDataList.get(position).getName().contains("订单")) {
+//                        intent.setClass(getActivity(), InventoryActivity.class);
+//                    }
+//                    startActivity(intent);
+//                } else {
+                startActivity(intent);
+//                }
             }
         });
         rcv_order_manager.setAdapter(orderManagerAdapter);
@@ -236,30 +236,36 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
         boolean state;
         indexOrderNetDatatList = new ArrayList<>();
         for (int i = 0; i < name.length; i++) {
-            entity = new OrderManagerEntity();
-            entity.setCount((Integer) object.get(name[i]));
-            state = PreferenceUtils.getPrefBoolean(MyApplication.getInstans(), nameText[i], false);
-            entity.setChoose_state(state);
-            entity.setName(nameText[i]);
-            if (firstCome && i < name.length / 2) {
-                entity.setChoose_state(firstCome);//第一次进入默认获取前5个显示在首页
-                PreferenceUtils.setPrefBoolean(MyApplication.getInstans(), nameText[i], true);
+            try {
+                entity = new OrderManagerEntity();
+                entity.setCount((Integer) object.get(name[i]));
+                state = PreferenceUtils.getPrefBoolean(MyApplication.getInstans(), nameText[i], false);
+                entity.setChoose_state(state);
+                entity.setName(nameText[i]);
+                if (firstCome && i < name.length / 2) {
+                    entity.setChoose_state(firstCome);//第一次进入默认获取前5个显示在首页
+                    PreferenceUtils.setPrefBoolean(MyApplication.getInstans(), nameText[i], true);
 //                indexOrderLocalDataList.add(indexOrderLocalDataList.size() - 1, entity);
-            }
+                }
 //            if (state && !firstCome) {
 //                indexOrderLocalDataList.add(indexOrderLocalDataList.size() - 1, entity);
 //            }
-            indexOrderNetDatatList.add(entity);
+                indexOrderNetDatatList.add(entity);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
-
-    public static String[] name = {"today_checkout_order_count", "today_wait_checkout_order_count", "transport_order_count",
+    //, "transport_order_count" , "运输中"
+    public static String[] name = {"today_checkout_order_count", "today_wait_checkout_order_count",
             "today_sign_order_count", "stock_exception_order_count", "no_pass_order_count"
-            , "today_confirm_storage_count", "wait_confirm_storage_count", "no_pass_storage_count", "warning_stock_count", "id_card_exception_order_count"};
-    public static String[] nameText = {"今日已出库", "今日等待出库", "运输中",
-            "今日已签收", "库存异常订单", "审核不通过的订单",
-            "今日已入库预报单", "待确认预报单", "审核不通过预报单", "库存预警", "身份证异常订单"};
+            , "today_confirm_storage_count", "wait_confirm_storage_count", "no_pass_storage_count",
+            "warning_stock_count", "id_card_exception_order_count", "today_create_order_count", "today_cancel_order_count"};
+    public static String[] nameText = {"今日已出库", "今日等待出库",
+            "今日已签收", "库存异常订单", "审核不通过订单",
+            "今日已入库预报单", "待确认预报单", "审核不通过预报单",
+            "库存预警", "身份证异常订单", "今日创建订单", "今日取消订单"};
 
 
     /**
@@ -464,13 +470,13 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     @Subscriber(tag = "LongClick")
     public void changeLongClickState(boolean state) {
         orderManagerAdapter.setLongClickState(state);
-        if (state) {
-            edit1.setVisibility(View.VISIBLE);
-            edit1.setAnimation(AnimationUtils.getShowAlphaAnimation());
-        } else {
-            edit1.setVisibility(View.GONE);
-            edit1.setAnimation(AnimationUtils.getHiddenAlphaAnimation());
-        }
+//        if (state) {
+//            edit1.setVisibility(View.VISIBLE);
+//            edit1.setAnimation(AnimationUtils.getShowAlphaAnimation());
+//        } else {
+//            edit1.setVisibility(View.GONE);
+//            edit1.setAnimation(AnimationUtils.getHiddenAlphaAnimation());
+//        }
 
         for (int i = 0; i < orderManagerAdapter.getOrderList().size(); i++) {
             if (orderManagerAdapter.getOrderList().get(i) != null) {

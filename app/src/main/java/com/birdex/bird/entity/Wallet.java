@@ -9,6 +9,16 @@ public class Wallet {
     private String balance;
     private String name;
 
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
+    }
+
+    //设置选中
+    private boolean check=false;
     public String getType() {
         return type;
     }

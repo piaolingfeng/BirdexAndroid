@@ -17,6 +17,8 @@ import android.widget.EditText;
 
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
+import com.birdex.bird.util.Constant;
+import com.birdex.bird.util.HelperUtil;
 import com.birdex.bird.util.HideSoftKeyboardUtil;
 import com.birdex.bird.util.SafeProgressDialog;
 import com.birdex.bird.widget.RotateLoading;
@@ -46,6 +48,14 @@ public abstract class BaseActivity extends AppCompatActivity {
                             + "when you used a fragment which implements the gta.dtp.fragment.BaseFragment.");
         }
         setContentView(mContentLayoutResId);
+        //获取屏幕高度
+        if (Build.VERSION.SDK_INT>=19&&Constant.Status_Height==0){
+            Constant.Status_Height= HelperUtil.getStatusHeight(this);
+        }
+        //设置状态栏透明
+        if(Build.VERSION.SDK_INT>=19&&Constant.Status_Height!=0){
+            setTranslucentStatus(this,true);
+        }
         ButterKnife.bind(this);
         HideSoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
         bar = new ProgressDialog(this);

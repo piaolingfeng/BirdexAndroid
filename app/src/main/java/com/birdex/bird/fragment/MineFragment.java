@@ -3,6 +3,7 @@ package com.birdex.bird.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -45,8 +46,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     //设置列表
     @Bind(R.id.rv_mine_list)
     public RecyclerView rv_list;
-    @Bind(R.id.titleview)
-    TitleView titleview;
+    @Bind(R.id.title_view)
+    TitleView title_view;
     private MineIndexAdapter adapter = null;
 
     String tag = "MineFragment";
@@ -63,8 +64,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void initializeContentViews() {
-        titleview.setTitle(getString(R.string.mine));
-        titleview.setBackIvVisble(false);
+
+        title_view.setTitle(getString(R.string.mine));
+        title_view.setBackIvVisble(false);
         ArrayList<MineEntity> list = new ArrayList<>();
         String[] titles = getActivity().getResources().getStringArray(R.array.mine_item_title);
         for (int i = 0; i < titles.length; i++) {

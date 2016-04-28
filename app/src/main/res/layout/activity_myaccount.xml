@@ -53,7 +53,7 @@
     <com.birdex.bird.widget.TitleView
         android:id="@+id/title_1l"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height"
+        android:layout_height="wrap_content"
         />
 
     <com.zhy.android.percent.support.PercentRelativeLayout

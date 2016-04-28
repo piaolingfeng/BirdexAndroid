@@ -7,37 +7,16 @@
     android:background="@color/white"
     android:gravity="center_horizontal">
 
-    <RelativeLayout
-        android:id="@+id/rl_about_us_head"
+    <com.birdex.bird.widget.TitleView
+        android:id="@+id/title_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:background="@color/blue_head_1"
-        android:gravity="center_vertical"
-        android:paddingBottom="15dp"
-        android:paddingTop="15dp">
-
-        <ImageView
-            android:id="@+id/iv_about_us_back"
-            android:layout_width="15dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="15dp"
-            android:src="@drawable/back_chevron" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/about_us_title"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-    </RelativeLayout>
+        android:layout_height="wrap_content"></com.birdex.bird.widget.TitleView>
 
     <ImageView
         android:id="@+id/iv_about_us_icon"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:layout_below="@id/rl_about_us_head"
+        android:layout_below="@id/title_view"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"

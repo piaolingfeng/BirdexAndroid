@@ -1,5 +1,7 @@
 package com.birdex.bird.adapter;
 
+import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import com.birdex.bird.R;
 import com.birdex.bird.entity.InventoryActivityEntity;
+import com.birdex.bird.util.T;
 
 import java.util.ArrayList;
 
@@ -20,7 +23,9 @@ public class StockDetailAdapter extends RecyclerView.Adapter<StockDetailAdapter.
     private LayoutInflater inflater=null;
     private ArrayList<InventoryActivityEntity.InventoryStockEntity.InventoryDetailEntity.InventoryOrderEntity> list=null;
     private InventoryActivityEntity.InventoryStockEntity.InventoryDetailEntity.InventoryOrderEntity entity=null;
+    private Context context=null;
     public StockDetailAdapter(Context context,ArrayList<InventoryActivityEntity.InventoryStockEntity.InventoryDetailEntity.InventoryOrderEntity> list){
+        this.context=context;
         inflater=LayoutInflater.from(context);
         if(list==null){
             this.list=new ArrayList<>();
@@ -38,6 +43,7 @@ public class StockDetailAdapter extends RecyclerView.Adapter<StockDetailAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         entity=list.get(position);
+        holder.itemView.setTag(position);
         if(TextUtils.isEmpty(entity.getTrackingNo())){
             holder.tv_batchcode.setText(R.string.stock_detail_item_none);
         }else{
@@ -56,7 +62,7 @@ public class StockDetailAdapter extends RecyclerView.Adapter<StockDetailAdapter.
         return this.list.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tv_batchcode;
         TextView tv_num;
         TextView tv_expire;
@@ -65,6 +71,22 @@ public class StockDetailAdapter extends RecyclerView.Adapter<StockDetailAdapter.
             tv_batchcode=(TextView)itemView.findViewById(R.id.tv_stockdetail_item_batchcode);
             tv_num=(TextView)itemView.findViewById(R.id.tv_stockdetail_item_num);
             tv_expire=(TextView)itemView.findViewById(R.id.tv_stockdetail_item_expire);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position=(Integer)v.getTag();
+            StringBuilder builder=new StringBuilder();
+            entity=list.get(position);
+            if(entity!=null){
+                if(entity.getTrackingNo()!=null){
+                    builder.append(entity.getTrackingNo());
+                }
+                ClipboardManager clip = (ClipboardManager) StockDetailAdapter.this.context.getSystemService(Activity.CLIPBOARD_SERVICE);
+                clip.setText(builder.toString());
+                T.showShortByID(StockDetailAdapter.this.context,R.string.copy_to_clipboard);
+            }
         }
     }
 }

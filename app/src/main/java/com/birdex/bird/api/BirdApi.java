@@ -18,7 +18,7 @@ public class BirdApi {
     public static String SERVER_ADDRESS = "api.beta1.b.birdex.cn";
 //    public static String SERVER_ADDRESS = "192.168.1.207";
 //    public static String PORT = "8089";//8002
-    public static String BASE_URL = "http://" + SERVER_ADDRESS;// + ":" + PORT;//
+    public static String BASE_URL = "http://" + SERVER_ADDRESS ;//+ ":" + PORT;//
 
     /**
      * @param context

@@ -1,6 +1,6 @@
 package com.birdex.bird.fragment;
 
-import android.app.Activity;
+ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -29,7 +29,8 @@ import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.entity.OrderStatus;
 import com.birdex.bird.entity.PredicitionEntity;
-import com.birdex.bird.greendao.warehouse;
+ import com.birdex.bird.entity.WarehouseEntity;
+ import com.birdex.bird.greendao.warehouse;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.StringUtils;
@@ -78,6 +79,9 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
     @Bind(R.id.tv_list_count)
     TextView tv_list_count;
 
+    public OrderStatus predicitionStatus;//预报状态列表
+    public WarehouseEntity warehouseEntity;//所有仓库列表
+
     @Override
     protected void key(int keyCode, KeyEvent event) {
 
@@ -96,8 +100,12 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
 
     @Override
     public void initializeContentViews() {
-
         initView();
+        predicitionStatus = new OrderStatus();
+        warehouseEntity = new WarehouseEntity();
+        getAllCompanyWarehouse();
+        reInitTime();
+        getAllPredicitionStatus();
     }
 
     /**
@@ -176,12 +184,199 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
     }
 
     /**
+     * 简化预报列表状态
+     */
+    private void dealPredictionStatus() {
+        OrderStatus status = new OrderStatus();
+        String statusName[] = {"待审核", "待入库", "待确认", "已入库", "审核不通过"};
+        if (predicitionStatus != null) {
+            for (int size = 0; size < statusName.length; size++) {
+                for (int i = 0; i < predicitionStatus.getData().size(); i++) {
+                    String name = predicitionStatus.getData().get(i).getStatus_name();
+                    if (statusName[size].equals(name)) {
+                        status.getData().add(predicitionStatus.getData().get(i));
+                        break;
+                    }
+                }
+            }
+        }
+        predicitionStatus = status;
+    }
+
+    /**
+     * 获取预报所有状态
+     */
+    private void getAllPredicitionStatus() {
+        showLoading();
+        RequestParams stateParams = new RequestParams();
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                    orderStatus = (OrderStatus) JsonHelper.parseLIst(response.getJSONArray("data"), OrderStatus.class);
+                try {
+                    if (response != null) {
+                        if (0 == response.get("error")) {
+                            predicitionStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
+                            dealPredictionStatus();
+                            if (predicitionStatus != null) {
+                                OrderStatus.Status status = new OrderStatus().new Status();
+                                status.setStatus_name("全部状态");
+                                predicitionStatus.getData().add(0, status);
+                                bus.post("","Pre_reInitStatus");
+                            } else {
+                                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
+                            }
+                        } else {
+                            T.showLong(MyApplication.getInstans(), response.get("data") + "");
+                        }
+                    } else {
+                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+
+            @Override
+            public void onFinish() {
+                hideLoading();
+                super.onFinish();
+            }
+        };
+        handler.setTag(tag);
+        BirdApi.getPredicitionStatus(MyApplication.getInstans(), stateParams, handler);
+    }
+
+    /**
+     * 获取所有的仓库
+     */
+    private void getAllCompanyWarehouse() {
+        showLoading();
+        RequestParams wareParams = new RequestParams();
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    if (response == null) {
+                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
+                        return;
+                    }
+                    if (0 == response.get("error")) {
+                        warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
+                        if (warehouseEntity != null) {
+                            if (warehouseEntity.getError().equals("0")) {
+                                WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
+                                detail.setName("全部仓库");
+//                nowSelectedWarehouse = detail;//默认选中全部
+                                warehouseEntity.getData().add(0, detail);
+                                bus.post(detail, "changeWarehouse");
+                            } else {
+                                T.showLong(MyApplication.getInstans(), warehouseEntity.getError());
+                            }
+                        } else {
+                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
+                        }
+                    } else {
+                        T.showLong(MyApplication.getInstans(), response.get("data") + "");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+
+            @Override
+            public void onFinish() {
+                hideLoading();
+                super.onFinish();
+            }
+        };
+        handler.setTag(tag);
+        BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, handler);
+    }
+
+    /**
      * 请求刷新数据
      */
     @Subscriber(tag = "requestPredictList")
     public void SearchOrderList(OrderRequestEntity entity) {
         this.entity = entity;
         getPredicitionList();
+    }
+
+    @Subscriber(tag = "Pre_reInitStatus")
+    private void reInitStatus(String text){
+        String indexOrder = getActivity().getIntent().getStringExtra("indexOrder");
+        if (!StringUtils.isEmpty(indexOrder)) {
+            if (indexOrder.contains("预报")) {
+                for (int position = 0; position < predicitionStatus.getData().size(); position++) {
+                    if (indexOrder.contains(predicitionStatus.getData().get(position).getStatus_name().trim())) {//包含该模块的名字
+                        entity.setStatus(predicitionStatus.getData().get(position).getStatus() + "");
+                        bus.post(predicitionStatus.getData().get(position), "Pre_changeState");
+                        state_all.setText(predicitionStatus.getData().get(position).getStatus_name());
+                        break;
+                    }
+                }
+            }
+        }
+        bus.post(entity, "requestPredictList");
+    }
+
+    private void reInitTime() {
+        String indexOrder = getActivity().getIntent().getStringExtra("indexOrder");
+        if (!StringUtils.isEmpty(indexOrder)) {
+//            getActivity().getIntent().removeExtra("indexOrder");
+            if (indexOrder.contains("今日")) {//初始化时间
+                entity.setStart_date(MyOrderListActivity.timeList.get(1).getStart_date());
+                entity.setEnd_date(MyOrderListActivity.timeList.get(1).getEnd_date());
+                bus.post(MyOrderListActivity.timeList.get(1).getName(), "Pre_changeTime");//改变显示的时间
+                state_time.setText(MyOrderListActivity.timeList.get(1).getName());
+            } else {
+                entity.setStart_date(MyOrderListActivity.timeList.get(0).getStart_date());
+                entity.setEnd_date(MyOrderListActivity.timeList.get(0).getEnd_date());
+                bus.post(MyOrderListActivity.timeList.get(0).getName(), "Pre_changeTime");//改变显示的时间
+                state_time.setText(MyOrderListActivity.timeList.get(1).getName());
+            }
+        }
     }
 
     @Override
@@ -233,49 +428,6 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
         initFloatAction();
         initSearch();
         initscan_code();
-        String indexOrder = getActivity().getIntent().getStringExtra("indexOrder");
-        if (!StringUtils.isEmpty(indexOrder)) {
-//            getActivity().getIntent().removeExtra("indexOrder");
-            if (indexOrder.contains("今日")) {//初始化时间
-                entity.setStart_date(MyOrderListActivity.timeList.get(1).getStart_date());
-                entity.setEnd_date(MyOrderListActivity.timeList.get(1).getEnd_date());
-                bus.post(MyOrderListActivity.timeList.get(1).getName(), "Pre_changeTime");//改变显示的时间
-                state_time.setText(MyOrderListActivity.timeList.get(1).getName());
-            } else {
-                entity.setStart_date(MyOrderListActivity.timeList.get(0).getStart_date());
-                entity.setEnd_date(MyOrderListActivity.timeList.get(0).getEnd_date());
-                bus.post(MyOrderListActivity.timeList.get(0).getName(), "Pre_changeTime");//改变显示的时间
-                state_time.setText(MyOrderListActivity.timeList.get(1).getName());
-            }
-            if (indexOrder.contains("预报")) {
-                for (int position = 0; position < MyOrderListActivity.predicitionStatus.getData().size(); position++) {
-                    if (indexOrder.contains(MyOrderListActivity.predicitionStatus.getData().get(position).getStatus_name().trim())) {//包含该模块的名字
-                        entity.setStatus(MyOrderListActivity.predicitionStatus.getData().get(position).getStatus() + "");
-                        bus.post(MyOrderListActivity.predicitionStatus.getData().get(position), "Pre_changeState");
-                        state_all.setText(MyOrderListActivity.predicitionStatus.getData().get(position).getStatus_name());
-                        break;
-                    }
-                }
-            }
-        }
-//        refresh_layout
-//                .setOnRefreshListener(new MyListener() {
-//                    @Override
-//                    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
-////                        super.onRefresh(pullToRefreshLayout);
-////                        bus.post("", "getTodayData");
-//                        entity.setPage_no(1);
-//                        bus.post(entity, "requestPredictList");
-//                    }
-//
-//                    @Override
-//                    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
-//                        super.onLoadMore(pullToRefreshLayout);
-//                        entity.setPage_no(entity.getPage_no() + 1);
-//                        bus.post(entity, "requestPredictList");
-//                    }
-//                });
-
         bus.register(this);
         rcy_orderlist.setLoadingListener(this);
         rcy_orderlist.setPullRefreshEnabled(false);
@@ -385,10 +537,10 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
     }
 
     @Subscriber(tag = "Pre_changeWarehouse")
-    public void changeWarehouse(warehouse house) {
+    public void changeWarehouse(WarehouseEntity.WarehouseDetail detail) {
 //        nowSelectedWarehouse = detail;
         if (state_Warehouse != null)
-            state_Warehouse.setText(house.getName());
+            state_Warehouse.setText(detail.getName());
     }
 
     @Subscriber(tag = "Pre_changeState")
@@ -474,7 +626,7 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
      * Warehouse
      */
     public void showWarehouseWindow(View viewID, int w) {
-        OrderWareHouseAdapter adapter = new OrderWareHouseAdapter(getActivity(), MyOrderListActivity.warehouseList);
+        OrderWareHouseAdapter adapter = new OrderWareHouseAdapter(getActivity(), warehouseEntity.getData());
         adapter.setOnRecyclerViewItemClickListener(
                 new OnRecyclerViewItemClickListener() {
                     @Override
@@ -519,9 +671,9 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
      * 设置仓库条件
      */
     private void setWarehouse(int position) {
-        entity.setWarehouse_code(MyOrderListActivity.warehouseList.get(position).getId());
+        entity.setWarehouse_code(warehouseEntity.getData().get(position).getWarehouse_code());
         entity.setPage_noReset();
-        bus.post(MyOrderListActivity.warehouseList.get(position), "Pre_changeWarehouse");
+        bus.post(warehouseEntity.getData().get(position), "Pre_changeWarehouse");
         bus.post(entity, "requestPredictList");
     }
 
@@ -540,7 +692,7 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.state_all:
-                showStateWindow((View) state_all.getParent(), MyOrderListActivity.predicitionStatus.getData(), 1);
+                showStateWindow((View) state_all.getParent(), predicitionStatus.getData(), 1);
                 break;
             case R.id.state_Warehouse://所有仓库
                 showWarehouseWindow((View) state_Warehouse.getParent(), 1);

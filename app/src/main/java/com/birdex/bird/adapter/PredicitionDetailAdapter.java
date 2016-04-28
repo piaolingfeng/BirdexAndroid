@@ -70,9 +70,12 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
             if (holder.tv_status.getText().toString().contains("待复核")) {
                 holder.btn_confirm.setVisibility(View.VISIBLE);
                 holder.btn_re_confirm.setVisibility(View.INVISIBLE);
+//                holder.tv_reconfirm_reson.setVisibility(View.VISIBLE);
+//                holder.tv_reconfirm_reson.setText("请输入原因复核");
             } else {
                 holder.btn_confirm.setVisibility(View.VISIBLE);
                 holder.btn_re_confirm.setVisibility(View.VISIBLE);
+                holder.tv_reconfirm_reson.setVisibility(View.GONE);
             }
         } else {
             holder.btn_confirm.setVisibility(View.INVISIBLE);
@@ -118,6 +121,8 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
         @Bind(R.id.btn_re_confirm)
         Button btn_re_confirm;
 
+        @Bind(R.id.tv_reconfirm_reson)
+        TextView tv_reconfirm_reson;
         int position = 0;
 
         public PredicitionDetailHolder(View itemView) {

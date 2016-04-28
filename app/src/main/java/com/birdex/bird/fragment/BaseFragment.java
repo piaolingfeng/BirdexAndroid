@@ -85,7 +85,8 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
     }
 
     public void showLoading() {
-        loadingDialog = new SafeProgressDialog(getActivity(), R.style.semester_dialog);// 创建自定义样式dialog
+        if (loadingDialog == null)
+            loadingDialog = new SafeProgressDialog(getActivity(), R.style.semester_dialog);// 创建自定义样式dialog
 //        loadingDialog.setCancelable(false);// 不可以用“返回键”取消
 //        loadingDialog.setCanceledOnTouchOutside(false);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_loading, null);

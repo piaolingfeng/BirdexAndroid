@@ -448,7 +448,6 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
             }
         });
         rcy_orderlist.setAdapter(predicitionAdapter);
-        getPredicitionList();
     }
 
     @Subscriber(tag = "predicition_visible")

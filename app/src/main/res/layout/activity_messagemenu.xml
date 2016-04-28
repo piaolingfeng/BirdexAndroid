@@ -6,7 +6,10 @@
     android:background="#F3F3F3"
     android:orientation="vertical">
 
-    <include layout="@layout/title" />
+    <com.birdex.bird.widget.TitleView
+        android:id="@+id/title_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></com.birdex.bird.widget.TitleView>
 
     <TextView
         android:layout_width="wrap_content"

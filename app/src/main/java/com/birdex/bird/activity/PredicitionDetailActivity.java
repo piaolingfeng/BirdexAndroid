@@ -219,6 +219,7 @@ public class PredicitionDetailActivity extends BaseActivity {
                 String remarkText = remark.getText().toString();
                 if (!StringUtils.isEmpty(remarkText)) {
                     setReviewStorage(entity.getData().getStorage_code(), entity.getData().getProducts().get(position).getProduct_code(), remarkText, position);
+                    entity.getData().getProducts().get(position).setReview_remark(remarkText);
                     myDialog.dismiss();
                 } else {
                     T.showLong(PredicitionDetailActivity.this, getString(R.string.tv_review_Storage_reason));
@@ -299,7 +300,7 @@ public class PredicitionDetailActivity extends BaseActivity {
      * @param product_code 发起复核的商品code
      * @param remark       发起复核的原因
      */
-    public void setReviewStorage(String storage_code, String product_code, String remark, final int position) {
+    public void setReviewStorage(String storage_code, String product_code,final String remark, final int position) {
         showLoading();
         RequestParams params = new RequestParams();
         params.add("storage_code", storage_code);
@@ -317,6 +318,7 @@ public class PredicitionDetailActivity extends BaseActivity {
                     int error = (int) response.get("error");
                     if (success != null && error == 0) {
                         bus.post(position, "re_confirm");//刷新当前页面
+//                        adapter.getProductList().get(position).setReview_remark(remark);
                         T.showLong(PredicitionDetailActivity.this, getString(R.string.confirm_re_success));
                     } else
                         T.showLong(PredicitionDetailActivity.this, success);

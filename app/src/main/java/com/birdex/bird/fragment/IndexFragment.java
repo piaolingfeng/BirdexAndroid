@@ -265,7 +265,7 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
     public static String[] nameText = {"今日已出库", "今日等待出库",
             "今日已签收", "库存异常订单", "审核不通过订单",
             "今日已入库预报单", "待确认预报单", "审核不通过预报单",
-            "库存预警", "身份证异常订单", "今日创建订单", "今日取消订单"};
+            "库存预警", "身份证异常订单", "今日订单数", "今日已取消订单"};
 
 
     /**

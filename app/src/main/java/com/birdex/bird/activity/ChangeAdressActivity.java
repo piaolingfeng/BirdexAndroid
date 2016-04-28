@@ -23,6 +23,7 @@ import com.birdex.bird.greendao.cityDao;
 import com.birdex.bird.util.GsonHelper;
 import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.T;
+import com.birdex.bird.widget.TitleView;
 import com.birdex.bird.widget.WheelView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -75,10 +76,8 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     @Bind(R.id.detail_adress)
     EditText detail_adress;
 
-    // 右上角文字
-    @Bind(R.id.save)
-    TextView save;
-
+    @Bind(R.id.title_view)
+    TitleView title_view;
     // 地区选择控件
     @Bind(R.id.wheelview_ll)
     LinearLayout wheelview_ll;
@@ -103,8 +102,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
     private void initData() {
         // 获取省份列表
         setData(DaoUtils.getcity());
-
-        save.setText(getString(R.string.change_adress));
+        title_view.setSaveText(getString(R.string.change_adress));
     }
 
     private List<city> provinces = new ArrayList<city>();
@@ -397,7 +395,7 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
 
     private boolean isFirst = true;
 
-    @OnClick({R.id.contacts, R.id.region_ll, R.id.confirm, R.id.back})
+    @OnClick({R.id.contacts, R.id.region_ll, R.id.confirm})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -444,11 +442,6 @@ public class ChangeAdressActivity extends BaseActivity implements View.OnClickLi
 
                 modOrder();
 
-                break;
-
-            //点击返回键
-            case R.id.back:
-                finish();
                 break;
         }
     }

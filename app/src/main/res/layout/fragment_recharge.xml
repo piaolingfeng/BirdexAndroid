@@ -5,7 +5,7 @@
     android:background="@color/background"
     android:orientation="vertical">
 
-    <ScrollView
+    <com.birdex.bird.widget.MyScrollview
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -14,62 +14,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_recharge_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
-
-                    <com.rey.material.widget.RadioButton
-                        android:id="@+id/rb_recharge_tran"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:gravity="center_vertical"
-                        android:text="@string/recharge_translute_account"
-                        android:textColor="@color/fragment_recharge_account"
-                        android:textSize="18sp"
-                        app:rbd_innerRadius="4dp"
-                        app:rbd_radius="8dp"
-                        app:rbd_strokeColor="@color/blue" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
-
-                    <com.rey.material.widget.RadioButton
-                        android:id="@+id/rb_recharge_tax"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_vertical"
-                        android:text="@string/recharge_tax_account"
-                        android:textColor="@color/fragment_recharge_account"
-                        android:textSize="18sp"
-                        app:rbd_innerRadius="4dp"
-                        app:rbd_radius="8dp"
-                        app:rbd_strokeColor="@color/blue" />
-                </LinearLayout>
-
-
-            </LinearLayout>
+                android:scrollbars="none"
+                android:overScrollMode="never"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -154,5 +104,5 @@
                 android:paddingBottom="12dp"
                 android:textSize="16sp" />
         </LinearLayout>
-    </ScrollView>
+    </com.birdex.bird.widget.MyScrollview>
 </LinearLayout>

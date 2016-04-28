@@ -13,6 +13,8 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -28,12 +30,17 @@ import android.widget.Toast;
 import com.alipay.sdk.app.PayTask;
 import com.birdex.bird.AliPay.PayResult;
 import com.birdex.bird.AliPay.SignUtils;
+import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.activity.MyAccountActivity;
+import com.birdex.bird.adapter.RechargeAccountAdapter;
 import com.birdex.bird.api.BirdApi;
+import com.birdex.bird.entity.AccountDetail;
 import com.birdex.bird.entity.EncryptEntity;
+import com.birdex.bird.entity.Wallet;
 import com.birdex.bird.util.Constant;
 import com.birdex.bird.util.GsonHelper;
+import com.birdex.bird.util.JsonHelper;
 import com.birdex.bird.util.T;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -42,6 +49,7 @@ import com.rey.material.widget.Switch;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -56,11 +64,9 @@ import butterknife.Bind;
 /**
  * 充值
  */
-public class RechargeFragment extends BaseFragment implements CompoundButton.OnCheckedChangeListener,View.OnClickListener,TextWatcher{
-    @Bind(R.id.rb_recharge_tran)
-    public RadioButton rb_tran;
-    @Bind(R.id.rb_recharge_tax)
-    public RadioButton rb_tax;
+public class RechargeFragment extends BaseFragment implements View.OnClickListener,TextWatcher{
+    @Bind(R.id.rv_recharge_account)
+    public RecyclerView rv_account;
     @Bind(R.id.btn_pay_recharge)
     public Button btn_pay;
     //输入金额
@@ -80,6 +86,8 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
     private final  String tag="RechargeFragment";
     //获取信息
     private SharedPreferences sharedPreferences=null;
+    //设置账号适配器
+    private RechargeAccountAdapter adapter=null;
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @SuppressWarnings("unused")
@@ -136,10 +144,9 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
     public void initializeContentViews() {
         et_money.addTextChangedListener(this);
         sharedPreferences=getActivity().getSharedPreferences(Constant.SP_UserInfo, Activity.MODE_PRIVATE);
-        rb_tran.setOnCheckedChangeListener(this);
-        rb_tax.setOnCheckedChangeListener(this);
-        rb_tran.setOnClickListener(this);
-        rb_tax.setOnClickListener(this);
+        adapter=new RechargeAccountAdapter(getActivity(),null);
+        rv_account.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        rv_account.setAdapter(adapter);
         btn_pay.setOnClickListener(this);
         //设置接口的参数
         params=new RequestParams();
@@ -148,6 +155,8 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
         params.put("a","in");
         params.put("islink","1");
         params.put("p","6");
+        //获取该用户的所有的账户
+        getMyAccount();
     }
 
     @Override
@@ -157,24 +166,15 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
 
 
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-    }
+
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.rb_recharge_tran:
-                rb_tran.setChecked(true);
-                rb_tax.setChecked(false);
-                break;
-            case R.id.rb_recharge_tax:
-                rb_tran.setChecked(false);
-                rb_tax.setChecked(true);
-                break;
             case R.id.btn_pay_recharge:
 //                pay(v);
-                if(!rb_tran.isChecked()&&!rb_tax.isChecked()){
+                Wallet wallet=adapter.getSelectWallet();
+                if(wallet==null){
                     T.showShortByID(getActivity(),R.string.recharge_tip1);
                     return;
                 }
@@ -203,10 +203,10 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
                 //添加用户的绑定id
                 params.put("ud",bindID);
                 //设置充值账号
-                if(rb_tran.isChecked()){
-                    params.put("WalletType","default");
-                }else if(rb_tax.isChecked()){
-                    params.put("WalletType","tax");
+                if(wallet.getType()!=null){
+                    params.put("WalletType",wallet.getType());
+                }else {
+                    params.put("WalletType","");
                 }
                 params.put("m",money);
 
@@ -393,5 +393,54 @@ public class RechargeFragment extends BaseFragment implements CompoundButton.OnC
     @Override
     public void afterTextChanged(Editable s) {
 
+    }
+    private void getMyAccount(){
+        showLoading();
+        RequestParams params = new RequestParams();
+
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    if ("0".equals(response.getString("error"))) {
+                        AccountDetail accountDetail = JsonHelper.parseObject((JSONObject) response.get("data"), AccountDetail.class);
+                        if(accountDetail!=null){
+                            if(accountDetail.getWallets()!=null&&accountDetail.getWallets().size()>0){
+                                adapter.setDataSource(accountDetail.getWallets());
+                            }else {
+                                T.showShortByID(getActivity(),R.string.recharge_account_tip1);
+                            }
+                        }else {
+                            T.showShortByID(getActivity(),R.string.recharge_account_tip1);
+                        }
+                    }else{
+                        T.showShort(getActivity(),response.getString("data"));
+                    }
+                    hideLoading();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    hideLoading();
+                }
+            }
+
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideLoading();
+                T.showShort(getActivity(), getString(R.string.recharge_account_tip1));
+            }
+
+        };
+        handler.setTag(tag);
+        BirdApi.getBalance(MyApplication.getInstans(), params, handler);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        hideLoading();
+        BirdApi.cancelRequestWithTag(tag);
     }
 }

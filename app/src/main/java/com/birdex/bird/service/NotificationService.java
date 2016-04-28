@@ -160,7 +160,7 @@ public class NotificationService extends UmengBaseIntentService {
 //                        }
 //                    }
 //                }
-                notifiManager.notify(0, builder.build());
+                notifiManager.notify(format.format(new Date()),0, builder.build());
 //                msgDao.insert(notimsg);
 //                db.close();
             } else {
@@ -190,7 +190,7 @@ public class NotificationService extends UmengBaseIntentService {
                     }
                 }
                 time1=time2;
-                notifiManager.notify(0, builder.build());
+                notifiManager.notify(format.format(new Date()),0, builder.build());
                 notimsg = new NotifiMsg();
                 notimsg.setIsread(false);
                 notimsg.setMsgtext(msg.text);

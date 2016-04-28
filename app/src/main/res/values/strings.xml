@@ -447,4 +447,8 @@
     <string name="list_no_data">暂无数据显示!</string>
 
     <string name="copy_to_clipboard">内容已经复制到粘贴板!</string>
+    <!--账户充值-->
+    <string name="recharge_account_tip1">获取充值账号失败!</string>
+    <string name="recharge_account_tip2">没有可充值的账号!</string>
+    <string name="recharge_account_unkonw">未知账号</string>
 </resources>

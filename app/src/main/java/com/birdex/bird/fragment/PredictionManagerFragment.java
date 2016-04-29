@@ -288,7 +288,7 @@ public class PredictionManagerFragment extends BaseFragment implements XRecycler
                                 detail.setName("全部仓库");
 //                nowSelectedWarehouse = detail;//默认选中全部
                                 warehouseEntity.getData().add(0, detail);
-                                bus.post(detail, "changeWarehouse");
+                                bus.post(detail, "Pre_changeWarehouse");
                             } else {
                                 T.showLong(MyApplication.getInstans(), warehouseEntity.getError());
                             }

@@ -312,7 +312,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
                                 detail.setName("全部仓库");
 //                nowSelectedWarehouse = detail;//默认选中全部
                                 warehouseEntity.getData().add(0, detail);
-                                bus.post(detail, "changeWarehouse");
+                                bus.post(detail, "Order_changeWarehouse");
                             } else {
                                 T.showLong(MyApplication.getInstans(), warehouseEntity.getError());
                             }
@@ -537,9 +537,10 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
     }
 
     @Subscriber(tag = "Order_changeWarehouse")
-    public void changeWarehouse(warehouse house) {
+    public void changeWarehouse(WarehouseEntity.WarehouseDetail detail) {
 //        nowSelectedWarehouse = detail;
-        state_Warehouse.setText(house.getName());
+        if (state_Warehouse != null)
+            state_Warehouse.setText(detail.getName());
     }
 
     @Subscriber(tag = "Order_changeState")

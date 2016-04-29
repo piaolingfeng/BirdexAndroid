@@ -180,8 +180,12 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     // 将接口获取到的值 set 进去
     private void setDetailData(CompanyInformation information, City cities, List<market> markets, List<businessmodel> businessModels, List<qgmodel> qgModels) {
         if (information != null) {
-            sign_company_name.setText(information.getCompany_name());
-            company_short_name.setText(information.getCompany_short_name());
+            if(information.getCompany_name() != null) {
+                sign_company_name.setText(information.getCompany_name());
+            }
+            if(information.getCompany_short_name()!=null) {
+                company_short_name.setText(information.getCompany_short_name());
+            }
 
             // 总部所在地   -- 缺少
             // 所在省份 id
@@ -193,7 +197,9 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
             if (cities != null) {
                 headquarters_address.setText(getAddressDetail(cities, provinceId, cityId, areaId));
             }
-            detail_address.setText(information.getAddress());
+            if(information.getAddress() != null) {
+                detail_address.setText(information.getAddress());
+            }
 
             // 主营市场   -- 缺少
             // 返回主营市场 list
@@ -202,12 +208,17 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                 main_market.setText(getMarketStr(markets, marTypes));
             }
 
-            order_pri.setText(information.getOrder_avg_price());
+            if(information.getOrder_avg_price()!=null) {
+                order_pri.setText(information.getOrder_avg_price());
+            }
 
             // 设置联系人信息相关
-            setContactInf(information.getContacts());
-
-            exception_email.setText(information.getNotice_email());
+            if(information.getContacts() !=null) {
+                setContactInf(information.getContacts());
+            }
+            if(information.getNotice_email()!=null) {
+                exception_email.setText(information.getNotice_email());
+            }
 
             // 业务模式 list
             List<String> businessType = StringUtils.spiltStringArray(information.getBusiness_models());
@@ -267,22 +278,24 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
     // 设置联系人信息
     private void setContactInf(List<Contact> contacts) {
         for (Contact contact : contacts) {
-            if ("10".equals(contact.getContact_type())) {
-                principal.setText(contact.getName());
-                principal_phone_no.setText(contact.getPhone());
-                principal_email.setText(contact.getEmail());
-            } else if ("20".equals(contact.getContact_type())) {
-                outin.setText(contact.getName());
-                outin_phone_no.setText(contact.getPhone());
-                outin_email.setText(contact.getEmail());
-            } else if ("30".equals(contact.getContact_type())) {
-                finance.setText(contact.getName());
-                finance_phone_no.setText(contact.getPhone());
-                finance_email.setText(contact.getEmail());
-            } else if ("40".equals(contact.getContact_type())) {
-                it.setText(contact.getName());
-                it_phone_no.setText(contact.getPhone());
-                it_email.setText(contact.getEmail());
+            if(contact != null) {
+                if ("10".equals(contact.getContact_type())) {
+                    principal.setText(contact.getName());
+                    principal_phone_no.setText(contact.getPhone());
+                    principal_email.setText(contact.getEmail());
+                } else if ("20".equals(contact.getContact_type())) {
+                    outin.setText(contact.getName());
+                    outin_phone_no.setText(contact.getPhone());
+                    outin_email.setText(contact.getEmail());
+                } else if ("30".equals(contact.getContact_type())) {
+                    finance.setText(contact.getName());
+                    finance_phone_no.setText(contact.getPhone());
+                    finance_email.setText(contact.getEmail());
+                } else if ("40".equals(contact.getContact_type())) {
+                    it.setText(contact.getName());
+                    it_phone_no.setText(contact.getPhone());
+                    it_email.setText(contact.getEmail());
+                }
             }
         }
     }
@@ -347,7 +360,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 try {
-                    if (response.get("error") == 0) {
+                    if ("0".equals(response.getString("error"))) {
                         companyInf = JsonHelper.parseObject((JSONObject) response.get("data"), CompanyInformation.class);
 
                         if (companyInf != null) {
@@ -492,7 +505,10 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                 if (baseContent.getVisibility() != View.VISIBLE) {
                     baseContent.setVisibility(View.VISIBLE);
                     baseJia.setBackgroundResource(R.drawable.arrow_down_select);
-                    control(0);
+//                    control(0);
+                } else {
+                    baseContent.setVisibility(View.GONE);
+                    baseJia.setBackgroundResource(R.drawable.arrow_up_select);
                 }
                 break;
 
@@ -500,7 +516,10 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                 if (mainContent.getVisibility() != View.VISIBLE) {
                     mainContent.setVisibility(View.VISIBLE);
                     mainJia.setBackgroundResource(R.drawable.arrow_down_select);
-                    control(1);
+//                    control(1);
+                } else {
+                    mainContent.setVisibility(View.GONE);
+                    mainJia.setBackgroundResource(R.drawable.arrow_up_select);
                 }
                 break;
 
@@ -508,7 +527,10 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                 if (contactsContent.getVisibility() != View.VISIBLE) {
                     contactsContent.setVisibility(View.VISIBLE);
                     contactsJia.setBackgroundResource(R.drawable.arrow_down_select);
-                    control(2);
+//                    control(2);
+                } else {
+                    contactsContent.setVisibility(View.GONE);
+                    contactsJia.setBackgroundResource(R.drawable.arrow_up_select);
                 }
                 break;
 //
@@ -516,7 +538,10 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
                 if (patternContent.getVisibility() != View.VISIBLE) {
                     patternContent.setVisibility(View.VISIBLE);
                     patternJia.setBackgroundResource(R.drawable.arrow_down_select);
-                    control(3);
+//                    control(3);
+                } else {
+                    patternContent.setVisibility(View.GONE);
+                    patternJia.setBackgroundResource(R.drawable.arrow_up_select);
                 }
                 break;
 

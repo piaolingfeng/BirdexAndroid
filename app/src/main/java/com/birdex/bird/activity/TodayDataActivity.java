@@ -9,6 +9,7 @@ import com.birdex.bird.adapter.TodayDataAdapter;
 import com.birdex.bird.fragment.IndexFragment;
 import com.birdex.bird.util.decoration.FullyLinearLayoutManager;
 import com.birdex.bird.entity.OrderManagerEntity;
+import com.birdex.bird.widget.TitleView;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 
 import java.util.List;
@@ -18,13 +19,11 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/3/29.
  */
-public class TodayDataActivity extends BaseActivity implements View.OnClickListener {
+public class TodayDataActivity extends BaseActivity{
+    @Bind(R.id.title_view)
+    TitleView title_view;
     @Bind(R.id.rcy)
     RecyclerView rcy;
-    @Bind(R.id.back)
-    PercentRelativeLayout back;
-    @Bind(R.id.title)
-    TextView title;
 
     private TodayDataAdapter adapter;
     private List<OrderManagerEntity> orderList;
@@ -36,9 +35,8 @@ public class TodayDataActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void initializeContentViews() {
-        title.setVisibility(View.VISIBLE);
-        title.setText(getString(R.string.data));
-        back.setOnClickListener(this);
+        title_view.setTitle(getString(R.string.data));
+        title_view.setBackIvVisble(true);
         orderList = (List<OrderManagerEntity>) getIntent().getSerializableExtra("TodayData");
         if (orderList == null || orderList.size() == 0) {
             orderList = IndexFragment.indexOrderNetDatatList;
@@ -48,12 +46,4 @@ public class TodayDataActivity extends BaseActivity implements View.OnClickListe
         rcy.setAdapter(adapter);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.back:
-                this.finish();
-
-        }
-    }
 }

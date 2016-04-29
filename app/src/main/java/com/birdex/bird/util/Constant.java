@@ -43,4 +43,6 @@ public class Constant {
     public static final String LOGIN = "login";
     public static final String BIND_USER_ID = "bind_user_id";
     public static final String FIRST_ENTRY_APP = "first_entry_app";
+    //获取状态栏高度
+    public static int Status_Height=0;
 }

@@ -134,7 +134,7 @@ public class MsgDetailActivity extends BaseActivity implements XRecyclerView.Loa
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     if (response!=null) {
-                        if (0 == response.get("error")) {
+                        if ("0".equals(response.getString("error"))) {
                             listEntity = GsonHelper.getPerson(response.toString(), MsgListEntity.class);
                             if (listEntity != null) {
                                 if (listEntity.getData().getMessages().size() != 20 && inventoryPage_no > 1) {

@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -24,6 +27,7 @@ import com.birdex.bird.activity.MyOrderListActivity;
 import com.birdex.bird.adapter.CommonSimpleAdapter;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.Constant;
+import com.birdex.bird.util.HelperUtil;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 
 import java.util.ArrayList;
@@ -36,7 +40,6 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
     Context mContext;
     View view;
     TextView title;
-    PercentRelativeLayout back;
     ImageView menu;
     TextView save;
     ImageView back_iv;
@@ -74,7 +77,7 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.back:
+            case R.id.back_iv:
                 if (mContext != null)
                     ((Activity) mContext).finish();
                 break;
@@ -95,29 +98,29 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
                     mPopupWindow.dismiss();
                 }
                 Intent intent = null;
-                if (list.get(position) != null && list.get(position).equals(mContext.getString(R.string.tool6))) {
-                    //我的充值
-                    intent = new Intent(mContext, MyAccountInfoActivity.class);
-                    //显示第一个页面
-                    intent.putExtra("enterindex", 0);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    mContext.startActivity(intent);
-                    return;
-                } else if (list.get(position) != null && list.get(position).equals(mContext.getString(R.string.tool5))) {
-                    //我的支出记录
-                    intent = new Intent(mContext, MyAccountInfoActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    //显示第二个页面
-                    intent.putExtra("enterindex", 1);
-                    mContext.startActivity(intent);
-                    return;
-                } else if (list.get(position) != null && list.get(position).equals(mContext.getString(R.string.tool3))) {
-                    //我的库存
-                    intent = new Intent(mContext, InventoryActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    mContext.startActivity(intent);
-                    return;
-                }
+//                if (list.get(position) != null && list.get(position).equals(mContext.getString(R.string.tool6))) {
+//                    //我的充值
+//                    intent = new Intent(mContext, MyAccountInfoActivity.class);
+//                    //显示第一个页面
+//                    intent.putExtra("enterindex", 0);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                    mContext.startActivity(intent);
+//                    return;
+//                } else if (list.get(position) != null && list.get(position).equals(mContext.getString(R.string.tool5))) {
+//                    //我的支出记录
+//                    intent = new Intent(mContext, MyAccountInfoActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                    //显示第二个页面
+//                    intent.putExtra("enterindex", 1);
+//                    mContext.startActivity(intent);
+//                    return;
+//                } else if (list.get(position) != null && list.get(position).equals(mContext.getString(R.string.tool3))) {
+//                    //我的库存
+//                    intent = new Intent(mContext, InventoryActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                    mContext.startActivity(intent);
+//                    return;
+//                }
                 intent = new Intent(mContext, MyOrderListActivity.class);
                 intent.putExtra("name", mContext.getString(Constant.name[position]));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -151,18 +154,21 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
     private void initView() {
         view = LayoutInflater.from(mContext).inflate(R.layout.title, null, false);
         title = (TextView) view.findViewById(R.id.title);
-        back = (PercentRelativeLayout) view.findViewById(R.id.back);
         menu = (ImageView) view.findViewById(R.id.menu);
         back_iv = (ImageView) view.findViewById(R.id.back_iv);
+        back_iv.setOnClickListener(this);
         save = (TextView) view.findViewById(R.id.save);
         prl_title = (PercentRelativeLayout) view.findViewById(R.id.prl_title);
-        back.setOnClickListener(this);
         menu.setOnClickListener(this);
         menuList = new ArrayList<>();
         for (int i = 0; i < Constant.name.length; i++) {//初始化lmenu list
             menuList.add(mContext.getString(Constant.name[i]));
         }
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        if (Build.VERSION.SDK_INT>=19&&Constant.Status_Height!=0){
+            prl_title.setPadding(0,Constant.Status_Height,0,0);
+//            params.setMargins(0,Constant.Status_Height,0,0);
+        }
         addView(view, params);
     }
 
@@ -191,6 +197,15 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
         save.setText(text);
     }
 
+    public void setSaveCompoundDrawables(Drawable left,Drawable top,Drawable right,Drawable bottom){
+        save.setCompoundDrawables(left,top,right,bottom);
+    }
+
+    public void setSaveListener(OnClickListener listener){
+        save.setVisibility(VISIBLE);
+        save.setOnClickListener(listener);
+    }
+
     public void setBackground(int col){
         prl_title.setBackgroundColor(col);
     }
@@ -211,8 +226,8 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
         }
     }
 
-    public void setMenu(Bitmap bitmap){
-        menu.setImageBitmap(bitmap);
+    public void setMenu(int resId){
+        menu.setImageResource(resId);
     }
     /*
      *库存titleview

@@ -99,7 +99,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
         titleView.setBackground(Color.parseColor("#FFFFFF"));
         titleView.setTitleTextcolor(Color.parseColor("#4A4A4A"));
         titleView.setBackIv(BitmapFactory.decodeResource(getResources(), R.drawable.blue_back));
-        titleView.setMenu(BitmapFactory.decodeResource(getResources(), R.drawable.black_menu));
+        titleView.setMenu(R.drawable.black_menu);
         getInterfactData();
     }
 
@@ -112,7 +112,6 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-                hideLoading();
                 try {
                     if ("0".equals(response.getString("error"))) {
                         AccountDetail accountDetail = JsonHelper.parseObject((JSONObject) response.get("data"), AccountDetail.class);
@@ -121,6 +120,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                             setInterfaceData(accountDetail);
                         }
                     }
+                    hideLoading();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     hideLoading();
@@ -218,7 +218,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    @OnClick({R.id.head_icon, R.id.account_manager, R.id.back, R.id.recharge_bt, R.id.recharge_tv, R.id.account_detail})
+    @OnClick({R.id.head_icon, R.id.account_manager, R.id.recharge_bt, R.id.recharge_tv, R.id.account_detail, R.id.shouzhimingxi})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -230,11 +230,6 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                 b.putString("company_code",companyCode);
                 intent.putExtras(b);
                 startActivityForResult(intent, Constant.ICON_CHANGE);
-                break;
-
-            // 点击左上角返回
-            case R.id.back:
-                finish();
                 break;
 
             // 充值按钮
@@ -270,6 +265,15 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                 intent = new Intent(this, MyAccountInfoActivity.class);
                 //显示第3个页面
                 intent.putExtra("enterindex", 2);
+                this.startActivity(intent);
+                break;
+
+            // 收支明细 textview
+            case R.id.shouzhimingxi:
+                //账户管理
+                intent = new Intent(this, MyAccountInfoActivity.class);
+                //显示第2个页面
+                intent.putExtra("enterindex", 1);
                 this.startActivity(intent);
                 break;
         }

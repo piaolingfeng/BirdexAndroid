@@ -1,64 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/stock_detail_item_paddlr"
-    android:paddingRight="@dimen/stock_detail_item_paddlr"
-    android:background="@color/white"
     android:layout_marginBottom="20dp"
-    android:orientation="vertical">
+    android:background="@drawable/sameorder_item_bg"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/stock_detail_item_paddlr"
+    android:layout_marginLeft="@dimen/stock_detail_item_marginlr"
+    android:layout_marginRight="@dimen/stock_detail_item_marginlr"
+    android:paddingRight="@dimen/stock_detail_item_paddlr">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/stock_detail_item_paddtb"
+        android:orientation="horizontal"
         android:paddingBottom="@dimen/stock_detail_item_paddtb"
-        android:orientation="horizontal">
+        android:paddingTop="@dimen/stock_detail_item_paddtb">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/stock_detail_item_batchncode"
-            android:textColor="@color/inventory_item_gray" />
+            android:textColor="@color/inventory_item_gray"/>
 
         <TextView
             android:id="@+id/tv_stockdetail_item_batchcode"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
-            android:textColor="@color/inventory_item_gray" />
+            android:textColor="@color/inventory_item_gray"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/stock_detail_item_num"
-            android:textColor="@color/blue_6" />
+            android:textColor="@color/blue_6"/>
 
         <TextView
             android:id="@+id/tv_stockdetail_item_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/blue_6" />
+            android:textColor="@color/blue_6"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/stock_detail_item_paddtb"
+        android:orientation="horizontal"
         android:paddingBottom="@dimen/stock_detail_item_paddtb"
-        android:orientation="horizontal">
+        android:paddingTop="@dimen/stock_detail_item_paddtb">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/stock_detail_item_expire"
-            android:textColor="@color/inventory_item_gray" />
+            android:textColor="@color/inventory_item_gray"/>
 
         <TextView
             android:id="@+id/tv_stockdetail_item_expire"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
-            android:textColor="@color/inventory_item_gray" />
+            android:textColor="@color/inventory_item_gray"/>
     </LinearLayout>
 </LinearLayout>

@@ -23,6 +23,7 @@ import com.birdex.bird.R;
 import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.util.glide.GlideUtils;
 import com.birdex.bird.util.T;
+import com.birdex.bird.widget.TitleView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -53,14 +54,9 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
 
     private static final String TAG = "IconChangeActivity";
 
-    // 标题
-    @Bind(R.id.title)
-    TextView title;
 
-    // 保存按钮
-    @Bind(R.id.save)
-    TextView save;
-
+    @Bind(R.id.title_view)
+    TitleView title_view;
     // 头像图片
     @Bind(R.id.iconchange_icon)
     ImageView icon;
@@ -106,8 +102,9 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
     private void initData() {
 
         // 设置title 内容
-        title.setText(getString(R.string.iconchange_title));
-        save.setText(getString(R.string.iconchange_save));
+        title_view.setTitle(getString(R.string.iconchange_title));
+        title_view.setSaveText(getString(R.string.iconchange_save));
+        title_view.setSaveListener(this);
 
         // 传过来的 bitmap
         logo = (String) getIntent().getExtras().get("logo");
@@ -115,14 +112,10 @@ public class IconChangeActivity extends BaseActivity implements View.OnClickList
         GlideUtils.setImageToLocalPathForMyaccount(icon, logo);
     }
 
-    @OnClick({R.id.back, R.id.save, R.id.iconchange_icon})
+    @OnClick({ R.id.iconchange_icon})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.back:
-                //点击了 返回按钮
-                finish();
-                break;
             case R.id.save:
 //                //点击了 保存按钮
 ////                if (!TextUtils.isEmpty(filePath)) {

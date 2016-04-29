@@ -104,7 +104,11 @@ public class OrderManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             orderManagerHolder.order_item_count.setText(orderList.get(position).getCount() + "");
             if (orderList.get(position).isDel_state()) {//长按删除状态
                 orderManagerHolder.order_item_del.setVisibility(View.VISIBLE);
+                orderManagerHolder.order_item_del.setAnimation(AnimationUtils.getShowAlphaAnimation());
             } else {
+//                if (orderManagerHolder.order_item_del.getVisibility()!=View.INVISIBLE) {
+//                    orderManagerHolder.order_item_del.setAnimation(AnimationUtils.getHiddenAlphaAnimation());
+//                }
                 orderManagerHolder.order_item_del.setVisibility(View.INVISIBLE);
             }
 //            if (position % 3 != 2) {//边沿数据不显示

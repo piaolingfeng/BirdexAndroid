@@ -13,6 +13,7 @@ public class OrderRequestEntity implements Serializable {
     String start_date = "";//	N		商品创建时间，区间开始日期，格式：2015-09-24
     String end_date = "";//	N		商品创建时间，区间结束日期，格式：2015-09-24
     String status = "";//	N		订单状态10:'待审核'; 11: '已删除'; 2:'等待出库'; 20: '准备出库'; 21: '包裹出库中'; 30: '审核不通过'; 40: '已出库'; 5: '运输中'; 50: '包裹空运中'; 51: '待清关'; 52: '包裹清关中'; 53: '包裹已清关'; 60: '已签收';
+    String statusName="";
     String count = "";    //N		总条数，服务器只有在不传值的情况下才重新总条数
     String service_type = "";    //N		服务方式
     String receiver_moblie = "";//	N		收件人手机号
@@ -21,6 +22,14 @@ public class OrderRequestEntity implements Serializable {
     int stock_status = 0;
     String order_by = "";
     int tab_type=0;
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
 
     public int getTab_type() {
         return tab_type;

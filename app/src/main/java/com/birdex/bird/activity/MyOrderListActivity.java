@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -20,14 +21,13 @@ import com.birdex.bird.api.BirdApi;
 import com.birdex.bird.entity.OrderRequestEntity;
 import com.birdex.bird.entity.OrderStatus;
 import com.birdex.bird.entity.TimeSelectEntity;
+import com.birdex.bird.entity.WarehouseEntity;
 import com.birdex.bird.fragment.BaseFragment;
 import com.birdex.bird.fragment.BillDetailFragment;
 import com.birdex.bird.fragment.InventoryFragment;
 import com.birdex.bird.fragment.OrderListManagerFragment;
 import com.birdex.bird.fragment.PredictionManagerFragment;
 import com.birdex.bird.fragment.RechargeFragment;
-import com.birdex.bird.greendao.DaoUtils;
-import com.birdex.bird.greendao.warehouse;
 import com.birdex.bird.interfaces.BackHandledInterface;
 import com.birdex.bird.interfaces.OnRecyclerViewItemClickListener;
 import com.birdex.bird.util.Constant;
@@ -65,10 +65,9 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
     List<String> menuList;//menu菜单list
     public String currentName;
 
-    public static OrderStatus orderStatus;//订单状态列表
-    public static OrderStatus predicitionStatus;//预报状态列表
-    //    public static WarehouseEntity warehouseEntity;//所有仓库列表
-    public static List<warehouse> warehouseList;
+    //    public static OrderStatus orderStatus;//订单状态列表
+//    public static OrderStatus predicitionStatus;//预报状态列表
+//    public static WarehouseEntity warehouseEntity;//所有仓库列表
     public static List<TimeSelectEntity> timeList;
 
     OrderRequestEntity entity;//请求数据保存的实体
@@ -84,9 +83,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void initializeContentViews() {
-        orderStatus = new OrderStatus();
-        predicitionStatus = new OrderStatus();
-        warehouseList = new ArrayList<>();
 //        warehouseEntity = new WarehouseEntity();
         if (orderListManagerFragment == null)
             orderListManagerFragment = new OrderListManagerFragment();
@@ -108,10 +104,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         }
         requestStateCount = 0;//
         initTimeStatus();
-        getAllOrderStatus();//获取订单所有状态
-        getAllPredicitionStatus();//获取预报所有状态
-//        getAllCompanyWarehouse();//获取所有仓库
-        getLocalCompanyWarehouse();
         setData();
     }
 
@@ -217,110 +209,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    /**
-     * 简化订单列表状态
-     */
-    private void dealOrderStatus() {
-        OrderStatus status = new OrderStatus();
-        String statusName[] = {"待审核", "等待出库", "已出库", "运输中", "已签收", "身份证异常", "库存异常", "审核不通过"};
-        if (orderStatus != null) {
-            for (int size = 0; size < statusName.length; size++) {
-                for (int i = 0; i < orderStatus.getData().size(); i++) {
-                    String name = orderStatus.getData().get(i).getStatus_name();
-                    if (statusName[size].equals(name)) {
-                        status.getData().add(orderStatus.getData().get(i));
-                        break;
-                    }
-                }
-            }
-        }
-        orderStatus = status;
-    }
-
-    /**
-     * 简化预报列表状态
-     */
-    private void dealPredictionStatus() {
-        OrderStatus status = new OrderStatus();
-        String statusName[] = {"待审核", "待入库", "待确认", "已入库", "审核不通过"};
-        if (predicitionStatus != null) {
-            for (int size = 0; size < statusName.length; size++) {
-                for (int i = 0; i < predicitionStatus.getData().size(); i++) {
-                    String name = predicitionStatus.getData().get(i).getStatus_name();
-                    if (statusName[size].equals(name)) {
-                        status.getData().add(predicitionStatus.getData().get(i));
-                        break;
-                    }
-                }
-            }
-        }
-        predicitionStatus = status;
-    }
-
-    /**
-     * 获取订单所有状态
-     */
-    private void getAllOrderStatus() {
-        showLoading();
-        RequestParams stateParams = new RequestParams();
-        stateParams.add("order_code", "");
-        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                    orderStatus = (OrderStatus) JsonHelper.parseLIst(response.getJSONArray("data"), OrderStatus.class);
-                hideLoading();
-                try {
-                    if (response != null) {
-                        if (0 == response.get("error")) {
-                            orderStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
-                            dealOrderStatus();
-                            if (orderStatus != null) {
-                                OrderStatus.Status status = new OrderStatus().new Status();
-                                status.setStatus_name("全部状态");
-                                orderStatus.getData().add(0, status);
-//                                requestStateCount++;
-//                                getNetStatusCount();
-                            } else {
-                                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
-                            }
-                        } else {
-                            T.showLong(MyApplication.getInstans(), response.get("data") + "");
-                        }
-                    } else {
-                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
-                super.onFailure(statusCode, headers, responseString, throwable);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-
-            @Override
-            public void onFinish() {
-                hideLoading();
-                super.onFinish();
-            }
-        };
-        handler.setTag(tag);
-        BirdApi.getOrderListState(MyApplication.getInstans(), stateParams, handler);
-    }
 
     public int requestStateCount = 0;
 
@@ -335,145 +223,6 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    /**
-     * 获取预报所有状态
-     */
-    private void getAllPredicitionStatus() {
-        showLoading();
-        RequestParams stateParams = new RequestParams();
-        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                    orderStatus = (OrderStatus) JsonHelper.parseLIst(response.getJSONArray("data"), OrderStatus.class);
-                try {
-                    if (response != null) {
-                        if (0 == response.get("error")) {
-                            predicitionStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
-                            dealPredictionStatus();
-                            if (predicitionStatus != null) {
-                                OrderStatus.Status status = new OrderStatus().new Status();
-                                status.setStatus_name("全部状态");
-                                predicitionStatus.getData().add(0, status);
-//                                requestStateCount++;
-//                                getNetStatusCount();
-                            } else {
-                                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_prasedatawrong));
-                            }
-                        } else {
-                            T.showLong(MyApplication.getInstans(), response.get("data") + "");
-                        }
-                    } else {
-                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
-                super.onFailure(statusCode, headers, responseString, throwable);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-
-
-            @Override
-            public void onFinish() {
-                hideLoading();
-                super.onFinish();
-            }
-        };
-        handler.setTag(tag);
-        BirdApi.getPredicitionStatus(MyApplication.getInstans(), stateParams, handler);
-    }
-
-    /**
-     * 获取所有的仓库
-     */
-//    private void getAllCompanyWarehouse() {
-//        showLoading();
-//        RequestParams wareParams = new RequestParams();
-//        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                try {
-//                    if (response == null) {
-//                        T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
-//                        return;
-//                    }
-//                    if (0 == response.get("error")) {
-//                        warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
-//                        if (warehouseEntity != null) {
-//                            if (warehouseEntity.getError().equals("0")) {
-//                                WarehouseEntity.WarehouseDetail detail = new WarehouseEntity().new WarehouseDetail();
-//                                detail.setName("全部仓库");
-////                nowSelectedWarehouse = detail;//默认选中全部
-//                                warehouseEntity.getData().add(0, detail);
-//                                bus.post(detail, "changeWarehouse");
-//                            } else {
-//                                T.showLong(MyApplication.getInstans(), warehouseEntity.getError());
-//                            }
-//                        } else {
-//                            T.showLong(MyApplication.getInstans(), getString(R.string.parse_error));
-//                        }
-//                    } else {
-//                        T.showLong(MyApplication.getInstans(), response.get("data") + "");
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + responseString);
-//                super.onFailure(statusCode, headers, responseString, throwable);
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
-//                super.onFailure(statusCode, headers, throwable, errorResponse);
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-//                T.showLong(MyApplication.getInstans(), getString(R.string.tip_myaccount_getdatawrong) + errorResponse);
-//                super.onFailure(statusCode, headers, throwable, errorResponse);
-//            }
-//
-//
-//            @Override
-//            public void onFinish() {
-//                hideLoading();
-//                super.onFinish();
-//            }
-//        };
-//        handler.setTag(tag);
-//        BirdApi.getAllWarehouse(MyApplication.getInstans(), wareParams, handler);
-//    }
-
-    private void getLocalCompanyWarehouse() {
-        List<warehouse> WarehouseList = DaoUtils.getAllWarehouse();
-        warehouse house = new warehouse();
-        house.setName("全部仓库");
-        WarehouseList.add(0, house);
-        warehouseList = WarehouseList;
-    }
 
     PopupWindow mPopupWindow;
 
@@ -563,6 +312,7 @@ public class MyOrderListActivity extends BaseActivity implements View.OnClickLis
                 }
             }
         }
+        Log.e("android", transaction.isEmpty() + "");
         if (!baseFragment.isAdded())
             transaction.add(R.id.tool_framelayout, baseFragment);
         transaction.show(baseFragment);

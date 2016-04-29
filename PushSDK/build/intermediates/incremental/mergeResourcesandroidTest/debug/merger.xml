@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="debug"><source path="D:\AndroidProject\BIRD\rebuild\Birdex\PushSDK\build\intermediates\bundles\debug\res"/></dataSet><dataSet config="main"><source path="D:\AndroidProject\BIRD\rebuild\Birdex\PushSDK\src\androidTest\res"/><source path="D:\AndroidProject\BIRD\rebuild\Birdex\PushSDK\build\generated\res\rs\androidTest\debug"/><source path="D:\AndroidProject\BIRD\rebuild\Birdex\PushSDK\build\generated\res\resValues\androidTest\debug"/></dataSet><mergedItems/></merger>

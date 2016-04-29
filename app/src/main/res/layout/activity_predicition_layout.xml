@@ -7,7 +7,7 @@
     <com.birdex.bird.widget.TitleView
         android:id="@+id/title_view"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height" />
+        android:layout_height="wrap_content" />
 
     <com.birdex.bird.widget.MyScrollview
         android:layout_width="match_parent"
@@ -101,6 +101,40 @@
 
                         <TextView
                             android:id="@+id/tv_Destination_warehousee"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="left|center"
+                            android:paddingBottom="@dimen/item_margin_top_height"
+                            android:paddingTop="@dimen/item_margin_top_height"
+                            android:textColor="@color/order_detail_text_color"
+                            android:textSize="@dimen/order_detail_size" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="right|center"
+                        android:text="@string/tv_old_warehousee"
+                        android:textColor="@color/order_detail_text_color"
+                        android:textSize="@dimen/order_detail_size" />
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:paddingLeft="@dimen/item_margin_top_height">
+
+                        <TextView
+                            android:id="@+id/tv_old_warehousee"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="left|center"

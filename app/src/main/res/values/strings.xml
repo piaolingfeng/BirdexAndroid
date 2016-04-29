@@ -173,7 +173,7 @@
     <string name="title_activity_about">AboutActivity</string>
     <!--关于-->
     <string name="about_us_title">关于我们</string>
-    <string name="about_us_content">\t\t\t\t笨鸟海淘是第三方转运物流服务商，成立于2014年1月，致力于为跨境电商提供优质物流仓储管理以及代理清关等服务。目前笨鸟海淘为中国最知名的海淘电商提供服务，并于2015年2月获得了贝塔斯曼集团亚洲基金（BAI）的500万美金规模的A轮投资。随着规模的不断扩大和融资的稳健进行，笨鸟海淘发展迅速，将为更多的电商提供更全面优质的服务。笨鸟海淘目前在全球一共开设6个仓库，分别是美国波特兰仓、美国LA仓、澳洲悉尼仓、香港仓、日本仓、韩国仓，2016年将陆续推出德国仓、英国仓、澳洲墨尔本、美国纽约、意大利等仓库。</string>
+    <string name="about_us_content">\t\t\t\t笨鸟海淘是第三方转运物流服务商，成立于2014年1月，致力于为跨境电商提供优质物流仓储管理以及代理清关等服务。笨鸟海淘目前在全球一共开设6个仓库，分别是美国波特兰仓、美国LA仓、澳洲悉尼仓、香港仓、日本仓、韩国仓，2016年将陆续推出德国仓、英国仓、澳洲墨尔本、美国纽约、意大利等仓库。</string>
     <string name="about_us_www">手机访问：www.birdex.cn</string>
     <string name="about_us_version">当前版本：B1.0.1 for Android</string>
 
@@ -190,9 +190,10 @@
     <string name="inventory_item_1">在库商品</string>
     <string name="inventory_item_2">待入库商品</string>
     <string name="inventory_search_hint">输入商品编码或UPC或商品名</string>
-    <string name="inventory_all">所有仓库</string>
+    <string name="inventory_all">全部仓库</string>
     <string name="inventory_sort_time">时间排序</string>
     <string name="inventory_sort_available">可用数量</string>
+    <string name="inventory_sort_willin">待入数量</string>
     <string name="inventory_all_data">共@条数据</string>
     <string name="inventory_tip_1">获取库存数据失败!</string>
     <string name="inventory_tip_2">库存数据解析失败!</string>
@@ -205,6 +206,7 @@
     <string name="inventory_item_actual">实际</string>
     <string name="inventory_item_inventory">所在仓</string>
     <string name="inventory_willin_item_num">待入库数</string>
+    <string name="inventory_noname">仓库名缺失</string>
     <!-- 修改地址 -->
     <string name="consignee">收货人：</string>
     <string name="phone">联系电话：</string>
@@ -252,6 +254,7 @@
     <string name="recharge_tip5">获取充值加密数据失败!</string>
     <string name="recharge_tip6">充值金额输入有误!</string>
     <string name="recharge_tip7">请填写合适的金额!</string>
+    <string name="recharge_tip8">充值出现异常!</string>
 
     <string name="please_wail">敬请期待</string>
     <string name="time_all">不限时间</string>
@@ -361,6 +364,7 @@
     <string name="tv_now_status">当前状态:</string>
     <string name="tv_confirm_predicition">批量确认预报</string>
     <string name="tv_Destination_warehousee">目的仓库:</string>
+    <string name="tv_old_warehousee">所在仓库:</string>
     <string name="tv_Logistics_tracking">物流号:</string>
     <string name="tv_update_time">更新时间:</string>
     <string name="tv_create_time">创建时间:</string>
@@ -385,6 +389,7 @@
 
     <string name="confirm_success">确认成功</string>
     <string name="confirm_re_success">复核确认成功</string>
+    <string name="tv_confirm_re_reason">复核原因:</string>
     <string name="margin_w">1%w</string>
     <string name="msg_text_2_5w">2.5%w</string>
     <string name="msg_text_3w">3%w</string>
@@ -392,6 +397,9 @@
     <string name="msg_text_4_5w">4.5%w</string>
     <string name="size_5w">5%w</string>
     <string name="msg_text_5_5w">5.5%w</string>
+
+    <string name="title_padding_percent">1.2%w</string>
+    <string name="title_menu_height_percent">8%w</string>
     <!--<string name="msg_text_per"></string>-->
     <string name="first_index_text_5_1w">4.9%w</string>
     <string name="request_err">服务器错误,请稍后重试</string>
@@ -439,4 +447,10 @@
     <string name="stock_detail_item_none">无</string>
     <string name="stock_detail_item_tip1">没有可用数据显示!</string>
     <string name="list_no_data">暂无数据显示!</string>
+
+    <string name="copy_to_clipboard">内容已经复制到粘贴板!</string>
+    <!--账户充值-->
+    <string name="recharge_account_tip1">获取充值账号失败!</string>
+    <string name="recharge_account_tip2">没有可充值的账号!</string>
+    <string name="recharge_account_unkonw">未知账号</string>
 </resources>

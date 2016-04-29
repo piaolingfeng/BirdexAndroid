@@ -134,7 +134,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                         T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
                         return;
                     }
-                    if (0 == response.get("error")) {
+                    if ("0".equals(response.getString("error"))) {
                         orderDetailEntity = GsonHelper.getPerson(response.toString(), OrderDetailEntity.class);
                         if (orderDetailEntity != null) {
                             bus.post(orderDetailEntity, "detail");

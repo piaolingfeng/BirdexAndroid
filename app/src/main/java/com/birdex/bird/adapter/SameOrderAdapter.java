@@ -1,5 +1,7 @@
 package com.birdex.bird.adapter;
 
+import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import com.birdex.bird.R;
 import com.birdex.bird.entity.PredicitionDetailEntity;
 import com.birdex.bird.fragment.IndexFragment;
+import com.birdex.bird.util.T;
 import com.loopj.android.http.HttpPatch;
 
 import java.util.ArrayList;
@@ -25,7 +28,9 @@ public class SameOrderAdapter extends RecyclerView.Adapter<SameOrderAdapter.View
     private static final int ITEM_VIEW_TYPE_HEADER = 0;
     private static final int ITEM_VIEW_TYPE_ITEM = 1;
     private  View header;
+    private Context context=null;
     public SameOrderAdapter(Context context,View header){
+        this.context=context;
         inflater=LayoutInflater.from(context);
         this.header = header;
     }
@@ -45,9 +50,10 @@ public class SameOrderAdapter extends RecyclerView.Adapter<SameOrderAdapter.View
             return;
         }
         product=list.get(position-1);
+        holder.itemView.setTag(position-1);
         if(product!=null){
             holder.tv_name.setText(product.getName()==null?"":product.getName());
-            holder.tv_code.setText(product.getProduct_code()==null?"":product.getExternal_no());
+            holder.tv_code.setText(product.getExternal_no()==null?"":product.getExternal_no());
             holder.tv_num.setText(product.getNums()==null?"":product.getNums());
         }
     }
@@ -60,7 +66,7 @@ public class SameOrderAdapter extends RecyclerView.Adapter<SameOrderAdapter.View
         return 0+1;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tv_name;
         TextView tv_code;
         TextView tv_num;
@@ -72,6 +78,22 @@ public class SameOrderAdapter extends RecyclerView.Adapter<SameOrderAdapter.View
             tv_name=(TextView)itemView.findViewById(R.id.tv_sameorder_name);
             tv_code=(TextView)itemView.findViewById(R.id.tv_sameorder_code);
             tv_num=(TextView)itemView.findViewById(R.id.tv_sameorder_num);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int realposition=(Integer)v.getTag();
+            StringBuilder builder=new StringBuilder();
+            product=list.get(realposition);
+            if(product!=null){
+                if(product.getExternal_no()!=null){
+                    builder.append(product.getExternal_no());
+                }
+                ClipboardManager clip = (ClipboardManager) SameOrderAdapter.this.context.getSystemService(Activity.CLIPBOARD_SERVICE);
+                clip.setText(builder.toString());
+                T.showShortByID(SameOrderAdapter.this.context,R.string.copy_to_clipboard);
+            }
         }
     }
     public void setDataSource(ArrayList<PredicitionDetailEntity.PredicitionData.PredicitionDetailProduct> list){

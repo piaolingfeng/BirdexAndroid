@@ -35,7 +35,8 @@
                     android:layout_width="wrap_content"
                     android:calendarViewShown="false"
                     android:layout_height="wrap_content"
-                    android:theme="@android:style/Theme"/>
+                    android:calendarTextColor="@color/black"
+                    android:theme="@android:style/Theme.Light"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -54,7 +55,8 @@
                     android:layout_width="wrap_content"
                     android:calendarViewShown="false"
                     android:layout_height="wrap_content"
-                    android:theme="@android:style/Theme"/>
+                    android:calendarTextColor="@color/black"
+                    android:theme="@android:style/Theme.Light"/>
             </LinearLayout>
         </LinearLayout>
 

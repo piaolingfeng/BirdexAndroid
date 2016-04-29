@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,7 +87,7 @@ public class InventoryWillInAdapter extends RecyclerView.Adapter<InventoryWillIn
                 if(entity1.getDetail()!=null){
                     for (InventoryActivityEntity.InventoryStockEntity.InventoryDetailEntity entity2 : entity1.getDetail()) {
                         count+=Integer.parseInt(entity2.getStock());
-                        String name=entity1.getWarehouse_name()+":";
+                        String name= TextUtils.isEmpty(entity1.getWarehouse_name())?this.activity.getString(R.string.inventory_noname):entity1.getWarehouse_name() +":";
                         String value=entity2.getStock()+" ";
                         ss.append(name);
                         ss.append(value);

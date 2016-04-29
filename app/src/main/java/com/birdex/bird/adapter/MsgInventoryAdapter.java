@@ -51,7 +51,7 @@ public class MsgInventoryAdapter extends RecyclerView.Adapter<MsgInventoryAdapte
     public void onBindViewHolder(MsgInventoryHolder holder, int position) {
         holder.position = position;
         holder.tv_create_time.setText(list.get(position).getUpdated_date());
-        holder.tv_product_code.setText(list.get(position).getMsg_content().getProduct_code());
+        holder.tv_product_code.setText(list.get(position).getMsg_content().getExternal_no());
         if (list.get(position).getRead_status().equals("0"))//0表示未读，1表示已读
         {
             holder.img_read_status.setVisibility(View.VISIBLE);
@@ -94,7 +94,7 @@ public class MsgInventoryAdapter extends RecyclerView.Adapter<MsgInventoryAdapte
 
         @Override
         public void onClick(View v) {
-            ClipboardManagerUtil.copy(list.get(position).getMsg_content().getOrder_oms_no(), mContext);
+            ClipboardManagerUtil.copy(list.get(position).getMsg_content().getExternal_no(), mContext);
             T.showShort(mContext, mContext.getString(R.string.copy_tip));
         }
     }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.birdex.bird.MyApplication;
 import com.birdex.bird.R;
 import com.birdex.bird.api.BirdApi;
+import com.birdex.bird.widget.TitleView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -30,16 +31,10 @@ import butterknife.OnClick;
  */
 public class MyMessageActivity extends BaseActivity implements View.OnClickListener {
 
-    @Bind(R.id.prl_title)
-    com.zhy.android.percent.support.PercentRelativeLayout title_rl;
 
-    // 右上角设置
-    @Bind(R.id.menu)
-    ImageView menu;
 
-    // 标题
-    @Bind(R.id.title)
-    TextView title;
+    @Bind(R.id.title_view)
+    TitleView title_view;
 
     @Bind(R.id.warning_bv_ll)
     LinearLayout warning_bv_ll;
@@ -132,10 +127,10 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
     // 初始化数据
     private void initData() {
         EventBus.getDefault().register(this);
-        title_rl.setBackgroundColor(Color.parseColor("#666666"));
-        menu.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_setting));
-        menu.setVisibility(View.VISIBLE);
-        title.setText(getString(R.string.my_message));
+        title_view.setInventoryDetail("",R.color.gray1);
+        title_view.setTitle(getString(R.string.my_message));
+        title_view.setMenuVisble(true);
+        title_view.setMenu(R.drawable.ic_setting);
 
         // 获取未读信息条数
         getUnreadData();
@@ -320,14 +315,10 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
     }
 
 
-    @OnClick({R.id.back, R.id.menu, R.id.warning_ll, R.id.exception_ll, R.id.repertory_exception_ll, R.id.check_exception_ll, R.id.account_exception_ll})
+    @OnClick({R.id.menu, R.id.warning_ll, R.id.exception_ll, R.id.repertory_exception_ll, R.id.check_exception_ll, R.id.account_exception_ll})
     @Override
     public void onClick(final View v) {
         switch (v.getId()) {
-            // 返回
-            case R.id.back:
-                finish();
-                break;
 
             // 右上角设置
             case R.id.menu:

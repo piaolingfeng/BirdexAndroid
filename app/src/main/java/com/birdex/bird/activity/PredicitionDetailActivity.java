@@ -48,6 +48,8 @@ public class PredicitionDetailActivity extends BaseActivity {
     TextView tv_confirm_predicition;
     @Bind(R.id.tv_Destination_warehousee)
     TextView tv_Destination_warehousee;
+    @Bind(R.id.tv_old_warehousee)
+    TextView tv_old_warehousee;
     @Bind(R.id.tv_Logistics_tracking)
     TextView tv_Logistics_tracking;
     @Bind(R.id.tv_remarks)
@@ -113,7 +115,7 @@ public class PredicitionDetailActivity extends BaseActivity {
                         T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
                         return;
                     }
-                    if (0 == response.get("error")) {
+                    if ("0".equals(response.getString("error"))) {
                         entity = GsonHelper.getPerson(response.toString(), PredicitionDetailEntity.class);
                         if (entity != null)
                             bus.post("", "predicitiondetail");
@@ -154,6 +156,8 @@ public class PredicitionDetailActivity extends BaseActivity {
     public void setUI(String text) {
         tv_now_status.setText(entity.getData().getStatus_name());
         tv_Destination_warehousee.setText(entity.getData().getWarehouse_name());
+        tv_old_warehousee.setText(entity.getData().getOld_warehouse_name()
+        );
         tv_confirm_predicition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,6 +219,7 @@ public class PredicitionDetailActivity extends BaseActivity {
                 String remarkText = remark.getText().toString();
                 if (!StringUtils.isEmpty(remarkText)) {
                     setReviewStorage(entity.getData().getStorage_code(), entity.getData().getProducts().get(position).getProduct_code(), remarkText, position);
+                    entity.getData().getProducts().get(position).setReview_remark(remarkText);
                     myDialog.dismiss();
                 } else {
                     T.showLong(PredicitionDetailActivity.this, getString(R.string.tv_review_Storage_reason));
@@ -295,7 +300,7 @@ public class PredicitionDetailActivity extends BaseActivity {
      * @param product_code 发起复核的商品code
      * @param remark       发起复核的原因
      */
-    public void setReviewStorage(String storage_code, String product_code, String remark, final int position) {
+    public void setReviewStorage(String storage_code, String product_code,final String remark, final int position) {
         showLoading();
         RequestParams params = new RequestParams();
         params.add("storage_code", storage_code);
@@ -313,6 +318,7 @@ public class PredicitionDetailActivity extends BaseActivity {
                     int error = (int) response.get("error");
                     if (success != null && error == 0) {
                         bus.post(position, "re_confirm");//刷新当前页面
+//                        adapter.getProductList().get(position).setReview_remark(remark);
                         T.showLong(PredicitionDetailActivity.this, getString(R.string.confirm_re_success));
                     } else
                         T.showLong(PredicitionDetailActivity.this, success);

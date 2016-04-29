@@ -41,6 +41,14 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
         this.onRecyclerViewInsClickListener = onRecyclerViewInsClickListener;
     }
 
+    public List<PredicitionDetailEntity.PredicitionData.PredicitionDetailProduct> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(List<PredicitionDetailEntity.PredicitionData.PredicitionDetailProduct> productList) {
+        this.productList = productList;
+    }
+
     public PredicitionDetailAdapter(Context mContext, List<PredicitionDetailEntity.PredicitionData.PredicitionDetailProduct> productList) {
         this.mContext = mContext;
         this.productList = productList;
@@ -70,11 +78,16 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
             if (holder.tv_status.getText().toString().contains("待复核")) {
                 holder.btn_confirm.setVisibility(View.VISIBLE);
                 holder.btn_re_confirm.setVisibility(View.INVISIBLE);
+                holder.tv_reconfirm_reason_l.setVisibility(View.VISIBLE);
+                holder.tv_reconfirm_reason.setVisibility(View.VISIBLE);
+                holder.tv_reconfirm_reason.setText(productList.get(position).getReview_remark());
             } else {
                 holder.btn_confirm.setVisibility(View.VISIBLE);
                 holder.btn_re_confirm.setVisibility(View.VISIBLE);
+                holder.tv_reconfirm_reason.setVisibility(View.GONE);
+                holder.tv_reconfirm_reason_l.setVisibility(View.GONE);
             }
-        }else {
+        } else {
             holder.btn_confirm.setVisibility(View.INVISIBLE);
             holder.btn_re_confirm.setVisibility(View.INVISIBLE);
         }
@@ -118,6 +131,10 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
         @Bind(R.id.btn_re_confirm)
         Button btn_re_confirm;
 
+        @Bind(R.id.tv_reconfirm_reason)
+        TextView tv_reconfirm_reason;
+        @Bind(R.id.tv_reconfirm_reason_l)
+        TextView tv_reconfirm_reason_l;
         int position = 0;
 
         public PredicitionDetailHolder(View itemView) {
@@ -144,9 +161,8 @@ public class PredicitionDetailAdapter extends RecyclerView.Adapter<PredicitionDe
         @Subscriber(tag = "confirm")
         public void setBtn_confirm(int position) {
             if (this.position == position || position == -1) {//-1为刷新全部状态
-                productList.get(position).setStatus_name("已入库");
+                productList.get(this.position).setStatus_name("已入库");
                 notifyDataSetChanged();
-
             }
         }
 

@@ -18,6 +18,7 @@ import com.birdex.bird.R;
 import com.birdex.bird.service.IPushAidlInterface;
 import com.birdex.bird.service.NotificationService;
 import com.birdex.bird.util.Constant;
+import com.birdex.bird.widget.TitleView;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -27,12 +28,9 @@ import butterknife.OnClick;
  */
 public class MessageMenuActivity extends BaseActivity implements View.OnClickListener {
 
-    @Bind(R.id.prl_title)
-    com.zhy.android.percent.support.PercentRelativeLayout title_rl;
 
-    // 标题
-    @Bind(R.id.title)
-    TextView title;
+    @Bind(R.id.title_view)
+    TitleView title_view;
 
     // rb
     @Bind(R.id.warning_tone_rb1)
@@ -66,9 +64,8 @@ public class MessageMenuActivity extends BaseActivity implements View.OnClickLis
 
     private void initData() {
 
-        title_rl.setBackgroundColor(Color.parseColor("#666666"));
-        title.setText(getString(R.string.message_setting));
-
+        title_view.setInventoryDetail("",R.color.gray1);
+        title_view.setTitle(getString(R.string.message_setting));
 //        initRadioButton();
         //绑定服务获取数据
         connection=new ServiceConnection() {
@@ -128,14 +125,10 @@ public class MessageMenuActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    @OnClick({R.id.back, R.id.warning_tone_rb1, R.id.warning_tone_rb2, R.id.time_rb1, R.id.time_rb2})
+    @OnClick({ R.id.warning_tone_rb1, R.id.warning_tone_rb2, R.id.time_rb1, R.id.time_rb2})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            // 左上角返回
-            case R.id.back:
-                finish();
-                break;
             // 系统提示音
             case R.id.warning_tone_rb1:
                 if (warning_tone_rb2.isChecked()) {

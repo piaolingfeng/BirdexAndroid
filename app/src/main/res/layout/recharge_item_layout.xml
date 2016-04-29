@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:paddingBottom="15dp"
+              android:paddingTop="15dp">
+
+    <com.rey.material.widget.RadioButton
+        android:id="@+id/rb_recharge_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="@string/recharge_translute_account"
+        android:textColor="@color/fragment_recharge_account"
+        android:textSize="18sp"
+        app:rbd_innerRadius="4dp"
+        app:rbd_radius="8dp"
+        app:rbd_strokeColor="@color/blue"/>
+</LinearLayout>

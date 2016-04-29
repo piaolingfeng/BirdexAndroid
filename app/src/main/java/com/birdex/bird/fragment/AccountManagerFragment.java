@@ -360,7 +360,7 @@ public class AccountManagerFragment extends BaseFragment implements View.OnClick
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 try {
-                    if (response.get("error") == 0) {
+                    if ("0".equals(response.getString("error"))) {
                         companyInf = JsonHelper.parseObject((JSONObject) response.get("data"), CompanyInformation.class);
 
                         if (companyInf != null) {

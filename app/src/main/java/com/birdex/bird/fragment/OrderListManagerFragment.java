@@ -170,7 +170,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
-                    if (0 == response.get("error")) {
+                    if ("0".equals(response.getString("error"))) {
                         orderListEntities = GsonHelper.getPerson(response.toString(), OrderListEntity.class);
                         if (orderListEntities != null) {
                             if (entity.getPage_no() > 1)
@@ -240,7 +240,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
                 hideLoading();
                 try {
                     if (response != null) {
-                        if (0 == response.get("error")) {
+                        if ("0".equals(response.getString("error"))) {
                             orderStatus = GsonHelper.getPerson(response.toString(), OrderStatus.class);
                             dealOrderStatus();
                             if (orderStatus != null) {
@@ -304,7 +304,7 @@ public class OrderListManagerFragment extends BaseFragment implements XRecyclerV
                         T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
                         return;
                     }
-                    if (0 == response.get("error")) {
+                    if ("0".equals(response.getString("error"))) {
                         warehouseEntity = GsonHelper.getPerson(response.toString(), WarehouseEntity.class);
                         if (warehouseEntity != null) {
                             if (warehouseEntity.getError().equals("0")) {

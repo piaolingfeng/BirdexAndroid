@@ -115,7 +115,7 @@ public class PredicitionDetailActivity extends BaseActivity {
                         T.showLong(MyApplication.getInstans(), getString(R.string.request_error));
                         return;
                     }
-                    if (0 == response.get("error")) {
+                    if ("0".equals(response.getString("error"))) {
                         entity = GsonHelper.getPerson(response.toString(), PredicitionDetailEntity.class);
                         if (entity != null)
                             bus.post("", "predicitiondetail");

@@ -79,9 +79,8 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
                     int actual=0;
                     if(entity1.getDetail()!=null){
                         for (InventoryActivityEntity.InventoryStockEntity.InventoryDetailEntity entity2 : entity1.getDetail()) {
-                            //可用=总入库-总出库-损耗-盘亏-占用-丢失-过期-破损+盘盈+允许超收数量
+                            //入库总数 = 出库总数 + 过期数量 + 破损数量 - 盘盈数量 + 盘亏数量 + 丢失数量 + 损耗（品质问题）数量 + 仓库实际数量
                             int in_stock =0,out_stock=0,spoilage_stock=0,shortage_stock=0,block_stock=0,lose_stock=0,expire_stock=0,damage_stock=0,overage_stock=0,overdraft_stock=0,stock=0;
-                            //可用=总入库-总出库-损耗-盘亏-占用-丢失-过期-破损+盘盈+允许超收数量
                             if(entity2.getIn_stock()!=null){
                                 in_stock = Integer.parseInt(entity2.getIn_stock());
                             }
@@ -115,14 +114,10 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
                             if(entity2.getStock()!= null){
                                 stock=Integer.parseInt(entity2.getStock());
                             }
-//                            availableCount += (in_stock - out_stock - spoilage_stock - shortage_stock - block_stock - lose_stock - expire_stock - damage_stock - overage_stock + overdraft_stock);
-//                            //占用=
-//                            if(entity2.getBlock_stock()!=null){
-//                                occupancyCount += Integer.parseInt(entity2.getBlock_stock());
-//                            }else{
-//                                occupancyCount += 0;
-//                            }
-                            avail+= (in_stock - out_stock - spoilage_stock - shortage_stock - block_stock - lose_stock - expire_stock - damage_stock - overage_stock + overdraft_stock);
+
+//                            avail+= (in_stock - out_stock - spoilage_stock - shortage_stock - block_stock - lose_stock - expire_stock - damage_stock - overage_stock + overdraft_stock);
+                            //可用库存 =  仓库实际数量 + 允许超售库存量 - 订单占用库存量
+                            avail+=(stock+overdraft_stock)-block_stock;
                             occupancy+=block_stock;
                             actual+=stock;
                         }

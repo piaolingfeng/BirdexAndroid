@@ -1,6 +1,8 @@
 package com.birdex.bird.fragment;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -49,7 +51,11 @@ public class ImageFragment extends BaseFragment {
     public void initializeContentViews() {
         if (imgID != 0) {
 //            iv_welcome.setImageResource(imgID);
-            GlideUtils.setImageToLocal(iv_welcome,imgID);
+//            GlideUtils.setImageToLocal(iv_welcome,imgID);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 3;
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgID, options);
+            iv_welcome.setImageBitmap(bitmap);
         }
     }
 

@@ -255,6 +255,7 @@
     <string name="recharge_tip6">充值金额输入有误!</string>
     <string name="recharge_tip7">请填写合适的金额!</string>
     <string name="recharge_tip8">充值出现异常!</string>
+    <string name="recharge_tip9">充值金额超过最大限制!</string>
 
     <string name="please_wail">敬请期待</string>
     <string name="time_all">不限时间</string>

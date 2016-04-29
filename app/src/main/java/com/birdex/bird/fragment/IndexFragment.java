@@ -504,7 +504,6 @@ public class IndexFragment extends BaseFragment implements OnStartDragListener {
 //                , "file:///android_asset/lunbo4.jpg"};
         int url[] = {
                 R.drawable.recycle_1,
-                R.drawable.recycle_2,
                 R.drawable.recycle_3
         };
         List<Integer> localPathList = new ArrayList<>();
